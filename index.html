@@ -45,11 +45,21 @@ calc: `
 `,
 
 graph: `
-  <h2>Graph (Basic Grid)</h2>
-  <canvas id="grid" width="300" height="300" style="border:1px solid black;"></canvas>
-  <br>
-  <button onclick="drawGrid()">Draw Grid</button>
-`,
+  <h2>Graph Calculator</h2>
+
+  X Range: <input id="xmin" value="-10"> to <input id="xmax" value="10"><br>
+  Y Range: <input id="ymin" value="-10"> to <input id="ymax" value="10"><br><br>
+
+  y = <input id="eq1" placeholder="x*x"><br>
+  y = <input id="eq2" placeholder=""><br>
+  y = <input id="eq3" placeholder=""><br>
+  y = <input id="eq4" placeholder=""><br><br>
+
+  <button onclick="drawGraph()">Graph</button>
+
+  <br><br>
+  <canvas id="grid" width="400" height="400" style="border:1px solid black;"></canvas>
+`
 
 about: `
   <h2>About</h2>
@@ -84,32 +94,93 @@ function calcVolume() {
 }
 
 // -------- GRAPH GRID --------
-function drawGrid() {
-  let canvas = document.getElementById("grid");
-  let ctx = canvas.getContext("2d");
+function drawGraph() {
+  const canvas = document.getElementById("grid");
+  const ctx = canvas.getContext("2d");
 
-  ctx.clearRect(0, 0, 300, 300);
+  const w = canvas.width;
+  const h = canvas.height;
 
-  let size = 300;
-  let step = 20;
+  ctx.clearRect(0, 0, w, h);
 
-  // grid lines
-  for (let i = 0; i <= size; i += step) {
-    ctx.moveTo(i, 0);
-    ctx.lineTo(i, size);
-    ctx.moveTo(0, i);
-    ctx.lineTo(size, i);
+  // Get ranges
+  let xmin = parseFloat(document.getElementById("xmin").value);
+  let xmax = parseFloat(document.getElementById("xmax").value);
+  let ymin = parseFloat(document.getElementById("ymin").value);
+  let ymax = parseFloat(document.getElementById("ymax").value);
+
+  // Convert math coords → canvas coords
+  function toX(x) {
+    return (x - xmin) / (xmax - xmin) * w;
+  }
+
+  function toY(y) {
+    return h - (y - ymin) / (ymax - ymin) * h;
+  }
+
+  // Draw grid
+  ctx.beginPath();
+  let step = (xmax - xmin) / 10;
+
+  for (let x = xmin; x <= xmax; x += step) {
+    let px = toX(x);
+    ctx.moveTo(px, 0);
+    ctx.lineTo(px, h);
+  }
+
+  for (let y = ymin; y <= ymax; y += step) {
+    let py = toY(y);
+    ctx.moveTo(0, py);
+    ctx.lineTo(w, py);
   }
 
   ctx.stroke();
 
-  // axes
+  // Draw axes
   ctx.beginPath();
-  ctx.moveTo(150, 0);
-  ctx.lineTo(150, 300);
-  ctx.moveTo(0, 150);
-  ctx.lineTo(300, 150);
+  ctx.moveTo(toX(0), 0);
+  ctx.lineTo(toX(0), h);
+  ctx.moveTo(0, toY(0));
+  ctx.lineTo(w, toY(0));
   ctx.stroke();
+
+  // Plot equations
+  const eqs = [
+    document.getElementById("eq1").value,
+    document.getElementById("eq2").value,
+    document.getElementById("eq3").value,
+    document.getElementById("eq4").value
+  ];
+
+  eqs.forEach(eq => {
+    if (!eq) return;
+
+    ctx.beginPath();
+
+    let first = true;
+
+    for (let x = xmin; x <= xmax; x += (xmax - xmin) / 200) {
+      let y;
+
+      try {
+        y = eval(eq.replaceAll("x", "(" + x + ")"));
+      } catch {
+        continue;
+      }
+
+      let px = toX(x);
+      let py = toY(y);
+
+      if (first) {
+        ctx.moveTo(px, py);
+        first = false;
+      } else {
+        ctx.lineTo(px, py);
+      }
+    }
+
+    ctx.stroke();
+  });
 }
 
 // initial load
