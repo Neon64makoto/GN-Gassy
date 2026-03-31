@@ -1,55 +1,60 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Injected Site</title>
+  <title>GN-Gassy</title>
   <meta charset="UTF-8">
 </head>
 
 <body>
 
-<h1>My Injected Site</h1>
+<h1>GN-Gassy</h1>
 
 <hr>
 
 <!-- Navigation -->
 <button onclick="load('home')">Home</button>
-<button onclick="load('tools')">Tools</button>
+<button onclick="load('calc')">Calculators</button>
+<button onclick="load('graph')">Graph</button>
 <button onclick="load('about')">About</button>
 
 <hr>
 
-<!-- Content Area -->
 <div id="content">Loading...</div>
 
 <script>
-// "Pages" stored as strings (so no external files needed)
 const pages = {
 
-  home: `
-    <h2>Home</h2>
-    <p>Welcome to the site.</p>
-    <p>This is fully injected and running from about:blank.</p>
-  `,
+home: `
+  <h2>Home</h2>
+  <p>Welcome to GN-Gassy.</p>
+`,
 
-  tools: `
-    <h2>Tools</h2>
-    <button onclick="alert('Tool executed successfully')">Run Tool</button>
-    <br><br>
-    <button onclick="document.body.innerHTML += '<p>New element added</p>'">
-      Add Element
-    </button>
-  `,
+calc: `
+  <h2>Calculators</h2>
 
-  about: `
-    <h2>About</h2>
-    <p>This site is:</p>
-    <ul>
-      <li>Single-file</li>
-      <li>No CSS</li>
-      <li>Fully fetchable</li>
-      <li>Injection-safe</li>
-    </ul>
-  `
+  <h3>Fraction Calculator</h3>
+  <input id="f1" placeholder="a/b">
+  <input id="f2" placeholder="c/d">
+  <button onclick="addFrac()">Add</button>
+  <p id="fout"></p>
+
+  <h3>Volume Calculator (Cube)</h3>
+  <input id="side" placeholder="side length">
+  <button onclick="calcVolume()">Calculate</button>
+  <p id="vout"></p>
+`,
+
+graph: `
+  <h2>Graph (Basic Grid)</h2>
+  <canvas id="grid" width="300" height="300" style="border:1px solid black;"></canvas>
+  <br>
+  <button onclick="drawGrid()">Draw Grid</button>
+`,
+
+about: `
+  <h2>About</h2>
+  <p>Simple injected tool site.</p>
+`
 };
 
 // Page loader
@@ -57,7 +62,57 @@ function load(page) {
   document.getElementById("content").innerHTML = pages[page];
 }
 
-// Initial load
+// -------- FRACTION CALC --------
+function addFrac() {
+  let f1 = document.getElementById("f1").value.split("/");
+  let f2 = document.getElementById("f2").value.split("/");
+
+  let a = +f1[0], b = +f1[1];
+  let c = +f2[0], d = +f2[1];
+
+  let num = a*d + b*c;
+  let den = b*d;
+
+  document.getElementById("fout").innerText = num + "/" + den;
+}
+
+// -------- VOLUME CALC --------
+function calcVolume() {
+  let s = +document.getElementById("side").value;
+  let v = s * s * s;
+  document.getElementById("vout").innerText = "Volume: " + v;
+}
+
+// -------- GRAPH GRID --------
+function drawGrid() {
+  let canvas = document.getElementById("grid");
+  let ctx = canvas.getContext("2d");
+
+  ctx.clearRect(0, 0, 300, 300);
+
+  let size = 300;
+  let step = 20;
+
+  // grid lines
+  for (let i = 0; i <= size; i += step) {
+    ctx.moveTo(i, 0);
+    ctx.lineTo(i, size);
+    ctx.moveTo(0, i);
+    ctx.lineTo(size, i);
+  }
+
+  ctx.stroke();
+
+  // axes
+  ctx.beginPath();
+  ctx.moveTo(150, 0);
+  ctx.lineTo(150, 300);
+  ctx.moveTo(0, 150);
+  ctx.lineTo(300, 150);
+  ctx.stroke();
+}
+
+// initial load
 load('home');
 </script>
 
