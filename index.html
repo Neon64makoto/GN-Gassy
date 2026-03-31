@@ -24,11 +24,13 @@
 <script>
 const pages = {
 
+// -------- HOME --------
 home: `
   <h2>Home</h2>
   <p>Welcome to GN-Gassy.</p>
 `,
 
+// -------- CALCULATORS --------
 calc: `
   <h2>Calculators</h2>
 
@@ -44,6 +46,7 @@ calc: `
   <p id="vout"></p>
 `,
 
+// -------- GRAPH --------
 graph: `
   <h2>Graph Calculator</h2>
 
@@ -59,20 +62,21 @@ graph: `
 
   <br><br>
   <canvas id="grid" width="400" height="400" style="border:1px solid black;"></canvas>
-`
+`,
 
+// -------- ABOUT --------
 about: `
   <h2>About</h2>
-  <p>Simple injected tool site.</p>
+  <p>GN-Gassy is a simple injected tool site with calculators and a graphing utility.</p>
 `
 };
 
-// Page loader
+// -------- PAGE LOADER --------
 function load(page) {
   document.getElementById("content").innerHTML = pages[page];
 }
 
-// -------- FRACTION CALC --------
+// -------- FRACTION CALCULATOR --------
 function addFrac() {
   let f1 = document.getElementById("f1").value.split("/");
   let f2 = document.getElementById("f2").value.split("/");
@@ -86,14 +90,14 @@ function addFrac() {
   document.getElementById("fout").innerText = num + "/" + den;
 }
 
-// -------- VOLUME CALC --------
+// -------- VOLUME CALCULATOR --------
 function calcVolume() {
   let s = +document.getElementById("side").value;
   let v = s * s * s;
   document.getElementById("vout").innerText = "Volume: " + v;
 }
 
-// -------- GRAPH GRID --------
+// -------- GRAPH CALCULATOR --------
 function drawGraph() {
   const canvas = document.getElementById("grid");
   const ctx = canvas.getContext("2d");
@@ -110,30 +114,25 @@ function drawGraph() {
   let ymax = parseFloat(document.getElementById("ymax").value);
 
   // Convert math coords → canvas coords
-  function toX(x) {
-    return (x - xmin) / (xmax - xmin) * w;
-  }
-
-  function toY(y) {
-    return h - (y - ymin) / (ymax - ymin) * h;
-  }
+  function toX(x) { return (x - xmin) / (xmax - xmin) * w; }
+  function toY(y) { return h - (y - ymin) / (ymax - ymin) * h; }
 
   // Draw grid
   ctx.beginPath();
-  let step = (xmax - xmin) / 10;
+  let stepX = (xmax - xmin)/10;
+  let stepY = (ymax - ymin)/10;
 
-  for (let x = xmin; x <= xmax; x += step) {
+  for (let x = xmin; x <= xmax; x += stepX) {
     let px = toX(x);
     ctx.moveTo(px, 0);
     ctx.lineTo(px, h);
   }
-
-  for (let y = ymin; y <= ymax; y += step) {
+  for (let y = ymin; y <= ymax; y += stepY) {
     let py = toY(y);
     ctx.moveTo(0, py);
     ctx.lineTo(w, py);
   }
-
+  ctx.strokeStyle = "#ccc";
   ctx.stroke();
 
   // Draw axes
@@ -142,6 +141,7 @@ function drawGraph() {
   ctx.lineTo(toX(0), h);
   ctx.moveTo(0, toY(0));
   ctx.lineTo(w, toY(0));
+  ctx.strokeStyle = "#000";
   ctx.stroke();
 
   // Plot equations
@@ -152,38 +152,26 @@ function drawGraph() {
     document.getElementById("eq4").value
   ];
 
-  eqs.forEach(eq => {
+  eqs.forEach((eq, i) => {
     if (!eq) return;
 
     ctx.beginPath();
-
     let first = true;
-
-    for (let x = xmin; x <= xmax; x += (xmax - xmin) / 200) {
+    for (let x = xmin; x <= xmax; x += (xmax-xmin)/200) {
       let y;
-
-      try {
-        y = eval(eq.replaceAll("x", "(" + x + ")"));
-      } catch {
-        continue;
-      }
-
+      try { y = eval(eq.replaceAll("x","("+x+")")); } catch { continue; }
       let px = toX(x);
       let py = toY(y);
-
-      if (first) {
-        ctx.moveTo(px, py);
-        first = false;
-      } else {
-        ctx.lineTo(px, py);
-      }
+      if (first) { ctx.moveTo(px, py); first = false; } 
+      else { ctx.lineTo(px, py); }
     }
-
+    // Different color per function
+    ctx.strokeStyle = ["red","blue","green","orange"][i%4];
     ctx.stroke();
   });
 }
 
-// initial load
+// Initial load
 load('home');
 </script>
 
