@@ -6,7 +6,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
-<body style="background:black;color:white;margin:0;height:100vh;display:flex;flex-direction:column;">
+<body style="
+  background:black;
+  color:white;
+  margin:0;
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  font-family:Arial;
+">
 
 <h1 style="margin:10px;">GN-Gassy</h1>
 
@@ -17,7 +25,13 @@
   <button onclick="load('about')">About</button>
 </div>
 
-<div id="content" style="flex:1;overflow:auto;padding:10px;">Loading...</div>
+<div id="content" style="
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  padding:10px;
+  gap:10px;
+">Loading...</div>
 
 <script>
 // -------- PAGES --------
@@ -26,9 +40,9 @@ const pages = {
 home: `
   <h2>Home</h2>
   <p>Welcome to GN-Gassy.</p>
-  <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Gassy@main/sili2.jpg" style="width:30%;">
+  <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Gassy@main/sili2.jpg" style="width:30%;border:1px solid white;">
   <br><br>
-  <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Gassy@main/sili3.jpg" style="width:30%;">
+  <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Gassy@main/sili3.jpg" style="width:30%;border:1px solid white;">
 `,
 
 calc: `
@@ -36,40 +50,33 @@ calc: `
   <button onclick="showCalc('simple')">Simple</button>
   <button onclick="showCalc('volume')">Volumes</button>
   <button onclick="showCalc('graph')">Graph</button>
-  <div id="calcContent"></div>
+  <div id="calcContent" style="margin-top:10px;"></div>
 `,
 
 games: `
-  <h2>Scratch Games</h2>
+  <h2>Games</h2>
+  <div style="display:flex;flex:1;gap:10px;height:80vh;">
 
-  <div style="display:flex;height:80vh;gap:10px;">
-
-    <div style="width:20%;">
+    <div style="width:20%;border:1px solid white;padding:5px;">
       <h3>Controls</h3>
-      <p id="controlsText">Under Construction</p>
+      <p>Under Construction</p>
     </div>
 
-    <div style="width:60%;text-align:center;">
-
+    <div style="width:60%;text-align:center;border:1px solid white;padding:5px;">
       <button onclick="prevGame()">◀</button>
       <button onclick="fullscreenGame()">Fullscreen</button>
 
-      <div id="gameContainer" style="width:100%;height:60vh;">
-        <iframe id="scratchFrame"
-          allow="fullscreen"
-          style="width:100%;height:100%;">
-        </iframe>
+      <div id="gameContainer" style="width:100%;height:60vh;margin-top:10px;border:1px solid white;">
+        <iframe id="scratchFrame" allow="fullscreen" style="width:100%;height:100%;"></iframe>
       </div>
 
       <button onclick="nextGame()">▶</button>
-
       <h3 id="gameTitle"></h3>
-
     </div>
 
-    <div style="width:20%;">
+    <div style="width:20%;border:1px solid white;padding:5px;">
       <h3>Credits</h3>
-      <p id="creditsText">Under Construction</p>
+      <p>Under Construction</p>
     </div>
 
   </div>
@@ -95,29 +102,29 @@ function showCalc(type){
     `;
   }
 
-  if(type==="volume"){
-    c.innerHTML = `
-      Cube <input id="cube"><button onclick="volCube()">Calc</button><p id="o1"></p>
-      Sphere <input id="sphere"><button onclick="volSphere()">Calc</button><p id="o2"></p>
-      L<input id="l"> W<input id="w"> H<input id="h"><button onclick="volRect()">Calc</button><p id="o3"></p>
-      R<input id="cr"> H<input id="ch"><button onclick="volCyl()">Calc</button><p id="o4"></p>
-      Base<input id="pb"> H<input id="ph"><button onclick="volPyr()">Calc</button><p id="o5"></p>
-    `;
-  }
-
   if(type==="graph"){
     c.innerHTML = `
-      X <input id="xmin" value="-10"> to <input id="xmax" value="10"><br>
-      Y <input id="ymin" value="-10"> to <input id="ymax" value="10"><br><br>
+      <div style="display:flex;gap:10px;height:70vh;">
 
-      y=<input id="eq1"><br>
-      y=<input id="eq2"><br>
-      y=<input id="eq3"><br>
-      y=<input id="eq4"><br><br>
+        <!-- LEFT SIDE -->
+        <div style="width:30%;border:1px solid white;padding:5px;">
+          X <input id="xmin" value="-10"> to <input id="xmax" value="10"><br>
+          Y <input id="ymin" value="-10"> to <input id="ymax" value="10"><br><br>
 
-      <button onclick="drawGraph()">Graph</button><br><br>
+          y=<input id="eq1"><span id="out1"></span><br>
+          y=<input id="eq2"><span id="out2"></span><br>
+          y=<input id="eq3"><span id="out3"></span><br>
+          y=<input id="eq4"><span id="out4"></span><br><br>
 
-      <canvas id="grid" style="width:100%;height:60vh;border:1px solid white;"></canvas>
+          <button onclick="drawGraph()">Graph</button>
+        </div>
+
+        <!-- RIGHT SIDE -->
+        <div style="flex:1;border:1px solid white;">
+          <canvas id="grid" style="width:100%;height:100%;"></canvas>
+        </div>
+
+      </div>
     `;
   }
 }
@@ -132,13 +139,6 @@ function calcSimple(){
   }
 }
 
-// -------- VOLUME --------
-function volCube(){ o1.innerText=cube.value**3; }
-function volSphere(){ o2.innerText=(4/3)*Math.PI*sphere.value**3; }
-function volRect(){ o3.innerText=l.value*w.value*h.value; }
-function volCyl(){ o4.innerText=Math.PI*cr.value**2*ch.value; }
-function volPyr(){ o5.innerText=(pb.value*ph.value)/3; }
-
 // -------- PARSER --------
 function parseEq(eq){
   eq = eq.replace(/\s+/g,"");
@@ -150,7 +150,6 @@ function parseEq(eq){
   eq = eq.replace(/sin/g,"Math.sin");
   eq = eq.replace(/cos/g,"Math.cos");
   eq = eq.replace(/tan/g,"Math.tan");
-  eq = eq.replace(/sqrt/g,"Math.sqrt");
   return eq;
 }
 
@@ -171,31 +170,41 @@ function drawGraph(){
   function X(x){ return (x-xminVal)/(xmaxVal-xminVal)*w; }
   function Y(y){ return h-(y-yminVal)/(ymaxVal-yminVal)*h; }
 
+  // background
   ctx.fillStyle="black";
   ctx.fillRect(0,0,w,h);
 
-  // grid
-  ctx.strokeStyle="#333";
-  for(let i=0;i<=10;i++){
-    let x=xminVal+(xmaxVal-xminVal)/10*i;
-    let y=yminVal+(ymaxVal-yminVal)/10*i;
+  // grid (stylish)
+  ctx.strokeStyle="#222";
+  for(let i=0;i<=20;i++){
+    let x=xminVal+(xmaxVal-xminVal)/20*i;
+    let y=yminVal+(ymaxVal-yminVal)/20*i;
+
     ctx.beginPath();
     ctx.moveTo(X(x),0); ctx.lineTo(X(x),h);
+    ctx.stroke();
+
+    ctx.beginPath();
     ctx.moveTo(0,Y(y)); ctx.lineTo(w,Y(y));
     ctx.stroke();
   }
 
   // axes
-  ctx.strokeStyle="white";
+  ctx.strokeStyle="#aaa";
+  ctx.lineWidth=2;
   ctx.beginPath();
   ctx.moveTo(X(0),0); ctx.lineTo(X(0),h);
   ctx.moveTo(0,Y(0)); ctx.lineTo(w,Y(0));
   ctx.stroke();
 
-  const equations = [eq1.value,eq2.value,eq3.value,eq4.value];
+  ctx.lineWidth=1;
+
+  const equations = [eq1,eq2,eq3,eq4];
+  const outputs = [out1,out2,out3,out4];
   const colors = ["red","cyan","lime","yellow"];
 
-  equations.forEach((eq,i)=>{
+  equations.forEach((el,i)=>{
+    let eq = el.value;
     if(!eq) return;
 
     let parsed = parseEq(eq);
@@ -203,7 +212,9 @@ function drawGraph(){
     let func;
     try{
       func = Function("x","return "+parsed);
+      outputs[i].innerText = " f(1)=" + func(1).toFixed(2);
     }catch{
+      outputs[i].innerText = " error";
       return;
     }
 
@@ -211,6 +222,7 @@ function drawGraph(){
     ctx.beginPath();
 
     let step = (xmaxVal - xminVal) / w;
+
     let first = true;
 
     for(let x=xminVal; x<=xmaxVal; x+=step){
