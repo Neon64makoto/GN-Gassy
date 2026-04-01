@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html>
 <head>
 <title>GN-Gassy</title>
@@ -42,20 +41,7 @@ body { font-size: 1.2em; }
 </style>
 </head>
 <body>
-
-<h1 style="text-align:center;">GN-Gassy</h1>
-
-<hr>
-
-<!-- Navigation -->
-<div style="text-align:center;">
-<button onclick="load('home')">Home</button>
-<button onclick="load('calc')">Calculators</button>
-<button onclick="load('games')">Games</button>
-<button onclick="load('about')">About</button>
-</div>
-<hr>
-
+@@ -39,18 +53,16 @@ <h1 style="text-align:center;">GN-Gassy</h1>
 <div id="content">Loading...</div>
 
 <!-- Version counter -->
@@ -77,10 +63,7 @@ home: `
  `,
 calc: `
    <h2>Calculators</h2>
-   <button onclick="showCalc('simple')">Simple Calculator</button>
-   <button onclick="showCalc('volume')">Volume Calculator</button>
-   <button onclick="showCalc('graph')">Graph Calculator</button>
-   <div id="calcContent"></div>
+@@ -61,13 +73,12 @@ <h2>Calculators</h2>
  `,
 games: `
    <h2>Scratch Games</h2>
@@ -96,8 +79,7 @@ games: `
    </div>
  `,
 about: `
-   <h2>About</h2>
-   <p>GN-Gassy is a simple injected tool site with calculators, volume calculators, and games.</p>
+@@ -76,12 +87,11 @@ <h2>About</h2>
  `
 };
 
@@ -112,11 +94,7 @@ if(page==='games') {
 currentIndex = 0;
 updateGame();
 }
-}
-
-// ------------- CALCULATOR HANDLER -------------
-function showCalc(type){
-const c = document.getElementById("calcContent");
+@@ -93,31 +103,40 @@ <h2>About</h2>
 if(type==="simple"){
 c.innerHTML = `
      <h3>Simple Calculator</h3>
@@ -170,14 +148,7 @@ c.innerHTML = `
    `;
 }
 }
-
-// ------------- SIMPLE CALC -------------
-function calcSimple(){
-const val = document.getElementById('simpleInput').value;
-try { document.getElementById('simpleOut').innerText = "Result: "+eval(val); }
-catch(e){ document.getElementById('simpleOut').innerText = "Invalid expression"; }
-}
-
+@@ -132,20 +151,44 @@ <h3>Graph Calculator</h3>
 // ------------- VOLUME CALCS -------------
 function volCube(){ 
 const side = document.getElementById('cubeSide');
@@ -227,33 +198,7 @@ function volPyr(){
 }
 
 // ------------- GAMES -------------
-const games = [
-"https://turbowarp.org/1143765424/embed?addons=pause&fps=60",
-"https://turbowarp.org/1075310827/embed?addons=pause&fps=60",
-"https://turbowarp.org/941803602/embed?addons=pause&fps=60",
-"https://turbowarp.org/973637218/embed?addons=pause&fps=60",
-"https://turbowarp.org/883776962/embed?addons=pause&fps=60",
-"https://turbowarp.org/898492644/embed?addons=pause&fps=60",
-"https://turbowarp.org/916303075/embed?addons=pause&fps=60",
-"https://turbowarp.org/978483855/embed?addons=pause&fps=60",
-"https://turbowarp.org/959847748/embed?addons=pause&fps=60"
-];
-
-const titles = [
-"Sisyphean Escalator","Gambling but Mid","Laser Dodge","Goober Dodger",
-"Neon's Hostile Road","Mid Cookie Clicker","Asteroid Assault",
-"Reel 'Em In","Rat Catcher"
-];
-
-let currentIndex = 0;
-
-function updateGame(){
-const f = document.getElementById("scratchFrame");
-if(!f) return;
-f.src = games[currentIndex];
-document.getElementById("gameTitle").innerText = titles[currentIndex];
-}
-
+@@ -179,36 +222,55 @@ <h3>Graph Calculator</h3>
 function nextGame(){ currentIndex = (currentIndex+1) % games.length; updateGame(); }
 function prevGame(){ currentIndex = (currentIndex-1+games.length) % games.length; }
 
@@ -327,13 +272,7 @@ ctx.lineWidth = 1;
 // Plot functions
 const functions = [
 document.getElementById('eq1').value,
-document.getElementById('eq2').value,
-document.getElementById('eq3').value,
-document.getElementById('eq4').value
-];
-
-functions.forEach((expr, index) => {
-if (!expr.trim()) return;
+@@ -222,17 +284,17 @@ <h3>Graph Calculator</h3>
 ctx.beginPath();
 ctx.strokeStyle = ['red', 'yellow', 'cyan', 'magenta'][index];
 let firstPoint = true;
@@ -355,11 +294,7 @@ const py = (ymax - y) / (ymax - ymin) * canvas.height;
 ctx.moveTo(px, py);
 firstPoint = false;
 } else {
-ctx.lineTo(px, py);
-}
-}
-}
-ctx.stroke();
+@@ -244,11 +306,10 @@ <h3>Graph Calculator</h3>
 });
 }
 
