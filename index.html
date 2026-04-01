@@ -32,6 +32,7 @@
     position: absolute;
     font-size: 0.9em;
     color: #ccc;
+    pointer-events: none;
   }
 </style>
 </head>
@@ -44,7 +45,9 @@
 <!-- Navigation -->
 <div style="text-align:center;">
   <button onclick="load('home')">Home</button>
-  <button onclick="load('calc')">Calculators</button>
+  <button onclick="showCalc('simple')">Simple Calculator</button>
+  <button onclick="showCalc('volume')">Volume Calculator</button>
+  <button onclick="showCalc('graph')">Graph Calculator</button>
   <button onclick="load('games')">Games</button>
   <button onclick="load('about')">About</button>
 </div>
@@ -53,7 +56,7 @@
 <div id="content">Loading...</div>
 
 <!-- Version counter -->
-<div id="versionCounter" style="position:fixed; bottom:10px; right:20px; color:gray;">v0.13</div>
+<div id="versionCounter" style="position:fixed; bottom:10px; right:20px; color:gray;">v0.15</div>
 
 <script>
 // ------------- PAGES -------------
@@ -90,7 +93,10 @@ const pages = {
 // Load page and initialize
 function load(page){
   document.getElementById("content").innerHTML = pages[page];
-  if(page==='graph') drawGraph();
+  if(page==='graph') {
+    drawGraph();
+    addGraphEventListeners();
+  }
   if(page==='games') {
     currentIndex = 0;
     updateGame();
@@ -134,8 +140,9 @@ function showCalc(type){
       y=<input id="eq4" placeholder="" style="width:150px;"><br><br>
       <button onclick="drawGraph()">Graph</button><br><br>
       <div style="position: relative;">
-        <canvas id="grid" width="400" height="400" style="border:1px solid white; display:block; margin:auto;"></canvas>
+        <canvas id="grid" width="400" height="400" style="border:1px solid white; display:block; margin:auto; cursor:crosshair;"></canvas>
         <div id="axesLabels"></div>
+        <div id="cursorCoords" style="position:absolute; bottom:5px; left:5px; background:rgba(0,0,0,0.5); padding:4px; font-size:0.8em; border-radius:4px;">x:0 y:0</div>
       </div>
     `;
   }
@@ -235,11 +242,26 @@ function drawGraph() {
   const ymin = parseFloat(document.getElementById('ymin').value);
   const ymax = parseFloat(document.getElementById('ymax').value);
 
-  // Draw grid lines
+  // Draw axes lines (bold)
   ctx.strokeStyle = 'white';
-  ctx.lineWidth = 1;
+  ctx.lineWidth = 2;
 
-  // Draw vertical grid lines and labels
+  // Draw y-axis (x=0)
+  const zeroX = (0 - xmin) / (xmax - xmin) * canvas.width;
+  ctx.beginPath();
+  ctx.moveTo(zeroX, 0);
+  ctx.lineTo(zeroX, canvas.height);
+  ctx.stroke();
+
+  // Draw x-axis (y=0)
+  const zeroY = (ymax - 0) / (ymax - ymin) * canvas.height;
+  ctx.beginPath();
+  ctx.moveTo(0, zeroY);
+  ctx.lineTo(canvas.width, zeroY);
+  ctx.stroke();
+
+  // Draw grid lines
+  ctx.lineWidth = 1;
   const gridXCount = 10;
   for(let i=0; i<=gridXCount; i++){
     const x = xmin + i*(xmax - xmin)/gridXCount;
@@ -255,7 +277,6 @@ function drawGraph() {
     }
   }
 
-  // Draw horizontal grid lines and labels
   const gridYCount = 10;
   for(let i=0; i<=gridYCount; i++){
     const yVal = ymin + i*(ymax - ymin)/gridYCount;
@@ -272,14 +293,14 @@ function drawGraph() {
   }
 
   // Plot functions
-  const functions = [
+  const expressions = [
     document.getElementById('eq1').value,
     document.getElementById('eq2').value,
     document.getElementById('eq3').value,
     document.getElementById('eq4').value
   ];
 
-  functions.forEach((expr, index) => {
+  expressions.forEach((expr, index) => {
     if (!expr.trim()) return;
     ctx.beginPath();
     ctx.strokeStyle = ['red', 'yellow', 'cyan', 'magenta'][index];
@@ -306,10 +327,42 @@ function drawGraph() {
   });
 }
 
-// Initialize first game
-load("home");
-updateGame();
+// Helper to evaluate expressions safely
+function safeEval(expr, xVal) {
+  try {
+    return eval(expr.replace(/x/g, `(${xVal})`));
+  } catch {
+    return NaN;
+  }
+}
 
+// Add event listeners for graph interaction
+function addGraphEventListeners() {
+  const canvas = document.getElementById('grid');
+  if (!canvas) return;
+  const rect = canvas.getBoundingClientRect();
+
+  // Update cursor position display
+  canvas.addEventListener('mousemove', (e) => {
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const xmin = parseFloat(document.getElementById('xmin').value);
+    const xmax = parseFloat(document.getElementById('xmax').value);
+    const ymin = parseFloat(document.getElementById('ymin').value);
+    const ymax = parseFloat(document.getElementById('ymax').value);
+    const ctxX = xmin + (x / canvas.width) * (xmax - xmin);
+    const ctxY = ymax - (y / canvas.height) * (ymax - ymin);
+    document.getElementById('cursorCoords').innerText = `x: ${ctxX.toFixed(2)} y: ${ctxY.toFixed(2)}`;
+  });
+
+  // Handle clicks for displaying (x,y)
+  canvas.addEventListener('click', () => {
+    // Optional: could add features here
+  });
+}
+
+// ------------- PAGE LOAD -------------
+load("home");
 </script>
 </body>
 </html>
