@@ -2,306 +2,220 @@
 <head>
 <title>GN-Gassy</title>
 <meta charset="UTF-8">
-<meta charset="UTF-8" />
+
 <style>
 body { background:black; color:white; font-family:Arial,sans-serif; margin:0; padding:0; }
-  input { margin:2px; }
-  button { margin:2px; }
-  input { margin:4px; font-size:1em; }
-  button { margin:4px; font-size:1em; padding:8px 12px; border:none; border-radius:4px; background:#444; color:white; cursor:pointer; }
-  button:hover { background:#666; }
+
+input { margin:4px; font-size:1em; }
+button { margin:4px; font-size:1em; padding:8px 12px; border:none; border-radius:4px; background:#444; color:white; cursor:pointer; }
+button:hover { background:#666; }
+
 #scratchFrame { width:80vw; height:70vh; border:none; }
-  /* Make the entire content scale with the window */
+
 #content {
-width: 100%;
-    height: calc(100vh - 150px);
-    min-height: calc(100vh - 150px);
-box-sizing: border-box;
-padding: 20px;
+  width: 100%;
+  height: calc(100vh - 150px);
+  box-sizing: border-box;
+  padding: 20px;
 }
-  /* Make UI larger for responsiveness */
-  /* Responsive font size for smaller screens */
+
+#axesLabels {
+  position: absolute;
+  font-size: 0.9em;
+  color: #ccc;
+}
+
 @media(max-width: 800px){
-body { font-size: 1.2em; }
+  body { font-size: 1.2em; }
 }
-  /* Styling for version counter */
-  #versionCounter {
-    font-size: 14px;
-    font-family: 'Courier New', monospace;
-    background: rgba(255,255,255,0.1);
-    padding: 4px 8px;
-    border-radius: 8px;
-  }
-  /* Style for the axes labels in the graph */
-  #axesLabels {
-    position: absolute;
-    font-size: 0.9em;
-    color: #ccc;
-  }
 </style>
 </head>
+
 <body>
-@@ -39,18 +53,16 @@ <h1 style="text-align:center;">GN-Gassy</h1>
+
+<!-- NAV BAR -->
+<div style="text-align:center; padding:10px; background:#111; border-bottom:1px solid #333;">
+  <button onclick="load('home')">Home</button>
+  <button onclick="load('calc')">Calculators</button>
+  <button onclick="load('games')">Games</button>
+  <button onclick="load('about')">About</button>
+</div>
+
+<h1 style="text-align:center;">GN-Gassy</h1>
 <div id="content">Loading...</div>
 
-<!-- Version counter -->
-<div id="versionCounter" style="position:fixed; bottom:5px; right:10px; color:gray; font-size:12px;">
-  v0.13 <!-- IMPORTANT: Increment this decimal every time the code is changed -->
+<div style="position:fixed; bottom:5px; right:10px; color:gray; font-size:12px;">
+  v0.13
 </div>
-<div id="versionCounter" style="position:fixed; bottom:10px; right:20px; color:gray;">v0.13</div>
 
 <script>
 // ------------- PAGES -------------
 const pages = {
+
 home: `
-   <h2>Home</h2>
-   <p>Welcome to GN-Gassy.</p>
-    <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Gassy@main/sili2.jpg" width="200"><br><br>
-    <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Gassy@main/sili3.jpg" width="200">
-    <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Gassy@main/sili2.jpg" width="200" style="border-radius:8px;"><br><br>
-    <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Gassy@main/sili3.jpg" width="200" style="border-radius:8px;">
- `,
+<h2>Home</h2>
+<p>Welcome to GN-Gassy.</p>
+<img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Gassy@main/sili2.jpg" width="200" style="border-radius:8px;"><br><br>
+<img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Gassy@main/sili3.jpg" width="200" style="border-radius:8px;">
+`,
+
 calc: `
-   <h2>Calculators</h2>
-@@ -61,13 +73,12 @@ <h2>Calculators</h2>
- `,
+<h2>Calculators</h2>
+<button onclick="showCalc('simple')">Simple</button>
+<button onclick="showCalc('volume')">Volume</button>
+<button onclick="showCalc('graph')">Graph</button>
+<div id="calcArea"></div>
+`,
+
 games: `
-   <h2>Scratch Games</h2>
-    <div style="text-align:center;">
-    <div style="text-align:center; position: relative;">
-     <button onclick="prevGame()">◀</button>
-     <button onclick="nextGame()">▶</button>
-      <!-- Removed fullscreen button as per request -->
-     <br><br>
-     <iframe id="scratchFrame" src="" allowfullscreen></iframe>
-      <h3 id="gameTitle"></h3>
-      <h3 id="gameTitle" style="margin-top:10px;"></h3>
-   </div>
- `,
+<h2>Scratch Games</h2>
+<div style="text-align:center;">
+<button onclick="prevGame()">◀</button>
+<button onclick="nextGame()">▶</button>
+<br><br>
+<iframe id="scratchFrame"></iframe>
+<h3 id="gameTitle"></h3>
+</div>
+`,
+
 about: `
-@@ -76,12 +87,11 @@ <h2>About</h2>
- `
+<h2>About</h2>
+<p>This is GN-Gassy.</p>
+`
 };
 
-// Helper to initialize the page content
-// Load page and initialize
+// Load page
 function load(page){
-document.getElementById("content").innerHTML = pages[page];
-  if(page==='graph') drawGraph(); // optional initial graph
-  if(page==='graph') drawGraph();
-if(page==='games') {
-    // Load the first game automatically when entering games section
-currentIndex = 0;
-updateGame();
+  document.getElementById("content").innerHTML = pages[page];
+
+  if(page==='games'){
+    currentIndex = 0;
+    updateGame();
+  }
 }
-@@ -93,31 +103,40 @@ <h2>About</h2>
-if(type==="simple"){
-c.innerHTML = `
-     <h3>Simple Calculator</h3>
+
+// ------------- CALCULATORS -------------
+function showCalc(type){
+  const c = document.getElementById('calcArea');
+
+  if(type==="simple"){
+    c.innerHTML = `
+      <h3>Simple Calculator</h3>
       <input id="simpleInput" placeholder="2+2*3">
-      <input id="simpleInput" placeholder="2+2*3" style="width:200px;">
-     <button onclick="calcSimple()">Calc</button>
-     <p id="simpleOut"></p>
-   `;
-} else if(type==='volume'){
-c.innerHTML = `
-     <h3>Volume Calculator</h3>
-      Cube: <input id="cubeSide" placeholder="Side"> <button onclick="volCube()">Calc</button><p id="cubeOut"></p>
-      Sphere: <input id="sphereR" placeholder="Radius"> <button onclick="volSphere()">Calc</button><p id="sphereOut"></p>
-      Rectangle: Length<input id="recL" placeholder="L"> Width<input id="recW" placeholder="W"> Height<input id="recH" placeholder="H">
-      Cube: <input id="cubeSide" placeholder="Side" style="width:80px;"> <button onclick="volCube()">Calc</button><p id="cubeOut"></p>
-      Sphere: <input id="sphereR" placeholder="Radius" style="width:80px;"> <button onclick="volSphere()">Calc</button><p id="sphereOut"></p>
-      Rectangle: Length<input id="recL" placeholder="L" style="width:80px;"> 
-                 Width<input id="recW" placeholder="W" style="width:80px;"> 
-                 Height<input id="recH" placeholder="H" style="width:80px;">
-     <button onclick="volRect()">Calc</button><p id="rectOut"></p>
-      Cylinder: Radius<input id="cylR" placeholder="R"> Height<input id="cylH" placeholder="H"><button onclick="volCyl()">Calc</button><p id="cylOut"></p>
-      Pyramid: Base<input id="pyrB" placeholder="Base area"> Height<input id="pyrH" placeholder="H"><button onclick="volPyr()">Calc</button><p id="pyrOut"></p>
-      Cylinder: Radius<input id="cylR" placeholder="R" style="width:80px;"> 
-                Height<input id="cylH" placeholder="H" style="width:80px;">
-      <button onclick="volCyl()">Calc</button><p id="cylOut"></p>
-      Pyramid: Base<input id="pyrB" placeholder="Base area" style="width:80px;"> 
-               Height<input id="pyrH" placeholder="H" style="width:80px;">
-      <button onclick="volPyr()">Calc</button><p id="pyrOut"></p>
-   `;
-} else if(type==='graph'){
-c.innerHTML = `
-     <h3>Graph Calculator</h3>
-      X Range: <input id="xmin" value="-10"> to <input id="xmax" value="10"><br>
-      Y Range: <input id="ymin" value="-10"> to <input id="ymax" value="10"><br><br>
-      y=<input id="eq1" placeholder="x*x"><br>
-      y=<input id="eq2" placeholder=""><br>
-      y=<input id="eq3" placeholder=""><br>
-      y=<input id="eq4" placeholder=""><br><br>
-      X Range: <input id="xmin" value="-10" style="width:50px;"> to <input id="xmax" value="10" style="width:50px;"><br>
-      Y Range: <input id="ymin" value="-10" style="width:50px;"> to <input id="ymax" value="10" style="width:50px;"><br><br>
-      y=<input id="eq1" placeholder="x*x" style="width:150px;"><br>
-      y=<input id="eq2" placeholder="" style="width:150px;"><br>
-      y=<input id="eq3" placeholder="" style="width:150px;"><br>
-      y=<input id="eq4" placeholder="" style="width:150px;"><br><br>
-     <button onclick="drawGraph()">Graph</button><br><br>
-      <canvas id="grid" width="400" height="400" style="border:1px solid white;"></canvas>
+      <button onclick="calcSimple()">Calc</button>
+      <p id="simpleOut"></p>
+    `;
+  }
+
+  else if(type==='volume'){
+    c.innerHTML = `
+      <h3>Volume Calculator</h3>
+
+      Cube: <input id="cubeSide" style="width:80px;">
+      <button onclick="volCube()">Calc</button>
+      <p id="cubeOut"></p>
+
+      Sphere: <input id="sphereR" style="width:80px;">
+      <button onclick="volSphere()">Calc</button>
+      <p id="sphereOut"></p>
+
+      Rect: 
+      <input id="recL" style="width:60px;">
+      <input id="recW" style="width:60px;">
+      <input id="recH" style="width:60px;">
+      <button onclick="volRect()">Calc</button>
+      <p id="rectOut"></p>
+    `;
+  }
+
+  else if(type==='graph'){
+    c.innerHTML = `
+      <h3>Graph Calculator</h3>
+
+      X: <input id="xmin" value="-10" style="width:50px;">
+      to <input id="xmax" value="10" style="width:50px;"><br>
+
+      Y: <input id="ymin" value="-10" style="width:50px;">
+      to <input id="ymax" value="10" style="width:50px;"><br><br>
+
+      y=<input id="eq1" placeholder="x*x" style="width:150px;"><br><br>
+
+      <button onclick="drawGraph()">Graph</button><br><br>
+
       <div style="position: relative;">
-        <canvas id="grid" width="400" height="400" style="border:1px solid white; display:block; margin:auto;"></canvas>
+        <canvas id="grid" width="400" height="400" style="border:1px solid white;"></canvas>
         <div id="axesLabels"></div>
       </div>
-   `;
+    `;
+  }
 }
+
+function calcSimple(){
+  const val = document.getElementById('simpleInput').value;
+  try {
+    document.getElementById('simpleOut').innerText = eval(val);
+  } catch {
+    document.getElementById('simpleOut').innerText = "Error";
+  }
 }
-@@ -132,20 +151,44 @@ <h3>Graph Calculator</h3>
-// ------------- VOLUME CALCS -------------
-function volCube(){ 
-const side = document.getElementById('cubeSide');
-  document.getElementById('cubeOut').innerText = "Volume: "+(parseFloat(side.value)**3); 
-  const val = parseFloat(side.value);
-  if(!isNaN(val))
-    document.getElementById('cubeOut').innerText = "Volume: " + (val*val*val);
-  else
-    document.getElementById('cubeOut').innerText = "Invalid input";
+
+// Volume
+function volCube(){
+  const v = parseFloat(cubeSide.value);
+  cubeOut.innerText = !isNaN(v) ? v**3 : "Invalid";
 }
-function volSphere(){ 
-const r = document.getElementById('sphereR');
-  document.getElementById('sphereOut').innerText = "Volume: "+((4/3)*Math.PI*Math.pow(parseFloat(r.value),3)); 
-  const val = parseFloat(r.value);
-  if(!isNaN(val))
-    document.getElementById('sphereOut').innerText = "Volume: " + ((4/3)*Math.PI*Math.pow(val,3));
-  else
-    document.getElementById('sphereOut').innerText = "Invalid input";
+
+function volSphere(){
+  const v = parseFloat(sphereR.value);
+  sphereOut.innerText = !isNaN(v) ? (4/3*Math.PI*v**3) : "Invalid";
 }
-function volRect(){ 
-  document.getElementById('rectOut').innerText = "Volume: "+(parseFloat(document.getElementById('recL').value)*parseFloat(document.getElementById('recW').value)*parseFloat(document.getElementById('recH').value)); 
-  const l = parseFloat(document.getElementById('recL').value);
-  const w = parseFloat(document.getElementById('recW').value);
-  const h = parseFloat(document.getElementById('recH').value);
-  if([l,w,h].every(v => !isNaN(v)))
-    document.getElementById('rectOut').innerText = "Volume: " + (l*w*h);
-  else
-    document.getElementById('rectOut').innerText = "Invalid input";
-}
-function volCyl(){ 
-  document.getElementById('cylOut').innerText = "Volume: "+(Math.PI*Math.pow(parseFloat(document.getElementById('cylR').value),2)*parseFloat(document.getElementById('cylH').value)); 
-  const r = parseFloat(document.getElementById('cylR').value);
-  const h = parseFloat(document.getElementById('cylH').value);
-  if(!isNaN(r) && !isNaN(h))
-    document.getElementById('cylOut').innerText = "Volume: " + (Math.PI*Math.pow(r,2)*h);
-  else
-    document.getElementById('cylOut').innerText = "Invalid input";
-}
-function volPyr(){ 
-  document.getElementById('pyrOut').innerText = "Volume: "+(parseFloat(document.getElementById('pyrB').value)*parseFloat(document.getElementById('pyrH').value)/3); 
-  const b = parseFloat(document.getElementById('pyrB').value);
-  const h = parseFloat(document.getElementById('pyrH').value);
-  if(!isNaN(b) && !isNaN(h))
-    document.getElementById('pyrOut').innerText = "Volume: " + (b*h/3);
-  else
-    document.getElementById('pyrOut').innerText = "Invalid input";
+
+function volRect(){
+  const l = parseFloat(recL.value);
+  const w = parseFloat(recW.value);
+  const h = parseFloat(recH.value);
+  rectOut.innerText = (!isNaN(l)&&!isNaN(w)&&!isNaN(h)) ? l*w*h : "Invalid";
 }
 
 // ------------- GAMES -------------
-@@ -179,36 +222,55 @@ <h3>Graph Calculator</h3>
-function nextGame(){ currentIndex = (currentIndex+1) % games.length; updateGame(); }
-function prevGame(){ currentIndex = (currentIndex-1+games.length) % games.length; }
+const games = [
+  {title:"Game 1", url:"https://scratch.mit.edu/projects/10128407/embed"},
+  {title:"Game 2", url:"https://scratch.mit.edu/projects/10128515/embed"}
+];
 
-// ------------- GRAPH DRAWING -------------
-function drawGraph() {
-const canvas = document.getElementById('grid');
-if (!canvas) return;
-const ctx = canvas.getContext('2d');
-ctx.clearRect(0, 0, canvas.width, canvas.height);
-  
+let currentIndex = 0;
 
-// Get ranges
-const xmin = parseFloat(document.getElementById('xmin').value);
-const xmax = parseFloat(document.getElementById('xmax').value);
-const ymin = parseFloat(document.getElementById('ymin').value);
-const ymax = parseFloat(document.getElementById('ymax').value);
-  
-  // Draw axes
-
-  // Draw grid lines
-ctx.strokeStyle = 'white';
-ctx.lineWidth = 1;
-  
-  // X axis
-  const xZero = (-xmin) / (xmax - xmin) * canvas.width;
-  ctx.beginPath();
-  ctx.moveTo(xZero, 0);
-  ctx.lineTo(xZero, canvas.height);
-  ctx.stroke();
-  
-  // Y axis
-  const yZero = (ymax) / (ymax - ymin) * canvas.height;
-  ctx.beginPath();
-  ctx.moveTo(0, yZero);
-  ctx.lineTo(canvas.width, yZero);
-  ctx.stroke();
-  
-
-  // Draw vertical grid lines and labels
-  const gridXCount = 10;
-  for(let i=0; i<=gridXCount; i++){
-    const x = xmin + i*(xmax - xmin)/gridXCount;
-    const px = (x - xmin) / (xmax - xmin) * canvas.width;
-    ctx.beginPath();
-    ctx.moveTo(px, 0);
-    ctx.lineTo(px, canvas.height);
-    ctx.stroke();
-
-    // Add labels
-    if(i===0 || i===gridXCount || (x >= xmin && x <= xmax)){
-      document.getElementById('axesLabels').innerHTML += `<div style="position:absolute; left:${px}px; bottom:0; transform:translateX(-50%) translateY(10px); font-size:0.8em; color:#ccc;">${x.toFixed(1)}</div>`;
-    }
-  }
-
-  // Draw horizontal grid lines and labels
-  const gridYCount = 10;
-  for(let i=0; i<=gridYCount; i++){
-    const yVal = ymin + i*(ymax - ymin)/gridYCount;
-    const py = (ymax - yVal) / (ymax - ymin) * canvas.height;
-    ctx.beginPath();
-    ctx.moveTo(0, py);
-    ctx.lineTo(canvas.width, py);
-    ctx.stroke();
-
-    // Add labels
-    if(i===0 || i===gridYCount || (yVal >= ymin && yVal <= ymax)){
-      document.getElementById('axesLabels').innerHTML += `<div style="position:absolute; left:0; bottom:${py}px; transform:translateY(0); font-size:0.8em; color:#ccc;">${yVal.toFixed(1)}</div>`;
-    }
-  }
-
-// Plot functions
-const functions = [
-document.getElementById('eq1').value,
-@@ -222,17 +284,17 @@ <h3>Graph Calculator</h3>
-ctx.beginPath();
-ctx.strokeStyle = ['red', 'yellow', 'cyan', 'magenta'][index];
-let firstPoint = true;
-    for (let px = 0; px <= canvas.width; px++) {
-    for (let px=0; px<=canvas.width; px++){
-const x = xmin + (px / canvas.width) * (xmax - xmin);
-let y;
-try {
-        y = eval(expr.replace(/x/g, `(${x})`));
-        y=eval(expr.replace(/x/g, `(${x})`));
-} catch {
-continue;
-}
-const py = (ymax - y) / (ymax - ymin) * canvas.height;
-      if (py >= 0 && py <= canvas.height) {
-        if (firstPoint) {
-      if (py >= 0 && py <= canvas.height){
-        if (firstPoint){
-ctx.moveTo(px, py);
-firstPoint = false;
-} else {
-@@ -244,11 +306,10 @@ <h3>Graph Calculator</h3>
-});
+function updateGame(){
+  document.getElementById('scratchFrame').src = games[currentIndex].url;
+  document.getElementById('gameTitle').innerText = games[currentIndex].title;
 }
 
-// Initialize first game on load
-// Initialize first game
+function nextGame(){ currentIndex = (currentIndex+1)%games.length; updateGame(); }
+function prevGame(){ currentIndex = (currentIndex-1+games.length)%games.length; updateGame(); }
+
+// ------------- GRAPH -------------
+function drawGraph(){
+  const canvas = document.getElementById('grid');
+  const ctx = canvas.getContext('2d');
+
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  const xmin = parseFloat(xmin.value);
+  const xmax = parseFloat(xmax.value);
+  const ymin = parseFloat(ymin.value);
+  const ymax = parseFloat(ymax.value);
+
+  ctx.strokeStyle="white";
+
+  const xZero = (-xmin)/(xmax-xmin)*canvas.width;
+  ctx.beginPath(); ctx.moveTo(xZero,0); ctx.lineTo(xZero,400); ctx.stroke();
+
+  const yZero = (ymax)/(ymax-ymin)*canvas.height;
+  ctx.beginPath(); ctx.moveTo(0,yZero); ctx.lineTo(400,yZero); ctx.stroke();
+}
+
+// INIT
 load("home");
-updateGame();
 
 </script>
 
