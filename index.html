@@ -215,48 +215,58 @@ function fixExpr(expr){
 
 function drawGraph(){
   const canvas = document.getElementById('grid');
+  if(!canvas) return;
+
   const ctx = canvas.getContext('2d');
-  ctx.clearRect(0,0,400,400);
 
-  const xmin = parseFloat(xmin.value);
-  const xmax = parseFloat(xmax.value);
-  const ymin = parseFloat(ymin.value);
-  const ymax = parseFloat(ymax.value);
+  // WHITE BACKGROUND (fix visibility)
+  ctx.fillStyle = "white";
+  ctx.fillRect(0, 0, 400, 400);
 
-  // grid
-  const step = 40;
-  ctx.strokeStyle="#333";
-  for(let i=0;i<=400;i+=step){
+  const xminVal = parseFloat(document.getElementById('xmin').value);
+  const xmaxVal = parseFloat(document.getElementById('xmax').value);
+  const yminVal = parseFloat(document.getElementById('ymin').value);
+  const ymaxVal = parseFloat(document.getElementById('ymax').value);
+
+  // GRID (light gray)
+  ctx.strokeStyle="#ddd";
+  ctx.lineWidth = 1;
+  for(let i=0;i<=400;i+=40){
     ctx.beginPath(); ctx.moveTo(i,0); ctx.lineTo(i,400); ctx.stroke();
     ctx.beginPath(); ctx.moveTo(0,i); ctx.lineTo(400,i); ctx.stroke();
   }
 
-  // axes
-  ctx.strokeStyle="white";
-  const xZero = (-xmin)/(xmax-xmin)*400;
-  const yZero = (ymax)/(ymax-ymin)*400;
+  // AXES (bold black)
+  ctx.strokeStyle="black";
+  ctx.lineWidth = 3;
+
+  const xZero = (-xminVal)/(xmaxVal-xminVal)*400;
+  const yZero = (ymaxVal)/(ymaxVal-yminVal)*400;
 
   ctx.beginPath(); ctx.moveTo(xZero,0); ctx.lineTo(xZero,400); ctx.stroke();
   ctx.beginPath(); ctx.moveTo(0,yZero); ctx.lineTo(400,yZero); ctx.stroke();
 
   const eqs = [eq1.value, eq2.value, eq3.value, eq4.value, eq5.value];
-  const colors = ["red","yellow","cyan","lime","magenta"];
+  const colors = ["red","blue","green","purple","orange"];
 
-  eqs.forEach((expr, i)=>{
+  eqs.forEach((expr,i)=>{
     if(!expr) return;
-    expr = fixExpr(expr);
+
+    expr = expr.replace(/(\d)x/g, "$1*x");
 
     ctx.strokeStyle = colors[i];
+    ctx.lineWidth = 2;
     ctx.beginPath();
 
     let first=true;
 
     for(let px=0; px<=400; px++){
-      const x = xmin + (px/400)*(xmax-xmin);
+      const x = xminVal + (px/400)*(xmaxVal-xminVal);
       let y;
+
       try { y = eval(expr); } catch { continue; }
 
-      const py = (ymax-y)/(ymax-ymin)*400;
+      const py = (ymaxVal-y)/(ymaxVal-yminVal)*400;
 
       if(py>=0 && py<=400){
         if(first){ ctx.moveTo(px,py); first=false; }
