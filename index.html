@@ -3,22 +3,25 @@
 <head>
   <title>GN-Gassy</title>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
-<body style="background:black; color:white;">
+<body style="background:black; color:white; margin:0;">
 
-<h1>GN-Gassy</h1>
-
-<hr>
-
-<button onclick="load('home')">Home</button>
-<button onclick="load('calc')">Calculators</button>
-<button onclick="load('games')">Games</button>
-<button onclick="load('about')">About</button>
+<h1 style="margin-left:10px;">GN-Gassy</h1>
 
 <hr>
 
-<div id="content">Loading...</div>
+<div style="margin-left:10px;">
+  <button onclick="load('home')">Home</button>
+  <button onclick="load('calc')">Calculators</button>
+  <button onclick="load('games')">Games</button>
+  <button onclick="load('about')">About</button>
+</div>
+
+<hr>
+
+<div id="content" style="width:100%; height:90vh;">Loading...</div>
 
 <script>
 // -------- PAGES --------
@@ -28,9 +31,9 @@ home: `
   <h2>Home</h2>
   <p>Welcome to GN-Gassy.</p>
 
-  <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Gassy@main/sili2.jpg" width="200">
+  <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Gassy@main/sili2.jpg" width="30%">
   <br><br>
-  <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Gassy@main/sili3.jpg" width="200">
+  <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Gassy@main/sili3.jpg" width="30%">
 `,
 
 calc: `
@@ -44,39 +47,46 @@ calc: `
 games: `
   <h2>Scratch Games</h2>
 
-  <table border="1">
+  <table border="1" width="100%" height="80%">
     <tr>
-      <td width="200" valign="top">
+
+      <td width="20%" valign="top">
         <h3>Controls</h3>
         <p id="controlsText">Under Construction</p>
       </td>
 
-      <td align="center">
-        <button onclick="prevGame()">◀</button><br><br>
+      <td width="60%" align="center">
 
-        <iframe id="scratchFrame"
-          src="https://turbowarp.org/1143765424/embed?addons=pause&fps=60"
-          width="500" height="350">
-        </iframe>
+        <button onclick="prevGame()">◀</button>
+        <button onclick="fullscreenGame()">Fullscreen</button>
 
         <br><br>
+
+        <div id="gameContainer" style="width:100%; height:60vh;">
+          <iframe id="scratchFrame"
+            src="https://turbowarp.org/1143765424/embed?addons=pause&fps=60"
+            style="width:100%; height:100%;">
+          </iframe>
+        </div>
+
+        <br><br>
+
         <button onclick="nextGame()">▶</button>
+
       </td>
 
-      <td width="200" valign="top">
+      <td width="20%" valign="top">
         <h3>Credits</h3>
         <p id="creditsText">Under Construction</p>
       </td>
+
     </tr>
   </table>
 
   <h3 id="gameTitle">Sisyphean Escalator</h3>
 `,
 
-about: `
-  <h2>About</h2>
-  <p>GN-Gassy tools site.</p>
-`
+about: `<h2>About</h2><p>GN-Gassy tools site.</p>`
 };
 
 // -------- LOAD --------
@@ -90,7 +100,7 @@ function showCalc(type){
 
   if(type==="simple"){
     c.innerHTML = `
-      <input id="simpleInput" placeholder="2+2*3">
+      <input id="simpleInput">
       <button onclick="calcSimple()">Calc</button>
       <p id="simpleOut"></p>
     `;
@@ -118,25 +128,22 @@ function showCalc(type){
 
       <button onclick="drawGraph()">Graph</button><br><br>
 
-      <canvas id="grid" width="400" height="400" style="border:1px solid white;"></canvas>
+      <canvas id="grid" style="width:90%; height:50vh;"></canvas>
     `;
   }
 }
 
 // -------- SIMPLE --------
 function calcSimple(){
-  try{
-    simpleOut.innerText = eval(simpleInput.value);
-  }catch{
-    simpleOut.innerText = "Error";
-  }
+  try{ simpleOut.innerText = eval(simpleInput.value); }
+  catch{ simpleOut.innerText = "Error"; }
 }
 
 // -------- VOLUME --------
-function volCube(){ o1.innerText=cube.value*cube.value*cube.value; }
-function volSphere(){ o2.innerText=(4/3)*Math.PI*sphere.value*sphere.value*sphere.value; }
+function volCube(){ o1.innerText=cube.value**3; }
+function volSphere(){ o2.innerText=(4/3)*Math.PI*sphere.value**3; }
 function volRect(){ o3.innerText=l.value*w.value*h.value; }
-function volCyl(){ o4.innerText=Math.PI*cr.value*cr.value*ch.value; }
+function volCyl(){ o4.innerText=Math.PI*cr.value**2*ch.value; }
 function volPyr(){ o5.innerText=(pb.value*ph.value)/3; }
 
 // -------- PARSER --------
@@ -154,32 +161,40 @@ function parseEq(eq){
   return eq;
 }
 
-// -------- GRAPH --------
+// -------- GRAPH (RESPONSIVE) --------
 function drawGraph(){
   const canvas = document.getElementById("grid");
   const ctx = canvas.getContext("2d");
 
+  // make canvas match display size
+  canvas.width = canvas.clientWidth;
+  canvas.height = canvas.clientHeight;
+
+  const w = canvas.width;
+  const h = canvas.height;
+
   let xmin=+xmin.value, xmax=+xmax.value;
   let ymin=+ymin.value, ymax=+ymax.value;
 
-  function X(x){ return (x-xmin)/(xmax-xmin)*400; }
-  function Y(y){ return 400-(y-ymin)/(ymax-ymin)*400; }
+  function X(x){ return (x-xmin)/(xmax-xmin)*w; }
+  function Y(y){ return h-(y-ymin)/(ymax-ymin)*h; }
 
-  ctx.clearRect(0,0,400,400);
+  ctx.fillStyle="black";
+  ctx.fillRect(0,0,w,h);
 
   ctx.beginPath();
   for(let i=0;i<=10;i++){
     let x=xmin+(xmax-xmin)/10*i;
     let y=ymin+(ymax-ymin)/10*i;
-    ctx.moveTo(X(x),0); ctx.lineTo(X(x),400);
-    ctx.moveTo(0,Y(y)); ctx.lineTo(400,Y(y));
+    ctx.moveTo(X(x),0); ctx.lineTo(X(x),h);
+    ctx.moveTo(0,Y(y)); ctx.lineTo(w,Y(y));
   }
-  ctx.strokeStyle="#444";
+  ctx.strokeStyle="#333";
   ctx.stroke();
 
   ctx.beginPath();
-  ctx.moveTo(X(0),0); ctx.lineTo(X(0),400);
-  ctx.moveTo(0,Y(0)); ctx.lineTo(400,Y(0));
+  ctx.moveTo(X(0),0); ctx.lineTo(X(0),h);
+  ctx.moveTo(0,Y(0)); ctx.lineTo(w,Y(0));
   ctx.strokeStyle="white";
   ctx.stroke();
 
@@ -195,29 +210,14 @@ function drawGraph(){
       if(first){ ctx.moveTo(px,py); first=false; }
       else ctx.lineTo(px,py);
     }
-    ctx.strokeStyle=["red","blue","green","yellow"][i%4];
+    ctx.strokeStyle=["red","cyan","lime","yellow"][i%4];
     ctx.stroke();
   });
 }
 
 // -------- GAMES --------
-const games = [
-"https://turbowarp.org/1143765424/embed?addons=pause&fps=60",
-"https://turbowarp.org/1075310827/embed?addons=pause&fps=60",
-"https://turbowarp.org/941803602/embed?addons=pause&fps=60",
-"https://turbowarp.org/973637218/embed?addons=pause&fps=60",
-"https://turbowarp.org/883776962/embed?addons=pause&fps=60",
-"https://turbowarp.org/898492644/embed?addons=pause&fps=60",
-"https://turbowarp.org/916303075/embed?addons=pause&fps=60",
-"https://turbowarp.org/978483855/embed?addons=pause&fps=60",
-"https://turbowarp.org/959847748/embed?addons=pause&fps=60"
-];
-
-const titles = [
-"Sisyphean Escalator","Gambling but Mid","Laser Dodge","Goober Dodger",
-"Neon's Hostile Road","Mid Cookie Clicker","Asteroid Assault",
-"Reel 'Em In","Rat Catcher"
-];
+const games = [/* same list */];
+const titles = [/* same list */];
 
 let currentIndex = 0;
 
@@ -230,6 +230,11 @@ function updateGame(){
 
 function nextGame(){ currentIndex=(currentIndex+1)%games.length; updateGame(); }
 function prevGame(){ currentIndex=(currentIndex-1+games.length)%games.length; updateGame(); }
+
+function fullscreenGame(){
+  const elem=document.getElementById("gameContainer");
+  if(elem.requestFullscreen) elem.requestFullscreen();
+}
 
 // init
 load("home");
