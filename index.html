@@ -21,7 +21,7 @@ button:hover { background:#666; }
 
 #axesLabels {
   position: absolute;
-  font-size: 0.9em;
+  font-size: 0.8em;
   color: #ccc;
 }
 
@@ -33,7 +33,6 @@ button:hover { background:#666; }
 
 <body>
 
-<!-- NAV BAR -->
 <div style="text-align:center; padding:10px; background:#111; border-bottom:1px solid #333;">
   <button onclick="load('home')">Home</button>
   <button onclick="load('calc')">Calculators</button>
@@ -45,10 +44,11 @@ button:hover { background:#666; }
 <div id="content">Loading...</div>
 
 <div style="position:fixed; bottom:5px; right:10px; color:gray; font-size:12px;">
-  v0.13
+  v0.14
 </div>
 
 <script>
+
 // ------------- PAGES -------------
 const pages = {
 
@@ -94,6 +94,11 @@ function load(page){
   }
 }
 
+// ENTER KEY SUPPORT
+function enterRun(e, fn){
+  if(e.key === "Enter") fn();
+}
+
 // ------------- CALCULATORS -------------
 function showCalc(type){
   const c = document.getElementById('calcArea');
@@ -101,7 +106,7 @@ function showCalc(type){
   if(type==="simple"){
     c.innerHTML = `
       <h3>Simple Calculator</h3>
-      <input id="simpleInput" placeholder="2+2*3">
+      <input id="simpleInput" placeholder="2+2*3" onkeydown="enterRun(event, calcSimple)">
       <button onclick="calcSimple()">Calc</button>
       <p id="simpleOut"></p>
     `;
@@ -111,20 +116,34 @@ function showCalc(type){
     c.innerHTML = `
       <h3>Volume Calculator</h3>
 
-      Cube: <input id="cubeSide" style="width:80px;">
+      Cube (Side):
+      <input id="cubeSide" onkeydown="enterRun(event, volCube)">
       <button onclick="volCube()">Calc</button>
       <p id="cubeOut"></p>
 
-      Sphere: <input id="sphereR" style="width:80px;">
+      Sphere (Radius):
+      <input id="sphereR" onkeydown="enterRun(event, volSphere)">
       <button onclick="volSphere()">Calc</button>
       <p id="sphereOut"></p>
 
-      Rect: 
-      <input id="recL" style="width:60px;">
-      <input id="recW" style="width:60px;">
-      <input id="recH" style="width:60px;">
+      Rectangular Prism (L W H):
+      <input id="recL" placeholder="L" onkeydown="enterRun(event, volRect)">
+      <input id="recW" placeholder="W" onkeydown="enterRun(event, volRect)">
+      <input id="recH" placeholder="H" onkeydown="enterRun(event, volRect)">
       <button onclick="volRect()">Calc</button>
       <p id="rectOut"></p>
+
+      Cylinder (R H):
+      <input id="cylR" placeholder="R" onkeydown="enterRun(event, volCyl)">
+      <input id="cylH" placeholder="H" onkeydown="enterRun(event, volCyl)">
+      <button onclick="volCyl()">Calc</button>
+      <p id="cylOut"></p>
+
+      Pyramid (Base Area, H):
+      <input id="pyrB" placeholder="Base" onkeydown="enterRun(event, volPyr)">
+      <input id="pyrH" placeholder="H" onkeydown="enterRun(event, volPyr)">
+      <button onclick="volPyr()">Calc</button>
+      <p id="pyrOut"></p>
     `;
   }
 
@@ -132,13 +151,14 @@ function showCalc(type){
     c.innerHTML = `
       <h3>Graph Calculator</h3>
 
-      X: <input id="xmin" value="-10" style="width:50px;">
-      to <input id="xmax" value="10" style="width:50px;"><br>
+      X: <input id="xmin" value="-10"> to <input id="xmax" value="10"><br>
+      Y: <input id="ymin" value="-10"> to <input id="ymax" value="10"><br><br>
 
-      Y: <input id="ymin" value="-10" style="width:50px;">
-      to <input id="ymax" value="10" style="width:50px;"><br><br>
-
-      y=<input id="eq1" placeholder="x*x" style="width:150px;"><br><br>
+      y=<input id="eq1" onkeydown="enterRun(event, drawGraph)"><br>
+      y=<input id="eq2" onkeydown="enterRun(event, drawGraph)"><br>
+      y=<input id="eq3" onkeydown="enterRun(event, drawGraph)"><br>
+      y=<input id="eq4" onkeydown="enterRun(event, drawGraph)"><br>
+      y=<input id="eq5" onkeydown="enterRun(event, drawGraph)"><br><br>
 
       <button onclick="drawGraph()">Graph</button><br><br>
 
@@ -151,15 +171,14 @@ function showCalc(type){
 }
 
 function calcSimple(){
-  const val = document.getElementById('simpleInput').value;
   try {
-    document.getElementById('simpleOut').innerText = eval(val);
+    simpleOut.innerText = eval(simpleInput.value);
   } catch {
-    document.getElementById('simpleOut').innerText = "Error";
+    simpleOut.innerText = "Error";
   }
 }
 
-// Volume
+// ------------- VOLUME -------------
 function volCube(){
   const v = parseFloat(cubeSide.value);
   cubeOut.innerText = !isNaN(v) ? v**3 : "Invalid";
@@ -177,6 +196,78 @@ function volRect(){
   rectOut.innerText = (!isNaN(l)&&!isNaN(w)&&!isNaN(h)) ? l*w*h : "Invalid";
 }
 
+function volCyl(){
+  const r = parseFloat(cylR.value);
+  const h = parseFloat(cylH.value);
+  cylOut.innerText = (!isNaN(r)&&!isNaN(h)) ? Math.PI*r*r*h : "Invalid";
+}
+
+function volPyr(){
+  const b = parseFloat(pyrB.value);
+  const h = parseFloat(pyrH.value);
+  pyrOut.innerText = (!isNaN(b)&&!isNaN(h)) ? b*h/3 : "Invalid";
+}
+
+// ------------- GRAPH -------------
+function fixExpr(expr){
+  return expr.replace(/(\d)x/g, "$1*x");
+}
+
+function drawGraph(){
+  const canvas = document.getElementById('grid');
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0,0,400,400);
+
+  const xmin = parseFloat(xmin.value);
+  const xmax = parseFloat(xmax.value);
+  const ymin = parseFloat(ymin.value);
+  const ymax = parseFloat(ymax.value);
+
+  // grid
+  const step = 40;
+  ctx.strokeStyle="#333";
+  for(let i=0;i<=400;i+=step){
+    ctx.beginPath(); ctx.moveTo(i,0); ctx.lineTo(i,400); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0,i); ctx.lineTo(400,i); ctx.stroke();
+  }
+
+  // axes
+  ctx.strokeStyle="white";
+  const xZero = (-xmin)/(xmax-xmin)*400;
+  const yZero = (ymax)/(ymax-ymin)*400;
+
+  ctx.beginPath(); ctx.moveTo(xZero,0); ctx.lineTo(xZero,400); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(0,yZero); ctx.lineTo(400,yZero); ctx.stroke();
+
+  const eqs = [eq1.value, eq2.value, eq3.value, eq4.value, eq5.value];
+  const colors = ["red","yellow","cyan","lime","magenta"];
+
+  eqs.forEach((expr, i)=>{
+    if(!expr) return;
+    expr = fixExpr(expr);
+
+    ctx.strokeStyle = colors[i];
+    ctx.beginPath();
+
+    let first=true;
+
+    for(let px=0; px<=400; px++){
+      const x = xmin + (px/400)*(xmax-xmin);
+      let y;
+      try { y = eval(expr); } catch { continue; }
+
+      const py = (ymax-y)/(ymax-ymin)*400;
+
+      if(py>=0 && py<=400){
+        if(first){ ctx.moveTo(px,py); first=false; }
+        else ctx.lineTo(px,py);
+      }
+    }
+
+    ctx.stroke();
+  });
+}
+
 // ------------- GAMES -------------
 const games = [
   {title:"Game 1", url:"https://scratch.mit.edu/projects/10128407/embed"},
@@ -186,33 +277,12 @@ const games = [
 let currentIndex = 0;
 
 function updateGame(){
-  document.getElementById('scratchFrame').src = games[currentIndex].url;
-  document.getElementById('gameTitle').innerText = games[currentIndex].title;
+  scratchFrame.src = games[currentIndex].url;
+  gameTitle.innerText = games[currentIndex].title;
 }
 
-function nextGame(){ currentIndex = (currentIndex+1)%games.length; updateGame(); }
-function prevGame(){ currentIndex = (currentIndex-1+games.length)%games.length; updateGame(); }
-
-// ------------- GRAPH -------------
-function drawGraph(){
-  const canvas = document.getElementById('grid');
-  const ctx = canvas.getContext('2d');
-
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-
-  const xmin = parseFloat(xmin.value);
-  const xmax = parseFloat(xmax.value);
-  const ymin = parseFloat(ymin.value);
-  const ymax = parseFloat(ymax.value);
-
-  ctx.strokeStyle="white";
-
-  const xZero = (-xmin)/(xmax-xmin)*canvas.width;
-  ctx.beginPath(); ctx.moveTo(xZero,0); ctx.lineTo(xZero,400); ctx.stroke();
-
-  const yZero = (ymax)/(ymax-ymin)*canvas.height;
-  ctx.beginPath(); ctx.moveTo(0,yZero); ctx.lineTo(400,yZero); ctx.stroke();
-}
+function nextGame(){ currentIndex=(currentIndex+1)%games.length; updateGame(); }
+function prevGame(){ currentIndex=(currentIndex-1+games.length)%games.length; updateGame(); }
 
 // INIT
 load("home");
