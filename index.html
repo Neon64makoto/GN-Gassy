@@ -4,180 +4,235 @@
   <title>GN-Gassy</title>
   <meta charset="UTF-8">
 </head>
-<body>
+
+<body style="background:black; color:white;">
 
 <h1>GN-Gassy</h1>
+
 <hr>
 
-<!-- Navigation -->
 <button onclick="load('home')">Home</button>
 <button onclick="load('calc')">Calculators</button>
-<button onclick="load('graph')">Graph</button>
+<button onclick="load('games')">Games</button>
 <button onclick="load('about')">About</button>
+
 <hr>
 
 <div id="content">Loading...</div>
 
 <script>
-// ------------- PAGES -------------
+// -------- PAGES --------
 const pages = {
-  home: `<h2>Home</h2><p>Welcome to GN-Gassy.</p>`,
 
-  calc: `<h2>Calculators</h2>
-    <button onclick="showCalc('simple')">Simple Calculator</button>
-    <button onclick="showCalc('volume')">Volume Calculator</button>
-    <button onclick="showCalc('graph')">Graph Calculator</button>
-    <div id="calcContent"></div>
-  `,
+home: `
+  <h2>Home</h2>
+  <p>Welcome to GN-Gassy.</p>
 
-  graph: `
-    <h2>Graph Calculator</h2>
-    X Range: <input id="xmin" value="-10"> to <input id="xmax" value="10"><br>
-    Y Range: <input id="ymin" value="-10"> to <input id="ymax" value="10"><br><br>
-    y = <input id="eq1" placeholder="x*x"><br>
-    y = <input id="eq2" placeholder=""><br>
-    y = <input id="eq3" placeholder=""><br>
-    y = <input id="eq4" placeholder=""><br><br>
-    <button onclick="drawGraph()">Graph</button><br><br>
-    <canvas id="grid" width="400" height="400" style="border:1px solid black;"></canvas>
-  `,
+  <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Gassy@main/sili2.jpg" width="200">
+  <br><br>
+  <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Gassy@main/sili3.jpg" width="200">
+`,
 
-  about: `<h2>About</h2>
-          <p>GN-Gassy is a simple injected tool site with calculators, volume calculators, and graphing.</p>`
+calc: `
+  <h2>Calculators</h2>
+  <button onclick="showCalc('simple')">Simple</button>
+  <button onclick="showCalc('volume')">Volumes</button>
+  <button onclick="showCalc('graph')">Graph</button>
+  <div id="calcContent"></div>
+`,
+
+games: `
+  <h2>Scratch Games</h2>
+
+  <table border="1">
+    <tr>
+      <td width="200" valign="top">
+        <h3>Controls</h3>
+        <p id="controlsText">Under Construction</p>
+      </td>
+
+      <td align="center">
+        <button onclick="prevGame()">◀</button><br><br>
+
+        <iframe id="scratchFrame"
+          src="https://turbowarp.org/1143765424/embed?addons=pause&fps=60"
+          width="500" height="350">
+        </iframe>
+
+        <br><br>
+        <button onclick="nextGame()">▶</button>
+      </td>
+
+      <td width="200" valign="top">
+        <h3>Credits</h3>
+        <p id="creditsText">Under Construction</p>
+      </td>
+    </tr>
+  </table>
+
+  <h3 id="gameTitle">Sisyphean Escalator</h3>
+`,
+
+about: `
+  <h2>About</h2>
+  <p>GN-Gassy tools site.</p>
+`
 };
 
-// ------------- PAGE LOADER -------------
-function load(page) {
+// -------- LOAD --------
+function load(page){
   document.getElementById("content").innerHTML = pages[page];
-  if(page==='graph') drawGraph(); // optional initial graph
 }
 
-// ------------- CALCULATORS HANDLER -------------
-function showCalc(type) {
-  const content = document.getElementById('calcContent');
-  if(type==='simple') {
-    content.innerHTML = `
-      <h3>Simple Calculator</h3>
-      <input id="simpleInput" placeholder="Enter expression, e.g. 2+2*3">
-      <button onclick="calcSimple()">Calculate</button>
+// -------- CALCS --------
+function showCalc(type){
+  const c = document.getElementById("calcContent");
+
+  if(type==="simple"){
+    c.innerHTML = `
+      <input id="simpleInput" placeholder="2+2*3">
+      <button onclick="calcSimple()">Calc</button>
       <p id="simpleOut"></p>
     `;
-  } else if(type==='volume') {
-    content.innerHTML = `
-      <h3>Volume Calculator</h3>
-      Cube: <input id="cubeSide" placeholder="Side length"><button onclick="volCube()">Calc</button><p id="cubeOut"></p>
-      Sphere: <input id="sphereR" placeholder="Radius"><button onclick="volSphere()">Calc</button><p id="sphereOut"></p>
-      Rectangle: L<input id="recL" placeholder="Length"> W<input id="recW" placeholder="Width"> H<input id="recH" placeholder="Height">
-      <button onclick="volRect()">Calc</button><p id="rectOut"></p>
-      Cylinder: R<input id="cylR" placeholder="Radius"> H<input id="cylH" placeholder="Height"><button onclick="volCyl()">Calc</button><p id="cylOut"></p>
-      Pyramid: B<input id="pyrB" placeholder="Base area"> H<input id="pyrH" placeholder="Height"><button onclick="volPyr()">Calc</button><p id="pyrOut"></p>
+  }
+
+  if(type==="volume"){
+    c.innerHTML = `
+      Cube <input id="cube"><button onclick="volCube()">Calc</button><p id="o1"></p>
+      Sphere <input id="sphere"><button onclick="volSphere()">Calc</button><p id="o2"></p>
+      L<input id="l"> W<input id="w"> H<input id="h"><button onclick="volRect()">Calc</button><p id="o3"></p>
+      R<input id="cr"> H<input id="ch"><button onclick="volCyl()">Calc</button><p id="o4"></p>
+      Base<input id="pb"> H<input id="ph"><button onclick="volPyr()">Calc</button><p id="o5"></p>
     `;
-  } else if(type==='graph') {
-    load('graph'); // switch to graph page
+  }
+
+  if(type==="graph"){
+    c.innerHTML = `
+      X <input id="xmin" value="-10"> to <input id="xmax" value="10"><br>
+      Y <input id="ymin" value="-10"> to <input id="ymax" value="10"><br><br>
+
+      y=<input id="eq1"><br>
+      y=<input id="eq2"><br>
+      y=<input id="eq3"><br>
+      y=<input id="eq4"><br><br>
+
+      <button onclick="drawGraph()">Graph</button><br><br>
+
+      <canvas id="grid" width="400" height="400" style="border:1px solid white;"></canvas>
+    `;
   }
 }
 
-// ------------- SIMPLE CALC -------------
-function calcSimple() {
-  const val = document.getElementById('simpleInput').value;
-  try {
-    document.getElementById('simpleOut').innerText = "Result: " + eval(val);
-  } catch(e) {
-    document.getElementById('simpleOut').innerText = "Invalid expression";
+// -------- SIMPLE --------
+function calcSimple(){
+  try{
+    simpleOut.innerText = eval(simpleInput.value);
+  }catch{
+    simpleOut.innerText = "Error";
   }
 }
 
-// ------------- VOLUME CALCS -------------
-function volCube() {
-  const s = parseFloat(document.getElementById('cubeSide').value);
-  document.getElementById('cubeOut').innerText = "Volume: " + (s*s*s);
-}
-function volSphere() {
-  const r = parseFloat(document.getElementById('sphereR').value);
-  document.getElementById('sphereOut').innerText = "Volume: " + ((4/3)*Math.PI*r*r*r);
-}
-function volRect() {
-  const l = parseFloat(document.getElementById('recL').value);
-  const w = parseFloat(document.getElementById('recW').value);
-  const h = parseFloat(document.getElementById('recH').value);
-  document.getElementById('rectOut').innerText = "Volume: " + (l*w*h);
-}
-function volCyl() {
-  const r = parseFloat(document.getElementById('cylR').value);
-  const h = parseFloat(document.getElementById('cylH').value);
-  document.getElementById('cylOut').innerText = "Volume: " + (Math.PI*r*r*h);
-}
-function volPyr() {
-  const b = parseFloat(document.getElementById('pyrB').value);
-  const h = parseFloat(document.getElementById('pyrH').value);
-  document.getElementById('pyrOut').innerText = "Volume: " + (b*h/3);
+// -------- VOLUME --------
+function volCube(){ o1.innerText=cube.value*cube.value*cube.value; }
+function volSphere(){ o2.innerText=(4/3)*Math.PI*sphere.value*sphere.value*sphere.value; }
+function volRect(){ o3.innerText=l.value*w.value*h.value; }
+function volCyl(){ o4.innerText=Math.PI*cr.value*cr.value*ch.value; }
+function volPyr(){ o5.innerText=(pb.value*ph.value)/3; }
+
+// -------- PARSER --------
+function parseEq(eq){
+  eq = eq.replace(/\s+/g,"");
+  eq = eq.replace(/\^/g,"**");
+  eq = eq.replace(/(\d)(x)/g,"$1*$2");
+  eq = eq.replace(/(x)(\d)/g,"$1*$2");
+  eq = eq.replace(/(\d)\(/g,"$1*(");
+  eq = eq.replace(/x\(/g,"x*(");
+  eq = eq.replace(/sin/g,"Math.sin");
+  eq = eq.replace(/cos/g,"Math.cos");
+  eq = eq.replace(/tan/g,"Math.tan");
+  eq = eq.replace(/sqrt/g,"Math.sqrt");
+  return eq;
 }
 
-// ------------- GRAPH CALCULATOR -------------
-function drawGraph() {
+// -------- GRAPH --------
+function drawGraph(){
   const canvas = document.getElementById("grid");
-  if(!canvas) return;
   const ctx = canvas.getContext("2d");
-  const w = canvas.width;
-  const h = canvas.height;
 
-  ctx.clearRect(0,0,w,h);
+  let xmin=+xmin.value, xmax=+xmax.value;
+  let ymin=+ymin.value, ymax=+ymax.value;
 
-  const xmin = parseFloat(document.getElementById("xmin").value);
-  const xmax = parseFloat(document.getElementById("xmax").value);
-  const ymin = parseFloat(document.getElementById("ymin").value);
-  const ymax = parseFloat(document.getElementById("ymax").value);
+  function X(x){ return (x-xmin)/(xmax-xmin)*400; }
+  function Y(y){ return 400-(y-ymin)/(ymax-ymin)*400; }
 
-  function toX(x){ return (x-xmin)/(xmax-xmin)*w; }
-  function toY(y){ return h-(y-ymin)/(ymax-ymin)*h; }
+  ctx.clearRect(0,0,400,400);
 
-  // grid lines
   ctx.beginPath();
-  const stepX = (xmax-xmin)/10;
-  const stepY = (ymax-ymin)/10;
-  for(let x=xmin;x<=xmax;x+=stepX){
-    const px = toX(x);
-    ctx.moveTo(px,0);
-    ctx.lineTo(px,h);
+  for(let i=0;i<=10;i++){
+    let x=xmin+(xmax-xmin)/10*i;
+    let y=ymin+(ymax-ymin)/10*i;
+    ctx.moveTo(X(x),0); ctx.lineTo(X(x),400);
+    ctx.moveTo(0,Y(y)); ctx.lineTo(400,Y(y));
   }
-  for(let y=ymin;y<=ymax;y+=stepY){
-    const py = toY(y);
-    ctx.moveTo(0,py);
-    ctx.lineTo(w,py);
-  }
-  ctx.strokeStyle="#ccc";
+  ctx.strokeStyle="#444";
   ctx.stroke();
 
-  // axes
   ctx.beginPath();
-  ctx.moveTo(toX(0),0); ctx.lineTo(toX(0),h);
-  ctx.moveTo(0,toY(0)); ctx.lineTo(w,toY(0));
-  ctx.strokeStyle="#000";
+  ctx.moveTo(X(0),0); ctx.lineTo(X(0),400);
+  ctx.moveTo(0,Y(0)); ctx.lineTo(400,Y(0));
+  ctx.strokeStyle="white";
   ctx.stroke();
 
-  // plot equations
-  const eqs = [document.getElementById("eq1").value,
-               document.getElementById("eq2").value,
-               document.getElementById("eq3").value,
-               document.getElementById("eq4").value];
-  eqs.forEach((eq,i)=>{
+  [eq1.value,eq2.value,eq3.value,eq4.value].forEach((eq,i)=>{
     if(!eq) return;
+    let p=parseEq(eq);
     ctx.beginPath();
     let first=true;
     for(let x=xmin;x<=xmax;x+=(xmax-xmin)/200){
       let y;
-      try{ y = eval(eq.replaceAll("x","("+x+")")); }catch{ continue; }
-      const px = toX(x);
-      const py = toY(y);
-      if(first){ ctx.moveTo(px,py); first=false; } else { ctx.lineTo(px,py); }
+      try{ y=eval(p.replaceAll("x","("+x+")")); }catch{ continue; }
+      let px=X(x), py=Y(y);
+      if(first){ ctx.moveTo(px,py); first=false; }
+      else ctx.lineTo(px,py);
     }
-    ctx.strokeStyle=["red","blue","green","orange"][i%4];
+    ctx.strokeStyle=["red","blue","green","yellow"][i%4];
     ctx.stroke();
   });
 }
 
-// initial load
-load('home');
+// -------- GAMES --------
+const games = [
+"https://turbowarp.org/1143765424/embed?addons=pause&fps=60",
+"https://turbowarp.org/1075310827/embed?addons=pause&fps=60",
+"https://turbowarp.org/941803602/embed?addons=pause&fps=60",
+"https://turbowarp.org/973637218/embed?addons=pause&fps=60",
+"https://turbowarp.org/883776962/embed?addons=pause&fps=60",
+"https://turbowarp.org/898492644/embed?addons=pause&fps=60",
+"https://turbowarp.org/916303075/embed?addons=pause&fps=60",
+"https://turbowarp.org/978483855/embed?addons=pause&fps=60",
+"https://turbowarp.org/959847748/embed?addons=pause&fps=60"
+];
+
+const titles = [
+"Sisyphean Escalator","Gambling but Mid","Laser Dodge","Goober Dodger",
+"Neon's Hostile Road","Mid Cookie Clicker","Asteroid Assault",
+"Reel 'Em In","Rat Catcher"
+];
+
+let currentIndex = 0;
+
+function updateGame(){
+  const f=document.getElementById("scratchFrame");
+  if(!f) return;
+  f.src=games[currentIndex];
+  gameTitle.innerText=titles[currentIndex];
+}
+
+function nextGame(){ currentIndex=(currentIndex+1)%games.length; updateGame(); }
+function prevGame(){ currentIndex=(currentIndex-1+games.length)%games.length; updateGame(); }
+
+// init
+load("home");
 </script>
 
 </body>
