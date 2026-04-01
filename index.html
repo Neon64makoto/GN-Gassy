@@ -44,7 +44,7 @@ button:hover { background:#666; }
 <div id="content">Loading...</div>
 
 <div style="position:fixed; bottom:5px; right:10px; color:gray; font-size:12px;">
-  v0.14
+  v0.15
 </div>
 
 <script>
@@ -219,7 +219,6 @@ function drawGraph(){
 
   const ctx = canvas.getContext('2d');
 
-  // WHITE BACKGROUND (fix visibility)
   ctx.fillStyle = "white";
   ctx.fillRect(0, 0, 400, 400);
 
@@ -228,7 +227,6 @@ function drawGraph(){
   const yminVal = parseFloat(document.getElementById('ymin').value);
   const ymaxVal = parseFloat(document.getElementById('ymax').value);
 
-  // GRID (light gray)
   ctx.strokeStyle="#ddd";
   ctx.lineWidth = 1;
   for(let i=0;i<=400;i+=40){
@@ -236,7 +234,6 @@ function drawGraph(){
     ctx.beginPath(); ctx.moveTo(0,i); ctx.lineTo(400,i); ctx.stroke();
   }
 
-  // AXES (bold black)
   ctx.strokeStyle="black";
   ctx.lineWidth = 3;
 
@@ -280,15 +277,32 @@ function drawGraph(){
 
 // ------------- GAMES -------------
 const games = [
-  {title:"Game 1", url:"https://scratch.mit.edu/projects/10128407/embed"},
-  {title:"Game 2", url:"https://scratch.mit.edu/projects/10128515/embed"}
+"https://turbowarp.org/10128407/embed?addons=pause",
+"https://turbowarp.org/1143765424/embed?addons=pause&fps=60",
+"https://turbowarp.org/1075310827/embed?addons=pause&fps=60",
+"https://turbowarp.org/941803602/embed?addons=pause&fps=60",
+"https://turbowarp.org/973637218/embed?addons=pause&fps=60",
+"https://turbowarp.org/883776962/embed?addons=pause&fps=60",
+"https://turbowarp.org/898492644/embed?addons=pause&fps=60",
+"https://turbowarp.org/916303075/embed?addons=pause&fps=60",
+"https://turbowarp.org/978483855/embed?addons=pause&fps=60",
+"https://turbowarp.org/959847748/embed?addons=pause&fps=60"
+];
+
+const titles = [
+"Paper Minecraft (Not Made By Me)",
+"Sisyphean Escalator","Gambling but Mid","Laser Dodge","Goober Dodger",
+"Neon's Hostile Road","Mid Cookie Clicker","Asteroid Assault",
+"Reel 'Em In","Rat Catcher"
 ];
 
 let currentIndex = 0;
 
 function updateGame(){
-  scratchFrame.src = games[currentIndex].url;
-  gameTitle.innerText = games[currentIndex].title;
+  const f=document.getElementById("scratchFrame");
+  if(!f) return;
+  f.src=games[currentIndex];
+  gameTitle.innerText=titles[currentIndex];
 }
 
 function nextGame(){ currentIndex=(currentIndex+1)%games.length; updateGame(); }
