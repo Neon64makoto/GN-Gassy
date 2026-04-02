@@ -44,6 +44,10 @@ button:hover { background:#666; }
   align-items:center;
 }
 
+#gameControls, #gameNotes {
+  white-space: pre-line;
+}
+
 @media(max-width: 800px){
   body { font-size: 1.2em; }
   .sideBox { display:none; }
@@ -65,7 +69,7 @@ button:hover { background:#666; }
 <div id="content">Loading...</div>
 
 <div style="position:fixed; bottom:5px; right:10px; color:gray; font-size:12px;">
-  v0.20 <!-- INCREMENT THIS EVERY UPDATE -->
+  v0.20.1 <!-- INCREMENT THIS VERSION NUMBER EVERY UPDATE -->
 </div>
 
 <script>
@@ -95,7 +99,7 @@ games: `
 
   <div class="sideBox">
     <h3>Controls</h3>
-    <p id="gameControls"></p>
+    <div id="gameControls"></div>
   </div>
 
   <div class="centerBox">
@@ -108,7 +112,7 @@ games: `
 
   <div class="sideBox">
     <h3>Notes / Credits</h3>
-    <p id="gameNotes"></p>
+    <div id="gameNotes"></div>
   </div>
 
 </div>
@@ -333,7 +337,9 @@ const titles = [
 ];
 
 // NEW
-const controls = ["","","","","","","","","",""];
+const controls = [`Type the letters shown fast enough or fall.
+
+Not case sensitive.`,"","","","","","","","",""];
 const notes = ["","","","","","","","","",""];
 
 let currentIndex = 0;
@@ -344,8 +350,8 @@ function updateGame(){
   f.src=games[currentIndex];
   gameTitle.innerText=titles[currentIndex];
 
-  document.getElementById("gameControls").innerText = controls[currentIndex] || "";
-  document.getElementById("gameNotes").innerText = notes[currentIndex] || "";
+  document.getElementById("gameControls").innerHTML = controls[currentIndex] || "";
+  document.getElementById("gameNotes").innerHTML = notes[currentIndex] || "";
 }
 
 function nextGame(){ currentIndex=(currentIndex+1)%games.length; updateGame(); }
