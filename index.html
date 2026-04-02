@@ -187,101 +187,133 @@ function showCalc(type){
     `;
   }
 
+  else if(type==='graph'){
+    c.innerHTML = `
+      <h3>Graph Calculator</h3>
+
+      X: <input id="xmin" value="-10"> to <input id="xmax" value="10"><br>
+      Y: <input id="ymin" value="-10"> to <input id="ymax" value="10"><br><br>
+
+      y=<input id="eq1" onkeydown="enterRun(event, drawGraph)"><br>
+      y=<input id="eq2" onkeydown="enterRun(event, drawGraph)"><br>
+      y=<input id="eq3" onkeydown="enterRun(event, drawGraph)"><br>
+      y=<input id="eq4" onkeydown="enterRun(event, drawGraph)"><br>
+      y=<input id="eq5" onkeydown="enterRun(event, drawGraph)"><br><br>
+
+      <button onclick="drawGraph()">Graph</button><br><br>
+
+      <div style="position: relative;">
+        <canvas id="grid" width="400" height="400" style="border:1px solid white;"></canvas>
+        <div id="axesLabels"></div>
+      </div>
+    `;
+  }
+}
+
+function calcSimple(){
+  try {
+    simpleOut.innerText = eval(simpleInput.value);
+  } catch {
+    simpleOut.innerText = "Error";
+  }
+}
+
+// ------------- VOLUME -------------
+function volCube(){
+  const v = parseFloat(cubeSide.value);
+  cubeOut.innerText = !isNaN(v) ? v**3 : "Invalid";
+}
+
+function volSphere(){
+  const v = parseFloat(sphereR.value);
+  sphereOut.innerText = !isNaN(v) ? (4/3*Math.PI*v**3) : "Invalid";
+}
+
+function volRect(){
+  const l = parseFloat(recL.value);
+  const w = parseFloat(recW.value);
+  const h = parseFloat(recH.value);
+  rectOut.innerText = (!isNaN(l)&&!isNaN(w)&&!isNaN(h)) ? l*w*h : "Invalid";
+}
+
+function volCyl(){
+  const r = parseFloat(cylR.value);
+  const h = parseFloat(cylH.value);
+  cylOut.innerText = (!isNaN(r)&&!isNaN(h)) ? Math.PI*r*r*h : "Invalid";
+}
+
+function volPyr(){
+  const b = parseFloat(pyrB.value);
+  const h = parseFloat(pyrH.value);
+  pyrOut.innerText = (!isNaN(b)&&!isNaN(h)) ? b*h/3 : "Invalid";
+}
+
+// ------------- GRAPH -------------
 function fixExpr(expr){
   return expr.replace(/(\d)x/g, "$1*x");
 }
 
 function drawGraph(){
-  const canvas=document.getElementById('grid');
+  const canvas = document.getElementById('grid');
   if(!canvas) return;
-  const ctx=canvas.getContext('2d');
 
-  ctx.fillStyle="black";
-  ctx.fillRect(0,0,400,400);
+  const ctx = canvas.getContext('2d');
 
-  const xminVal=+xmin.value,xmaxVal=+xmax.value;
-  const yminVal=+ymin.value,ymaxVal=+ymax.value;
+  ctx.fillStyle = "white";
+  ctx.fillRect(0, 0, 400, 400);
 
-  const w=400,h=400;
+  const xminVal = parseFloat(document.getElementById('xmin').value);
+  const xmaxVal = parseFloat(document.getElementById('xmax').value);
+  const yminVal = parseFloat(document.getElementById('ymin').value);
+  const ymaxVal = parseFloat(document.getElementById('ymax').value);
 
-  ctx.strokeStyle="#333";
-  for(let i=0;i<=10;i++){
-    let x=i*(w/10),y=i*(h/10);
-    ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,h); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(w,y); ctx.stroke();
+  ctx.strokeStyle="#ddd";
+  ctx.lineWidth = 1;
+  for(let i=0;i<=400;i+=40){
+    ctx.beginPath(); ctx.moveTo(i,0); ctx.lineTo(i,400); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0,i); ctx.lineTo(400,i); ctx.stroke();
   }
 
-  const xZero=(-xminVal)/(xmaxVal-xminVal)*w;
-  const yZero=(ymaxVal)/(ymaxVal-yminVal)*h;
+  ctx.strokeStyle="black";
+  ctx.lineWidth = 3;
 
-  ctx.strokeStyle="white";
-  ctx.beginPath(); ctx.moveTo(xZero,0); ctx.lineTo(xZero,h); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(0,yZero); ctx.lineTo(w,yZero); ctx.stroke();
+  const xZero = (-xminVal)/(xmaxVal-xminVal)*400;
+  const yZero = (ymaxVal)/(ymaxVal-yminVal)*400;
 
-  ctx.fillStyle="white";
-  ctx.font="10px Arial";
+  ctx.beginPath(); ctx.moveTo(xZero,0); ctx.lineTo(xZero,400); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(0,yZero); ctx.lineTo(400,yZero); ctx.stroke();
 
-  for(let i=0;i<=10;i++){
-    let xv=xminVal+(i/10)*(xmaxVal-xminVal);
-    let yv=yminVal+(i/10)*(ymaxVal-yminVal);
-    let px=i*(w/10),py=h-i*(h/10);
-    ctx.fillText(xv.toFixed(1),px,yZero+10);
-    ctx.fillText(yv.toFixed(1),xZero+5,py);
-  }
-
-  const eqs=[eq1.value,eq2.value,eq3.value,eq4.value,eq5.value];
-  const colors=["red","blue","green","purple","orange"];
-
-  let results="<h3>Results</h3>";
-  let funcs=[];
+  const eqs = [eq1.value, eq2.value, eq3.value, eq4.value, eq5.value];
+  const colors = ["red","blue","green","purple","orange"];
 
   eqs.forEach((expr,i)=>{
     if(!expr) return;
-    expr=expr.replace(/(\d)x/g,"$1*x");
-    let fn=(x)=>eval(expr);
-    funcs.push(fn);
 
-    ctx.strokeStyle=colors[i];
+    expr = expr.replace(/(\d)x/g, "$1*x");
+
+    ctx.strokeStyle = colors[i];
+    ctx.lineWidth = 2;
     ctx.beginPath();
 
     let first=true;
-    for(let px=0;px<=w;px++){
-      let x=xminVal+(px/w)*(xmaxVal-xminVal);
-      let y;
-      try{ y=fn(x);}catch{continue;}
-      let py=(ymaxVal-y)/(ymaxVal-yminVal)*h;
 
-      if(py>=0&&py<=h){
-        if(first){ctx.moveTo(px,py);first=false;}
+    for(let px=0; px<=400; px++){
+      const x = xminVal + (px/400)*(xmaxVal-xminVal);
+      let y;
+
+      try { y = eval(expr); } catch { continue; }
+
+      const py = (ymaxVal-y)/(ymaxVal-yminVal)*400;
+
+      if(py>=0 && py<=400){
+        if(first){ ctx.moveTo(px,py); first=false; }
         else ctx.lineTo(px,py);
       }
     }
+
     ctx.stroke();
-
-    try{ results+=`<p style="color:${colors[i]}">y=${expr} → y(0)=${fn(0).toFixed(2)}</p>`;}catch{}
   });
-
-  for(let i=0;i<funcs.length;i++){
-    for(let j=i+1;j<funcs.length;j++){
-      for(let x=xminVal;x<=xmaxVal;x+=0.1){
-        let y1=funcs[i](x),y2=funcs[j](x);
-        if(Math.abs(y1-y2)<0.1){
-          results+=`<p>Intersection ≈ (${x.toFixed(2)}, ${y1.toFixed(2)})</p>`;
-          break;
-        }
-      }
-    }
-  }
-
-  let div=document.getElementById("graphResults");
-  if(!div){
-    div=document.createElement("div");
-    div.id="graphResults";
-    canvas.parentElement.appendChild(div);
-  }
-  div.innerHTML=results;
 }
-
 
 // ------------- GAMES -------------
 const games = [
