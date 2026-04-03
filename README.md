@@ -1,2 +1,2 @@
 # GN-Gassy
-Blow up, I made this for reasons unknown.
+Blow up, the GN stands for Goober Node.
