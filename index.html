@@ -81,7 +81,7 @@
 
     button:hover {
       background: #555;
-      border-color: #00bfff;
+      border-color: #0400ff;
       box-shadow: 0 0 10px rgba(0, 191, 255, 0.5);
       transform: translateY(-1px);
     }
@@ -605,7 +605,7 @@ const pages = {
     <section class="home-grid">
       <article class="panel hero-panel">
         <h2>Home</h2>
-        <p class="lead">Welcome to GN-Gassy. This keeps the original dark look, but now scales properly with your screen size and has improved sizing for better readability.</p>
+        <p class="lead">Welcome to GN-Gassy. Take a look at these cats.</p>
         <div class="image-row">
           <figure class="image-card">
             <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Gassy@main/sili2.jpg" alt="Cat image from GN-Gassy">
@@ -623,13 +623,10 @@ const pages = {
         <h3>Patch Notes</h3>
         <p class="section-copy">Recent changes to the homepage and site structure.</p>
         <ul class="patch-list">
-          <li>Consolidated CSS and JavaScript back into a single <strong>index.html</strong> file for proper injection into blank pages.</li>
-          <li>Implemented comprehensive responsive scaling using viewport-based font sizing.</li>
+          <li>Implemented scaling using viewport-based font sizing.</li>
           <li>Increased font sizes and spacing for non-game sections to improve readability.</li>
           <li>Added media queries for optimal display on all screen sizes (480px to 1200px+).</li>
-          <li>Kept the existing dark GN-Gassy look while improving the overall user experience.</li>
           <li>Added a dedicated <strong>Patch Notes</strong> area to the Home page.</li>
-          <li>Updated the displayed site version from v0.25 to <strong>v0.26</strong>.</li>
         </ul>
       </aside>
     </section>
@@ -1077,7 +1074,7 @@ function toggleMute() {
   const btn = document.getElementById('muteBtn');
   
   if (isMuted) {
-    btn.innerText = '🔇 Unmute';
+    btn.innerText = 'Unmute';
     btn.style.background = '#555';
     // Mute all audio elements
     document.querySelectorAll('audio').forEach(el => {
@@ -1090,7 +1087,7 @@ function toggleMute() {
       } catch (e) {}
     });
   } else {
-    btn.innerText = '🔊 Mute';
+    btn.innerText = 'Mute';
     btn.style.background = '#444';
     // Unmute all audio elements
     document.querySelectorAll('audio').forEach(el => {
