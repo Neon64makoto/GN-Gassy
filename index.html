@@ -52,7 +52,7 @@
       height: 100%;
       object-fit: cover;
       z-index: -1;
-      filter: blur(8px);
+      filter: blur(0px);
     }
 
     .content-overlay {
@@ -81,7 +81,7 @@
 
     button:hover {
       background: #555;
-      border-color: #00bfff;
+      border-color: ##1100ff;
       box-shadow: 0 0 10px rgba(0, 191, 255, 0.5);
       transform: translateY(-1px);
     }
@@ -161,7 +161,7 @@
     }
 
     .panel {
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.015));
+      background: linear-gradient(180deg, rgba(0, 0, 0, 1), rgba(0, 0, 150, 0.5));
       border: 1px solid var(--border);
       border-radius: 14px;
       box-shadow: var(--shadow);
@@ -584,7 +584,7 @@
     <button onclick="load('about')">About</button>
   </nav>
   <div class="topbar-right">
-    <button id="muteBtn" onclick="toggleMute()">🔊 Mute</button>
+    <button id="muteBtn" onclick="toggleMute()">Mute</button>
   </div>
 </div>
 
@@ -594,7 +594,7 @@
 </main>
 
 <div class="version-tag">
-  v0.30
+  v0.31
 </div>
 
 <script>
@@ -605,7 +605,7 @@ const pages = {
     <section class="home-grid">
       <article class="panel hero-panel">
         <h2>Home</h2>
-        <p class="lead">Welcome to GN-Gassy. This keeps the original dark look, but now scales properly with your screen size and has improved sizing for better readability.</p>
+        <p class="lead">Welcome to GN-Gassy. Take a look at these cats.</p>
         <div class="image-row">
           <figure class="image-card">
             <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Gassy@main/sili2.jpg" alt="Cat image from GN-Gassy">
@@ -619,11 +619,12 @@ const pages = {
       </article>
 
       <aside class="panel patch-panel">
-        <div class="version-chip">Latest patch · v0.30</div>
+        <div class="version-chip">Latest patch · v0.31</div>
         <h3>Patch Notes</h3>
         <p class="section-copy">Recent changes to the homepage and site structure.</p>
         <ul class="patch-list">
-          <li>Added background video that is <strong>.mp4</strong></li>
+          <li>Changed the <strong>color</strong> of most of the UI.</li>
+          <li>Added background video that is <strong>.mp4.</strong></li>
         </ul>
       </aside>
     </section>
@@ -1071,7 +1072,7 @@ function toggleMute() {
   const btn = document.getElementById('muteBtn');
   
   if (isMuted) {
-    btn.innerText = '🔇 Unmute';
+    btn.innerText = 'Unmute';
     btn.style.background = '#555';
     // Mute all audio elements
     document.querySelectorAll('audio').forEach(el => {
@@ -1084,7 +1085,7 @@ function toggleMute() {
       } catch (e) {}
     });
   } else {
-    btn.innerText = '🔊 Mute';
+    btn.innerText = 'Mute';
     btn.style.background = '#444';
     // Unmute all audio elements
     document.querySelectorAll('audio').forEach(el => {
