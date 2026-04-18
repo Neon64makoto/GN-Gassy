@@ -711,6 +711,19 @@
     .chat-input-row { display: flex; padding: 0.5rem; background: #111; border-top: 1px solid #333; }
     #chatInput { flex: 1; margin: 0; }
 
+    /* --- Sili Guessing Game (GN-Neon Themed) --- */
+    .guess-container { max-width: 400px; margin: 0 auto; text-align: center; padding: 1rem; }
+    .guess-message { font-size: 1.2rem; margin-top: 1rem; min-height: 1.5rem; }
+    .guess-success { color: #00ff00; }
+    .guess-error { color: #ff0000; }
+    .diff-slider { position: fixed; top: 0; right: -300px; width: 250px; height: 100%; background: rgba(17,17,17,0.98); box-shadow: -5px 0 15px rgba(0,0,0,0.5); padding: 1.5rem; transition: right 0.4s ease; color: #0044ff; z-index: 1000; border-left: 1px solid #333; backdrop-filter: blur(10px); }
+    .diff-slider.open { right: 0; }
+    .diff-slider h2 { color: #fff; margin-top: 0; }
+    .diff-slider input { width: 100%; margin: 5px 0 15px; background: #0c0c0c; border: 1px solid #333; color: white; }
+    .diff-slider button { width: 100%; margin: 5px 0; }
+    .slider-toggle-btn { position: fixed; right: 0; top: 50%; transform: translateY(-50%); background: #0044ff; color: white; border: none; width: 30px; height: 60px; cursor: pointer; border-radius: 8px 0 0 8px; z-index: 1100; transition: right 0.4s ease; }
+    .slider-toggle-btn.open { right: 250px; }
+
     /* ─── RESPONSIVE ──────────────────────────────────────────────────── */
     @media (max-width: 1200px) {
       html,
@@ -762,7 +775,7 @@
       }
 
       .page-shell {
-        padding: 9.5rem 1rem 5rem;
+        padding: 9.5rem 1rem 2rem;
       }
 
       .site-title {
@@ -832,7 +845,7 @@
       }
 
       .page-shell {
-        padding: 9.5rem 0.75rem 5rem;
+        padding: 9.5rem 0.75rem 2rem;
       }
 
       .site-title {
@@ -955,21 +968,13 @@ let isVisualizerMode = false;
 const playlist = [
   'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Super%20Mario%20RPG.mp3',
   'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Philly%20Nice%20(B-Side).mp3',
-  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/dq%20blizzard.mp3',
-  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Neon%20Cobra.mp3',
-  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Pain_is_just_freddy_fazbear.mp3',
-  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/But%20Can%20You%20Do%20This.mp3',
-  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Super%20Mario%20RPG%20Waltz%20of%20the%20Forest%20(4K).mp3'
+  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/dq%20blizzard.mp3'
 ];
 
 const trackMeta = [
-  { title: 'SMRPG Rawest Forrest', artist: 'Martin Hagwell' },
-  { title: 'Philly Nice (B-Side)', artist: 'Rozebud' },
-  { title: 'DQ Blizzard', artist: 'MC Chris' },
-  { title: 'Neon Cobra', artist: 'Shockwave-Sound' },
-  { title: 'FNAF 1 (trust)', artist: 'Silva Gunner' },
-  { title: 'But Can You Do This', artist: 'Lolnein' },
-  { title: 'SMRPG Waltz of The Forest', artist: 'Psyguy' }
+  { title: 'Super Mario RPG', artist: 'Yoko Shimomura' },
+  { title: 'Philly Nice (B-Side)', artist: 'Unknown Artist' },
+  { title: 'DQ Blizzard', artist: 'Unknown Artist' }
 ];
 
 // ─── SPLASH LOGIC ────────────────────────────────────────────────────────────
@@ -1080,11 +1085,11 @@ function exitVizOnEsc(e) { if(e.key === 'Escape') toggleVisualizerMode(); }
   };
   document.addEventListener('mousemove', (e) => {
     if (e.clientY < 100) { isNear = true; show(); } 
-    else { isNear = false; if(!topbar.matches(':hover')) { clearTimeout(hideTimer); hideTimer = setTimeout(hide, 500); } }
+    else { isNear = false; if(!topbar.matches(':hover')) { clearTimeout(hideTimer); hideTimer = setTimeout(hide, 1500); } }
   });
   topbar.addEventListener('mouseenter', show);
-  topbar.addEventListener('mouseleave', () => { if(!isNear) hideTimer = setTimeout(hide, 500); });
-  hideTimer = setTimeout(hide, 500);
+  topbar.addEventListener('mouseleave', () => { if(!isNear) hideTimer = setTimeout(hide, 1000); });
+  hideTimer = setTimeout(hide, 3000);
 })();
 
 // ─── VISUALIZER DRAW ─────────────────────────────────────────────────────────
@@ -1181,7 +1186,6 @@ const pages = {
       <div class="games-menu" id="gamesMenu">
         <button onclick="showScratchGames()">Scratch Games</button>
         <button onclick="showEmulators()">Emulators</button>
-        <button onclick="showTool('flappy')">Flappy Bird</button>
         <button onclick="showTool('guess')">Number Guessing Game</button>
       </div>
       <div id="gamesContent"></div>
@@ -1246,14 +1250,32 @@ function showTool(type) {
     area.innerHTML = `<h3>Search Engine</h3><div style="display:flex;gap:0.5rem;"><input id="searchInput" style="flex:1" placeholder="Search Google..."><button onclick="doSearch()">Search</button></div>`;
   } else if (type === 'ciphers') {
     area.innerHTML = `<h3>Ciphers</h3><div class="button-row"><button onclick="showCipher('caesar')">Caesar</button><button onclick="showCipher('atbash')">Atbash</button></div><div id="cipherArea"></div>`;
-  } else if (type === 'flappy') {
-    area.innerHTML = `<button class="back-button" onclick="load('games')">← Back</button><div class="embed-container"><iframe src="https://neal.fun/flappy-bird/"></iframe></div>`;
   } else if (type === 'guess') {
-    area.innerHTML = `<h3>Number Guessing</h3><p>Guess a number between 1 and 100:</p><input id="guessInput" type="number"><button onclick="checkGuess()">Guess</button><p id="guessMsg"></p>`;
-    window.secretNum = Math.floor(Math.random() * 100) + 1;
+    const gamesMenu = document.getElementById('gamesMenu');
+    if (gamesMenu) gamesMenu.style.display = 'none';
+    area.innerHTML = `<button class="back-button" onclick="load('games')">← Back to Games Menu</button>
+      <div class="guess-container panel">
+        <h3>Number Guessing Game</h3>
+        <p id="rangeDisplay">Guess a number between 1 and 100</p>
+        <input type="number" id="guessInput" placeholder="Enter your guess" min="1" max="100">
+        <button id="submitGuess">Submit Guess</button>
+        <p class="guess-message" id="guessMessage"></p>
+        <button id="playAgain" style="display:none; background:#00ff00;">Play Again</button>
+      </div>
+      <button class="slider-toggle-btn" id="toggleSlider">▶</button>
+      <div class="diff-slider" id="difficultySlider">
+        <h2>Difficulty</h2>
+        <label>Min:</label><input type="number" id="minInput" value="1">
+        <label>Max:</label><input type="number" id="maxInput" value="100">
+        <button id="setRange">Set Range</button>
+        <button id="easyMode">Easy (0-50)</button>
+        <button id="normalMode">Normal (0-100)</button>
+        <button id="hardMode">Hard (0-500)</button>
+        <button id="impossibleMode">Impossible (0-1,000,000)</button>
+      </div>`;
+    initGuessGame();
   }
 }
-
 function showCalc(type) {
   const c = document.getElementById("calcArea");
   if (type === "simple") {
@@ -1264,6 +1286,7 @@ function showCalc(type) {
     c.innerHTML = `<h3>Graph Calculator</h3>X: <input id="xmin" value="-10"> to <input id="xmax" value="10"><br>Y: <input id="ymin" value="-10"> to <input id="ymax" value="10"><br><br>y=<input id="eq1" onkeydown="enterRun(event, drawGraph)"><br>y=<input id="eq2" onkeydown="enterRun(event, drawGraph)"><br>y=<input id="eq3" onkeydown="enterRun(event, drawGraph)"><br>y=<input id="eq4" onkeydown="enterRun(event, drawGraph)"><br>y=<input id="eq5" onkeydown="enterRun(event, drawGraph)"><br><br><button onclick="drawGraph()">Graph</button><br><br><div class="canvas-wrap"><canvas id="grid" width="400" height="400"></canvas><div id="axesLabels"></div></div>`;
   }
 }
+
 // ─── ORIGINAL CALCULATOR LOGIC ────────────────────────────────────────────────
 function calcSimple() { try { simpleOut.innerText = eval(simpleInput.value); } catch { simpleOut.innerText = "Error"; } }
 function volCube() { const v = parseFloat(cubeSide.value); cubeOut.innerText = !isNaN(v) ? v ** 3 : "Invalid"; }
@@ -1308,26 +1331,26 @@ function drawGraph() {
 // ─── ORIGINAL GAMES DATA ─────────────────────────────────────────────────────
 const games = ["https://turbowarp.org/10128407/embed?addons=pause,fullscreen", "https://turbowarp.org/1143765424/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/1075310827/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/941803602/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/973637218/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/883776962/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/898492644/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/916303075/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/978483855/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/959847748/embed?addons=pause,fullscreen&fps=60"];
 const titles = ["Paper Minecraft (Not Made By Me)", "Sisyphean Escalator", "Gambling but Mid", "Laser Dodge", "Goober Dodger", "Neon's Hostile Road", "Mid Cookie Clicker", "Asteroid Assault", "Reel 'Em In", "Cats Hate Rats"];
-const controls = [`Modding Guide: ▶️ https://youtu.be/PexNsUvqD5w\n[1 to 9] - Select Item    [Click] - Place or Mine\n[WASD] - Move / Jump  [E] - Open/Close Inventory\n[E+hover] - Open / Close Chest, Crafting Table, Door\n[Space] - Drop single tile from a stack while dragging.\n[F] - Eat food       [N] - Label a sign or chest\n[Q] - Drop item      [P] - Pause / Unpause\n[T] - Talk / Command    [O] - Save your game\n[M] - Music / Sounds   [Shift] - Sprint`, `Type the letters shown fast enough or fall.\n\nNot case sensitive.`, `::At BlackJack::\nUse arrow keys to bet:\n\nLeft and Right set the bet to 0 and max\n\nUp and down will change the bet by 10, or if holding "." will change it by 500\n1\nEnter to place bet, and after will be the hit button.\n\nSpace to stand.\n\n::At Slots::\nS to Spin\n\nSame betting controls.`, `Use the mouse to dodge the lasers that get faster with time!\n\nPress the left mouse button to become invincible for three seconds with a 10 second cool down so use it wisely!`, `Use the mouse to dodge the goobers, and don't stay in the border too long.\n\nThat's really about it.`, `ASD to move.\nW for a 3-second long power-up of invincibility.\nSpace to Start/Restart on the game-over screen.\n\n1 and 2 control the arcade scan filter.\n3 and 4 control the arcade cabinet overlay.\n5 and 6 control the arcade music (on/off)\n\n(60 fps Is highly recommended)`, `It's Cookie Clicker, but worse.\n\nUse your mouse.`, `Left mouse button to fire a weak auxiliary laser that overheats quickly.\n\nSpace for Main powerful laser.\n\nW for a backup shield that lasts 10 seconds, but has limited uses.\n\nUse your mouse to aim the laser.`, `Use Left Mouse Button to fire the harpoon and try to get the best fish, and buy upgrades.\n \nBeware of the explosive mine, it takes $50 dollars to repair the harpoon and the explosion might scare a few good fish away.\n\n\nThis is still a work in progress and I plan on adding more things like power ups, multipliers, and maybe a high score system.\n\nF to show debug menu \nG to hide debug menu`, `goober.\n\nUse mouse 1 to hit the rats.\nuse F to turn off the yarn.\nUse G to turn them back on.\n`];
-const notes = [`*** Credits ***\nAll the graphics are taken from the Minecraft wiki page and have not been created by me. I have rescaled them and broken them up to make the game work, but that is it at present.\n\nORIGNAL PROJECT MADE BY GRIFFPATCH ON SCRATCH, NOT ME:\n\nCheck him out he does great stuf, https://scratch.mit.edu/users/griffpatch/`, `The game is based on this video by the way:\n\nhttps://youtu.be/2Gby1XQ4Z2M?feature=shared`, `Don't gamble in real life, also this technically is not correct, and if you do it quick enough you can easily break most of this.\n\nThe special codes are:\n\nL E O\n\nZ A C H\n\nN F S M W\n`, `Not much to add, I could have done a better job with the randomization of everything, but I am not gonna be working on this any further.`, `<b>!!!VOLUME WARNING!!!</b>\n\nI made all of this in scratch.\n\nFor now there is a max of 15 goobers on screen at a time.\n`, `Added a normal and hard mode to the game, plus a secret Most Wanted mode.\n\nI made most of these sprites in scratch and the ships were made in Pixil Art\n\nlink to my Pixil Art profile here: https://www.pixilart.com/neon64makoto\n\nArcade cabinet overlay here:https://forums.launchbox-app.com/files/file/2726-generic-arcade-1080p-overlay/    (i used the 4th one)\n\nMost sounds were found here:\nhttps://pixabay.com/sound-effects/search/arcade/\nhttps://downloads.khinsider.com/game-soundtracks/album/five-nights-at-freddy-s-fnaf-2-sfx\n\nPlus this for hard mode music: https://www.youtube.com/watch?v=R6ZHn2XEbGk\n\nAnd this for <b>****MW****</b> mode:\nhttps://www.youtube.com/watch?v=kG5LF_QS1JU`, `I stole all the assets I obviously stole and made the assets I obviously made. Not much else.\n\nSecret code this time is:\n\nD R G`, `I made everything except for the crosshair which you can find here: https://nohat.cc/f/red-crosshair-png-transparent/m2i8N4N4K9Z5A0K9-201907232239.html\nAnd the asteroid is here: https://assets.website-files.com/62cc3ac38e15ba20d4ff98f5/62d908ddf4c208aa8b54b424_asteroid-8bit-picture.png\n\nEverything else was either made in scratch or made on my Pixil art profile\n\nLink to my Pixil art profile: https://www.pixilart.com/neon64makoto/gallery\n\n\n\n\ngoober.`, `Everything was pretty much made in scratch except for the harpoon and boat clip art. Also the fish are just a part of scratch's sprite library.`, `<b>!!!VOLUME WARNING!!!</b>`];
+const controls = [\`Modding Guide: ▶️ https://youtu.be/PexNsUvqD5w\\n[1 to 9] - Select Item    [Click] - Place or Mine\\n[WASD] - Move / Jump  [E] - Open/Close Inventory\\n[E+hover] - Open / Close Chest, Crafting Table, Door\\n[Space] - Drop single tile from a stack while dragging.\\n[F] - Eat food       [N] - Label a sign or chest\\n[Q] - Drop item      [P] - Pause / Unpause\\n[T] - Talk / Command    [O] - Save your game\\n[M] - Music / Sounds   [Shift] - Sprint\`, \`Type the letters shown fast enough or fall.\\n\\nNot case sensitive.\`, \`::At BlackJack::\\nUse arrow keys to bet:\\n\\nLeft and Right set the bet to 0 and max\\n\\nUp and down will change the bet by 10, or if holding "." will change it by 500\\n1\\nEnter to place bet, and after will be the hit button.\\n\\nSpace to stand.\\n\\n::At Slots::\\nS to Spin\\n\\nSame betting controls.\`, \`Use the mouse to dodge the lasers that get faster with time!\\n\\nPress the left mouse button to become invincible for three seconds with a 10 second cool down so use it wisely!\`, \`Use the mouse to dodge the goobers, and don't stay in the border too long.\\n\\nThat's really about it.\`, \`ASD to move.\\nW for a 3-second long power-up of invincibility.\\nSpace to Start/Restart on the game-over screen.\\n\\n1 and 2 control the arcade scan filter.\\n3 and 4 control the arcade cabinet overlay.\\n5 and 6 control the arcade music (on/off)\\n\\n(60 fps Is highly recommended)\`, \`It's Cookie Clicker, but worse.\\n\\nUse your mouse.\`, \`Left mouse button to fire a weak auxiliary laser that overheats quickly.\\n\\nSpace for Main powerful laser.\\n\\nW for a backup shield that lasts 10 seconds, but has limited uses.\\n\\nUse your mouse to aim the laser.\`, \`Use Left Mouse Button to fire the harpoon and try to get the best fish, and buy upgrades.\\n \\nBeware of the explosive mine, it takes $50 dollars to repair the harpoon and the explosion might scare a few good fish away.\\n\\n\\nThis is still a work in progress and I plan on adding more things like power ups, multipliers, and maybe a high score system.\\n\\nF to show debug menu \\nG to hide debug menu\`, \`goober.\\n\\nUse mouse 1 to hit the rats.\\nuse F to turn off the yarn.\\nUse G to turn them back on.\\n\`];
+const notes = [\`*** Credits ***\\nAll the graphics are taken from the Minecraft wiki page and have not been created by me. I have rescaled them and broken them up to make the game work, but that is it at present.\\n\\nORIGNAL PROJECT MADE BY GRIFFPATCH ON SCRATCH, NOT ME:\\n\\nCheck him out he does great stuf, https://scratch.mit.edu/users/griffpatch/\`, \`The game is based on this video by the way:\\n\\nhttps://youtu.be/2Gby1XQ4Z2M?feature=shared\`, \`Don't gamble in real life, also this technically is not correct, and if you do it quick enough you can easily break most of this.\\n\\nThe special codes are:\\n\\nL E O\\n\\nZ A C H\\n\\nN F S M W\\n\`, \`Not much to add, I could have done a better job with the randomization of everything, but I am not gonna be working on this any further.\`, \`<b>!!!VOLUME WARNING!!!</b>\\n\\nI made all of this in scratch.\\n\\nFor now there is a max of 15 goobers on screen at a time.\\n\`, \`Added a normal and hard mode to the game, plus a secret Most Wanted mode.\\n\\nI made most of these sprites in scratch and the ships were made in Pixil Art\\n\\nlink to my Pixil Art profile here: https://www.pixilart.com/neon64makoto\\n\\nArcade cabinet overlay here:https://forums.launchbox-app.com/files/file/2726-generic-arcade-1080p-overlay/    (i used the 4th one)\\n\\nMost sounds were found here:\\nhttps://pixabay.com/sound-effects/search/arcade/\\nhttps://downloads.khinsider.com/game-soundtracks/album/five-nights-at-freddy-s-fnaf-2-sfx\\n\\nPlus this for hard mode music: https://www.youtube.com/watch?v=R6ZHn2XEbGk\\n\\nAnd this for <b>****MW****</b> mode:\\nhttps://www.youtube.com/watch?v=kG5LF_QS1JU\`, \`It's Cookie Clicker, but worse.\\n\\nUse your mouse.\\n\\nSecret code this time is:\\n\\nD R G\`, \`I made everything except for the crosshair which you can find here: https://nohat.cc/f/red-crosshair-png-transparent/m2i8N4N4K9Z5A0K9-201907232239.html\\nAnd the asteroid is here: https://assets.website-files.com/62cc3ac38e15ba20d4ff98f5/62d908ddf4c208aa8b54b424_asteroid-8bit-picture.png\\n\\nEverything else was either made in scratch or made on my Pixil art profile\\n\\nLink to my Pixil art profile: https://www.pixilart.com/neon64makoto/gallery\\n\\n\\n\\n\\ngoober.\`, \`Everything was pretty much made in scratch except for the harpoon and boat clip art. Also the fish are just a part of scratch's sprite library.\`, \`<b>!!!VOLUME WARNING!!!</b>\`];
 
 function showScratchGames() {
   const content = document.getElementById('gamesContent'), gamesMenu = document.querySelector('.games-menu'); if (gamesMenu) gamesMenu.style.display = 'none';
-  content.innerHTML = `<button class="back-button" onclick="load('games')">← Back to Games Menu</button><div class="games-layout"><div class="sideBox"><h3>Controls</h3><div id="gameControls"></div></div><div class="centerBox"><div class="button-row" style="justify-content:center;"><button onclick="prevGame()">◀</button><button onclick="nextGame()">▶</button></div><iframe id="scratchFrame" allowfullscreen title="GN-Neon Scratch game viewer"></iframe><h3 id="gameTitle"></h3></div><div class="sideBox"><h3>Notes / Credits</h3><div id="gameNotes"></div></div></div>`;
+  content.innerHTML = \`<button class="back-button" onclick="load('games')">← Back to Games Menu</button><div class="games-layout"><div class="sideBox"><h3>Controls</h3><div id="gameControls"></div></div><div class="centerBox"><div class="button-row" style="justify-content:center;"><button onclick="prevGame()">◀</button><button onclick="nextGame()">▶</button></div><iframe id="scratchFrame" allowfullscreen title="GN-Neon Scratch game viewer"></iframe><h3 id="gameTitle"></h3></div><div class="sideBox"><h3>Notes / Credits</h3><div id="gameNotes"></div></div></div>\`;
   currentIndex = 0; updateGame();
 }
 
 function showEmulators() {
   const content = document.getElementById('gamesContent'), gamesMenu = document.querySelector('.games-menu'); if (gamesMenu) gamesMenu.style.display = 'none';
-  content.innerHTML = `<button class="back-button" onclick="load('games')">← Back to Games Menu</button><div class="games-menu" style="max-width: 400px; margin: 2rem auto;"><h3>Select Emulator</h3><button onclick="navigateTo('nes')">NES</button><button onclick="navigateTo('snes')">SNES</button><button onclick="navigateTo('genesis')">Genesis</button></div>`;
+  content.innerHTML = \`<button class="back-button" onclick="load('games')">← Back to Games Menu</button><div class="games-menu" style="max-width: 400px; margin: 2rem auto;"><h3>Select Emulator</h3><button onclick="navigateTo('nes')">NES</button><button onclick="navigateTo('snes')">SNES</button><button onclick="navigateTo('genesis')">Genesis</button></div>\`;
 }
 
 function navigateTo(emulator) {
   const content = document.getElementById('gamesContent');
   if (emulator === 'nes') {
-    content.innerHTML = `<button class="back-button" onclick="showEmulators()">← Back to Emulators</button><div style="width: 100%; max-width: 900px; margin: 2rem auto;"><h2 style="padding: 0 0 1rem 0;">NES Emulator</h2><div style="width:100%;height:500px;max-width:100%; background: #000; border-radius: 10px; overflow: hidden; border: 1px solid #333;"><div id="game"></div></div><script>window.EJS_player='#game';window.EJS_core='nes';window.EJS_gameName='cpu_dummy_reads';window.EJS_color='#0006ff';window.EJS_startOnLoaded=true;window.EJS_pathtodata='https://cdn.jsdelivr.net/gh/EmulatorJS/EmulatorJS@latest/data/';window.EJS_url='https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Roms/cpu_dummy_reads.nes';<\/script><script src="https://cdn.jsdelivr.net/gh/EmulatorJS/EmulatorJS@latest/data/loader.js"><\/script></div>`;
+    content.innerHTML = \`<button class="back-button" onclick="showEmulators()">← Back to Emulators</button><div style="width: 100%; max-width: 900px; margin: 2rem auto;"><h2 style="padding: 0 0 1rem 0;">NES Emulator</h2><div style="width:100%;height:500px;max-width:100%; background: #000; border-radius: 10px; overflow: hidden; border: 1px solid #333;"><div id="game"></div></div><script>window.EJS_player='#game';window.EJS_core='nes';window.EJS_gameName='cpu_dummy_reads';window.EJS_color='#0006ff';window.EJS_startOnLoaded=true;window.EJS_pathtodata='https://cdn.jsdelivr.net/gh/EmulatorJS/EmulatorJS@latest/data/';window.EJS_url='https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Roms/cpu_dummy_reads.nes';<\/script><script src="https://cdn.jsdelivr.net/gh/EmulatorJS/EmulatorJS@latest/data/loader.js"><\/script></div>\`;
   } else {
-    content.innerHTML = `<div class="wip-container"><h2>${emulator.toUpperCase()} Emulator</h2><p>Work in Progress</p><p style="color: #888; margin-top: 1rem;">This section is currently under development.</p><button class="back-button" onclick="showEmulators()">← Back to Emulators</button></div>`;
+    content.innerHTML = \`<div class="wip-container"><h2>\${emulator.toUpperCase()} Emulator</h2><p>Work in Progress</p><p style="color: #888; margin-top: 1rem;">This section is currently under development.</p><button class="back-button" onclick="showEmulators()">← Back to Emulators</button></div>\`;
   }
 }
 
@@ -1344,7 +1367,7 @@ function prevGame() { currentIndex = (currentIndex - 1 + games.length) % games.l
 // ─── NEW TOOLS LOGIC ──────────────────────────────────────────────────────────
 function showCipher(type) {
   const area = document.getElementById("cipherArea");
-  area.innerHTML = `<h3>${type.toUpperCase()}</h3><textarea id="cipherIn" style="width:100%; height:100px; background:#111; color:white;" placeholder="Enter text..."></textarea><br><button onclick="runCipher('${type}')">Run</button><p id="cipherOut" style="background:#000; padding:1rem; border-radius:8px; white-space:pre-wrap; margin-top:1rem;"></p>`;
+  area.innerHTML = \`<h3>\${type.toUpperCase()}</h3><textarea id="cipherIn" style="width:100%; height:100px; background:#111; color:white;" placeholder="Enter text..."></textarea><br><button onclick="runCipher('\${type}')">Run</button><p id="cipherOut" style="background:#000; padding:1rem; border-radius:8px; white-space:pre-wrap; margin-top:1rem;"></p>\`;
 }
 function runCipher(type) {
   const input = document.getElementById('cipherIn').value;
@@ -1363,10 +1386,10 @@ function runIDE() {
 function sendChat() {
   const log = document.getElementById('chatLog'), inp = document.getElementById('chatInput');
   if(!inp.value)return;
-  log.innerHTML += `<div class="chat-msg user-msg">${inp.value}</div>`;
+  log.innerHTML += \`<div class="chat-msg user-msg">\${inp.value}</div>\`;
   const userVal = inp.value; inp.value='';
   setTimeout(()=> {
-    log.innerHTML += `<div class="chat-msg bot-msg">AI demo response to: "${userVal}"</div>`;
+    log.innerHTML += \`<div class="chat-msg bot-msg">AI demo response to: "\${userVal}"</div>\`;
     log.scrollTop = log.scrollHeight;
   }, 600);
 }
@@ -1392,16 +1415,60 @@ function clearCanvas() { paintingCanvas.getContext('2d').clearRect(0,0,800,500);
 function showEmbed(url) {
   const area = document.getElementById('embedArea');
   area.style.display = 'block';
-  area.innerHTML = `<iframe src="${url}"></iframe>`;
+  area.innerHTML = \`<iframe src="\${url}"></iframe>\`;
 }
 function showCreation(type) {
-  document.getElementById('creationArea').innerHTML = `<h3>${type.toUpperCase()}</h3><p>Gallery for ${type} coming soon!</p>`;
+  document.getElementById('creationArea').innerHTML = \`<h3>\${type.toUpperCase()}</h3><p>Gallery for \${type} coming soon!</p>\`;
 }
-function checkGuess() {
-  const v = parseInt(document.getElementById('guessInput').value);
-  const msg = document.getElementById('guessMsg');
-  if(v === window.secretNum) msg.innerText = "Correct!";
-  else msg.innerText = v < window.secretNum ? "Too low!" : "Too high!";
+
+// ─── NEW GUESSING GAME LOGIC ─────────────────────────────────────────────────
+function initGuessGame() {
+  let min = 1, max = 100, guessCount = 0;
+  let randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+  
+  const msg = document.getElementById('guessMessage'), inp = document.getElementById('guessInput');
+  const subBtn = document.getElementById('submitGuess'), playBtn = document.getElementById('playAgain');
+  const rangeDisp = document.getElementById('rangeDisplay'), slider = document.getElementById('difficultySlider');
+  const toggle = document.getElementById('toggleSlider');
+
+  const updateRange = () => {
+    randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+    guessCount = 0; msg.textContent = ''; inp.value = '';
+    rangeDisp.textContent = \`Guess a number between \${min} and \${max}\`;
+    inp.min = min; inp.max = max;
+    playBtn.style.display = "none"; subBtn.style.display = "inline-block";
+    inp.focus();
+  };
+
+  const handleGuess = () => {
+    const val = parseInt(inp.value, 10);
+    if(isNaN(val)) return;
+    inp.value = ''; guessCount++;
+    if (val === randomNumber) {
+      msg.innerHTML = \`<span class="guess-success">🎉 Correct! Took \${guessCount} guesses.</span>\`;
+      subBtn.style.display = "none"; playBtn.style.display = "inline-block";
+    } else {
+      msg.innerHTML = \`<span class="guess-error">\${val < randomNumber ? "Too low!" : "Too high!"}</span>\`;
+    }
+  };
+
+  subBtn.onclick = handleGuess;
+  playBtn.onclick = updateRange;
+  inp.onkeypress = (e) => { if(e.key === 'Enter') subBtn.style.display !== "none" ? handleGuess() : updateRange(); };
+  toggle.onclick = () => {
+    const open = slider.classList.toggle('open');
+    toggle.classList.toggle('open');
+    toggle.innerText = open ? "◀" : "▶";
+  };
+
+  document.getElementById('setRange').onclick = () => {
+    const nMin = parseInt(document.getElementById('minInput').value), nMax = parseInt(document.getElementById('maxInput').value);
+    if(!isNaN(nMin) && !isNaN(nMax) && nMin < nMax) { min = nMin; max = nMax; updateRange(); }
+  };
+  document.getElementById('easyMode').onclick = () => { min = 0; max = 50; updateRange(); };
+  document.getElementById('normalMode').onclick = () => { min = 0; max = 100; updateRange(); };
+  document.getElementById('hardMode').onclick = () => { min = 0; max = 500; updateRange(); };
+  document.getElementById('impossibleMode').onclick = () => { min = 0; max = 1000000; updateRange(); };
 }
 
 // ─── BOOT ─────────────────────────────────────────────────────────────────────
