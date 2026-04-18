@@ -80,66 +80,26 @@
     }
 
     @keyframes loading-stripes {
-      0% {
-        background-position: 0 0;
-      }
-      100% {
-        background-position: 40px 40px;
-      }
+      0% { background-position: 0 0; }
+      100% { background-position: 40px 40px; }
     }
 
     /* Styled scrollbars */
-    ::-webkit-scrollbar {
-      width: 12px;
-      height: 12px;
-    }
+    ::-webkit-scrollbar { width: 12px; height: 12px; }
+    ::-webkit-scrollbar-track { background: #0a0a0a; }
+    ::-webkit-scrollbar-thumb { background: #0600ff; border-radius: 6px; }
+    ::-webkit-scrollbar-thumb:hover { background: #0044ff; }
 
-    ::-webkit-scrollbar-track {
-      background: #0a0a0a;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: #0600ff;
-      border-radius: 6px;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-      background: #0044ff;
-    }
-
-    /* Firefox scrollbar styling */
-    * {
-      scrollbar-color: #0600ff #0a0a0a;
-      scrollbar-width: thin;
-    }
-
-    body.video-bg {
-      background: none;
-      position: relative;
-    }
-
+    body.video-bg { background: none; position: relative; }
     #videoBg {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       object-fit: cover;
       z-index: -2;
-      filter: blur(0px);
     }
 
-    .content-overlay {
-      position: relative;
-      z-index: 1;
-      background: rgba(0, 0, 0, 0.85);
-      min-height: 100vh;
-    }
-
-    button,
-    input {
-      font: inherit;
-    }
+    button, input, textarea { font: inherit; }
 
     button {
       margin: 0.5rem;
@@ -160,7 +120,7 @@
       transform: translateY(-1px);
     }
 
-    input {
+    input, textarea {
       margin: 0.5rem;
       font-size: 1.1rem;
       padding: 0.75rem 0.75rem;
@@ -170,16 +130,10 @@
       border-radius: 4px;
     }
 
-    input::placeholder {
-      color: #8b8b8b;
-    }
-
     /* ─── TOP BAR ─────────────────────────────────────────────────────── */
     .topbar {
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
+      top: 0; left: 0; right: 0;
       z-index: 100;
       background: rgba(17, 17, 17, 0.97);
       border-bottom: 1px solid var(--border);
@@ -188,25 +142,12 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0;
-      /* auto-hide */
       transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.4s;
     }
 
-    .topbar.hidden {
-      transform: translateY(-100%);
-    }
-
-    .topbar.ui-hidden {
-      opacity: 0;
-      pointer-events: none;
-    }
-    
-    .topbar.ui-hidden.hover-reveal {
-      opacity: 1;
-      pointer-events: auto;
-      transform: translateY(0);
-    }
+    .topbar.hidden { transform: translateY(-100%); }
+    .topbar.ui-hidden { opacity: 0; pointer-events: none; }
+    .topbar.ui-hidden.hover-reveal { opacity: 1; pointer-events: auto; transform: translateY(0); }
 
     .topbar-row1 {
       width: 100%;
@@ -218,40 +159,29 @@
       padding: 0 1rem;
     }
 
-    .nav {
-      text-align: center;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
     .topbar-brand {
       position: absolute;
-      left: 1rem;
-      font-size: 1.3rem;
+      left: 1.5rem;
+      font-size: 1.8rem; /* Bigger logo */
       font-weight: bold;
       color: #0600ff;
       letter-spacing: 1px;
+      text-shadow: 0 0 10px rgba(0, 6, 255, 0.5);
     }
+
+    .nav { display: flex; flex-wrap: wrap; justify-content: center; }
 
     .topbar-right {
       position: absolute;
-      right: 1rem;
+      right: 1.5rem;
       display: flex;
-      gap: 0.5rem;
+      gap: 0.75rem;
       align-items: center;
     }
 
-    #muteBtn {
-      padding: 0.6rem 0.8rem;
-      font-size: 1rem;
-      min-width: 60px;
-    }
-
-    /* ─── STYLIZED VOLUME SLIDER ─────────────────────────────────────── */
     #volumeSlider {
       -webkit-appearance: none;
-      width: 80px;
+      width: 100px;
       height: 6px;
       background: #222;
       border-radius: 3px;
@@ -262,8 +192,7 @@
 
     #volumeSlider::-webkit-slider-thumb {
       -webkit-appearance: none;
-      width: 14px;
-      height: 14px;
+      width: 14px; height: 14px;
       background: #0044ff;
       border-radius: 50%;
       cursor: pointer;
@@ -284,122 +213,41 @@
       margin-top: 0.4rem;
     }
 
-    .music-info {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      line-height: 1.25;
-    }
-
-    .music-title {
-      font-size: 0.95rem;
-      font-weight: bold;
-      color: #fff;
-      letter-spacing: 0.02em;
-    }
-
-    .music-artist {
-      font-size: 0.8rem;
-      color: #7799ff;
-    }
-
-    .music-btn-row {
-      display: flex;
-      align-items: center;
-      gap: 0.25rem;
-    }
-
+    .music-info { display: flex; flex-direction: column; align-items: center; line-height: 1.25; }
+    .music-title { font-size: 0.95rem; font-weight: bold; color: #fff; }
+    .music-artist { font-size: 0.8rem; color: #7799ff; }
+    .music-btn-row { display: flex; align-items: center; gap: 0.25rem; }
     .music-btn {
-      margin: 0;
-      padding: 0.35rem 0.65rem;
-      font-size: 1rem;
-      background: transparent;
+      margin: 0; padding: 0.35rem 0.65rem;
+      font-size: 1rem; background: transparent;
       border: 1px solid rgba(0, 0, 200, 0.45);
-      border-radius: 6px;
-      color: #aac0ff;
+      border-radius: 6px; color: #aac0ff;
       cursor: pointer;
-      transition: all 0.15s;
-      min-width: unset;
     }
+    .music-btn:hover { background: rgba(0, 0, 255, 0.25); border-color: #0044ff; color: #fff; }
+    .music-btn.active-loop { background: rgba(0, 0, 255, 0.35); border-color: #0044ff; color: #fff; }
 
-    .music-btn:hover {
-      background: rgba(0, 0, 255, 0.25);
-      transform: translateY(-1px);
-      border-color: #0044ff;
-      color: #fff;
-    }
-
-    .music-btn.active-loop {
-      background: rgba(0, 0, 255, 0.35);
-      border-color: #0044ff;
-      color: #fff;
-    }
-
-    .music-seek-row {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      width: 100%;
-    }
-
-    .music-time {
-      font-size: 0.78rem;
-      color: #7799ff;
-      white-space: nowrap;
-      min-width: 38px;
-      text-align: center;
-    }
-
+    .music-seek-row { display: flex; align-items: center; gap: 0.5rem; width: 100%; }
+    .music-time { font-size: 0.78rem; color: #7799ff; min-width: 38px; text-align: center; }
     #seekBar {
-      flex: 1;
-      -webkit-appearance: none;
-      appearance: none;
-      height: 4px;
-      border-radius: 2px;
+      flex: 1; -webkit-appearance: none; appearance: none;
+      height: 4px; border-radius: 2px;
       background: linear-gradient(to right, #0044ff 0%, #333 0%);
-      outline: none;
-      cursor: pointer;
-      margin: 0;
-      padding: 0;
-      border: none;
+      outline: none; cursor: pointer;
     }
-
-    #seekBar::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: #0044ff;
-      cursor: pointer;
-    }
+    #seekBar::-webkit-slider-thumb { -webkit-appearance: none; width: 12px; height: 12px; border-radius: 50%; background: #0044ff; }
 
     /* ─── MAIN CONTENT ────────────────────────────────────────────────── */
     .page-shell {
       width: 100%;
       max-width: 1200px;
       margin: 0 auto;
-      padding: 8rem 1.5rem 5rem;
+      padding: 8.5rem 1.5rem 5rem;
       transition: opacity 0.4s;
     }
+    .page-shell.ui-hidden { opacity: 0; pointer-events: none; }
 
-    .page-shell.ui-hidden {
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    .site-title {
-      margin: 0.5rem 0 1.5rem;
-      text-align: center;
-      letter-spacing: 0.04em;
-      font-size: 3rem;
-    }
-
-    #content {
-      width: 100%;
-      min-height: calc(100vh - 200px);
-      padding: 1rem 0 2rem;
-    }
+    .site-title { margin: 0.5rem 0 1.5rem; text-align: center; font-size: 3rem; }
 
     .panel {
       background: linear-gradient(180deg, rgba(0, 0, 0, 1), rgba(0, 0, 150, 0.5));
@@ -407,160 +255,56 @@
       border-radius: 14px;
       box-shadow: var(--shadow);
       backdrop-filter: blur(5px);
-      padding: 10px;
+      padding: 2rem;
     }
 
+    /* Home Grid Restoration */
     .home-grid {
       display: grid;
       grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.9fr);
       gap: 1.5rem;
       align-items: start;
     }
+    .hero-panel h2, .patch-panel h3 { margin-top: 0; font-size: 2rem; }
+    .lead { color: #d2d2d2; line-height: 1.6; font-size: 1.15rem; }
+    .image-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+    .image-card { background: var(--panel-alt); border: 1px solid var(--border); border-radius: 12px; padding: 1rem; }
+    .image-card img { width: 100%; border-radius: 8px; }
+    .image-card span { display: block; margin-top: 0.75rem; color: var(--muted); }
 
-    .section-panel {
-      padding: 2rem;
-    }
+    .patch-panel { max-height: 600px; overflow-y: auto; display: flex; flex-direction: column; }
+    .version-chip { display: inline-flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; padding: 0.5rem 0.8rem; border-radius: 999px; border: 1px solid rgba(0, 0, 225, 1); background: rgba(0, 0, 150, 0.08); color: var(--accent); font-size: 0.9rem; }
+    .patch-list { margin: 1rem 0 0; padding-left: 1.5rem; line-height: 1.65; }
 
-    .button-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-      margin-bottom: 1.5rem;
-    }
-
-    /* Tools Specific */
-    #toolArea {
-      margin-top: 1rem;
-    }
-
-    /* Canvas Tool */
-    #paintingCanvas {
-      background: white;
-      cursor: crosshair;
-      border-radius: 8px;
-      display: block;
-      margin: 0 auto;
-    }
-
-    .canvas-controls {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      margin-top: 1rem;
-      flex-wrap: wrap;
-    }
-
-    /* IDE Tool */
-    #ideContainer {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-    #ideInput {
-      width: 100%;
-      height: 300px;
-      background: #111;
-      color: #0f0;
-      font-family: monospace;
-      padding: 1rem;
-      border: 1px solid #333;
-      border-radius: 8px;
-    }
-    #ideOutput {
-      width: 100%;
-      height: 300px;
-      background: white;
-      border-radius: 8px;
-      border: none;
-    }
-
-    /* Chatbot Tool */
-    #chatContainer {
-      height: 400px;
-      background: #0a0a0a;
-      border: 1px solid #333;
-      border-radius: 8px;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-    #chatLog {
-      flex: 1;
-      overflow-y: auto;
-      padding: 1rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
+    /* Tools / IDE / Canvas / Chat */
+    .button-row { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1.5rem; }
+    #ideContainer { display: flex; flex-direction: column; gap: 1rem; }
+    #ideInput { width: 100%; height: 300px; background: #111; color: #0f0; font-family: monospace; }
+    #ideOutput { width: 100%; height: 300px; background: white; border-radius: 8px; border: none; }
+    #paintingCanvas { background: white; border-radius: 8px; display: block; margin: 0 auto; }
+    #chatContainer { height: 400px; background: #0a0a0a; border: 1px solid #333; border-radius: 8px; display: flex; flex-direction: column; overflow: hidden; }
+    #chatLog { flex: 1; overflow-y: auto; padding: 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
     .chat-msg { padding: 0.5rem 0.8rem; border-radius: 8px; max-width: 80%; }
     .user-msg { align-self: flex-end; background: #0044ff; color: white; }
     .bot-msg { align-self: flex-start; background: #222; color: #7799ff; }
     .chat-input-row { display: flex; padding: 0.5rem; background: #111; border-top: 1px solid #333; }
     #chatInput { flex: 1; margin: 0; }
 
-    /* Unblocked / Embedded */
-    .embed-container {
-      width: 100%;
-      height: 80vh;
-      border-radius: 12px;
-      overflow: hidden;
-      border: 1px solid #333;
-      background: #000;
-    }
-    .embed-container iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
-
-    /* Creations Grid */
-    .creations-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1.5rem;
-    }
-    .creation-card {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid #333;
-      border-radius: 12px;
-      padding: 1rem;
-      text-align: center;
-    }
-    .creation-card img, .creation-card video {
-      width: 100%;
-      border-radius: 8px;
-      margin-bottom: 0.5rem;
-    }
-
-    /* Games Specific */
-    #gamesContent { width: 100%; }
-    .games-layout { display: flex; gap: 1rem; align-items: flex-start; justify-content: center; width: 100%; padding: 1rem 0; }
+    /* Games Layout */
+    .games-layout { display: flex; gap: 1rem; align-items: flex-start; justify-content: center; width: 100%; }
     .sideBox { width: 20%; padding: 1.25rem; background: #111; border: 1px solid #333; border-radius: 12px; height: 70vh; overflow-y: auto; }
     .centerBox { width: 55%; text-align: center; }
+    #scratchFrame { width: 100%; height: 60vh; border-radius: 10px; border: none; background: #000; }
 
-    .version-tag {
-      position: fixed;
-      bottom: 5px;
-      right: 10px;
-      color: gray;
-      font-size: 0.85rem;
-      z-index: 200;
-      transition: opacity 0.4s;
-    }
+    .embed-container { width: 100%; height: 80vh; border-radius: 12px; overflow: hidden; border: 1px solid #333; }
+    .embed-container iframe { width: 100%; height: 100%; border: none; }
 
-    #visualizerCanvas {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 100vh;
-      z-index: -1;
-      pointer-events: none;
-    }
+    #visualizerCanvas { position: fixed; bottom: 0; left: 0; width: 100%; height: 100vh; z-index: -1; pointer-events: none; }
+    .version-tag { position: fixed; bottom: 5px; right: 10px; color: gray; font-size: 0.85rem; z-index: 200; }
 
     @media (max-width: 960px) {
       .topbar-brand { position: static; margin-bottom: 0.5rem; }
-      .topbar-right { position: static; margin-top: 0.5rem; }
+      .home-grid { grid-template-columns: 1fr; }
       .sideBox { display: none; }
       .centerBox { width: 100%; }
     }
@@ -714,11 +458,11 @@ function exitVizOnEsc(e) { if(e.key === 'Escape') toggleVisualizerMode(); }
   const hide = () => { if(!isNear) { topbar.classList.add('hidden'); if (isVisualizerMode) topbar.classList.remove('hover-reveal'); } };
   document.addEventListener('mousemove', (e) => {
     if (e.clientY < 100) { isNear = true; show(); } 
-    else { isNear = false; if(!topbar.matches(':hover')) { clearTimeout(hideTimer); hideTimer = setTimeout(hide, 500); } }
+    else { isNear = false; if(!topbar.matches(':hover')) { clearTimeout(hideTimer); hideTimer = setTimeout(hide, 1500); } }
   });
   topbar.addEventListener('mouseenter', show);
-  topbar.addEventListener('mouseleave', () => { if(!isNear) hideTimer = setTimeout(hide, 500); });
-  hideTimer = setTimeout(hide, 500);
+  topbar.addEventListener('mouseleave', () => { if(!isNear) hideTimer = setTimeout(hide, 1000); });
+  hideTimer = setTimeout(hide, 3000);
 })();
 
 (function() {
@@ -732,7 +476,7 @@ function exitVizOnEsc(e) { if(e.key === 'Escape') toggleVisualizerMode(); }
     if (!audioContextReady || !analyser) { drawIdle(ctx, W, H); return; }
     const bufferLength = analyser.frequencyBinCount, dataArray = new Uint8Array(bufferLength);
     analyser.getByteFrequencyData(dataArray);
-    const barCount = 120, gap = 2, barW = (W - gap * (barCount - 1)) / barCount, maxHeight = H * 0.75;
+    const barCount = 120, gap = 2, barW = (W - gap * (barCount - 1)) / barCount, maxHeight = H * 0.45;
     for (let i = 0; i < barCount; i++) {
       let intensity = Math.pow(dataArray[i] / 255, 1.5);
       const barH = intensity * maxHeight, x = i * (barW + gap), y = H - barH, opacity = 0.5 + (intensity * 0.5);
@@ -760,18 +504,19 @@ const pages = {
       </article>
       <aside class="panel patch-panel">
         <div class="version-chip">Latest overhaul · v0.40</div>
-        <h3>Restructure Update</h3>
+        <h3>Patch Notes</h3>
+        <p class="section-copy">Restructure and new tools added!</p>
         <ul class="patch-list">
-          <li>Renamed to <strong>GN-Neon</strong> (Goober Network).</li>
-          <li>Consolidated tools into new <strong>Tools</strong> section.</li>
+          <li>Renamed to <strong>GN-Neon</strong>.</li>
+          <li>New <strong>Tools</strong> section with IDE, Canvas, and AI Chatbot.</li>
           <li>Added <strong>Creations</strong> and <strong>Unblocked</strong> sections.</li>
-          <li>New tools: <strong>Painting Canvas</strong>, <strong>Search Engine</strong>, <strong>HTML IDE</strong>, <strong>AI Chatbot</strong>.</li>
+          <li>Visualizer contrast and blue color refinements.</li>
         </ul>
       </aside>
     </section>
   `,
   tools: `
-    <section class="panel section-panel">
+    <section class="panel">
       <h2>Tools</h2>
       <div class="button-row">
         <button onclick="showTool('calc')">Calculators</button>
@@ -785,7 +530,7 @@ const pages = {
     </section>
   `,
   games: `
-    <section class="panel section-panel">
+    <section class="panel">
       <h2>Games</h2>
       <div class="button-row">
         <button onclick="showScratchGames()">Scratch Games</button>
@@ -797,18 +542,19 @@ const pages = {
     </section>
   `,
   creations: `
-    <section class="panel section-panel">
+    <section class="panel">
       <h2>Creations</h2>
-      <div class="creations-grid">
-        <div class="creation-card"><h3>Code Projects</h3><p>Check out my latest repositories and snippets.</p></div>
-        <div class="creation-card"><h3>Map Videos</h3><p>Walkthroughs and cinematic views of my custom maps.</p></div>
-        <div class="creation-card"><h3>Map Images</h3><p>High-resolution screenshots of level designs.</p></div>
+      <div class="button-row">
+        <button onclick="showCreation('code')">Code</button>
+        <button onclick="showCreation('videos')">Map Videos</button>
+        <button onclick="showCreation('images')">Map Images</button>
       </div>
+      <div id="creationArea"></div>
     </section>
   `,
   unblocked: `
-    <section class="panel section-panel">
-      <h2>Unblocked Websites</h2>
+    <section class="panel">
+      <h2>Unblocked</h2>
       <div class="button-row">
         <button onclick="showEmbed('https://www.crazygames.com')">CrazyGames</button>
         <button onclick="showEmbed('https://www.poki.com')">Poki</button>
@@ -818,7 +564,7 @@ const pages = {
     </section>
   `,
   about: `
-    <section class="panel section-panel">
+    <section class="panel">
       <h2>About</h2>
       <p class="section-copy">This is GN-Neon. The GN stands for Goober Network. I made this site to bypass lightspeed filter. Why? Because I can.<br><br>I (Neon64) made this site to provide games, tools, and unblocked content for everyone.</p>
     </section>
@@ -830,7 +576,7 @@ function load(page) { document.getElementById("content").innerHTML = pages[page]
 function showTool(type) {
   const area = document.getElementById("toolArea") || document.getElementById("gamesContent");
   if (type === 'calc') {
-    area.innerHTML = `<h3>Calculators</h3><div class="button-row"><button onclick="showCalc('simple')">Simple</button><button onclick="showCalc('volume')">Volume</button><button onclick="showCalc('graph')">Graph</button><button onclick="showCalc('fractions')">Fractions</button></div><div id="calcArea"></div>`;
+    area.innerHTML = `<h3>Calculators</h3><div class="button-row"><button onclick="showCalc('simple')">Simple</button><button onclick="showCalc('volume')">Volume</button><button onclick="showCalc('graph')">Graph</button></div><div id="calcArea"></div>`;
   } else if (type === 'ide') {
     area.innerHTML = `<h3>HTML IDE</h3><div id="ideContainer"><textarea id="ideInput" placeholder="Write HTML/CSS/JS here..." oninput="runIDE()"></textarea><iframe id="ideOutput"></iframe></div>`;
   } else if (type === 'chat') {
@@ -839,32 +585,42 @@ function showTool(type) {
     area.innerHTML = `<h3>Painting Canvas</h3><canvas id="paintingCanvas" width="800" height="500"></canvas><div class="canvas-controls"><input type="color" id="brushColor" value="#0000ff"><input type="range" id="brushSize" min="1" max="50" value="5"><button onclick="clearCanvas()">Clear</button></div>`;
     initCanvas();
   } else if (type === 'search') {
-    area.innerHTML = `<h3>Search Engine</h3><div style="display:flex;gap:0.5rem;"><input id="searchInput" style="flex:1" placeholder="Search Google..."><button onclick="doSearch()">Search</button></div><p style="color:#777;margin-top:0.5rem;">Results will open in a new tab.</p>`;
+    area.innerHTML = `<h3>Search Engine</h3><div style="display:flex;gap:0.5rem;"><input id="searchInput" style="flex:1" placeholder="Search Google..."><button onclick="doSearch()">Search</button></div>`;
   } else if (type === 'ciphers') {
     area.innerHTML = `<h3>Ciphers</h3><div class="button-row"><button onclick="showCipher('caesar')">Caesar</button><button onclick="showCipher('atbash')">Atbash</button></div><div id="cipherArea"></div>`;
   } else if (type === 'flappy') {
-    area.innerHTML = `<h3>Flappy Bird</h3><div class="embed-container"><iframe src="https://neal.fun/flappy-bird/"></iframe></div>`;
+    area.innerHTML = `<div class="embed-container"><iframe src="https://neal.fun/flappy-bird/"></iframe></div>`;
   } else if (type === 'guess') {
-    area.innerHTML = `<h3>Number Guessing</h3><p>I'm thinking of a number between 1 and 100.</p><input id="guessInput" type="number"><button onclick="checkGuess()">Guess</button><p id="guessMsg"></p>`;
+    area.innerHTML = `<h3>Number Guessing</h3><input id="guessInput" type="number"><button onclick="checkGuess()">Guess</button><p id="guessMsg"></p>`;
     window.secretNum = Math.floor(Math.random()*100)+1;
   }
 }
 
 function showCalc(type) {
   const c = document.getElementById("calcArea");
-  if (type === 'fractions') {
-    c.innerHTML = `<h3>Fractions</h3><input id="f1n" style="width:50px">/<input id="f1d" style="width:50px"> + <input id="f2n" style="width:50px">/<input id="f2d" style="width:50px"><button onclick="calcFrac()">=</button><p id="fracOut"></p>`;
-  } else {
-    // Re-using existing calc logic from original code
-    if (type === "simple") c.innerHTML = `<h3>Simple</h3><input id="simpleInput" placeholder="2+2*3"><button onclick="calcSimple()">Calc</button><p id="simpleOut"></p>`;
-    else if (type === "volume") c.innerHTML = `<h3>Volume</h3>Cube (Side): <input id="cubeSide"><button onclick="volCube()">Calc</button><p id="cubeOut"></p>`;
-    else if (type === "graph") c.innerHTML = `<h3>Graph</h3><div class="canvas-wrap"><canvas id="grid" width="400" height="400"></canvas></div><input id="xmin" value="-10"><input id="xmax" value="10"><input id="eq1" placeholder="y="><button onclick="drawGraph()">Graph</button>`;
-  }
+  if (type === "simple") c.innerHTML = `<h3>Simple</h3><input id="simpleInput" placeholder="2+2*3" onkeydown="if(event.key==='Enter')calcSimple()"><button onclick="calcSimple()">Calc</button><p id="simpleOut"></p>`;
+  else if (type === "volume") c.innerHTML = `<h3>Volume</h3>Cube (Side): <input id="cubeSide" onkeydown="if(event.key==='Enter')volCube()"><button onclick="volCube()">Calc</button><p id="cubeOut"></p>Sphere (Radius): <input id="sphereR" onkeydown="if(event.key==='Enter')volSphere()"><button onclick="volSphere()">Calc</button><p id="sphereOut"></p>Rectangular Prism: <input id="recL" placeholder="L"><input id="recW" placeholder="W"><input id="recH" placeholder="H"><button onclick="volRect()">Calc</button><p id="rectOut"></p>`;
+  else if (type === "graph") c.innerHTML = `<h3>Graph</h3><div class="canvas-wrap"><canvas id="grid" width="400" height="400"></canvas></div><br>y=<input id="eq1" onkeydown="if(event.key==='Enter')drawGraph()"><button onclick="drawGraph()">Graph</button>`;
 }
 
-function calcFrac() { fracOut.innerText = "Result: " + (eval(f1n.value/f1d.value) + eval(f2n.value/f2d.value)); }
+function showCipher(type) {
+  const area = document.getElementById("cipherArea");
+  area.innerHTML = `<h3>${type.toUpperCase()}</h3><textarea id="cipherIn" style="width:100%;height:100px" placeholder="Text to encode/decode..."></textarea><br><button onclick="runCipher('${type}')">Run</button><p id="cipherOut" style="background:#000;padding:1rem;border-radius:8px;white-space:pre-wrap;"></p>`;
+}
+
+function runCipher(type) {
+  const input = document.getElementById('cipherIn').value;
+  let out = "";
+  if (type === 'caesar') {
+    out = input.replace(/[a-z]/gi, c => String.fromCharCode((c <= "Z" ? 90 : 122) >= (c = c.charCodeAt(0) + 3) ? c : c - 26));
+  } else if (type === 'atbash') {
+    out = input.replace(/[a-z]/gi, c => String.fromCharCode((c <= "Z" ? 155 : 219) - c.charCodeAt(0)));
+  }
+  document.getElementById('cipherOut').innerText = out;
+}
+
 function runIDE() { const out = document.getElementById('ideOutput').contentWindow.document; out.open(); out.write(document.getElementById('ideInput').value); out.close(); }
-function sendChat() { const log = document.getElementById('chatLog'), inp = document.getElementById('chatInput'); if(!inp.value)return; log.innerHTML += `<div class="chat-msg user-msg">${inp.value}</div>`; setTimeout(()=>log.innerHTML+=`<div class="chat-msg bot-msg">I am an offline demo bot. Real AI integration coming soon!</div>`, 500); inp.value=''; log.scrollTop=log.scrollHeight; }
+function sendChat() { const log = document.getElementById('chatLog'), inp = document.getElementById('chatInput'); if(!inp.value)return; log.innerHTML += `<div class="chat-msg user-msg">${inp.value}</div>`; setTimeout(()=>log.innerHTML+=`<div class="chat-msg bot-msg">Real AI integration coming soon!</div>`, 500); inp.value=''; log.scrollTop=log.scrollHeight; }
 function doSearch() { window.open('https://www.google.com/search?q=' + encodeURIComponent(document.getElementById('searchInput').value), '_blank'); }
 
 function initCanvas() {
@@ -875,28 +631,39 @@ function initCanvas() {
   cvs.onmousemove = (e) => {
     if(!painting) return;
     ctx.lineWidth = document.getElementById('brushSize').value;
-    ctx.lineCap = 'round';
-    ctx.strokeStyle = document.getElementById('brushColor').value;
+    ctx.lineCap = 'round'; ctx.strokeStyle = document.getElementById('brushColor').value;
     const rect = cvs.getBoundingClientRect();
     ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
     ctx.stroke(); ctx.beginPath(); ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
   };
 }
-function clearCanvas() { const cvs = document.getElementById('paintingCanvas'); cvs.getContext('2d').clearRect(0,0,cvs.width,cvs.height); }
+function clearCanvas() { paintingCanvas.getContext('2d').clearRect(0,0,800,500); }
 
 function showEmbed(url) { const area = document.getElementById('embedArea'); area.style.display = 'block'; area.innerHTML = `<iframe src="${url}"></iframe>`; }
+function showCreation(type) { document.getElementById('creationArea').innerHTML = `<h3>${type.toUpperCase()}</h3><p>Content for ${type} goes here.</p>`; }
 
-// Existing calc/game helpers (simplified for brevity but functional)
+// Restore Original Calc Logic
 function calcSimple() { try { simpleOut.innerText = eval(simpleInput.value); } catch { simpleOut.innerText = "Error"; } }
 function volCube() { const v = parseFloat(cubeSide.value); cubeOut.innerText = !isNaN(v) ? v ** 3 : "Invalid"; }
-function drawGraph() { /* Simplified graph logic */ const ctx = grid.getContext("2d"); ctx.fillStyle="white"; ctx.fillRect(0,0,400,400); }
+function volSphere() { const v = parseFloat(sphereR.value); sphereOut.innerText = !isNaN(v) ? (4/3)*Math.PI*v**3 : "Invalid"; }
+function volRect() { const l=parseFloat(recL.value), w=parseFloat(recW.value), h=parseFloat(recH.value); rectOut.innerText = !isNaN(l)&&!isNaN(w)&&!isNaN(h) ? l*w*h : "Invalid"; }
+function drawGraph() {
+  const ctx = grid.getContext("2d"); ctx.fillStyle = "black"; ctx.fillRect(0,0,400,400);
+  ctx.strokeStyle = "white"; ctx.beginPath(); ctx.moveTo(200,0); ctx.lineTo(200,400); ctx.moveTo(0,200); ctx.lineTo(400,200); ctx.stroke();
+  let expr = eq1.value.replace(/(\d)x/g, "$1*x");
+  ctx.strokeStyle = "cyan"; ctx.beginPath();
+  for(let px=0; px<=400; px++){
+    let x = (px-200)/20; let y; try { y = eval(expr); } catch { continue; }
+    let py = 200 - (y*20); if(px===0) ctx.moveTo(px,py); else ctx.lineTo(px,py);
+  }
+  ctx.stroke();
+}
 function checkGuess() { const v = parseInt(guessInput.value); guessMsg.innerText = v === window.secretNum ? "Correct!" : v < window.secretNum ? "Too low" : "Too high"; }
 
 const games = ["https://turbowarp.org/10128407/embed?addons=pause,fullscreen"];
 const titles = ["Paper Minecraft"];
 function showScratchGames() {
-  const content = document.getElementById('gamesContent');
-  content.innerHTML = `<div class="games-layout"><div class="sideBox"><h3>Controls</h3><div id="gameControls">WASD to move</div></div><div class="centerBox"><iframe id="scratchFrame" style="width:100%;height:60vh" src="${games[0]}"></iframe><h3 id="gameTitle">${titles[0]}</h3></div><div class="sideBox"><h3>Notes</h3><div id="gameNotes">Credits to Griffpatch</div></div></div>`;
+  document.getElementById('gamesContent').innerHTML = `<div class="games-layout"><div class="sideBox"><h3>Controls</h3><div id="gameControls">WASD to move</div></div><div class="centerBox"><iframe id="scratchFrame" src="${games[0]}"></iframe><h3 id="gameTitle">${titles[0]}</h3></div><div class="sideBox"><h3>Notes</h3><div id="gameNotes">Credits to Griffpatch</div></div></div>`;
 }
 function showEmulators() { document.getElementById('gamesContent').innerHTML = `<h3>Emulators</h3><button onclick="navigateTo('nes')">NES</button>`; }
 function navigateTo(e) { document.getElementById('gamesContent').innerHTML = `<h3>${e.toUpperCase()} Emulator</h3><p>Loading...</p>`; }
