@@ -18,136 +18,875 @@
       --shadow: 0 14px 32px rgba(0, 0, 0, 0.32);
     }
 
-    * { box-sizing: border-box; }
-    html, body { margin: 0; padding: 0; min-height: 100%; font-size: 16px; }
-    body { background: #000; color: var(--text); font-family: Arial, sans-serif; background-size: cover; background-position: center; background-attachment: fixed; transition: opacity 0.5s ease; }
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+      font-size: 16px;
+    }
+
+    body {
+      background: #000;
+      color: var(--text);
+      font-family: Arial, sans-serif;
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      transition: opacity 0.5s ease;
+    }
 
     /* Splash / Loading Overlay */
     #splashOverlay {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       background: linear-gradient(45deg, #0a0a0a 25%, #1a1a2e 25%, #1a1a2e 50%, #0a0a0a 50%, #0a0a0a 75%, #1a1a2e 75%, #1a1a2e);
-      background-size: 40px 40px; animation: loading-stripes 0.8s linear infinite; z-index: 2000;
-      display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; transition: opacity 0.8s ease, visibility 0.8s;
+      background-size: 40px 40px;
+      animation: loading-stripes 0.8s linear infinite;
+      z-index: 2000;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: opacity 0.8s ease, visibility 0.8s;
     }
-    #splashOverlay.fade-out { opacity: 0; visibility: hidden; }
-    #splashText { font-size: 2rem; font-weight: bold; color: #fff; text-shadow: 0 0 20px #0044ff; letter-spacing: 4px; text-align: center; pointer-events: none; }
-    #splashSubtext { margin-top: 1rem; color: #7799ff; font-size: 1rem; pointer-events: none; }
-    @keyframes loading-stripes { 0% { background-position: 0 0; } 100% { background-position: 40px 40px; } }
+
+    #splashOverlay.fade-out {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    #splashText {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #fff;
+      text-shadow: 0 0 20px #0044ff;
+      letter-spacing: 4px;
+      text-align: center;
+      pointer-events: none;
+    }
+
+    #splashSubtext {
+      margin-top: 1rem;
+      color: #7799ff;
+      font-size: 1rem;
+      pointer-events: none;
+    }
+
+    @keyframes loading-stripes {
+      0% {
+        background-position: 0 0;
+      }
+      100% {
+        background-position: 40px 40px;
+      }
+    }
 
     /* Styled scrollbars */
-    ::-webkit-scrollbar { width: 12px; height: 12px; }
-    ::-webkit-scrollbar-track { background: #0a0a0a; }
-    ::-webkit-scrollbar-thumb { background: #0600ff; border-radius: 6px; }
-    ::-webkit-scrollbar-thumb:hover { background: #0044ff; }
-    * { scrollbar-color: #0600ff #0a0a0a; scrollbar-width: thin; }
+    ::-webkit-scrollbar {
+      width: 12px;
+      height: 12px;
+    }
 
-    body.video-bg { background: none; position: relative; }
-    #videoBg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; }
+    ::-webkit-scrollbar-track {
+      background: #0a0a0a;
+    }
 
-    button, input, textarea { font: inherit; }
-    button { margin: 0.5rem; font-size: 1.1rem; padding: 0.75rem 1rem; border: 1px solid transparent; border-radius: 4px; background: #0900ad; color: white; cursor: pointer; transition: background 0.16s ease, border-color 0.16s ease, transform 0.16s ease; }
-    button:hover { background: #0044ff; border-color: #1100ff; box-shadow: 0 0 35px rgba(0, 0, 255, 0.95); transform: translateY(-1px); }
-    input, textarea { margin: 0.5rem; font-size: 1.1rem; padding: 0.75rem 0.75rem; color: var(--text); background: #0c0c0c; border: 1px solid var(--border-strong); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb {
+      background: #0600ff;
+      border-radius: 6px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #0044ff;
+    }
+
+    /* Firefox scrollbar styling */
+    * {
+      scrollbar-color: #0600ff #0a0a0a;
+      scrollbar-width: thin;
+    }
+
+    body.video-bg {
+      background: none;
+      position: relative;
+    }
+
+    #videoBg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -2;
+      filter: blur(0px);
+    }
+
+    .content-overlay {
+      position: relative;
+      z-index: 1;
+      background: rgba(0, 0, 0, 0.85);
+      min-height: 100vh;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      margin: 0.5rem;
+      font-size: 1.1rem;
+      padding: 0.75rem 1rem;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      background: #0900ad;
+      color: white;
+      cursor: pointer;
+      transition: background 0.16s ease, border-color 0.16s ease, transform 0.16s ease;
+    }
+
+    button:hover {
+      background: #0044ff;
+      border-color: #1100ff;
+      box-shadow: 0 0 35px rgba(0, 0, 255, 0.95);
+      transform: translateY(-1px);
+    }
+
+    input {
+      margin: 0.5rem;
+      font-size: 1.1rem;
+      padding: 0.75rem 0.75rem;
+      color: var(--text);
+      background: #0c0c0c;
+      border: 1px solid var(--border-strong);
+      border-radius: 4px;
+    }
+
+    input::placeholder {
+      color: #8b8b8b;
+    }
 
     /* ─── TOP BAR ─────────────────────────────────────────────────────── */
     .topbar {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      background: rgba(17, 17, 17, 0.97); border-bottom: 1px solid var(--border); backdrop-filter: blur(10px);
-      padding: 0.75rem 0 0.5rem; display: flex; flex-direction: column; align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(17, 17, 17, 0.97);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(10px);
+      padding: 0.75rem 0 0.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      /* auto-hide */
       transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.4s;
     }
-    .topbar.hidden { transform: translateY(-100%); }
-    .topbar.ui-hidden { opacity: 0; pointer-events: none; }
-    .topbar.ui-hidden.hover-reveal { opacity: 1; pointer-events: auto; transform: translateY(0); }
 
-    .topbar-row1 { width: 100%; display: flex; justify-content: center; align-items: center; gap: 1rem; position: relative; padding: 0 1rem; }
-    .topbar-brand { position: absolute; left: 1.5rem; font-size: 1.8rem; font-weight: bold; color: #0600ff; letter-spacing: 1px; text-shadow: 0 0 10px rgba(0, 6, 255, 0.5); }
-    .nav { display: flex; flex-wrap: wrap; justify-content: center; }
-    .topbar-right { position: absolute; right: 1.5rem; display: flex; gap: 0.75rem; align-items: center; }
+    .topbar.hidden {
+      transform: translateY(-100%);
+    }
 
-    #volumeSlider { -webkit-appearance: none; width: 100px; height: 6px; background: #222; border-radius: 3px; outline: none; border: 1px solid #333; cursor: pointer; }
-    #volumeSlider::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; background: #0044ff; border-radius: 50%; cursor: pointer; box-shadow: 0 0 10px rgba(0, 68, 255, 0.8); border: 1px solid #fff; }
+    .topbar.ui-hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    
+    .topbar.ui-hidden.hover-reveal {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    .topbar-row1 {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1.5rem;
+      position: relative;
+      padding: 0 1rem;
+    }
+
+    .nav {
+      text-align: center;
+    }
+
+    .topbar-brand {
+      position: absolute;
+      left: 1rem;
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: #0600ff;
+      letter-spacing: 1px;
+    }
+
+    .topbar-right {
+      position: absolute;
+      right: 1rem;
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    #muteBtn {
+      padding: 0.6rem 0.8rem;
+      font-size: 1rem;
+      min-width: 60px;
+    }
+
+    /* ─── STYLIZED VOLUME SLIDER ─────────────────────────────────────── */
+    #volumeSlider {
+      -webkit-appearance: none;
+      width: 100px;
+      height: 6px;
+      background: #222;
+      border-radius: 3px;
+      outline: none;
+      border: 1px solid #333;
+      cursor: pointer;
+    }
+
+    #volumeSlider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 14px;
+      height: 14px;
+      background: #0044ff;
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(0, 68, 255, 0.8);
+      border: 1px solid #fff;
+    }
+
+    #volumeSlider::-moz-range-thumb {
+      width: 14px;
+      height: 14px;
+      background: #0044ff;
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(0, 68, 255, 0.8);
+      border: 1px solid #fff;
+    }
 
     /* ─── MUSIC CONTROLS ──────────────────────────────────────────────── */
-    .music-controls { width: 100%; max-width: 780px; display: flex; flex-direction: column; align-items: center; gap: 0.3rem; padding: 0.45rem 1rem 0.6rem; border-top: 1px solid rgba(0, 0, 200, 0.25); margin-top: 0.4rem; }
-    .music-info { display: flex; flex-direction: column; align-items: center; line-height: 1.25; }
-    .music-title { font-size: 0.95rem; font-weight: bold; color: #fff; }
-    .music-artist { font-size: 0.8rem; color: #7799ff; }
-    .music-btn-row { display: flex; align-items: center; gap: 0.25rem; }
-    .music-btn { margin: 0; padding: 0.35rem 0.65rem; font-size: 1rem; background: transparent; border: 1px solid rgba(0, 0, 200, 0.45); border-radius: 6px; color: #aac0ff; cursor: pointer; }
-    .music-btn:hover { background: rgba(0, 0, 255, 0.25); border-color: #0044ff; color: #fff; }
-    .music-btn.active-loop { background: rgba(0, 0, 255, 0.35); border-color: #0044ff; color: #fff; }
-    .music-seek-row { display: flex; align-items: center; gap: 0.5rem; width: 100%; }
-    .music-time { font-size: 0.78rem; color: #7799ff; min-width: 38px; text-align: center; }
-    #seekBar { flex: 1; -webkit-appearance: none; appearance: none; height: 4px; border-radius: 2px; background: linear-gradient(to right, #0044ff 0%, #333 0%); outline: none; cursor: pointer; }
-    #seekBar::-webkit-slider-thumb { -webkit-appearance: none; width: 12px; height: 12px; border-radius: 50%; background: #0044ff; }
+    .music-controls {
+      width: 100%;
+      max-width: 780px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.45rem 1rem 0.6rem;
+      border-top: 1px solid rgba(0, 0, 200, 0.25);
+      margin-top: 0.4rem;
+    }
+
+    .music-info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      line-height: 1.25;
+    }
+
+    .music-title {
+      font-size: 0.95rem;
+      font-weight: bold;
+      color: #fff;
+      letter-spacing: 0.02em;
+    }
+
+    .music-artist {
+      font-size: 0.8rem;
+      color: #7799ff;
+    }
+
+    .music-btn-row {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .music-btn {
+      margin: 0;
+      padding: 0.35rem 0.65rem;
+      font-size: 1rem;
+      background: transparent;
+      border: 1px solid rgba(0, 0, 200, 0.45);
+      border-radius: 6px;
+      color: #aac0ff;
+      cursor: pointer;
+      transition: all 0.15s;
+      min-width: unset;
+    }
+
+    .music-btn:hover {
+      background: rgba(0, 0, 255, 0.25);
+      transform: translateY(-1px);
+      border-color: #0044ff;
+      color: #fff;
+    }
+
+    .music-btn.active-loop {
+      background: rgba(0, 0, 255, 0.35);
+      border-color: #0044ff;
+      color: #fff;
+    }
+
+    .music-seek-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      width: 100%;
+    }
+
+    .music-time {
+      font-size: 0.78rem;
+      color: #7799ff;
+      white-space: nowrap;
+      min-width: 38px;
+      text-align: center;
+    }
+
+    #seekBar {
+      flex: 1;
+      -webkit-appearance: none;
+      appearance: none;
+      height: 4px;
+      border-radius: 2px;
+      background: linear-gradient(to right, #0044ff 0%, #333 0%);
+      outline: none;
+      cursor: pointer;
+      margin: 0;
+      padding: 0;
+      border: none;
+    }
+
+    #seekBar::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #0044ff;
+      cursor: pointer;
+    }
 
     /* ─── MAIN CONTENT ────────────────────────────────────────────────── */
-    .page-shell { width: 100%; max-width: 1200px; margin: 0 auto; padding: 8.5rem 1.5rem 5rem; transition: opacity 0.4s; }
-    .page-shell.ui-hidden { opacity: 0; pointer-events: none; }
-    .site-title { margin: 0.5rem 0 1.5rem; text-align: center; font-size: 3rem; }
+    .page-shell {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 8rem 1.5rem 5rem;
+      transition: opacity 0.4s;
+    }
 
-    .panel { background: linear-gradient(180deg, rgba(0, 0, 0, 1), rgba(0, 0, 150, 0.5)); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--shadow); backdrop-filter: blur(5px); padding: 2rem; }
-    .home-grid { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.9fr); gap: 1.5rem; align-items: start; }
-    .hero-panel h2, .patch-panel h3 { margin-top: 0; font-size: 2rem; }
-    .lead { color: #d2d2d2; line-height: 1.6; font-size: 1.15rem; }
-    .image-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin-top: 1.5rem; }
-    .image-card { background: var(--panel-alt); border: 1px solid var(--border); border-radius: 12px; padding: 1rem; }
-    .image-card img { width: 100%; border-radius: 8px; }
-    .image-card span { display: block; margin-top: 0.75rem; color: var(--muted); }
+    .page-shell.ui-hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
 
-    .patch-panel { max-height: 600px; overflow-y: auto; display: flex; flex-direction: column; }
-    .version-chip { display: inline-flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; padding: 0.5rem 0.8rem; border-radius: 999px; border: 1px solid rgba(0, 0, 225, 1); background: rgba(0, 0, 150, 0.08); color: var(--accent); font-size: 0.9rem; }
-    .patch-list { margin: 1rem 0 0; padding-left: 1.5rem; line-height: 1.65; }
+    .site-title {
+      margin: 0.5rem 0 1.5rem;
+      text-align: center;
+      letter-spacing: 0.04em;
+      font-size: 3rem;
+    }
 
-    /* Tools / IDE / Canvas / Chat */
-    .button-row { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1.5rem; }
-    #ideContainer { display: flex; flex-direction: column; gap: 1rem; }
-    #ideInput { width: 100%; height: 300px; background: #111; color: #0f0; font-family: monospace; }
-    #ideOutput { width: 100%; height: 300px; background: white; border-radius: 8px; border: none; }
-    #paintingCanvas { background: white; border-radius: 8px; display: block; margin: 0 auto; }
-    #chatContainer { height: 400px; background: #0a0a0a; border: 1px solid #333; border-radius: 8px; display: flex; flex-direction: column; overflow: hidden; }
-    #chatLog { flex: 1; overflow-y: auto; padding: 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
-    .chat-msg { padding: 0.5rem 0.8rem; border-radius: 8px; max-width: 80%; }
-    .user-msg { align-self: flex-end; background: #0044ff; color: white; }
-    .bot-msg { align-self: flex-start; background: #222; color: #7799ff; }
-    .chat-input-row { display: flex; padding: 0.5rem; background: #111; border-top: 1px solid #333; }
-    #chatInput { flex: 1; margin: 0; }
+    #content {
+      width: 100%;
+      min-height: calc(100vh - 200px);
+      padding: 1rem 0 2rem;
+    }
 
-    /* Games Layout */
-    .games-layout { display: flex; gap: 1rem; align-items: flex-start; justify-content: center; width: 100%; }
-    .sideBox { width: 20%; padding: 1.25rem; background: #111; border: 1px solid #333; border-radius: 12px; height: 70vh; overflow-y: auto; }
-    .centerBox { width: 55%; text-align: center; }
-    #scratchFrame { width: 100%; height: 60vh; border-radius: 10px; border: none; background: #000; }
-    .embed-container { width: 100%; height: 80vh; border-radius: 12px; overflow: hidden; border: 1px solid #333; }
-    .embed-container iframe { width: 100%; height: 100%; border: none; }
+    .panel {
+      background: linear-gradient(180deg, rgba(0, 0, 0, 1), rgba(0, 0, 150, 0.5));
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(5px);
+      padding: 10px;
+    }
 
-    #visualizerCanvas { position: fixed; bottom: 0; left: 0; width: 100%; height: 100vh; z-index: -1; pointer-events: none; }
-    .version-tag { position: fixed; bottom: 5px; right: 10px; color: gray; font-size: 0.85rem; z-index: 200; }
+    .home-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.9fr);
+      gap: 1.5rem;
+      align-items: start;
+    }
 
-    .canvas-wrap { position: relative; display: inline-block; }
-    #grid { border: 1px solid white; background: #000; }
-    #axesLabels { position: absolute; font-size: 0.8em; color: #ccc; }
-    #graphResults { margin-top: 1.5rem; padding: 1rem; background: #0e0e0e; border: 1px solid var(--border); border-radius: 10px; text-align: left; font-size: 1.05rem; }
+    .games-panel {
+      background: linear-gradient(180deg, rgba(0, 0, 0, 1), rgba(0, 0, 150, 0.5));
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(5px);
+      padding: 10px;
+      width: 90vw;
+      margin-left: calc(50% - 45vw);
+      position: relative;
+    }
 
-    @media (max-width: 960px) { .topbar-brand { position: static; margin-bottom: 0.5rem; } .home-grid { grid-template-columns: 1fr; } .sideBox { display: none; } .centerBox { width: 100%; } }
+    .games-panel h2 {
+      padding: 2rem 2rem 1rem 2rem;
+      margin: 0;
+    }
+
+    .games-menu {
+      padding: 0 2rem 2rem 2rem;
+      text-align: center;
+    }
+
+    #gamesContent {
+      width: 100%;
+    }
+
+    .hero-panel h2,
+    .patch-panel h3,
+    .calc-panel h2,
+    .games-panel h2,
+    .about-panel h2 {
+      margin-top: 0;
+      font-size: 2rem;
+    }
+
+    .lead {
+      color: #d2d2d2;
+      line-height: 1.6;
+      font-size: 1.15rem;
+    }
+
+    .image-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .image-card {
+      background: var(--panel-alt);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem;
+    }
+
+    .image-card img {
+      width: 100%;
+      display: block;
+      border-radius: 8px;
+    }
+
+    .image-card span {
+      display: block;
+      margin-top: 0.75rem;
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    .patch-panel {
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      max-height: 600px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .version-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+      padding: 0.5rem 0.8rem;
+      border-radius: 999px;
+      border: 1px solid rgba(0, 0, 225, 1);
+      background: rgba(0, 0, 150, 0.08);
+      color: var(--accent);
+      font-size: 0.9rem;
+    }
+
+    .patch-list {
+      margin: 1rem 0 0;
+      padding-left: 1.5rem;
+      line-height: 1.65;
+      font-size: 0.95rem;
+    }
+
+    .patch-list li + li {
+      margin-top: 0.75rem;
+    }
+
+    .section-copy {
+      color: var(--muted);
+      font-size: 1.1rem;
+    }
+
+    .calc-panel,
+    .games-panel,
+    .about-panel {
+      padding: 2rem;
+    }
+
+    .calc-panel h2,
+    .games-panel h2,
+    .about-panel h2 {
+      font-size: 2rem;
+    }
+
+    .calc-panel h3,
+    .games-panel h3,
+    .about-panel h3 {
+      font-size: 1.5rem;
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    #scratchFrame {
+      width: 100%;
+      height: 70vh;
+      border: none;
+      border-radius: 10px;
+      background: #000;
+    }
+
+    .games-layout {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      justify-content: center;
+      width: 100%;
+      padding: 1rem 2rem 2rem 2rem;
+      margin: 0;
+      box-sizing: border-box;
+    }
+
+    .games-menu {
+      text-align: center;
+    }
+
+    .games-menu button {
+      display: block;
+      width: 100%;
+      margin: 0.75rem auto;
+      font-size: 1.2rem;
+      padding: 1rem 1.5rem;
+    }
+
+    .back-button {
+      display: block;
+      margin: 1rem auto 2rem;
+      font-size: 1rem;
+      padding: 0.7rem 1.2rem;
+    }
+
+    .wip-container {
+      text-align: center;
+      padding: 3rem 1rem;
+    }
+
+    .wip-container h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .wip-container p {
+      color: #b3b3b3;
+      font-size: 1.2rem;
+    }
+
+    .sideBox {
+      width: 20%;
+      padding: 1.25rem;
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 12px;
+      overflow-y: auto;
+      height: 70vh;
+      box-shadow: var(--shadow);
+      font-size: 1rem;
+    }
+
+    .centerBox {
+      width: 55%;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .sideBox {
+      flex-shrink: 0;
+    }
+
+    #gameControls,
+    #gameNotes {
+      white-space: pre-line;
+      color: #ddd;
+      line-height: 1.5;
+      font-size: 0.95rem;
+    }
+
+    .canvas-wrap {
+      position: relative;
+      display: inline-block;
+    }
+
+    #grid {
+      border: 1px solid white;
+      background: #000;
+    }
+
+    #axesLabels {
+      position: absolute;
+      font-size: 0.8em;
+      color: #ccc;
+    }
+
+    #graphResults {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      background: #0e0e0e;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      text-align: left;
+      font-size: 1.05rem;
+    }
+
+    .version-tag {
+      position: fixed;
+      bottom: 5px;
+      right: 10px;
+      color: gray;
+      font-size: 0.85rem;
+      z-index: 200;
+      transition: opacity 0.4s;
+    }
+
+    .version-tag.ui-hidden {
+      opacity: 0;
+    }
+
+    /* ─── AUDIO VISUALIZER ────────────────────────────────────────────── */
+    #visualizerCanvas {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      z-index: -1;
+      pointer-events: none;
+      display: block;
+    }
+
+    /* ─── RESPONSIVE ──────────────────────────────────────────────────── */
+    @media (max-width: 1200px) {
+      html,
+      body {
+        font-size: 15px;
+      }
+
+      .site-title {
+        font-size: 2.5rem;
+      }
+    }
+
+    @media (max-width: 960px) {
+      html,
+      body {
+        font-size: 14px;
+      }
+
+      .site-title {
+        font-size: 2.2rem;
+      }
+
+      .home-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .games-layout {
+        flex-direction: column;
+      }
+
+      .sideBox,
+      .centerBox {
+        width: 100%;
+      }
+
+      .patch-panel h3 {
+        font-size: 1.3rem;
+      }
+
+      .patch-panel {
+        max-height: 400px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      html,
+      body {
+        font-size: 13px;
+      }
+
+      .page-shell {
+        padding: 9rem 1rem 5rem;
+      }
+
+      .site-title {
+        font-size: 1.8rem;
+        margin: 0.5rem 0 1rem;
+      }
+
+      .hero-panel,
+      .patch-panel,
+      .calc-panel,
+      .games-panel,
+      .about-panel {
+        padding: 1.5rem;
+      }
+
+      .patch-panel {
+        max-height: 350px;
+      }
+
+      .topbar {
+        gap: 0.5rem;
+      }
+
+      .topbar-right {
+        right: 0.5rem;
+      }
+
+      .hero-panel h2,
+      .patch-panel h3,
+      .calc-panel h2,
+      .games-panel h2,
+      .about-panel h2 {
+        font-size: 1.5rem;
+      }
+
+      .image-row {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+      }
+
+      .sideBox {
+        padding: 1rem;
+        font-size: 0.9rem;
+      }
+
+      #scratchFrame {
+        height: 50vh;
+      }
+
+      button {
+        margin: 0.4rem;
+        font-size: 1rem;
+        padding: 0.6rem 0.8rem;
+      }
+
+      input {
+        margin: 0.4rem;
+        font-size: 1rem;
+        padding: 0.6rem 0.6rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      html,
+      body {
+        font-size: 12px;
+      }
+
+      .page-shell {
+        padding: 9rem 0.75rem 5rem;
+      }
+
+      .site-title {
+        font-size: 1.5rem;
+        margin: 0.4rem 0 0.8rem;
+      }
+
+      .hero-panel,
+      .patch-panel,
+      .calc-panel,
+      .games-panel,
+      .about-panel {
+        padding: 1rem;
+      }
+
+      .hero-panel h2,
+      .patch-panel h3,
+      .calc-panel h2,
+      .games-panel h2,
+      .about-panel h2 {
+        font-size: 1.3rem;
+      }
+
+      .button-row {
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+      }
+
+      button {
+        margin: 0.3rem;
+        font-size: 0.9rem;
+        padding: 0.5rem 0.6rem;
+      }
+
+      input {
+        margin: 0.3rem;
+        font-size: 0.9rem;
+        padding: 0.5rem 0.5rem;
+      }
+
+      .sideBox {
+        padding: 0.75rem;
+        font-size: 0.85rem;
+      }
+
+      #scratchFrame {
+        height: 40vh;
+      }
+
+      .games-layout {
+        gap: 0.5rem;
+      }
+    }
   </style>
 </head>
 <body class="video-bg">
   <audio id="bgMusic" style="display:none;" crossorigin="anonymous"></audio>
+
+  <!-- Click to Enter Splash -->
   <div id="splashOverlay" onclick="enterSite()">
     <div id="splashText">LOADING...</div>
     <div id="splashSubtext">Please wait for the assets to load</div>
   </div>
+
   <div class="topbar" id="topbar">
     <div class="topbar-row1">
       <div class="topbar-brand">GN-Neon</div>
-      <nav class="nav">
+      <nav class="nav" aria-label="Primary">
         <button onclick="load('home')">Home</button>
-        <button onclick="load('tools')">Tools</button>
+        <button onclick="load('calc')">Calculators</button>
         <button onclick="load('games')">Games</button>
-        <button onclick="load('creations')">Creations</button>
-        <button onclick="load('unblocked')">Unblocked</button>
         <button onclick="load('about')">About</button>
         <button onclick="toggleVisualizerMode()" id="vizModeBtn" style="border: 1px solid #0044ff; background: rgba(0,0,255,0.1);">Visualizer</button>
       </nav>
@@ -156,16 +895,18 @@
         <button id="muteBtn" onclick="toggleMute()">Mute</button>
       </div>
     </div>
+
+    <!-- Music controls -->
     <div class="music-controls">
       <div class="music-info">
         <span class="music-title" id="mcTitle">Super Mario RPG</span>
         <span class="music-artist" id="mcArtist">Yoko Shimomura</span>
       </div>
       <div class="music-btn-row">
-        <button class="music-btn" onclick="musicPrev()">&#9664;&#9664;</button>
-        <button class="music-btn" id="mcPlayPause" onclick="musicPlayPause()">&#9646;&#9646;</button>
-        <button class="music-btn" onclick="musicNext()">&#9654;&#9654;</button>
-        <button class="music-btn" id="mcLoop" onclick="musicToggleLoop()">&#8635;</button>
+        <button class="music-btn" onclick="musicPrev()" title="Previous">&#9664;&#9664;</button>
+        <button class="music-btn" id="mcPlayPause" onclick="musicPlayPause()" title="Play/Pause">&#9646;&#9646;</button>
+        <button class="music-btn" onclick="musicNext()" title="Next">&#9654;&#9654;</button>
+        <button class="music-btn" id="mcLoop" onclick="musicToggleLoop()" title="Loop">&#8635;</button>
       </div>
       <div class="music-seek-row">
         <span class="music-time" id="mcCurrent">0:00</span>
@@ -174,45 +915,73 @@
       </div>
     </div>
   </div>
+
   <main class="page-shell" id="mainContent">
     <h1 class="site-title">GN-Neon</h1>
     <div id="content">Loading...</div>
   </main>
+
   <canvas id="visualizerCanvas"></canvas>
-  <div class="version-tag" id="vTag">v0.40</div>
+
+  <div class="version-tag" id="vTag">
+    v0.40
+  </div>
+
 <script>
-let currentIndex = 0, isMuted = false, currentTrack = 0, isLooping = false, seekDragging = false, isVisualizerMode = false;
+// ─── STATE ───────────────────────────────────────────────────────────────────
+let currentIndex = 0;
+let isMuted = false;
+let currentTrack = 0;
+let isLooping = false;
+let seekDragging = false;
+let isVisualizerMode = false;
+
+// ─── PLAYLIST ────────────────────────────────────────────────────────────────
 const playlist = [
   'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Super%20Mario%20RPG.mp3',
   'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Philly%20Nice%20(B-Side).mp3',
   'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/dq%20blizzard.mp3'
 ];
-const trackMeta = [{ title: 'Super Mario RPG', artist: 'Yoko Shimomura' }, { title: 'Philly Nice (B-Side)', artist: 'Unknown Artist' }, { title: 'DQ Blizzard', artist: 'Unknown Artist' }];
 
+const trackMeta = [
+  { title: 'Super Mario RPG', artist: 'Yoko Shimomura' },
+  { title: 'Philly Nice (B-Side)', artist: 'Unknown Artist' },
+  { title: 'DQ Blizzard', artist: 'Unknown Artist' }
+];
+
+// ─── SPLASH LOGIC ────────────────────────────────────────────────────────────
 function enterSite() {
   const overlay = document.getElementById('splashOverlay');
   if (overlay.classList.contains('ready')) {
     overlay.classList.add('fade-out');
     ensureAudioContext();
-    document.getElementById('bgMusic').play().catch(e => console.warn(e));
+    const audio = document.getElementById('bgMusic');
+    audio.play().catch(e => console.warn("Audio start blocked:", e));
   }
 }
 
+// ─── AUDIO ENGINE ────────────────────────────────────────────────────────────
 let audioCtx = null, analyser = null, sourceNode = null, audioContextReady = false;
+
 function ensureAudioContext() {
   if (audioContextReady) { if (audioCtx.state === 'suspended') audioCtx.resume(); return; }
   const audio = document.getElementById('bgMusic');
   try {
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    analyser = audioCtx.createAnalyser(); analyser.fftSize = 512; analyser.smoothingTimeConstant = 0.8;
-    sourceNode = audioCtx.createMediaElementSource(audio); sourceNode.connect(analyser); analyser.connect(audioCtx.destination);
+    analyser = audioCtx.createAnalyser();
+    analyser.fftSize = 512;
+    analyser.smoothingTimeConstant = 0.8;
+    sourceNode = audioCtx.createMediaElementSource(audio);
+    sourceNode.connect(analyser);
+    analyser.connect(audioCtx.destination);
     audioContextReady = true;
   } catch (e) { console.warn(e); }
 }
 
 function initMusic() {
   const audio = document.getElementById('bgMusic');
-  audio.src = playlist[currentTrack]; audio.volume = 0.5;
+  audio.src = playlist[currentTrack];
+  audio.volume = 0.5;
   audio.addEventListener('ended', () => isLooping ? (audio.currentTime = 0, audio.play()) : musicNext());
   audio.addEventListener('timeupdate', updateSeekBar);
   audio.addEventListener('play', () => { document.getElementById('mcPlayPause').innerHTML = '&#9646;&#9646;'; });
@@ -230,167 +999,219 @@ function updateSeekBar() {
   const audio = document.getElementById('bgMusic'), bar = document.getElementById('seekBar');
   if (!audio.duration) return;
   const pct = (audio.currentTime / audio.duration) * 100;
-  bar.value = pct; bar.style.background = `linear-gradient(to right, #0044ff ${pct}%, #333 ${pct}%)`;
+  bar.value = pct;
+  bar.style.background = `linear-gradient(to right, #0044ff ${pct}%, #333 ${pct}%)`;
   document.getElementById('mcCurrent').textContent = fmtTime(audio.currentTime);
   document.getElementById('mcDuration').textContent = fmtTime(audio.duration);
 }
 
 function fmtTime(s) { const m = Math.floor(s/60), sec = Math.floor(s%60); return `${m}:${sec.toString().padStart(2,'0')}`; }
-function musicPlayPause() { ensureAudioContext(); const a = document.getElementById('bgMusic'); a.paused ? a.play() : a.pause(); }
+
+function musicPlayPause() { const a = document.getElementById('bgMusic'); ensureAudioContext(); a.paused ? a.play() : a.pause(); }
 function musicNext() { currentTrack = (currentTrack + 1) % playlist.length; const a = document.getElementById('bgMusic'); a.src = playlist[currentTrack]; updateTrackDisplay(); a.play(); }
 function musicPrev() { const a = document.getElementById('bgMusic'); if(a.currentTime > 3) a.currentTime = 0; else currentTrack = (currentTrack - 1 + playlist.length) % playlist.length; a.src = playlist[currentTrack]; updateTrackDisplay(); a.play(); }
 function musicToggleLoop() { isLooping = !isLooping; document.getElementById('mcLoop').classList.toggle('active-loop', isLooping); }
 function musicSeek(v) { const a = document.getElementById('bgMusic'); seekDragging = true; a.currentTime = (v/100)*a.duration; setTimeout(()=>seekDragging=false, 200); }
 function setVolume(v) { document.getElementById('bgMusic').volume = v/100; }
-function toggleMute() { isMuted = !isMuted; document.getElementById('muteBtn').innerText = isMuted ? 'Unmute' : 'Mute'; document.querySelectorAll('audio').forEach(a => a.muted = isMuted); }
+function toggleMute() { isMuted = !isMuted; const b = document.getElementById('muteBtn'); b.innerText = isMuted ? 'Unmute' : 'Mute'; document.querySelectorAll('audio').forEach(a => a.muted = isMuted); }
 
+// ─── VISUALIZER MODE ──────────────────────────────────────────────────────────
 function toggleVisualizerMode() {
   isVisualizerMode = !isVisualizerMode;
-  const main = document.getElementById('mainContent'), top = document.getElementById('topbar'), tag = document.getElementById('vTag'), btn = document.getElementById('vizModeBtn');
-  if (isVisualizerMode) { main.classList.add('ui-hidden'); top.classList.add('ui-hidden'); tag.classList.add('ui-hidden'); btn.innerText = "Exit Mode"; document.addEventListener('keydown', exitVizOnEsc); }
-  else { main.classList.remove('ui-hidden'); top.classList.remove('ui-hidden'); tag.classList.remove('ui-hidden'); btn.innerText = "Visualizer"; top.classList.remove('hover-reveal'); document.removeEventListener('keydown', exitVizOnEsc); }
+  const main = document.getElementById('mainContent');
+  const top = document.getElementById('topbar');
+  const tag = document.getElementById('vTag');
+  const btn = document.getElementById('vizModeBtn');
+
+  if (isVisualizerMode) {
+    main.classList.add('ui-hidden');
+    top.classList.add('ui-hidden');
+    tag.classList.add('ui-hidden');
+    btn.innerText = "Exit Mode";
+    document.addEventListener('keydown', exitVizOnEsc);
+  } else {
+    main.classList.remove('ui-hidden');
+    top.classList.remove('ui-hidden');
+    tag.classList.remove('ui-hidden');
+    btn.innerText = "Visualizer";
+    top.classList.remove('hover-reveal');
+    document.removeEventListener('keydown', exitVizOnEsc);
+  }
 }
 function exitVizOnEsc(e) { if(e.key === 'Escape') toggleVisualizerMode(); }
 
+// ─── AUTO-HIDE TOP BAR ───────────────────────────────────────────────────────
 (function() {
   const topbar = document.getElementById('topbar');
   let hideTimer = null, isNear = false;
-  const show = () => { topbar.classList.remove('hidden'); if (isVisualizerMode) topbar.classList.add('hover-reveal'); clearTimeout(hideTimer); };
-  const hide = () => { if(!isNear) { topbar.classList.add('hidden'); if (isVisualizerMode) topbar.classList.remove('hover-reveal'); } };
-  document.addEventListener('mousemove', (e) => { if (e.clientY < 100) { isNear = true; show(); } else { isNear = false; if(!topbar.matches(':hover')) { clearTimeout(hideTimer); hideTimer = setTimeout(hide, 1500); } } });
-  topbar.addEventListener('mouseenter', show); topbar.addEventListener('mouseleave', () => { if(!isNear) hideTimer = setTimeout(hide, 1000); });
-  hideTimer = setTimeout(hide, 3000);
+  const show = () => { 
+    topbar.classList.remove('hidden'); 
+    if (isVisualizerMode) topbar.classList.add('hover-reveal');
+    clearTimeout(hideTimer); 
+  };
+  const hide = () => { 
+    if(!isNear) {
+      topbar.classList.add('hidden'); 
+      if (isVisualizerMode) topbar.classList.remove('hover-reveal');
+    }
+  };
+  document.addEventListener('mousemove', (e) => {
+    if (e.clientY < 100) { isNear = true; show(); } 
+    else { isNear = false; if(!topbar.matches(':hover')) { clearTimeout(hideTimer); hideTimer = setTimeout(hide, 500); } }
+  });
+  topbar.addEventListener('mouseenter', show);
+  topbar.addEventListener('mouseleave', () => { if(!isNear) hideTimer = setTimeout(hide, 500); });
+  hideTimer = setTimeout(hide, 500);
 })();
 
+// ─── VISUALIZER DRAW ─────────────────────────────────────────────────────────
 (function() {
   const canvas = document.getElementById('visualizerCanvas'), ctx = canvas.getContext('2d');
   const resize = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; };
   resize(); window.addEventListener('resize', resize);
+
   function draw() {
-    requestAnimationFrame(draw); const W = canvas.width, H = canvas.height; ctx.clearRect(0, 0, W, H);
+    requestAnimationFrame(draw);
+    const W = canvas.width, H = canvas.height;
+    ctx.clearRect(0, 0, W, H);
     if (!audioContextReady || !analyser) { drawIdle(ctx, W, H); return; }
-    const bufferLength = analyser.frequencyBinCount, dataArray = new Uint8Array(bufferLength); analyser.getByteFrequencyData(dataArray);
-    const barCount = 120, gap = 2, barW = (W - gap * (barCount - 1)) / barCount, maxHeight = H * 0.45;
+    
+    const bufferLength = analyser.frequencyBinCount, dataArray = new Uint8Array(bufferLength);
+    analyser.getByteFrequencyData(dataArray);
+    
+    const barCount = 120, gap = 2, barW = (W - gap * (barCount - 1)) / barCount;
+    const maxHeight = H * 0.75;
+    
     for (let i = 0; i < barCount; i++) {
-      let intensity = Math.pow(dataArray[i] / 255, 1.5);
-      const barH = intensity * maxHeight, x = i * (barW + gap), y = H - barH, opacity = 0.5 + (intensity * 0.5);
-      ctx.fillStyle = `rgba(0, 0, 255, ${opacity})`; ctx.fillRect(x, y, barW, barH);
+      const rawVal = dataArray[i];
+      let intensity = rawVal / 255;
+      
+      // Exaggerate contrast: Lows lower, Highs higher
+      // Using power function to push quiet parts down
+      intensity = Math.pow(intensity, 1.5);
+      
+      const barH = intensity * maxHeight;
+      const x = i * (barW + gap);
+      const y = H - barH;
+      
+      // Opacity: 0.5 (quietest) to 1.0 (loudest)
+      const opacity = 0.5 + (intensity * 0.5);
+      
+      // Color: Normal blue (0,0,255)
+      ctx.fillStyle = `rgba(0, 0, 255, ${opacity})`;
+      ctx.fillRect(x, y, barW, barH);
     }
   }
-  function drawIdle(ctx, W, H) { const barCount = 120, gap = 2, barW = (W - gap * (barCount - 1)) / barCount; for (let i = 0; i < barCount; i++) { ctx.fillStyle = 'rgba(0, 0, 255, 0.2)'; ctx.fillRect(i * (barW + gap), H - 2, barW, 2); } }
+  
+  function drawIdle(ctx, W, H) {
+    const barCount = 120, gap = 2, barW = (W - gap * (barCount - 1)) / barCount;
+    for (let i = 0; i < barCount; i++) {
+      ctx.fillStyle = 'rgba(0, 0, 255, 0.2)';
+      ctx.fillRect(i * (barW + gap), H - 2, barW, 2);
+    }
+  }
   draw();
 })();
 
+// ─── ORIGINAL PAGES DATA ─────────────────────────────────────────────────────
 const pages = {
   home: `
     <section class="home-grid">
       <article class="panel hero-panel">
         <h2>Home</h2>
-        <p class="lead">Welcome to GN-Neon (Goober Network). Take a look at these cats.</p>
+        <p class="lead">Welcome to GN-Neon. Take a look at these cats.</p>
         <div class="image-row">
-          <figure class="image-card"><img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/sili2.jpg"><span>sili2.jpg</span></figure>
-          <figure class="image-card"><img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/sili3.jpg"><span>sili3.jpg</span></figure>
+          <figure class="image-card">
+            <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/sili2.jpg" alt="Cat image from GN-Neon">
+            <span>sili2.jpg</span>
+          </figure>
+          <figure class="image-card">
+            <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/sili3.jpg" alt="Cat image from GN-Neon">
+            <span>sili3.jpg</span>
+          </figure>
         </div>
       </article>
+
       <aside class="panel patch-panel">
-        <div class="version-chip">Latest overhaul · v0.40</div>
+        <div class="version-chip">Latest patch · v0.40</div>
         <h3>Patch Notes</h3>
+        <p class="section-copy">Background music and audio controls added!</p>
         <ul class="patch-list">
-          <li>Renamed to <strong>GN-Neon</strong>.</li>
-          <li>New <strong>Tools</strong> section with IDE, Canvas, and AI Chatbot.</li>
-          <li>Added <strong>Creations</strong> and <strong>Unblocked</strong> sections.</li>
-          <li>Visualizer contrast and blue color refinements.</li>
+          <li>Added <strong>background music playlist</strong> with 3 tracks (SMRPG, Philly Nice, DQ Blizzard).</li>
+          <li>Added <strong>volume slider</strong> to the top bar for audio control.</li>
+          <li>Music plays at <strong>50% volume</strong> by default.</li>
+          <li>Mute button now controls both <strong>music and iframe audio</strong>.</li>
+          <li>Refined Scratch Games layout for better fit.</li>
+          <li>Centered Games panel at 90% screen width.</li>
+        </ul>
+        <div class="version-chip" style="margin-top: 1rem;">Previous patch · v0.36</div>
+        <ul class="patch-list" style="margin-top: 0.5rem;">
+          <li>Some minor changes.</li>
+          <li>Changed the <strong>color</strong> of the buttons.</li>
+          <li>Changed the <strong>color</strong> of most of the UI.</li>
+          <li>Added background video that is <strong>.mp4.</strong></li>
         </ul>
       </aside>
     </section>
   `,
-  tools: `
-    <section class="panel">
-      <h2>Tools</h2>
+
+  calc: `
+    <section class="panel calc-panel">
+      <h2>Calculators</h2>
       <div class="button-row">
-        <button onclick="showTool('calc')">Calculators</button>
-        <button onclick="showTool('ide')">HTML IDE</button>
-        <button onclick="showTool('chat')">AI Chatbot</button>
-        <button onclick="showTool('canvas')">Painting Canvas</button>
-        <button onclick="showTool('search')">Search Engine</button>
-        <button onclick="showTool('ciphers')">Ciphers</button>
+        <button onclick="showCalc('simple')">Simple</button>
+        <button onclick="showCalc('volume')">Volume</button>
+        <button onclick="showCalc('graph')">Graph</button>
       </div>
-      <div id="toolArea"></div>
+      <div id="calcArea"></div>
     </section>
   `,
+
   games: `
-    <section class="panel games-panel" style="width: 90vw; margin-left: calc(50% - 45vw);">
+    <section class="panel games-panel">
       <h2>Games</h2>
       <div class="games-menu" id="gamesMenu">
-        <button onclick="showScratchGames()" style="display:block; width:100%; margin:0.75rem auto; font-size:1.2rem; padding:1rem 1.5rem;">Scratch Games</button>
-        <button onclick="showEmulators()" style="display:block; width:100%; margin:0.75rem auto; font-size:1.2rem; padding:1rem 1.5rem;">Emulators</button>
-        <button onclick="showTool('flappy')" style="display:block; width:100%; margin:0.75rem auto; font-size:1.2rem; padding:1rem 1.5rem;">Flappy Bird</button>
-        <button onclick="showTool('guess')" style="display:block; width:100%; margin:0.75rem auto; font-size:1.2rem; padding:1rem 1.5rem;">Number Guessing</button>
+        <button onclick="showScratchGames()">Scratch Games</button>
+        <button onclick="showEmulators()">Emulators</button>
       </div>
       <div id="gamesContent"></div>
     </section>
   `,
-  creations: `
-    <section class="panel">
-      <h2>Creations</h2>
-      <div class="button-row">
-        <button onclick="showCreation('code')">Code</button>
-        <button onclick="showCreation('videos')">Map Videos</button>
-        <button onclick="showCreation('images')">Map Images</button>
-      </div>
-      <div id="creationArea"></div>
-    </section>
-  `,
-  unblocked: `
-    <section class="panel">
-      <h2>Unblocked</h2>
-      <div class="button-row">
-        <button onclick="showEmbed('https://www.crazygames.com')">CrazyGames</button>
-        <button onclick="showEmbed('https://www.poki.com')">Poki</button>
-        <button onclick="showEmbed('https://www.youtube.com/embed')">YouTube</button>
-      </div>
-      <div id="embedArea" class="embed-container" style="display:none;"></div>
-    </section>
-  `,
+
   about: `
-    <section class="panel">
+    <section class="panel about-panel">
       <h2>About</h2>
-      <p class="section-copy">This is GN-Neon. The GN stands for Goober Network. I made this site to bypass lightspeed filter. Why? Because I can.<br><br>I (Neon64) made this site to provide games, tools, and unblocked content for everyone.</p>
+      <p class="section-copy">This is GN-Neon. The GN stands for Goober Network. I made this site to bypass lightspeed filter, considering you are here, you should know how I did that. Why? Because I can.<br />
+      <br />
+      I (Neon64) made this site, with suprisingly little help from any AI, it has games for fun, and tools to cheat or get messages across secretly, plus things blocked by Lightspeed or the internet.
+      </p>
     </section>
   `
 };
 
-function load(page) { document.getElementById("content").innerHTML = pages[page]; if (page === 'games') { setTimeout(() => { const gamesMenu = document.querySelector('.games-menu'); if (gamesMenu) gamesMenu.style.display = 'block'; }, 0); } }
-function enterRun(e, fn) { if (e.key === "Enter") fn(); }
-
-function showTool(type) {
-  const area = document.getElementById("toolArea") || document.getElementById("gamesContent");
-  if (type === 'calc') {
-    area.innerHTML = `<h3>Calculators</h3><div class="button-row"><button onclick="showCalc('simple')">Simple</button><button onclick="showCalc('volume')">Volume</button><button onclick="showCalc('graph')">Graph</button></div><div id="calcArea"></div>`;
-  } else if (type === 'ide') {
-    area.innerHTML = `<h3>HTML IDE</h3><div id="ideContainer"><textarea id="ideInput" placeholder="Write HTML/CSS/JS here..." oninput="runIDE()"></textarea><iframe id="ideOutput"></iframe></div>`;
-  } else if (type === 'chat') {
-    area.innerHTML = `<h3>AI Chatbot</h3><div id="chatContainer"><div id="chatLog"></div><div class="chat-input-row"><input id="chatInput" placeholder="Ask something..." onkeydown="if(event.key==='Enter')sendChat()"><button onclick="sendChat()">Send</button></div></div>`;
-  } else if (type === 'canvas') {
-    area.innerHTML = `<h3>Painting Canvas</h3><canvas id="paintingCanvas" width="800" height="500"></canvas><div class="canvas-controls"><input type="color" id="brushColor" value="#0000ff"><input type="range" id="brushSize" min="1" max="50" value="5"><button onclick="clearCanvas()">Clear</button></div>`;
-    initCanvas();
-  } else if (type === 'search') {
-    area.innerHTML = `<h3>Search Engine</h3><div style="display:flex;gap:0.5rem;"><input id="searchInput" style="flex:1" placeholder="Search Google..."><button onclick="doSearch()">Search</button></div>`;
-  } else if (type === 'ciphers') {
-    area.innerHTML = `<h3>Ciphers</h3><div class="button-row"><button onclick="showCipher('caesar')">Caesar</button><button onclick="showCipher('atbash')">Atbash</button></div><div id="cipherArea"></div>`;
-  } else if (type === 'flappy') {
-    area.innerHTML = `<button class="back-button" onclick="load('games')">← Back</button><div class="embed-container"><iframe src="https://neal.fun/flappy-bird/"></iframe></div>`;
-  } else if (type === 'guess') {
-    area.innerHTML = `<h3>Number Guessing</h3><input id="guessInput" type="number"><button onclick="checkGuess()">Guess</button><p id="guessMsg"></p>`;
-    window.secretNum = Math.floor(Math.random()*100)+1;
+function load(page) {
+  document.getElementById("content").innerHTML = pages[page];
+  if (page === 'games') {
+    setTimeout(() => {
+      const gamesMenu = document.querySelector('.games-menu');
+      if (gamesMenu) gamesMenu.style.display = 'block';
+    }, 0);
   }
+}
+
+function enterRun(e, fn) {
+  if (e.key === "Enter") fn();
 }
 
 function showCalc(type) {
   const c = document.getElementById("calcArea");
-  if (type === "simple") { c.innerHTML = `<h3>Simple Calculator</h3><input id="simpleInput" placeholder="2+2*3" onkeydown="enterRun(event, calcSimple)"><button onclick="calcSimple()">Calc</button><p id="simpleOut"></p>`; }
-  else if (type === "volume") { c.innerHTML = `<h3>Volume Calculator</h3>Cube (Side): <input id="cubeSide" onkeydown="enterRun(event, volCube)"><button onclick="volCube()">Calc</button><p id="cubeOut"></p>Sphere (Radius): <input id="sphereR" onkeydown="enterRun(event, volSphere)"><button onclick="volSphere()">Calc</button><p id="sphereOut"></p>Rectangular Prism (L, W, H): <input id="recL" placeholder="L" onkeydown="enterRun(event, volRect)"><input id="recW" placeholder="W" onkeydown="enterRun(event, volRect)"><input id="recH" placeholder="H" onkeydown="enterRun(event, volRect)"><button onclick="volRect()">Calc</button><p id="rectOut"></p>Cylinder (R, H): <input id="cylR" placeholder="R" onkeydown="enterRun(event, volCyl)"><input id="cylH" placeholder="H" onkeydown="enterRun(event, volCyl)"><button onclick="volCyl()">Calc</button><p id="cylOut"></p>Pyramid (B, H): <input id="pyrB" placeholder="B" onkeydown="enterRun(event, volPyr)"><input id="pyrH" placeholder="H" onkeydown="enterRun(event, volPyr)"><button onclick="volPyr()">Calc</button><p id="pyrOut"></p>`; }
-  else if (type === "graph") { c.innerHTML = `<h3>Graph Calculator</h3>X: <input id="xmin" value="-10"> to <input id="xmax" value="10"><br>Y: <input id="ymin" value="-10"> to <input id="ymax" value="10"><br><br>y=<input id="eq1" onkeydown="enterRun(event, drawGraph)"><br>y=<input id="eq2" onkeydown="enterRun(event, drawGraph)"><br>y=<input id="eq3" onkeydown="enterRun(event, drawGraph)"><br>y=<input id="eq4" onkeydown="enterRun(event, drawGraph)"><br>y=<input id="eq5" onkeydown="enterRun(event, drawGraph)"><br><br><button onclick="drawGraph()">Graph</button><br><br><div class="canvas-wrap"><canvas id="grid" width="400" height="400"></canvas><div id="axesLabels"></div></div>`; }
+  if (type === "simple") {
+    c.innerHTML = `<h3>Simple Calculator</h3><input id="simpleInput" placeholder="2+2*3" onkeydown="enterRun(event, calcSimple)"><button onclick="calcSimple()">Calc</button><p id="simpleOut"></p>`;
+  } else if (type === "volume") {
+    c.innerHTML = `<h3>Volume Calculator</h3>Cube (Side): <input id="cubeSide" onkeydown="enterRun(event, volCube)"><button onclick="volCube()">Calc</button><p id="cubeOut"></p>Sphere (Radius): <input id="sphereR" onkeydown="enterRun(event, volSphere)"><button onclick="volSphere()">Calc</button><p id="sphereOut"></p>Rectangular Prism (Length, Width, Height): <input id="recL" placeholder="Length" onkeydown="enterRun(event, volRect)"><input id="recW" placeholder="Width" onkeydown="enterRun(event, volRect)"><input id="recH" placeholder="Height" onkeydown="enterRun(event, volRect)"><button onclick="volRect()">Calc</button><p id="rectOut"></p>Cylinder (Radius, Height): <input id="cylR" placeholder="Radius" onkeydown="enterRun(event, volCyl)"><input id="cylH" placeholder="Height" onkeydown="enterRun(event, volCyl)"><button onclick="volCyl()">Calc</button><p id="cylOut"></p>Pyramid (Base Area, Height): <input id="pyrB" placeholder="Base Area" onkeydown="enterRun(event, volPyr)"><input id="pyrH" placeholder="Height" onkeydown="enterRun(event, volPyr)"><button onclick="volPyr()">Calc</button><p id="pyrOut"></p>`;
+  } else if (type === "graph") {
+    c.innerHTML = `<h3>Graph Calculator</h3>X: <input id="xmin" value="-10"> to <input id="xmax" value="10"><br>Y: <input id="ymin" value="-10"> to <input id="ymax" value="10"><br><br>y=<input id="eq1" onkeydown="enterRun(event, drawGraph)"><br>y=<input id="eq2" onkeydown="enterRun(event, drawGraph)"><br>y=<input id="eq3" onkeydown="enterRun(event, drawGraph)"><br>y=<input id="eq4" onkeydown="enterRun(event, drawGraph)"><br>y=<input id="eq5" onkeydown="enterRun(event, drawGraph)"><br><br><button onclick="drawGraph()">Graph</button><br><br><div class="canvas-wrap"><canvas id="grid" width="400" height="400"></canvas><div id="axesLabels"></div></div>`;
+  }
 }
 
 function calcSimple() { try { simpleOut.innerText = eval(simpleInput.value); } catch { simpleOut.innerText = "Error"; } }
@@ -399,76 +1220,89 @@ function volSphere() { const v = parseFloat(sphereR.value); sphereOut.innerText 
 function volRect() { const l = parseFloat(recL.value), w = parseFloat(recW.value), h = parseFloat(recH.value); rectOut.innerText = !isNaN(l) && !isNaN(w) && !isNaN(h) ? l * w * h : "Invalid"; }
 function volCyl() { const r = parseFloat(cylR.value), h = parseFloat(cylH.value); cylOut.innerText = !isNaN(r) && !isNaN(h) ? Math.PI * r * r * h : "Invalid"; }
 function volPyr() { const b = parseFloat(pyrB.value), h = parseFloat(pyrH.value); pyrOut.innerText = !isNaN(b) && !isNaN(h) ? (b * h) / 3 : "Invalid"; }
+
 function drawGraph() {
-  const canvas = document.getElementById("grid"); if (!canvas) return; const ctx = canvas.getContext("2d"); ctx.fillStyle = "black"; ctx.fillRect(0, 0, 400, 400);
+  const canvas = document.getElementById("grid"); if (!canvas) return;
+  const ctx = canvas.getContext("2d"); ctx.fillStyle = "black"; ctx.fillRect(0, 0, 400, 400);
   const xminVal = parseFloat(xmin.value), xmaxVal = parseFloat(xmax.value), yminVal = parseFloat(ymin.value), ymaxVal = parseFloat(ymax.value), width = 400, height = 400;
-  ctx.strokeStyle = "#333"; ctx.lineWidth = 1; for (let i = 0; i <= 10; i++) { const x = i * (width / 10), y = i * (height / 10); ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, height); ctx.stroke(); ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(width, y); ctx.stroke(); }
-  ctx.strokeStyle = "white"; ctx.lineWidth = 2; const xZero = (-xminVal / (xmaxVal - xminVal)) * width, yZero = (ymaxVal / (ymaxVal - yminVal)) * height;
+  ctx.strokeStyle = "#333"; ctx.lineWidth = 1;
+  for (let i = 0; i <= 10; i++) { const x = i * (width / 10), y = i * (height / 10); ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, height); ctx.stroke(); ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(width, y); ctx.stroke(); }
+  ctx.strokeStyle = "white"; ctx.lineWidth = 2;
+  const xZero = (-xminVal / (xmaxVal - xminVal)) * width, yZero = (ymaxVal / (ymaxVal - yminVal)) * height;
   ctx.beginPath(); ctx.moveTo(xZero, 0); ctx.lineTo(xZero, height); ctx.stroke(); ctx.beginPath(); ctx.moveTo(0, yZero); ctx.lineTo(width, yZero); ctx.stroke();
-  ctx.fillStyle = "white"; ctx.font = "10px Arial"; for (let i = 0; i <= 10; i++) { const xVal = xminVal + (i / 10) * (xmaxVal - xminVal), yVal = yminVal + (i / 10) * (ymaxVal - yminVal), px = i * (width / 10), py = height - i * (height / 10); ctx.fillText(xVal.toFixed(1), px, yZero + 10); ctx.fillText(yVal.toFixed(1), xZero + 5, py); }
-  const eqs = [eq1.value, eq2.value, eq3.value, eq4.value, eq5.value], colors = ["red", "cyan", "lime", "yellow", "orange"]; let resultsHTML = "<h3>Results</h3>"; const functions = [];
+  ctx.fillStyle = "white"; ctx.font = "10px Arial";
+  for (let i = 0; i <= 10; i++) { const xVal = xminVal + (i / 10) * (xmaxVal - xminVal), yVal = yminVal + (i / 10) * (ymaxVal - yminVal), px = i * (width / 10), py = height - i * (height / 10); ctx.fillText(xVal.toFixed(1), px, yZero + 10); ctx.fillText(yVal.toFixed(1), xZero + 5, py); }
+  const eqs = [eq1.value, eq2.value, eq3.value, eq4.value, eq5.value], colors = ["red", "cyan", "lime", "yellow", "orange"];
+  let resultsHTML = "<h3>Results</h3>"; const functions = [];
   eqs.forEach((expr, i) => {
-    if (!expr) return; expr = expr.replace(/(\d)x/g, "$1*x"); let fn; try { fn = (x) => eval(expr); functions.push({ fn, color: colors[i], expr }); } catch { return; }
-    ctx.strokeStyle = colors[i]; ctx.lineWidth = 2; ctx.beginPath(); let first = true;
-    for (let px = 0; px <= width; px++) { const x = xminVal + (px / width) * (xmaxVal - xminVal); let y; try { y = fn(x); } catch { continue; } const py = ((ymaxVal - y) / (ymaxVal - yminVal)) * height; if (py >= 0 && py <= height) { if (first) { ctx.moveTo(px, py); first = false; } else { ctx.lineTo(px, py); } } } ctx.stroke();
+    if (!expr) return; expr = expr.replace(/(\d)x/g, "$1*x");
+    let fn; try { fn = (x) => eval(expr); functions.push({ fn, color: colors[i], expr }); } catch { return; }
+    ctx.strokeStyle = colors[i]; ctx.lineWidth = 2; ctx.beginPath();
+    let first = true;
+    for (let px = 0; px <= width; px++) { const x = xminVal + (px / width) * (xmaxVal - xminVal); let y; try { y = fn(x); } catch { continue; } const py = ((ymaxVal - y) / (ymaxVal - yminVal)) * height; if (py >= 0 && py <= height) { if (first) { ctx.moveTo(px, py); first = false; } else { ctx.lineTo(px, py); } } }
+    ctx.stroke();
     try { const y0 = fn(0); resultsHTML += `<p style="color:${colors[i]}">y=${expr} → y(0) = ${y0.toFixed(2)}</p>`; } catch {}
   });
-  for (let i = 0; i < functions.length; i++) { for (let j = i + 1; j < functions.length; j++) { for (let x = xminVal; x <= xmaxVal; x += 0.1) { let y1, y2; try { y1 = functions[i].fn(x); y2 = functions[j].fn(x); } catch { continue; } if (Math.abs(y1 - y2) < 0.1) { resultsHTML += `<p>Intersection ≈ (${x.toFixed(2)}, ${y1.toFixed(2)})</p>`; break; } } } }
+  for (let i = 0; i < functions.length; i++) {
+    for (let j = i + 1; j < functions.length; j++) {
+      for (let x = xminVal; x <= xmaxVal; x += 0.1) {
+        let y1, y2; try { y1 = functions[i].fn(x); y2 = functions[j].fn(x); } catch { continue; }
+        if (Math.abs(y1 - y2) < 0.1) { resultsHTML += `<p>Intersection ≈ (${x.toFixed(2)}, ${y1.toFixed(2)})</p>`; break; }
+      }
+    }
+  }
   let existing = document.getElementById("graphResults"); if (!existing) { const div = document.createElement("div"); div.id = "graphResults"; canvas.parentElement.appendChild(div); existing = div; } existing.innerHTML = resultsHTML;
 }
 
 const games = ["https://turbowarp.org/10128407/embed?addons=pause,fullscreen", "https://turbowarp.org/1143765424/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/1075310827/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/941803602/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/973637218/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/883776962/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/898492644/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/916303075/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/978483855/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/959847748/embed?addons=pause,fullscreen&fps=60"];
 const titles = ["Paper Minecraft (Not Made By Me)", "Sisyphean Escalator", "Gambling but Mid", "Laser Dodge", "Goober Dodger", "Neon's Hostile Road", "Mid Cookie Clicker", "Asteroid Assault", "Reel 'Em In", "Cats Hate Rats"];
 const controls = [`Modding Guide: ▶️ https://youtu.be/PexNsUvqD5w\n[1 to 9] - Select Item    [Click] - Place or Mine\n[WASD] - Move / Jump  [E] - Open/Close Inventory\n[E+hover] - Open / Close Chest, Crafting Table, Door\n[Space] - Drop single tile from a stack while dragging.\n[F] - Eat food       [N] - Label a sign or chest\n[Q] - Drop item      [P] - Pause / Unpause\n[T] - Talk / Command    [O] - Save your game\n[M] - Music / Sounds   [Shift] - Sprint`, `Type the letters shown fast enough or fall.\n\nNot case sensitive.`, `::At BlackJack::\nUse arrow keys to bet:\n\nLeft and Right set the bet to 0 and max\n\nUp and down will change the bet by 10, or if holding "." will change it by 500\n1\nEnter to place bet, and after will be the hit button.\n\nSpace to stand.\n\n::At Slots::\nS to Spin\n\nSame betting controls.`, `Use the mouse to dodge the lasers that get faster with time!\n\nPress the left mouse button to become invincible for three seconds with a 10 second cool down so use it wisely!`, `Use the mouse to dodge the goobers, and don't stay in the border too long.\n\nThat's really about it.`, `ASD to move.\nW for a 3-second long power-up of invincibility.\nSpace to Start/Restart on the game-over screen.\n\n1 and 2 control the arcade scan filter.\n3 and 4 control the arcade cabinet overlay.\n5 and 6 control the arcade music (on/off)\n\n(60 fps Is highly recommended)`, `It's Cookie Clicker, but worse.\n\nUse your mouse.`, `Left mouse button to fire a weak auxiliary laser that overheats quickly.\n\nSpace for Main powerful laser.\n\nW for a backup shield that lasts 10 seconds, but has limited uses.\n\nUse your mouse to aim the laser.`, `Use Left Mouse Button to fire the harpoon and try to get the best fish, and buy upgrades.\n \nBeware of the explosive mine, it takes $50 dollars to repair the harpoon and the explosion might scare a few good fish away.\n\n\nThis is still a work in progress and I plan on adding more things like power ups, multipliers, and maybe a high score system.\n\nF to show debug menu \nG to hide debug menu`, `goober.\n\nUse mouse 1 to hit the rats.\nuse F to turn off the yarn.\nUse G to turn them back on.\n`];
-const notes = [`*** Credits ***\nAll the graphics are taken from the Minecraft wiki page and have not been created by me. I have rescaled them and broken them up to make the game work, but that is it at present.\n\nORIGNAL PROJECT MADE BY GRIFFPATCH ON SCRATCH, NOT ME:\n\nCheck him out he does great stuf, https://scratch.mit.edu/users/griffpatch/`, `The game is based on this video by the way:\n\nhttps://youtu.be/2Gby1XQ4Z2M?feature=shared`, `Don't gamble in real life, also this technically is not correct, and if you do it quick enough you can easily break most of this.\n\nThe special codes are:\n\nL E O\n\nZ A C H\n\nN F S M W\n`, `Not much to add, I could have done a better job with the randomization of everything, but I am not gonna be working on this any further.`, `<b>!!!VOLUME WARNING!!!</b>\n\nI made all of this in scratch.\n\nFor now there is a max of 15 goobers on screen at a time.`, `Added a normal and hard mode to the game, plus a secret Most Wanted mode.\n\nI made most of these sprites in scratch and the ships were made in Pixil Art\n\nlink to my Pixil Art profile here: https://www.pixilart.com/neon64makoto\n\nArcade cabinet overlay here:https://forums.launchbox-app.com/files/file/2726-generic-arcade-1080p-overlay/    (i used the 4th one)\n\nMost sounds were found here:\nhttps://pixabay.com/sound-effects/search/arcade/\nhttps://downloads.khinsider.com/game-soundtracks/album/five-nights-at-freddy-s-fnaf-2-sfx\n\nPlus this for hard mode music: https://www.youtube.com/watch?v=R6ZHn2XEbGk\n\nAnd this for <b>****MW****</b> mode:\nhttps://www.youtube.com/watch?v=kG5LF_QS1JU`, `I stole all the assets I obviously stole and made the assets I obviously made. Not much else.\n\nSecret code this time is:\n\nD R G`, `I made everything except for the crosshair which you can find here: https://nohat.cc/f/red-crosshair-png-transparent/m2i8N4N4K9Z5A0K9-201907232239.html\nAnd the asteroid is here: https://assets.website-files.com/62cc3ac38e15ba20d4ff98f5/62d908ddf4c208aa8b54b424_asteroid-8bit-picture.png\n\nEverything else was either made in scratch or made on my Pixil art profile\n\nLink to my Pixil art profile: https://www.pixilart.com/neon64makoto/gallery\n\n\n\n\ngoober.`, `Everything was pretty much made in scratch except for the harpoon and boat clip art. Also the fish are just a part of scratch's sprite library.`, `<b>!!!VOLUME WARNING!!!</b>`];
+const notes = [`*** Credits ***\nAll the graphics are taken from the Minecraft wiki page and have not been created by me. I have rescaled them and broken them up to make the game work, but that is it at present.\n\nORIGNAL PROJECT MADE BY GRIFFPATCH ON SCRATCH, NOT ME:\n\nCheck him out he does great stuf, https://scratch.mit.edu/users/griffpatch/`, `The game is based on this video by the way:\n\nhttps://youtu.be/2Gby1XQ4Z2M?feature=shared`, `Don't gamble in real life, also this technically is not correct, and if you do it quick enough you can easily break most of this.\n\nThe special codes are:\n\nL E O\n\nZ A C H\n\nN F S M W\n`, `Not much to add, I could have done a better job with the randomization of everything, but I am not gonna be working on this any further.`, `<b>!!!VOLUME WARNING!!!</b>\n\nI made all of this in scratch.\n\nFor now there is a max of 15 goobers on screen at a time.\n`, `Added a normal and hard mode to the game, plus a secret Most Wanted mode.\n\nI made most of these sprites in scratch and the ships were made in Pixil Art\n\nlink to my Pixil Art profile here: https://www.pixilart.com/neon64makoto\n\nArcade cabinet overlay here:https://forums.launchbox-app.com/files/file/2726-generic-arcade-1080p-overlay/    (i used the 4th one)\n\nMost sounds were found here:\nhttps://pixabay.com/sound-effects/search/arcade/\nhttps://downloads.khinsider.com/game-soundtracks/album/five-nights-at-freddy-s-fnaf-2-sfx\n\nPlus this for hard mode music: https://www.youtube.com/watch?v=R6ZHn2XEbGk\n\nAnd this for <b>****MW****</b> mode:\nhttps://www.youtube.com/watch?v=kG5LF_QS1JU`, `I stole all the assets I obviously stole and made the assets I obviously made. Not much else.\n\nSecret code this time is:\n\nD R G`, `I made everything except for the crosshair which you can find here: https://nohat.cc/f/red-crosshair-png-transparent/m2i8N4N4K9Z5A0K9-201907232239.html\nAnd the asteroid is here: https://assets.website-files.com/62cc3ac38e15ba20d4ff98f5/62d908ddf4c208aa8b54b424_asteroid-8bit-picture.png\n\nEverything else was either made in scratch or made on my Pixil art profile\n\nLink to my Pixil art profile: https://www.pixilart.com/neon64makoto/gallery\n\n\n\n\ngoober.`, `Everything was pretty much made in scratch except for the harpoon and boat clip art. Also the fish are just a part of scratch's sprite library.`, `<b>!!!VOLUME WARNING!!!</b>`];
 
 function showScratchGames() {
-  const content = document.getElementById('gamesContent'); const gamesMenu = document.querySelector('.games-menu'); if (gamesMenu) gamesMenu.style.display = 'none';
+  const content = document.getElementById('gamesContent'), gamesMenu = document.querySelector('.games-menu'); if (gamesMenu) gamesMenu.style.display = 'none';
   content.innerHTML = `<button class="back-button" onclick="load('games')">← Back to Games Menu</button><div class="games-layout"><div class="sideBox"><h3>Controls</h3><div id="gameControls"></div></div><div class="centerBox"><div class="button-row" style="justify-content:center;"><button onclick="prevGame()">◀</button><button onclick="nextGame()">▶</button></div><iframe id="scratchFrame" allowfullscreen title="GN-Neon Scratch game viewer"></iframe><h3 id="gameTitle"></h3></div><div class="sideBox"><h3>Notes / Credits</h3><div id="gameNotes"></div></div></div>`;
   currentIndex = 0; updateGame();
 }
+
 function showEmulators() {
-  const content = document.getElementById('gamesContent'); const gamesMenu = document.querySelector('.games-menu'); if (gamesMenu) gamesMenu.style.display = 'none';
+  const content = document.getElementById('gamesContent'), gamesMenu = document.querySelector('.games-menu'); if (gamesMenu) gamesMenu.style.display = 'none';
   content.innerHTML = `<button class="back-button" onclick="load('games')">← Back to Games Menu</button><div class="games-menu" style="max-width: 400px; margin: 2rem auto;"><h3>Select Emulator</h3><button onclick="navigateTo('nes')">NES</button><button onclick="navigateTo('snes')">SNES</button><button onclick="navigateTo('genesis')">Genesis</button></div>`;
 }
+
 function navigateTo(emulator) {
   const content = document.getElementById('gamesContent');
-  if (emulator === 'nes') { content.innerHTML = `<button class="back-button" onclick="showEmulators()">← Back to Emulators</button><div style="width: 100%; max-width: 900px; margin: 2rem auto;"><h2 style="padding: 0 0 1rem 0;">NES Emulator</h2><div style="width:100%;height:500px;max-width:100%; background: #000; border-radius: 10px; overflow: hidden; border: 1px solid #333;"><div id="game"></div></div><script>window.EJS_player='#game';window.EJS_core='nes';window.EJS_gameName='cpu_dummy_reads';window.EJS_color='#0006ff';window.EJS_startOnLoaded=true;window.EJS_pathtodata='https://cdn.jsdelivr.net/gh/EmulatorJS/EmulatorJS@latest/data/';window.EJS_url='https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Roms/cpu_dummy_reads.nes';<\/script><script src="https://cdn.jsdelivr.net/gh/EmulatorJS/EmulatorJS@latest/data/loader.js"><\/script></div>`; }
-  else { content.innerHTML = `<div class="wip-container"><h2>${emulator.toUpperCase()} Emulator</h2><p>Work in Progress</p><p style="color: #888; margin-top: 1rem;">This section is currently under development.</p><button class="back-button" onclick="showEmulators()">← Back to Emulators</button></div>`; }
+  if (emulator === 'nes') {
+    content.innerHTML = `<button class="back-button" onclick="showEmulators()">← Back to Emulators</button><div style="width: 100%; max-width: 900px; margin: 2rem auto;"><h2 style="padding: 0 0 1rem 0;">NES Emulator</h2><div style="width:100%;height:500px;max-width:100%; background: #000; border-radius: 10px; overflow: hidden; border: 1px solid #333;"><div id="game"></div></div><script>window.EJS_player='#game';window.EJS_core='nes';window.EJS_gameName='cpu_dummy_reads';window.EJS_color='#0006ff';window.EJS_startOnLoaded=true;window.EJS_pathtodata='https://cdn.jsdelivr.net/gh/EmulatorJS/EmulatorJS@latest/data/';window.EJS_url='https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Roms/cpu_dummy_reads.nes';<\/script><script src="https://cdn.jsdelivr.net/gh/EmulatorJS/EmulatorJS@latest/data/loader.js"><\/script></div>`;
+  } else {
+    content.innerHTML = `<div class="wip-container"><h2>${emulator.toUpperCase()} Emulator</h2><p>Work in Progress</p><p style="color: #888; margin-top: 1rem;">This section is currently under development.</p><button class="back-button" onclick="showEmulators()">← Back to Emulators</button></div>`;
+  }
 }
-function updateGame() { const f = document.getElementById("scratchFrame"); if (!f) return; f.src = games[currentIndex]; gameTitle.innerText = titles[currentIndex]; document.getElementById("gameControls").innerHTML = controls[currentIndex] || ""; document.getElementById("gameNotes").innerHTML = notes[currentIndex] || ""; }
+
+function updateGame() {
+  const f = document.getElementById("scratchFrame"); if (!f) return;
+  f.src = games[currentIndex]; gameTitle.innerText = titles[currentIndex];
+  document.getElementById("gameControls").innerHTML = controls[currentIndex] || "";
+  document.getElementById("gameNotes").innerHTML = notes[currentIndex] || "";
+}
+
 function nextGame() { currentIndex = (currentIndex + 1) % games.length; updateGame(); }
 function prevGame() { currentIndex = (currentIndex - 1 + games.length) % games.length; updateGame(); }
 
-function showTool(type) {
-  const area = document.getElementById("toolArea") || document.getElementById("gamesContent");
-  if (type === 'calc') { area.innerHTML = `<h3>Calculators</h3><div class="button-row"><button onclick="showCalc('simple')">Simple</button><button onclick="showCalc('volume')">Volume</button><button onclick="showCalc('graph')">Graph</button></div><div id="calcArea"></div>`; }
-  else if (type === 'ide') { area.innerHTML = `<h3>HTML IDE</h3><div id="ideContainer"><textarea id="ideInput" placeholder="Write HTML/CSS/JS here..." oninput="runIDE()"></textarea><iframe id="ideOutput"></iframe></div>`; }
-  else if (type === 'chat') { area.innerHTML = `<h3>AI Chatbot</h3><div id="chatContainer"><div id="chatLog"></div><div class="chat-input-row"><input id="chatInput" placeholder="Ask something..." onkeydown="if(event.key==='Enter')sendChat()"><button onclick="sendChat()">Send</button></div></div>`; }
-  else if (type === 'canvas') { area.innerHTML = `<h3>Painting Canvas</h3><canvas id="paintingCanvas" width="800" height="500"></canvas><div class="canvas-controls"><input type="color" id="brushColor" value="#0000ff"><input type="range" id="brushSize" min="1" max="50" value="5"><button onclick="clearCanvas()">Clear</button></div>`; initCanvas(); }
-  else if (type === 'search') { area.innerHTML = `<h3>Search Engine</h3><div style="display:flex;gap:0.5rem;"><input id="searchInput" style="flex:1" placeholder="Search Google..."><button onclick="doSearch()">Search</button></div>`; }
-  else if (type === 'ciphers') { area.innerHTML = `<h3>Ciphers</h3><div class="button-row"><button onclick="showCipher('caesar')">Caesar</button><button onclick="showCipher('atbash')">Atbash</button></div><div id="cipherArea"></div>`; }
-  else if (type === 'flappy') { area.innerHTML = `<button class="back-button" onclick="load('games')">← Back</button><div class="embed-container"><iframe src="https://neal.fun/flappy-bird/"></iframe></div>`; }
-  else if (type === 'guess') { area.innerHTML = `<h3>Number Guessing</h3><input id="guessInput" type="number"><button onclick="checkGuess()">Guess</button><p id="guessMsg"></p>`; window.secretNum = Math.floor(Math.random()*100)+1; }
+function setVideoBackground(videoUrl) {
+  const video = document.createElement('video');
+  video.id = 'videoBg'; video.autoplay = true; video.loop = true; video.muted = true; video.src = videoUrl;
+  video.addEventListener('canplay', () => {
+    const splash = document.getElementById('splashOverlay');
+    splash.classList.add('ready');
+    document.getElementById('splashText').innerText = "!!!WARNING MUSIC WILL PLAY!!!";
+    document.getElementById('splashSubtext').innerText = "CLICK TO ENTER";
+  });
+  document.body.insertBefore(video, document.body.firstChild);
+  document.body.classList.add('video-bg');
 }
 
-function showCipher(type) { const area = document.getElementById("cipherArea"); area.innerHTML = `<h3>${type.toUpperCase()}</h3><textarea id="cipherIn" style="width:100%;height:100px" placeholder="Text..."></textarea><br><button onclick="runCipher('${type}')">Run</button><p id="cipherOut" style="background:#000;padding:1rem;border-radius:8px;white-space:pre-wrap;"></p>`; }
-function runCipher(type) { const input = document.getElementById('cipherIn').value; let out = ""; if (type === 'caesar') { out = input.replace(/[a-z]/gi, c => String.fromCharCode((c <= "Z" ? 90 : 122) >= (c = c.charCodeAt(0) + 3) ? c : c - 26)); } else if (type === 'atbash') { out = input.replace(/[a-z]/gi, c => String.fromCharCode((c <= "Z" ? 155 : 219) - c.charCodeAt(0))); } document.getElementById('cipherOut').innerText = out; }
-function runIDE() { const out = document.getElementById('ideOutput').contentWindow.document; out.open(); out.write(document.getElementById('ideInput').value); out.close(); }
-function sendChat() { const log = document.getElementById('chatLog'), inp = document.getElementById('chatInput'); if(!inp.value)return; log.innerHTML += `<div class="chat-msg user-msg">${inp.value}</div>`; setTimeout(()=>log.innerHTML+=`<div class="chat-msg bot-msg">AI integration coming soon!</div>`, 500); inp.value=''; log.scrollTop=log.scrollHeight; }
-function doSearch() { window.open('https://www.google.com/search?q=' + encodeURIComponent(document.getElementById('searchInput').value), '_blank'); }
-function initCanvas() { const cvs = document.getElementById('paintingCanvas'), ctx = cvs.getContext('2d'); let painting = false; cvs.onmousedown = () => painting = true; cvs.onmouseup = () => { painting = false; ctx.beginPath(); }; cvs.onmousemove = (e) => { if(!painting) return; ctx.lineWidth = document.getElementById('brushSize').value; ctx.lineCap = 'round'; ctx.strokeStyle = document.getElementById('brushColor').value; const rect = cvs.getBoundingClientRect(); ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top); ctx.stroke(); ctx.beginPath(); ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top); }; }
-function clearCanvas() { paintingCanvas.getContext('2d').clearRect(0,0,800,500); }
-function showEmbed(url) { const area = document.getElementById('embedArea'); area.style.display = 'block'; area.innerHTML = `<iframe src="${url}"></iframe>`; }
-function showCreation(type) { document.getElementById('creationArea').innerHTML = `<h3>${type.toUpperCase()}</h3><p>Content for ${type} goes here.</p>`; }
-function checkGuess() { const v = parseInt(guessInput.value); guessMsg.innerText = v === window.secretNum ? "Correct!" : v < window.secretNum ? "Too low" : "Too high"; }
-
-function setVideoBackground(url) {
-  const v = document.createElement('video'); v.id = 'videoBg'; v.autoplay = true; v.loop = true; v.muted = true; v.src = url;
-  v.oncanplay = () => { splashOverlay.classList.add('ready'); splashText.innerText = "CLICK TO ENTER"; };
-  document.body.insertBefore(v, document.body.firstChild);
-}
-
+// ─── BOOT ─────────────────────────────────────────────────────────────────────
 load("home");
 setVideoBackground('https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/FlatlineLoop.mp4');
 initMusic();
