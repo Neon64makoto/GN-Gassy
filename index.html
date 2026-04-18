@@ -1057,11 +1057,11 @@ function exitVizOnEsc(e) { if(e.key === 'Escape') toggleVisualizerMode(); }
   };
   document.addEventListener('mousemove', (e) => {
     if (e.clientY < 100) { isNear = true; show(); } 
-    else { isNear = false; if(!topbar.matches(':hover')) { clearTimeout(hideTimer); hideTimer = setTimeout(hide, 2000); } }
+    else { isNear = false; if(!topbar.matches(':hover')) { clearTimeout(hideTimer); hideTimer = setTimeout(hide, 500); } }
   });
   topbar.addEventListener('mouseenter', show);
-  topbar.addEventListener('mouseleave', () => { if(!isNear) hideTimer = setTimeout(hide, 1500); });
-  hideTimer = setTimeout(hide, 3000);
+  topbar.addEventListener('mouseleave', () => { if(!isNear) hideTimer = setTimeout(hide, 500); });
+  hideTimer = setTimeout(hide, 500);
 })();
 
 // ─── VISUALIZER DRAW ─────────────────────────────────────────────────────────
