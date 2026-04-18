@@ -656,7 +656,9 @@
     }
   </style>
 </head>
-<body>  <div class="topbar">
+<body>
+  <audio id="bgMusic" autoplay loop style="display:none;"></audio>
+  <div class="topbar">
   <div class="topbar-brand">GN-Gassy</div>
   <nav class="nav" aria-label="Primary">
     <button onclick="load('home')">Home</button>
@@ -665,6 +667,7 @@
     <button onclick="load('about')">About</button>
   </nav>
   <div class="topbar-right">
+    <input type="range" id="volumeSlider" min="0" max="100" value="50" style="width: 100px; cursor: pointer;" onchange="setVolume(this.value)" oninput="setVolume(this.value)">
     <button id="muteBtn" onclick="toggleMute()">Mute</button>
   </div>
 </div>
@@ -675,7 +678,7 @@
 </main>
 
 <div class="version-tag">
-    v0.36
+    v0.37
 </div>
 
 <script>
@@ -700,10 +703,19 @@ const pages = {
       </article>
 
       <aside class="panel patch-panel">
-        <div class="version-chip">Latest patch · v0.36</div>
+        <div class="version-chip">Latest patch · v0.37</div>
         <h3>Patch Notes</h3>
-        <p class="section-copy">Recent changes to the homepage and site structure.</p>
+        <p class="section-copy">Background music and audio controls added!</p>
         <ul class="patch-list">
+          <li>Added <strong>background music playlist</strong> with 3 tracks (SMRPG, Philly Nice, DQ Blizzard).</li>
+          <li>Added <strong>volume slider</strong> to the top bar for audio control.</li>
+          <li>Music plays at <strong>50% volume</strong> by default.</li>
+          <li>Mute button now controls both <strong>music and iframe audio</strong>.</li>
+          <li>Refined Scratch Games layout for better fit.</li>
+          <li>Centered Games panel at 90% screen width.</li>
+        </ul>
+        <div class="version-chip" style="margin-top: 1rem;">Previous patch · v0.36</div>
+        <ul class="patch-list" style="margin-top: 0.5rem;">
           <li>Some minor changes.</li>
           <li>Changed the <strong>color</strong> of the buttons.</li>
           <li>Changed the <strong>color</strong> of most of the UI.</li>
@@ -1150,6 +1162,36 @@ goober.`, `Everything was pretty much made in scratch except for the harpoon and
 let currentIndex = 0;
 let isMuted = false;
 
+// Music playlist (SMRPG -> Philly Nice -> dq blizzard)
+const playlist = [
+  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Gassy@main/Music/Super%20Mario%20RPG.mp3',
+  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Gassy@main/Music/Philly%20Nice%20(B-Side).mp3',
+  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Gassy@main/Music/dq%20blizzard.mp3'
+];
+let currentTrack = 0;
+
+function initMusic() {
+  const audio = document.getElementById('bgMusic');
+  if (audio) {
+    audio.src = playlist[currentTrack];
+    audio.volume = 0.5; // 50% volume
+    audio.play().catch(err => console.log('Autoplay prevented:', err));
+    
+    audio.addEventListener('ended', () => {
+      currentTrack = (currentTrack + 1) % playlist.length;
+      audio.src = playlist[currentTrack];
+      audio.play();
+    });
+  }
+}
+
+function setVolume(value) {
+  const audio = document.getElementById('bgMusic');
+  if (audio && !isMuted) {
+    audio.volume = value / 100;
+  }
+}
+
 function toggleMute() {
   isMuted = !isMuted;
   const btn = document.getElementById('muteBtn');
@@ -1308,6 +1350,7 @@ function prevGame() {
 
 load("home");
 setVideoBackground('https://raw.githubusercontent.com/Neon64makoto/GN-Gassy/main/Files/FlatlineLoop.mp4');
+initMusic();
 </script>
 
 </body>
