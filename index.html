@@ -1172,16 +1172,31 @@ let currentTrack = 0;
 
 function initMusic() {
   const audio = document.getElementById('bgMusic');
-  if (audio) {
+  if (!audio) return;
+  
+  audio.src = playlist[currentTrack];
+  audio.volume = 0.5; // 50% volume
+  
+  // Handle track ending
+  audio.addEventListener('ended', () => {
+    currentTrack = (currentTrack + 1) % playlist.length;
     audio.src = playlist[currentTrack];
-    audio.volume = 0.5; // 50% volume
-    audio.play().catch(err => console.log('Autoplay prevented:', err));
-    
-    audio.addEventListener('ended', () => {
-      currentTrack = (currentTrack + 1) % playlist.length;
-      audio.src = playlist[currentTrack];
-      audio.play();
-    });
+    audio.play().catch(err => console.log('Play error:', err));
+  }, { once: false });
+  
+  // Try to play immediately
+  audio.play().catch(err => {
+    console.log('Autoplay blocked, waiting for user interaction');
+    // Add one-time listener for user interaction
+    document.addEventListener('click', playMusicOnce, { once: true });
+    document.addEventListener('keydown', playMusicOnce, { once: true });
+  });
+}
+
+function playMusicOnce() {
+  const audio = document.getElementById('bgMusic');
+  if (audio && audio.paused) {
+    audio.play().catch(err => console.log('Play error:', err));
   }
 }
 
