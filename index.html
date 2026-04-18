@@ -401,6 +401,7 @@
       text-align: center;
       letter-spacing: 0.04em;
       font-size: 3rem;
+      color: blue;
     }
 
     #content {
@@ -710,19 +711,6 @@
     .chat-input-row { display: flex; padding: 0.5rem; background: #111; border-top: 1px solid #333; }
     #chatInput { flex: 1; margin: 0; }
 
-    /* --- Sili Guessing Game (GN-Neon Themed) --- */
-    .guess-container { max-width: 400px; margin: 0 auto; text-align: center; }
-    .guess-message { font-size: 1.2rem; margin-top: 1rem; min-height: 1.5rem; }
-    .guess-success { color: #00ff00; }
-    .guess-error { color: #ff0000; }
-    .diff-slider { position: fixed; top: 0; right: -300px; width: 250px; height: 100%; background: rgba(17,17,17,0.98); box-shadow: -5px 0 15px rgba(0,0,0,0.5); padding: 1.5rem; transition: right 0.4s ease; color: #0044ff; z-index: 1000; border-left: 1px solid #333; backdrop-filter: blur(10px); }
-    .diff-slider.open { right: 0; }
-    .diff-slider h2 { color: #fff; margin-top: 0; }
-    .diff-slider input { width: 100%; margin: 5px 0 15px; }
-    .diff-slider button { width: 100%; margin: 5px 0; }
-    .slider-toggle-btn { position: fixed; right: 0; top: 50%; transform: translateY(-50%); background: #0044ff; color: white; border: none; width: 30px; height: 60px; cursor: pointer; border-radius: 8px 0 0 8px; z-index: 1100; transition: right 0.4s ease; }
-    .slider-toggle-btn.open { right: 250px; }
-
     /* ─── RESPONSIVE ──────────────────────────────────────────────────── */
     @media (max-width: 1200px) {
       html,
@@ -774,7 +762,7 @@
       }
 
       .page-shell {
-        padding: 9.5rem 1rem 2rem;
+        padding: 9.5rem 1rem 5rem;
       }
 
       .site-title {
@@ -844,7 +832,7 @@
       }
 
       .page-shell {
-        padding: 9.5rem 0.75rem 2rem;
+        padding: 9.5rem 0.75rem 5rem;
       }
 
       .site-title {
@@ -967,13 +955,21 @@ let isVisualizerMode = false;
 const playlist = [
   'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Super%20Mario%20RPG.mp3',
   'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Philly%20Nice%20(B-Side).mp3',
-  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/dq%20blizzard.mp3'
+  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/dq%20blizzard.mp3',
+  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Neon%20Cobra.mp3',
+  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Pain_is_just_freddy_fazbear.mp3',
+  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/But%20Can%20You%20Do%20This.mp3',
+  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Super%20Mario%20RPG%20Waltz%20of%20the%20Forest%20(4K).mp3'
 ];
 
 const trackMeta = [
-  { title: 'Super Mario RPG', artist: 'Yoko Shimomura' },
-  { title: 'Philly Nice (B-Side)', artist: 'Unknown Artist' },
-  { title: 'DQ Blizzard', artist: 'Unknown Artist' }
+  { title: 'SMRPG Rawest Forrest', artist: 'Martin Hagwell' },
+  { title: 'Philly Nice (B-Side)', artist: 'Rozebud' },
+  { title: 'DQ Blizzard', artist: 'MC Chris' },
+  { title: 'Neon Cobra', artist: 'Shockwave-Sound' },
+  { title: 'FNAF 1 (trust)', artist: 'Silva Gunner' },
+  { title: 'But Can You Do This', artist: 'Lolnein' },
+  { title: 'SMRPG Waltz of The Forest', artist: 'Psyguy' }
 ];
 
 // ─── SPLASH LOGIC ────────────────────────────────────────────────────────────
@@ -1084,11 +1080,11 @@ function exitVizOnEsc(e) { if(e.key === 'Escape') toggleVisualizerMode(); }
   };
   document.addEventListener('mousemove', (e) => {
     if (e.clientY < 100) { isNear = true; show(); } 
-    else { isNear = false; if(!topbar.matches(':hover')) { clearTimeout(hideTimer); hideTimer = setTimeout(hide, 1500); } }
+    else { isNear = false; if(!topbar.matches(':hover')) { clearTimeout(hideTimer); hideTimer = setTimeout(hide, 500); } }
   });
   topbar.addEventListener('mouseenter', show);
-  topbar.addEventListener('mouseleave', () => { if(!isNear) hideTimer = setTimeout(hide, 1000); });
-  hideTimer = setTimeout(hide, 3000);
+  topbar.addEventListener('mouseleave', () => { if(!isNear) hideTimer = setTimeout(hide, 500); });
+  hideTimer = setTimeout(hide, 500);
 })();
 
 // ─── VISUALIZER DRAW ─────────────────────────────────────────────────────────
@@ -1253,27 +1249,8 @@ function showTool(type) {
   } else if (type === 'flappy') {
     area.innerHTML = `<button class="back-button" onclick="load('games')">← Back</button><div class="embed-container"><iframe src="https://neal.fun/flappy-bird/"></iframe></div>`;
   } else if (type === 'guess') {
-    area.innerHTML = `<button class="back-button" onclick="load('games')">← Back</button>
-      <div class="guess-container">
-        <h3>Number Guessing Game</h3>
-        <p id="rangeDisplay">Guess a number between 1 and 100</p>
-        <input type="number" id="guessInput" placeholder="Enter your guess" min="1" max="100">
-        <button id="submitGuess">Submit Guess</button>
-        <p class="guess-message" id="guessMessage"></p>
-        <button id="playAgain" style="display:none; background:#00ff00;">Play Again</button>
-      </div>
-      <button class="slider-toggle-btn" id="toggleSlider">▶</button>
-      <div class="diff-slider" id="difficultySlider">
-        <h2>Difficulty</h2>
-        <label>Min:</label><input type="number" id="minInput" value="1">
-        <label>Max:</label><input type="number" id="maxInput" value="100">
-        <button id="setRange">Set Range</button>
-        <button id="easyMode">Easy (0-50)</button>
-        <button id="normalMode">Normal (0-100)</button>
-        <button id="hardMode">Hard (0-500)</button>
-        <button id="impossibleMode">Impossible (0-1,000,000)</button>
-      </div>`;
-    initGuessGame();
+    area.innerHTML = `<h3>Number Guessing</h3><p>Guess a number between 1 and 100:</p><input id="guessInput" type="number"><button onclick="checkGuess()">Guess</button><p id="guessMsg"></p>`;
+    window.secretNum = Math.floor(Math.random() * 100) + 1;
   }
 }
 
@@ -1420,55 +1397,11 @@ function showEmbed(url) {
 function showCreation(type) {
   document.getElementById('creationArea').innerHTML = `<h3>${type.toUpperCase()}</h3><p>Gallery for ${type} coming soon!</p>`;
 }
-
-// ─── NEW GUESSING GAME LOGIC ─────────────────────────────────────────────────
-function initGuessGame() {
-  let min = 1, max = 100, guessCount = 0;
-  let randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
-  
-  const msg = document.getElementById('guessMessage'), inp = document.getElementById('guessInput');
-  const subBtn = document.getElementById('submitGuess'), playBtn = document.getElementById('playAgain');
-  const rangeDisp = document.getElementById('rangeDisplay'), slider = document.getElementById('difficultySlider');
-  const toggle = document.getElementById('toggleSlider');
-
-  const updateRange = () => {
-    randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
-    guessCount = 0; msg.textContent = ''; inp.value = '';
-    rangeDisp.textContent = `Guess a number between ${min} and ${max}`;
-    inp.min = min; inp.max = max;
-    playBtn.style.display = "none"; subBtn.style.display = "inline-block";
-    inp.focus();
-  };
-
-  const handleGuess = () => {
-    const val = parseInt(inp.value, 10);
-    if(isNaN(val)) return;
-    inp.value = ''; guessCount++;
-    if (val === randomNumber) {
-      msg.innerHTML = `<span class="guess-success">🎉 Correct! Took ${guessCount} guesses.</span>`;
-      subBtn.style.display = "none"; playBtn.style.display = "inline-block";
-    } else {
-      msg.innerHTML = `<span class="guess-error">${val < randomNumber ? "Too low!" : "Too high!"}</span>`;
-    }
-  };
-
-  subBtn.onclick = handleGuess;
-  playBtn.onclick = updateRange;
-  inp.onkeypress = (e) => { if(e.key === 'Enter') subBtn.style.display !== "none" ? handleGuess() : updateRange(); };
-  toggle.onclick = () => {
-    const open = slider.classList.toggle('open');
-    toggle.classList.toggle('open');
-    toggle.innerText = open ? "◀" : "▶";
-  };
-
-  document.getElementById('setRange').onclick = () => {
-    const nMin = parseInt(document.getElementById('minInput').value), nMax = parseInt(document.getElementById('maxInput').value);
-    if(!isNaN(nMin) && !isNaN(nMax) && nMin < nMax) { min = nMin; max = nMax; updateRange(); }
-  };
-  document.getElementById('easyMode').onclick = () => { min = 0; max = 50; updateRange(); };
-  document.getElementById('normalMode').onclick = () => { min = 0; max = 100; updateRange(); };
-  document.getElementById('hardMode').onclick = () => { min = 0; max = 500; updateRange(); };
-  document.getElementById('impossibleMode').onclick = () => { min = 0; max = 1000000; updateRange(); };
+function checkGuess() {
+  const v = parseInt(document.getElementById('guessInput').value);
+  const msg = document.getElementById('guessMsg');
+  if(v === window.secretNum) msg.innerText = "Correct!";
+  else msg.innerText = v < window.secretNum ? "Too low!" : "Too high!";
 }
 
 // ─── BOOT ─────────────────────────────────────────────────────────────────────
