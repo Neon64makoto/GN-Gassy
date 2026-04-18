@@ -387,7 +387,7 @@
       width: 100%;
       max-width: 1200px;
       margin: 0 auto;
-      padding: 8.5rem 1.5rem 5rem;
+      padding: 8.5rem 1.5rem 2rem;
       transition: opacity 0.4s;
     }
 
@@ -405,8 +405,8 @@
 
     #content {
       width: 100%;
-      min-height: calc(100vh - 200px);
-      padding: 1rem 0 2rem;
+      min-height: auto;
+      padding: 1rem 0 1rem;
     }
 
     .panel {
@@ -1071,11 +1071,11 @@ function exitVizOnEsc(e) { if(e.key === 'Escape') toggleVisualizerMode(); }
   };
   document.addEventListener('mousemove', (e) => {
     if (e.clientY < 100) { isNear = true; show(); } 
-    else { isNear = false; if(!topbar.matches(':hover')) { clearTimeout(hideTimer); hideTimer = setTimeout(hide, 500); } }
+    else { isNear = false; if(!topbar.matches(':hover')) { clearTimeout(hideTimer); hideTimer = setTimeout(hide, 1500); } }
   });
   topbar.addEventListener('mouseenter', show);
-  topbar.addEventListener('mouseleave', () => { if(!isNear) hideTimer = setTimeout(hide, 500); });
-  hideTimer = setTimeout(hide, 500);
+  topbar.addEventListener('mouseleave', () => { if(!isNear) hideTimer = setTimeout(hide, 1000); });
+  hideTimer = setTimeout(hide, 3000);
 })();
 
 // ─── VISUALIZER DRAW ─────────────────────────────────────────────────────────
