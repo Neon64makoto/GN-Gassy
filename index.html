@@ -1429,13 +1429,13 @@ document.addEventListener('keydown', (e) => {
       showBoth(); 
       // Force hide after 5 seconds even if mouse is moving near edge
       clearTimeout(hideTimer);
-      hideTimer = setTimeout(() => { isNear = false; hideBoth(); }, 5000);
+      hideTimer = setTimeout(() => { isNear = false; hideBoth(); }, 500);
     } 
     else { 
       isNear = false; 
       if(!topbar.matches(':hover') && !leftPanel.matches(':hover') && !logoConnector.matches(':hover')) { 
         clearTimeout(hideTimer); 
-        hideTimer = setTimeout(hideBoth, 500); 
+        hideTimer = setTimeout(hideBoth, 150); 
       } 
     }
   });
