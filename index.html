@@ -13,11 +13,11 @@
       --border-strong: #444;
       --text: #fff;
       --muted: #b3b3b3;
-      --neon-blue: #0044ff;
-      --neon-blue-soft: rgba(0, 68, 255, 0.14);
-      --neon-blue-lighter: #ff0000;
-      --neon-blue-lighter2: #aac0ff;
-      --shadow: 0 14px 32px rgba(255, 0, 0, 0.32);
+      --neon-blue: var(--neon-blue);
+      --neon-blue-soft: var(--neon-blue-soft);
+      --neon-blue-lighter: var(--neon-blue-lighter);
+      --neon-blue-lighter2: var(--neon-blue-lighter2);
+      --shadow: 0 14px 32px rgba(0, 0, 0, 0.32);
       --panel-size: 140px;
     }
 
@@ -48,7 +48,7 @@
       position: fixed;
       top: 0; left: 0;
       width: 100%; height: 100%;
-      background: linear-gradient(45deg, #0a0a0a 25%, #1a1a2e 25%, #1a1a2e 50%, #0a0a0a 50%, #0a0a0a 75%, #1a1a2e 75%, #1a1a2e);
+      background: linear-gradient(45deg, #0a0a0a 25%, var(--neon-blue) 25%, var(--neon-blue) 50%, #0a0a0a 50%, #0a0a0a 75%, var(--neon-blue) 75%, var(--neon-blue));
       background-size: 40px 40px;
       animation: loading-stripes 0.8s linear infinite;
       z-index: 2000;
@@ -1487,7 +1487,7 @@ function showTool(type) {
   } else if (type === 'chat') {
     area.innerHTML = `<button class="back-button" onclick="load('tools')">← Back to Tools</button><h3>AI Chatbot</h3><div id="chatContainer"><div id="chatLog"></div><div class="chat-input-row"><input id="chatInput" placeholder="Ask something..." onkeydown="if(event.key==='Enter')sendChat()"><button onclick="sendChat()">Send</button></div></div>`;
   } else if (type === 'canvas') {
-    area.innerHTML = `<button class="back-button" onclick="load('tools')">← Back to Tools</button><h3>Painting Canvas</h3><canvas id="paintingCanvas" width="800" height="500"></canvas><div style="text-align:center; margin-top:1rem;"><input type="color" id="brushColor" value="#0044ff"><input type="range" id="brushSize" min="1" max="50" value="5"><button onclick="clearCanvas()">Clear</button></div>`;
+    area.innerHTML = `<button class="back-button" onclick="load('tools')">← Back to Tools</button><h3>Painting Canvas</h3><canvas id="paintingCanvas" width="800" height="500"></canvas><div style="text-align:center; margin-top:1rem;"><input type="color" id="brushColor" value="var(--neon-blue)"><input type="range" id="brushSize" min="1" max="50" value="5"><button onclick="clearCanvas()">Clear</button></div>`;
     initCanvas();
   } else if (type === 'ciphers') {
     area.innerHTML = `<button class="back-button" onclick="load('tools')">← Back to Tools</button><h3>Ciphers</h3><div class="games-menu"><button onclick="showCipher('caesar')">Caesar</button><button onclick="showCipher('atbash')">Atbash</button></div><div id="cipherArea"></div>`;
