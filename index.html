@@ -661,14 +661,13 @@
     }
 
     #graphResults {
-      margin-top: 0;
+      margin-top: 1.5rem;
       padding: 1rem;
-      background: #0a0a0a;
+      background: #0e0e0e;
       border: 1px solid var(--border);
-      border-radius: 8px;
+      border-radius: 10px;
       text-align: left;
       font-size: 1.05rem;
-      width: 100%;
     }
 
     .version-tag {
@@ -715,12 +714,11 @@
     .tools-side-by-side > div { flex: 1; }
     .tools-side-by-side textarea { width: 100%; height: 200px; margin: 0; }
     .tools-side-by-side pre { width: 100%; height: 200px; margin: 0; padding: 1rem; background: #0a0a0a; border: 1px solid var(--border); border-radius: 8px; overflow-y: auto; color: #7799ff; white-space: pre-wrap; word-wrap: break-word; }
-    .cipher-buttons { display: flex; gap: 0.5rem; margin: 0 0 1rem 0; align-items: center; flex-wrap: nowrap; width: 100%; order: -1; }
+    .cipher-buttons { display: flex; gap: 0.5rem; margin: 0 0 1rem 0; align-items: center; flex-wrap: nowrap; width: 100%; }
     .cipher-buttons button { margin: 0; padding: 0.5rem 0.75rem; font-size: 0.95rem; flex-shrink: 0; }
     .graph-layout { display: flex; gap: 1.5rem; align-items: flex-start; }
-    .graph-layout .graph-inputs { flex: 0 0 auto; display: flex; flex-direction: column; gap: 0.75rem; }
-    .graph-layout .graph-inputs input { width: 100%; }
-    .graph-layout .graph-outputs { flex: 1; display: flex; flex-direction: column; gap: 0; }
+    .graph-layout .graph-inputs { flex: 0 0 50%; }
+    .graph-layout .graph-outputs { flex: 0 0 50%; display: flex; flex-direction: column; gap: 1rem; }
     .graph-layout .canvas-wrap { flex-shrink: 0; }
     .graph-layout #grid { display: block; max-width: 100%; height: auto; }
     #graphResults { margin-top: 0; padding: 1rem; background: #0a0a0a; border: 1px solid var(--border); border-radius: 8px; min-height: 50px; }
@@ -1119,7 +1117,8 @@ function exitVizOnEsc(e) { if(e.key === 'Escape') toggleVisualizerMode(); }
     const bufferLength = analyser.frequencyBinCount, dataArray = new Uint8Array(bufferLength);
     analyser.getByteFrequencyData(dataArray);
     
-    const barCount = 120, gap = 2, barW = (W - gap * (barCount - 1)) / barCount;
+    const barCount = 120, gap = 1;
+    const barW = W / barCount;
     const maxHeight = H * 0.45;
     
     for (let i = 0; i < barCount; i++) {
@@ -1128,20 +1127,21 @@ function exitVizOnEsc(e) { if(e.key === 'Escape') toggleVisualizerMode(); }
       intensity = Math.pow(intensity, 1.5);
       
       const barH = intensity * maxHeight;
-      const x = i * (barW + gap);
+      const x = i * barW;
       const y = H - barH;
       const opacity = 0.5 + (intensity * 0.5);
       
       ctx.fillStyle = `rgba(0, 0, 255, ${opacity})`;
-      ctx.fillRect(x, y, barW, barH);
+      ctx.fillRect(x, y, barW - gap, barH);
     }
   }
   
   function drawIdle(ctx, W, H) {
-    const barCount = 120, gap = 2, barW = (W - gap * (barCount - 1)) / barCount;
+    const barCount = 120, gap = 1;
+    const barW = W / barCount;
     for (let i = 0; i < barCount; i++) {
       ctx.fillStyle = 'rgba(0, 0, 255, 0.2)';
-      ctx.fillRect(i * (barW + gap), H - 2, barW, 2);
+      ctx.fillRect(i * barW, H - 2, barW - gap, 2);
     }
   }
   draw();
@@ -1270,10 +1270,9 @@ function showCalc(type) {
   } else if (type === "volume") {
     c.innerHTML = `<h3>Volume Calculator</h3>Cube (Side): <input id="cubeSide" onkeydown="enterRun(event, volCube)"><button onclick="volCube()">Calc</button><p id="cubeOut"></p>Sphere (Radius): <input id="sphereR" onkeydown="enterRun(event, volSphere)"><button onclick="volSphere()">Calc</button><p id="sphereOut"></p>Rectangular Prism (L, W, H): <input id="recL" placeholder="Length" onkeydown="enterRun(event, volRect)"><input id="recW" placeholder="Width" onkeydown="enterRun(event, volRect)"><input id="recH" placeholder="Height" onkeydown="enterRun(event, volRect)"><button onclick="volRect()">Calc</button><p id="rectOut"></p>Cylinder (R, H): <input id="cylR" placeholder="Radius" onkeydown="enterRun(event, volCyl)"><input id="cylH" placeholder="Height" onkeydown="enterRun(event, volCyl)"><button onclick="volCyl()">Calc</button><p id="cylOut"></p>Pyramid (Base, Height): <input id="pyrB" placeholder="Base Area" onkeydown="enterRun(event, volPyr)"><input id="pyrH" placeholder="Height" onkeydown="enterRun(event, volPyr)"><button onclick="volPyr()">Calc</button><p id="pyrOut"></p>`;
   } else if (type === 'graph') {
-    c.innerHTML = `<h3>Graph Calculator</h3><div class="graph-layout"><div class="graph-inputs"><div><label>X Min:</label><input id="xmin" value="-10" style="width:100%;"></div><div><label>X Max:</label><input id="xmax" value="10" style="width:100%;"></div><div><label>Y Min:</label><input id="ymin" value="-10" style="width:100%;"></div><div><label>Y Max:</label><input id="ymax" value="10" style="width:100%;"></div><div><label>Equation 1:</label><input id="eq1" placeholder="x^2" style="width:100%;"></div><div><label>Equation 2:</label><input id="eq2" placeholder="2*x+1" style="width:100%;"></div><div><label>Equation 3:</label><input id="eq3" placeholder="" style="width:100%;"></div><div><label>Equation 4:</label><input id="eq4" placeholder="" style="width:100%;"></div><div><label>Equation 5:</label><input id="eq5" placeholder="" style="width:100%;"></div><button onclick="drawGraph()" style="width:100%;">Draw</button></div><div class="graph-outputs"><div class="canvas-wrap"><canvas id="grid" width="400" height="400"></canvas></div><div id="graphResults"></div></div></div>`;
+    c.innerHTML = `<h3>Graph Calculator</h3><div class="graph-layout"><div class="graph-inputs"><div>X: <input id="xmin" value="-10" style="width: 60px;"> to <input id="xmax" value="10" style="width: 60px;"></div><div style="margin-top: 0.5rem;">Y: <input id="ymin" value="-10" style="width: 60px;"> to <input id="ymax" value="10" style="width: 60px;"></div><div style="margin-top: 1rem;"><div>y=<input id="eq1" onkeydown="enterRun(event, drawGraph)" style="width: 150px;"></div><div>y=<input id="eq2" onkeydown="enterRun(event, drawGraph)" style="width: 150px;"></div><div>y=<input id="eq3" onkeydown="enterRun(event, drawGraph)" style="width: 150px;"></div><div>y=<input id="eq4" onkeydown="enterRun(event, drawGraph)" style="width: 150px;"></div><div>y=<input id="eq5" onkeydown="enterRun(event, drawGraph)" style="width: 150px;"></div></div><button onclick="drawGraph()" style="margin-top: 1rem;">Graph</button></div><div class="graph-outputs"><div class="canvas-wrap" style="height: auto; margin-top: 0;"><canvas id="grid" width="400" height="400"></canvas><div id="axesLabels"></div></div><div id="graphResults"></div></div></div>`;
   }
 }
-
 // ─── ORIGINAL CALCULATOR LOGIC ────────────────────────────────────────────────
 function calcSimple() { try { simpleOut.innerText = eval(simpleInput.value); } catch { simpleOut.innerText = "Error"; } }
 function volCube() { const v = parseFloat(cubeSide.value); cubeOut.innerText = !isNaN(v) ? v ** 3 : "Invalid"; }
@@ -1354,7 +1353,7 @@ function prevGame() { currentIndex = (currentIndex - 1 + games.length) % games.l
 // ─── NEW TOOLS LOGIC ──────────────────────────────────────────────────────────
 function showCipher(type) {
   const area = document.getElementById("cipherArea");
-  area.innerHTML = `<div class="tools-side-by-side"><div><h3 style="margin-top: 0;">Input</h3><textarea id="cipherIn" placeholder="Enter text..."></textarea></div><div><h3 style="margin-top: 0; margin-bottom: 0;">Output</h3><div class="cipher-buttons"><button onclick="runCipher('${type}', 'encode')">Encode</button><button onclick="runCipher('${type}', 'decode')">Decode</button></div><pre id="cipherOut"></pre></div></div>`;
+  area.innerHTML = `<div class="tools-side-by-side"><div><h3 style="margin-top: 0;">Input</h3><textarea id="cipherIn" placeholder="Enter text..."></textarea></div><div><h3 style="margin-top: 0; margin-bottom: 0.5rem;">Output</h3><div class="cipher-buttons"><button onclick="runCipher('${type}', 'encode')">Encode</button><button onclick="runCipher('${type}', 'decode')">Decode</button></div><pre id="cipherOut"></pre></div></div>`;
 }
 function runCipher(type, mode) {
   const input = document.getElementById('cipherIn').value;
@@ -1378,41 +1377,59 @@ function sendChat() {
   const log = document.getElementById('chatLog'), inp = document.getElementById('chatInput');
   if(!inp.value)return;
   log.innerHTML += `<div class="chat-msg user-msg">${inp.value}</div>`;
-  setTimeout(()=>log.innerHTML += `<div class="chat-msg bot-msg">I'm a placeholder chatbot. Real AI coming soon!</div>`, 300);
-  inp.value = "";
-  log.scrollTop = log.scrollHeight;
+  const userVal = inp.value; inp.value='';
+  setTimeout(()=> {
+    log.innerHTML += `<div class="chat-msg bot-msg">AI demo response to: "${userVal}"</div>`;
+    log.scrollTop = log.scrollHeight;
+  }, 600);
 }
+function doSearch() { window.open('https://www.google.com/search?q=' + encodeURIComponent(document.getElementById('searchInput').value), '_blank'); }
 function initCanvas() {
-  const canvas = document.getElementById('paintingCanvas'), ctx = canvas.getContext('2d');
-  let isDrawing = false;
-  canvas.addEventListener('mousedown', ()=>isDrawing=true);
-  canvas.addEventListener('mouseup', ()=>isDrawing=false);
-  canvas.addEventListener('mousemove', (e)=>{
-    if(!isDrawing)return;
-    const rect = canvas.getBoundingClientRect(), x = e.clientX - rect.left, y = e.clientY - rect.top;
-    ctx.fillStyle = document.getElementById('brushColor').value;
+  const cvs = document.getElementById('paintingCanvas'), ctx = cvs.getContext('2d');
+  let painting = false;
+  cvs.onmousedown = () => painting = true;
+  cvs.onmouseup = () => { painting = false; ctx.beginPath(); };
+  cvs.onmousemove = (e) => {
+    if(!painting) return;
+    ctx.lineWidth = document.getElementById('brushSize').value;
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = document.getElementById('brushColor').value;
+    const rect = cvs.getBoundingClientRect();
+    ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+    ctx.stroke();
     ctx.beginPath();
-    ctx.arc(x, y, document.getElementById('brushSize').value, 0, Math.PI*2);
-    ctx.fill();
-  });
+    ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+  };
 }
-function clearCanvas() { const canvas = document.getElementById('paintingCanvas'); canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height); }
-function checkGuess() { const guess = parseInt(guessInput.value); if(guess === window.secretNum) guessMsg.innerText = "Correct!"; else guessMsg.innerText = guess < window.secretNum ? "Too low!" : "Too high!"; }
+function clearCanvas() { paintingCanvas.getContext('2d').clearRect(0,0,800,500); }
+
 function showCreation(type) {
-  const area = document.getElementById("creationArea");
-  if (type === 'code') area.innerHTML = `<p>Code creations coming soon</p>`;
-  else if (type === 'videos') area.innerHTML = `<p>Map videos coming soon</p>`;
-  else if (type === 'images') area.innerHTML = `<p>Map images coming soon</p>`;
+  document.getElementById('creationArea').innerHTML = `<h3>${type.toUpperCase()}</h3><p>Gallery for ${type} coming soon!</p>`;
+}
+function checkGuess() {
+  const v = parseInt(document.getElementById('guessInput').value);
+  const msg = document.getElementById('guessMsg');
+  if(v === window.secretNum) msg.innerText = "Correct!";
+  else msg.innerText = v < window.secretNum ? "Too low!" : "Too high!";
 }
 
-// ─── INIT ────────────────────────────────────────────────────────────────────
-window.addEventListener('load', () => {
-  initMusic();
-  setTimeout(() => {
-    document.getElementById('splashOverlay').classList.add('ready');
-  }, 1000);
-  load('home');
-});
+// ─── BOOT ─────────────────────────────────────────────────────────────────────
+function setVideoBackground(videoUrl) {
+  const video = document.createElement('video');
+  video.id = 'videoBg'; video.autoplay = true; video.loop = true; video.muted = true; video.src = videoUrl;
+  video.addEventListener('canplay', () => {
+    const splash = document.getElementById('splashOverlay');
+    splash.classList.add('ready');
+    document.getElementById('splashText').innerText = "!!!WARNING MUSIC WILL PLAY!!!";
+    document.getElementById('splashSubtext').innerText = "CLICK TO ENTER";
+  });
+  document.body.insertBefore(video, document.body.firstChild);
+  document.body.classList.add('video-bg');
+}
+
+load("home");
+setVideoBackground('https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/FlatlineLoop.mp4');
+initMusic();
 </script>
 </body>
 </html>
