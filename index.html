@@ -1114,7 +1114,8 @@ const DEFAULT_COLORS = {
 let rainbowStates = {
   '--neon-blue': { active: false, speed: 5 },
   '--neon-blue-lighter': { active: false, speed: 5 },
-  '--neon-blue-lighter2': { active: false, speed: 5 }
+  '--neon-blue-lighter2': { active: false, speed: 5 },
+  '--neon-blue-soft': { active: false, speed: 5 }
 };
 
 function updateRainbow() {
@@ -1122,9 +1123,10 @@ function updateRainbow() {
   for (const [key, state] of Object.entries(rainbowStates)) {
     if (state.active) {
       const hue = (time * state.speed * 10) % 360;
-      document.documentElement.style.setProperty(key, `hsl(${hue}, 100%, 50%)`);
-      if (key === '--neon-blue') {
-        document.documentElement.style.setProperty('--neon-blue-soft', `hsla(${hue}, 100%, 50%, 0.15)`);
+      if (key === '--neon-blue-soft') {
+        document.documentElement.style.setProperty(key, `hsla(${hue}, 100%, 50%, 0.15)`);
+      } else {
+        document.documentElement.style.setProperty(key, `hsl(${hue}, 100%, 50%)`);
       }
     }
   }
@@ -1317,8 +1319,6 @@ function toggleVisualizerMode() {
     main.classList.add('ui-hidden');
     top.classList.add('ui-hidden');
     left.classList.add('ui-hidden');
-    logo.style.opacity = '0';
-    logo.style.pointerEvents = 'none';
     tag.classList.add('ui-hidden');
     btn.innerText = "Exit Mode";
     document.addEventListener('keydown', exitVizOnEsc);
@@ -1326,8 +1326,6 @@ function toggleVisualizerMode() {
     main.classList.remove('ui-hidden');
     top.classList.remove('ui-hidden');
     left.classList.remove('ui-hidden');
-    logo.style.opacity = '';
-    logo.style.pointerEvents = '';
     tag.classList.remove('ui-hidden');
     btn.innerText = "Visualizer";
     top.classList.remove('hover-reveal');
@@ -1336,6 +1334,24 @@ function toggleVisualizerMode() {
   }
 }
 function exitVizOnEsc(e) { if(e.key === 'Escape') toggleVisualizerMode(); }
+
+// ─── KEYBOARD SHORTCUTS ──────────────────────────────────────────────────────
+document.addEventListener('keydown', (e) => {
+  if (e.ctrlKey) {
+    if (e.key === 'ArrowLeft') { e.preventDefault(); musicPrev(); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); musicNext(); }
+    if (e.key === 'ArrowUp') { 
+      e.preventDefault(); 
+      const v = Math.min(100, Math.round(document.getElementById('bgMusic').volume * 100) + 5);
+      setVolume(v);
+    }
+    if (e.key === 'ArrowDown') { 
+      e.preventDefault(); 
+      const v = Math.max(0, Math.round(document.getElementById('bgMusic').volume * 100) - 5);
+      setVolume(v);
+    }
+  }
+});
 
 // ─── UNIFIED PANEL HOVER REVEAL ───────────────────────────────────────────────
 (function() {
@@ -1382,7 +1398,13 @@ function exitVizOnEsc(e) { if(e.key === 'Escape') toggleVisualizerMode(); }
   
   // Mouse move tracking
   document.addEventListener('mousemove', (e) => {
-    if (e.clientX < 8 || e.clientY < 8) { isNear = true; showBoth(); } 
+    if (e.clientX < 8 || e.clientY < 8) { 
+      isNear = true; 
+      showBoth(); 
+      // Force hide after 5 seconds even if mouse is moving near edge
+      clearTimeout(hideTimer);
+      hideTimer = setTimeout(() => { isNear = false; hideBoth(); }, 5000);
+    } 
     else { 
       isNear = false; 
       if(!topbar.matches(':hover') && !leftPanel.matches(':hover') && !logoConnector.matches(':hover')) { 
@@ -1523,7 +1545,10 @@ const pages = {
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
               <span>${key.replace('--neon-', '').replace('-', ' ').toUpperCase()}</span>
               <div style="display: flex; gap: 0.5rem; align-items: center;">
-                <input type="color" value="${getComputedStyle(document.documentElement).getPropertyValue(key).trim()}" onchange="updateColor('${key}', this.value)">
+                ${key === '--neon-blue-soft' ? 
+                  `<input type="text" value="${getComputedStyle(document.documentElement).getPropertyValue(key).trim()}" onchange="updateColor('${key}', this.value)" style="width: 120px; background: #000; border: 1px solid #333; color: #fff; padding: 4px; font-size: 0.8rem;">` :
+                  `<input type="color" value="${getComputedStyle(document.documentElement).getPropertyValue(key).trim()}" onchange="updateColor('${key}', this.value)">`
+                }
                 <button onclick="toggleRainbow('${key}')" style="margin:0; padding: 0.3rem 0.6rem; font-size: 0.8rem; background: ${state.active ? 'var(--neon-blue)' : '#333'}">Rainbow</button>
               </div>
             </div>
@@ -1535,10 +1560,6 @@ const pages = {
             ` : ''}
           </div>
         `).join('')}
-        <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px;">
-          <span>Soft Glow Color (RGBA)</span>
-          <input type="text" value="${getComputedStyle(document.documentElement).getPropertyValue('--neon-blue-soft').trim()}" onchange="updateColor('--neon-blue-soft', this.value)" style="width: 180px; background: #000; border: 1px solid #333; color: #fff; padding: 4px;">
-        </div>
         <button onclick="resetColors()" style="background: #440000; border: 1px solid #ff0000; margin-top: 1rem;">Reset to Defaults</button>
       </div>
     </section>
