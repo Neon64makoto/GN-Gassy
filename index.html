@@ -179,7 +179,7 @@
        UNIFIED DIAGONAL PANEL LAYOUT (Opera GX style)
        ═══════════════════════════════════════════════════════════ */
 
-    /* ─── LOGO CONNECTOR (L-shaped corner piece) ──────────────── */
+    /* ─── LOGO CONNECTOR (with protruding triangles) ─────────────── */
     .logo-connector {
       position: fixed;
       top: 0;
@@ -194,7 +194,8 @@
       align-items: center;
       justify-content: center;
       box-shadow: 0 0 20px rgba(0, 68, 255, 0.5), inset 0 0 15px rgba(0, 68, 255, 0.2);
-      /* L-shaped: top-right and bottom-left quadrants visible */
+      /* Protruding triangles: top-right and bottom-left */
+      clip-path: polygon(0 0, 100% 0, 100% 50%, 50% 50%, 50% 100%, 0 100%);
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -230,6 +231,7 @@
       z-index: 110;
       background: rgba(17, 17, 17, 0.97);
       border-right: 2px solid #0044ff;
+      border-top: 2px solid #0044ff;
       backdrop-filter: blur(10px);
       padding-top: var(--panel-size);
       display: flex;
@@ -239,6 +241,8 @@
       transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.35s;
       opacity: 0;
       pointer-events: none;
+      /* Recessed triangle to match logo */
+      clip-path: polygon(0 50%, 100% 0, 100% 100%, 0 100%);
     }
 
     .left-panel.visible {
@@ -297,6 +301,7 @@
       z-index: 110;
       background: rgba(17, 17, 17, 0.97);
       border-bottom: 2px solid #0044ff;
+      border-left: 2px solid #0044ff;
       backdrop-filter: blur(10px);
       padding: 0.75rem 0 0.5rem;
       display: flex;
@@ -308,6 +313,8 @@
       transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.35s;
       opacity: 0;
       pointer-events: none;
+      /* Recessed triangle to match logo */
+      clip-path: polygon(50% 0, 100% 0, 100% 100%, 0 100%);
     }
 
     .topbar.visible {
