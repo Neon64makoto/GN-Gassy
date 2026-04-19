@@ -917,13 +917,12 @@
         <button onclick="load('tools')">Tools</button>
         <button onclick="load('games')">Games</button>
         <button onclick="load('creations')">Creations</button>
-        <button onclick="load('unblocked')">Unblocked</button>
         <button onclick="load('about')">About</button>
         <button onclick="toggleVisualizerMode()" id="vizModeBtn" style="border: 1px solid #0044ff; background: rgba(0,0,255,0.1);">Visualizer</button>
       </nav>
       <div class="topbar-right">
-        <input type="number" id="volumeInput" min="0" max="200" value="50" oninput="setVolumeFromInput(this.value)">
-        <input type="range" id="volumeSlider" min="0" max="200" value="50" oninput="setVolume(this.value)">
+        <input type="number" id="volumeInput" min="0" max="100" value="50" oninput="setVolumeFromInput(this.value)">
+        <input type="range" id="volumeSlider" min="0" max="100" value="50" oninput="setVolume(this.value)">
         <button id="muteBtn" onclick="toggleMute()">Mute</button>
       </div>
     </div>
@@ -1058,7 +1057,7 @@ function setVolume(v) {
 function setVolumeFromInput(v) {
   let val = parseInt(v);
   if (isNaN(val)) val = 0;
-  if (val > 200) val = 200;
+  if (val > 100) val = 100;
   if (val < 0) val = 0;
   setVolume(val);
 }
@@ -1181,7 +1180,7 @@ const pages = {
         <ul class="patch-list">
           <li>Renamed to <strong>GN-Neon</strong>.</li>
           <li>New <strong>Tools</strong> section with IDE, Canvas, and AI Chatbot.</li>
-          <li>Added <strong>Creations</strong> and <strong>Unblocked</strong> sections.</li>
+          <li>Added <strong>Creations</strong> section.</li>
           <li>Refined visualizer contrast and deep blue styling.</li>
         </ul>
       </aside>
@@ -1220,17 +1219,6 @@ const pages = {
         <button onclick="showCreation('images')">Map Images</button>
       </div>
       <div id="creationArea"></div>
-    </section>
-  `,
-  unblocked: `
-    <section class="panel">
-      <h2>Unblocked</h2>
-      <div class="button-row">
-        <button onclick="showEmbed('https://www.crazygames.com')">CrazyGames</button>
-        <button onclick="showEmbed('https://www.poki.com')">Poki</button>
-        <button onclick="showEmbed('https://www.youtube.com/embed')">YouTube</button>
-      </div>
-      <div id="embedArea" class="embed-container" style="display:none;"></div>
     </section>
   `,
   about: `
