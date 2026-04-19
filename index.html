@@ -489,7 +489,6 @@
 
     .image-card span {
       display: block;
-      margin-top: 0.75rem;
       color: var(--muted);
       font-size: 1rem;
     }
@@ -661,13 +660,14 @@
     }
 
     #graphResults {
-      margin-top: 1.5rem;
+      margin-top: 1rem;
       padding: 1rem;
-      background: #0e0e0e;
+      background: #0a0a0a;
       border: 1px solid var(--border);
-      border-radius: 10px;
+      border-radius: 8px;
       text-align: left;
       font-size: 1.05rem;
+      width: 400px; /* Match Graph Width */
     }
 
     .version-tag {
@@ -710,18 +710,21 @@
     .bot-msg { align-self: flex-start; background: #222; color: #7799ff; }
     .chat-input-row { display: flex; padding: 0.5rem; background: #111; border-top: 1px solid #333; }
     #chatInput { flex: 1; margin: 0; }
-    .tools-side-by-side { display: flex; gap: 1.5rem; }
-    .tools-side-by-side > div { flex: 1; }
-    .tools-side-by-side textarea { width: 100%; height: 200px; margin: 0; }
-    .tools-side-by-side pre { width: 100%; height: 200px; margin: 0; padding: 1rem; background: #0a0a0a; border: 1px solid var(--border); border-radius: 8px; overflow-y: auto; color: #7799ff; white-space: pre-wrap; word-wrap: break-word; }
-    .cipher-buttons { display: flex; gap: 0.5rem; margin: 0 0 1rem 0; align-items: center; flex-wrap: nowrap; width: 100%; }
+    
+    .tools-side-by-side { display: flex; gap: 1.5rem; align-items: stretch; }
+    .tools-side-by-side > div { flex: 1; display: flex; flex-direction: column; }
+    .tools-side-by-side textarea { width: 100%; height: 250px; margin: 0; flex-grow: 1; }
+    .tools-side-by-side pre { width: 100%; height: 250px; margin: 0; padding: 1rem; background: #0a0a0a; border: 1px solid var(--border); border-radius: 8px; overflow-y: auto; color: #7799ff; white-space: pre-wrap; word-wrap: break-word; flex-grow: 1; }
+    .cipher-buttons { display: flex; gap: 0.5rem; margin-bottom: 0.5rem; align-items: center; flex-wrap: nowrap; }
     .cipher-buttons button { margin: 0; padding: 0.5rem 0.75rem; font-size: 0.95rem; flex-shrink: 0; }
+    
     .graph-layout { display: flex; gap: 1.5rem; align-items: flex-start; }
-    .graph-layout .graph-inputs { flex: 0 0 50%; }
-    .graph-layout .graph-outputs { flex: 0 0 50%; display: flex; flex-direction: column; gap: 1rem; }
+    .graph-layout .graph-inputs { flex: 1; }
+    .graph-layout .graph-inputs input[type="text"] { width: 100%; }
+    .graph-layout .graph-outputs { flex: 0 0 400px; display: flex; flex-direction: column; gap: 0; }
     .graph-layout .canvas-wrap { flex-shrink: 0; }
-    .graph-layout #grid { display: block; max-width: 100%; height: auto; }
-    #graphResults { margin-top: 0; padding: 1rem; background: #0a0a0a; border: 1px solid var(--border); border-radius: 8px; min-height: 50px; }
+    .graph-layout #grid { display: block; }
+    
     .ide-layout { display: flex; gap: 1.5rem; height: 350px; }
     .ide-layout > div { flex: 1; display: flex; flex-direction: column; }
     #ideInput { margin: 0; flex: 1; }
@@ -1213,7 +1216,6 @@ const pages = {
       <div id="creationArea"></div>
     </section>
   `,
-
   about: `
     <section class="panel about-panel">
       <h2>About</h2>
@@ -1249,8 +1251,6 @@ function showTool(type) {
     initCanvas();
   } else if (type === 'search') {
     area.innerHTML = `<h3>Search Engine</h3><div class="wip-container" style="padding: 2rem;"><p>Work in Progress</p></div>`;
-  } else if (type === 'search2') {
-    area.innerHTML = `<h3>Search Engine</h3><div style="display:flex;gap:0.5rem;"><input id="searchInput" style="flex:1" placeholder="Search Google..."><button onclick="doSearch()">Search</button></div>`;
   } else if (type === 'ciphers') {
     area.innerHTML = `<h3>Ciphers</h3><div class="button-row"><button onclick="showCipher('caesar')">Caesar</button><button onclick="showCipher('atbash')">Atbash</button></div><div id="cipherArea"></div>`;
   } else if (type === 'flappy') {
@@ -1268,9 +1268,10 @@ function showCalc(type) {
   } else if (type === "volume") {
     c.innerHTML = `<h3>Volume Calculator</h3>Cube (Side): <input id="cubeSide" onkeydown="enterRun(event, volCube)"><button onclick="volCube()">Calc</button><p id="cubeOut"></p>Sphere (Radius): <input id="sphereR" onkeydown="enterRun(event, volSphere)"><button onclick="volSphere()">Calc</button><p id="sphereOut"></p>Rectangular Prism (L, W, H): <input id="recL" placeholder="Length" onkeydown="enterRun(event, volRect)"><input id="recW" placeholder="Width" onkeydown="enterRun(event, volRect)"><input id="recH" placeholder="Height" onkeydown="enterRun(event, volRect)"><button onclick="volRect()">Calc</button><p id="rectOut"></p>Cylinder (R, H): <input id="cylR" placeholder="Radius" onkeydown="enterRun(event, volCyl)"><input id="cylH" placeholder="Height" onkeydown="enterRun(event, volCyl)"><button onclick="volCyl()">Calc</button><p id="cylOut"></p>Pyramid (Base, Height): <input id="pyrB" placeholder="Base Area" onkeydown="enterRun(event, volPyr)"><input id="pyrH" placeholder="Height" onkeydown="enterRun(event, volPyr)"><button onclick="volPyr()">Calc</button><p id="pyrOut"></p>`;
   } else if (type === 'graph') {
-    c.innerHTML = `<h3>Graph Calculator</h3><div class="graph-layout"><div class="graph-inputs"><div>X: <input id="xmin" value="-10" style="width: 60px;"> to <input id="xmax" value="10" style="width: 60px;"></div><div style="margin-top: 0.5rem;">Y: <input id="ymin" value="-10" style="width: 60px;"> to <input id="ymax" value="10" style="width: 60px;"></div><div style="margin-top: 1rem;"><div>y=<input id="eq1" onkeydown="enterRun(event, drawGraph)" style="width: 150px;"></div><div>y=<input id="eq2" onkeydown="enterRun(event, drawGraph)" style="width: 150px;"></div><div>y=<input id="eq3" onkeydown="enterRun(event, drawGraph)" style="width: 150px;"></div><div>y=<input id="eq4" onkeydown="enterRun(event, drawGraph)" style="width: 150px;"></div><div>y=<input id="eq5" onkeydown="enterRun(event, drawGraph)" style="width: 150px;"></div></div><button onclick="drawGraph()" style="margin-top: 1rem;">Graph</button></div><div class="graph-outputs"><div class="canvas-wrap" style="height: auto; margin-top: 0;"><canvas id="grid" width="400" height="400"></canvas><div id="axesLabels"></div></div><div id="graphResults"></div></div></div>`;
+    c.innerHTML = `<h3>Graph Calculator</h3><div class="graph-layout"><div class="graph-inputs"><div>X: <input id="xmin" value="-10" style="width: 60px;"> to <input id="xmax" value="10" style="width: 60px;"></div><div style="margin-top: 0.5rem;">Y: <input id="ymin" value="-10" style="width: 60px;"> to <input id="ymax" value="10" style="width: 60px;"></div><br>y=<input type="text" id="eq1" onkeydown="enterRun(event, drawGraph)"><br>y=<input type="text" id="eq2" onkeydown="enterRun(event, drawGraph)"><br>y=<input type="text" id="eq3" onkeydown="enterRun(event, drawGraph)"><br>y=<input type="text" id="eq4" onkeydown="enterRun(event, drawGraph)"><br>y=<input type="text" id="eq5" onkeydown="enterRun(event, drawGraph)"><br><br><button onclick="drawGraph()">Graph</button></div><div class="graph-outputs"><div class="canvas-wrap"><canvas id="grid" width="400" height="400"></canvas><div id="axesLabels"></div></div><div id="graphResults"></div></div></div>`;
   }
 }
+
 // ─── ORIGINAL CALCULATOR LOGIC ────────────────────────────────────────────────
 function calcSimple() { try { simpleOut.innerText = eval(simpleInput.value); } catch { simpleOut.innerText = "Error"; } }
 function volCube() { const v = parseFloat(cubeSide.value); cubeOut.innerText = !isNaN(v) ? v ** 3 : "Invalid"; }
@@ -1315,26 +1316,26 @@ function drawGraph() {
 // ─── ORIGINAL GAMES DATA ─────────────────────────────────────────────────────
 const games = ["https://turbowarp.org/10128407/embed?addons=pause,fullscreen", "https://turbowarp.org/1143765424/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/1075310827/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/941803602/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/973637218/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/883776962/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/898492644/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/916303075/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/978483855/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/959847748/embed?addons=pause,fullscreen&fps=60"];
 const titles = ["Paper Minecraft (Not Made By Me)", "Sisyphean Escalator", "Gambling but Mid", "Laser Dodge", "Goober Dodger", "Neon's Hostile Road", "Mid Cookie Clicker", "Asteroid Assault", "Reel 'Em In", "Cats Hate Rats"];
-const controls = [`Modding Guide: ▶️ https://youtu.be/PexNsUvqD5w\n[1 to 9] - Select Item    [Click] - Place or Mine\n[WASD] - Move / Jump  [E] - Open/Close Inventory\n[E+hover] - Open / Close Chest, Crafting Table, Door\n[Space] - Drop single tile from a stack while dragging.\n[F] - Eat food       [N] - Label a sign or chest\n[Q] - Drop item      [P] - Pause / Unpause\n[T] - Talk / Command    [O] - Save your game\n[M] - Music / Sounds   [Shift] - Sprint`, `Type the letters shown fast enough or fall.\n\nNot case sensitive.`, `::At BlackJack::\nUse arrow keys to bet:\n\nLeft and Right set the bet to 0 and max\n\nUp and down will change the bet by 10, or if holding "." will change it by 500\n1\nEnter to place bet, and after will be the hit button.\n\nSpace to stand.\n\n::At Slots::\nS to Spin\n\nSame betting controls.`, `Use the mouse to dodge the lasers that get faster with time!\n\nPress the left mouse button to become invincible for three seconds with a 10 second cool down so use it wisely!`, `Use the mouse to dodge the goobers, and don't stay in the border too long.\n\nThat's really about it.`, `ASD to move.\nW for a 3-second long power-up of invincibility.\nSpace to Start/Restart on the game-over screen.\n\n1 and 2 control the arcade scan filter.\n3 and 4 control the arcade cabinet overlay.\n5 and 6 control the arcade music (on/off)\n\n(60 fps Is highly recommended)`, `It's Cookie Clicker, but worse.\n\nUse your mouse.`, `Left mouse button to fire a weak auxiliary laser that overheats quickly.\n\nSpace for Main powerful laser.\n\nW for a backup shield that lasts 10 seconds, but has limited uses.\n\nUse your mouse to aim the laser.`, `Use Left Mouse Button to fire the harpoon and try to get the best fish, and buy upgrades.\n \nBeware of the explosive mine, it takes $50 dollars to repair the harpoon and the explosion might scare a few good fish away.\n\n\nThis is still a work in progress and I plan on adding more things like power ups, multipliers, and maybe a high score system.\n\nF to show debug menu \nG to hide debug menu`, `goober.\n\nUse mouse 1 to hit the rats.\nuse F to turn off the yarn.\nUse G to turn them back on.\n`];
-const notes = [`*** Credits ***\nAll the graphics are taken from the Minecraft wiki page and have not been created by me. I have rescaled them and broken them up to make the game work, but that is it at present.\n\nORIGNAL PROJECT MADE BY GRIFFPATCH ON SCRATCH, NOT ME:\n\nCheck him out he does great stuf, https://scratch.mit.edu/users/griffpatch/`, `The game is based on this video by the way:\n\nhttps://youtu.be/2Gby1XQ4Z2M?feature=shared`, `Don't gamble in real life, also this technically is not correct, and if you do it quick enough you can easily break most of this.\n\nThe special codes are:\n\nL E O\n\n\nN F S M W\n`, `Not much to add, I could have done a better job with the randomization of everything, but I am not gonna be working on this any further.`, `<b>!!!VOLUME WARNING!!!</b>\n\nI made all of this in scratch.\n\nFor now there is a max of 15 goobers on screen at a time.\n`, `Added a normal and hard mode to the game, plus a secret Most Wanted mode.\n\nI made most of these sprites in scratch and the ships were made in Pixil Art\n\nlink to my Pixil Art profile here: https://www.pixilart.com/neon64makoto\n\nArcade cabinet overlay here:https://forums.launchbox-app.com/files/file/2726-generic-arcade-1080p-overlay/    (i used the 4th one)\n\nMost sounds were found here:\nhttps://pixabay.com/sound-effects/search/arcade/\nhttps://downloads.khinsider.com/game-soundtracks/album/five-nights-at-freddy-s-fnaf-2-sfx\n\nPlus this for hard mode music: https://www.youtube.com/watch?v=R6ZHn2XEbGk\n\nAnd this for <b>****MW****</b> mode:\nhttps://www.youtube.com/watch?v=kG5LF_QS1JU`, `I stole all the assets I obviously stole and made the assets I obviously made. Not much else.\n\nSecret code this time is:\n\nD R G`, `I made everything except for the crosshair which you can find here: https://nohat.cc/f/red-crosshair-png-transparent/m2i8N4N4K9Z5A0K9-201907232239.html\nAnd the asteroid is here: https://assets.website-files.com/62cc3ac38e15ba20d4ff98f5/62d908ddf4c208aa8b54b424_asteroid-8bit-picture.png\n\nEverything else was either made in scratch or made on my Pixil art profile\n\nLink to my Pixil art profile: https://www.pixilart.com/neon64makoto/gallery\n\n\n\n\ngoober.`, `Everything was pretty much made in scratch except for the harpoon and boat clip art. Also the fish are just a part of scratch's sprite library.`, `<b>!!!VOLUME WARNING!!!</b>`];
+const controls = [\`Modding Guide: ▶️ https://youtu.be/PexNsUvqD5w\\n[1 to 9] - Select Item    [Click] - Place or Mine\\n[WASD] - Move / Jump  [E] - Open/Close Inventory\\n[E+hover] - Open / Close Chest, Crafting Table, Door\\n[Space] - Drop single tile from a stack while dragging.\\n[F] - Eat food       [N] - Label a sign or chest\\n[Q] - Drop item      [P] - Pause / Unpause\\n[T] - Talk / Command    [O] - Save your game\\n[M] - Music / Sounds   [Shift] - Sprint\`, \`Type the letters shown fast enough or fall.\\n\\nNot case sensitive.\`, \`::At BlackJack::\\nUse arrow keys to bet:\\n\\nLeft and Right set the bet to 0 and max\\n\\nUp and down will change the bet by 10, or if holding "." will change it by 500\\n1\\nEnter to place bet, and after will be the hit button.\\n\\nSpace to stand.\\n\\n::At Slots::\\nS to Spin\\n\\nSame betting controls.\`, \`Use the mouse to dodge the lasers that get faster with time!\\n\\nPress the left mouse button to become invincible for three seconds with a 10 second cool down so use it wisely!\`, \`Use the mouse to dodge the goobers, and don't stay in the border too long.\\n\\nThat's really about it.\`, \`ASD to move.\\nW for a 3-second long power-up of invincibility.\\nSpace to Start/Restart on the game-over screen.\\n\\n1 and 2 control the arcade scan filter.\\n3 and 4 control the arcade cabinet overlay.\\n5 and 6 control the arcade music (on/off)\\n\\n(60 fps Is highly recommended)\`, \`It's Cookie Clicker, but worse.\\n\\nUse your mouse.\`, \`Left mouse button to fire a weak auxiliary laser that overheats quickly.\\n\\nSpace for Main powerful laser.\\n\\nW for a backup shield that lasts 10 seconds, but has limited uses.\\n\\nUse your mouse to aim the laser.\`, \`Use Left Mouse Button to fire the harpoon and try to get the best fish, and buy upgrades.\\n \\nBeware of the explosive mine, it takes $50 dollars to repair the harpoon and the explosion might scare a few good fish away.\\n\\n\\nThis is still a work in progress and I plan on adding more things like power ups, multipliers, and maybe a high score system.\\n\\nF to show debug menu \\nG to hide debug menu\`, \`goober.\\n\\nUse mouse 1 to hit the rats.\\nuse F to turn off the yarn.\\nUse G to turn them back on.\\n\`];
+const notes = [\`*** Credits ***\\nAll the graphics are taken from the Minecraft wiki page and have not been created by me. I have rescaled them and broken them up to make the game work, but that is it at present.\\n\\nORIGNAL PROJECT MADE BY GRIFFPATCH ON SCRATCH, NOT ME:\\n\\nCheck him out he does great stuf, https://scratch.mit.edu/users/griffpatch/\`, \`The game is based on this video by the way:\\n\\nhttps://youtu.be/2Gby1XQ4Z2M?feature=shared\`, \`Don't gamble in real life, also this technically is not correct, and if you do it quick enough you can easily break most of this.\\n\\nThe special codes are:\\n\\nL E O\\n\\nZ A C H\\n\\nN F S M W\\n\`, \`Not much to add, I could have done a better job with the randomization of everything, but I am not gonna be working on this any further.\`, \`<b>!!!VOLUME WARNING!!!</b>\\n\\nI made all of this in scratch.\\n\\nFor now there is a max of 15 goobers on screen at a time.\\n\`, \`Added a normal and hard mode to the game, plus a secret Most Wanted mode.\\n\\nI made most of these sprites in scratch and the ships were made in Pixil Art\\n\\nlink to my Pixil Art profile here: https://www.pixilart.com/neon64makoto\\n\\nArcade cabinet overlay here:https://forums.launchbox-app.com/files/file/2726-generic-arcade-1080p-overlay/    (i used the 4th one)\\n\\nMost sounds were found here:\\nhttps://pixabay.com/sound-effects/search/arcade/\\nhttps://downloads.khinsider.com/game-soundtracks/album/five-nights-at-freddy-s-fnaf-2-sfx\\n\\nPlus this for hard mode music: https://www.youtube.com/watch?v=R6ZHn2XEbGk\\n\\nAnd this for <b>****MW****</b> mode:\\nhttps://www.youtube.com/watch?v=kG5LF_QS1JU\`, \`I stole all the assets I obviously stole and made the assets I obviously made. Not much else.\\n\\nSecret code this time is:\\n\\nD R G\`, \`I made everything except for the crosshair which you can find here: https://nohat.cc/f/red-crosshair-png-transparent/m2i8N4N4K9Z5A0K9-201907232239.html\\nAnd the asteroid is here: https://assets.website-files.com/62cc3ac38e15ba20d4ff98f5/62d908ddf4c208aa8b54b424_asteroid-8bit-picture.png\\n\\nEverything else was either made in scratch or made on my Pixil art profile\\n\\nLink to my Pixil art profile: https://www.pixilart.com/neon64makoto/gallery\\n\\n\\n\\n\\ngoober.\`, \`Everything was pretty much made in scratch except for the harpoon and boat clip art. Also the fish are just a part of scratch's sprite library.\`, \`<b>!!!VOLUME WARNING!!!</b>\`];
 
 function showScratchGames() {
   const content = document.getElementById('gamesContent'), gamesMenu = document.querySelector('.games-menu'); if (gamesMenu) gamesMenu.style.display = 'none';
-  content.innerHTML = `<button class="back-button" onclick="load('games')">← Back to Games Menu</button><div class="games-layout"><div class="sideBox"><h3>Controls</h3><div id="gameControls"></div></div><div class="centerBox"><div class="button-row" style="justify-content:center;"><button onclick="prevGame()">◀</button><button onclick="nextGame()">▶</button></div><iframe id="scratchFrame" allowfullscreen title="GN-Neon Scratch game viewer"></iframe><h3 id="gameTitle"></h3></div><div class="sideBox"><h3>Notes / Credits</h3><div id="gameNotes"></div></div></div>`;
+  content.innerHTML = \`<button class="back-button" onclick="load('games')">← Back to Games Menu</button><div class="games-layout"><div class="sideBox"><h3>Controls</h3><div id="gameControls"></div></div><div class="centerBox"><div class="button-row" style="justify-content:center;"><button onclick="prevGame()">◀</button><button onclick="nextGame()">▶</button></div><iframe id="scratchFrame" allowfullscreen title="GN-Neon Scratch game viewer"></iframe><h3 id="gameTitle"></h3></div><div class="sideBox"><h3>Notes / Credits</h3><div id="gameNotes"></div></div></div>\`;
   currentIndex = 0; updateGame();
 }
 
 function showEmulators() {
   const content = document.getElementById('gamesContent'), gamesMenu = document.querySelector('.games-menu'); if (gamesMenu) gamesMenu.style.display = 'none';
-  content.innerHTML = `<button class="back-button" onclick="load('games')">← Back to Games Menu</button><div class="games-menu" style="max-width: 400px; margin: 2rem auto;"><h3>Select Emulator</h3><button onclick="navigateTo('nes')">NES</button><button onclick="navigateTo('snes')">SNES</button><button onclick="navigateTo('genesis')">Genesis</button></div>`;
+  content.innerHTML = \`<button class="back-button" onclick="load('games')">← Back to Games Menu</button><div class="games-menu" style="max-width: 400px; margin: 2rem auto;"><h3>Select Emulator</h3><button onclick="navigateTo('nes')">NES</button><button onclick="navigateTo('snes')">SNES</button><button onclick="navigateTo('genesis')">Genesis</button></div>\`;
 }
 
 function navigateTo(emulator) {
   const content = document.getElementById('gamesContent');
   if (emulator === 'nes') {
-    content.innerHTML = `<button class="back-button" onclick="showEmulators()">← Back to Emulators</button><div style="width: 100%; max-width: 900px; margin: 2rem auto;"><h2 style="padding: 0 0 1rem 0;">NES Emulator</h2><div style="width:100%;height:500px;max-width:100%; background: #000; border-radius: 10px; overflow: hidden; border: 1px solid #333;"><div id="game"></div></div><script>window.EJS_player='#game';window.EJS_core='nes';window.EJS_gameName='cpu_dummy_reads';window.EJS_color='#0006ff';window.EJS_startOnLoaded=true;window.EJS_pathtodata='https://cdn.jsdelivr.net/gh/EmulatorJS/EmulatorJS@latest/data/';window.EJS_url='https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Roms/cpu_dummy_reads.nes';<\/script><script src="https://cdn.jsdelivr.net/gh/EmulatorJS/EmulatorJS@latest/data/loader.js"><\/script></div>`;
+    content.innerHTML = \`<button class="back-button" onclick="showEmulators()">← Back to Emulators</button><div style="width: 100%; max-width: 900px; margin: 2rem auto;"><h2 style="padding: 0 0 1rem 0;">NES Emulator</h2><div style="width:100%;height:500px;max-width:100%; background: #000; border-radius: 10px; overflow: hidden; border: 1px solid #333;"><div id="game"></div></div><script>window.EJS_player='#game';window.EJS_core='nes';window.EJS_gameName='cpu_dummy_reads';window.EJS_color='#0006ff';window.EJS_startOnLoaded=true;window.EJS_pathtodata='https://cdn.jsdelivr.net/gh/EmulatorJS/EmulatorJS@latest/data/';window.EJS_url='https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Roms/cpu_dummy_reads.nes';<\/script><script src="https://cdn.jsdelivr.net/gh/EmulatorJS/EmulatorJS@latest/data/loader.js"><\/script></div>\`;
   } else {
-    content.innerHTML = `<div class="wip-container"><h2>${emulator.toUpperCase()} Emulator</h2><p>Work in Progress</p><p style="color: #888; margin-top: 1rem;">This section is currently under development.</p><button class="back-button" onclick="showEmulators()">← Back to Emulators</button></div>`;
+    content.innerHTML = \`<div class="wip-container"><h2>\${emulator.toUpperCase()} Emulator</h2><p>Work in Progress</p><p style="color: #888; margin-top: 1rem;">This section is currently under development.</p><button class="back-button" onclick="showEmulators()">← Back to Emulators</button></div>\`;
   }
 }
 
@@ -1351,7 +1352,7 @@ function prevGame() { currentIndex = (currentIndex - 1 + games.length) % games.l
 // ─── NEW TOOLS LOGIC ──────────────────────────────────────────────────────────
 function showCipher(type) {
   const area = document.getElementById("cipherArea");
-  area.innerHTML = `<div class="tools-side-by-side"><div><h3 style="margin-top: 0;">Input</h3><textarea id="cipherIn" placeholder="Enter text..."></textarea></div><div><h3 style="margin-top: 0; margin-bottom: 0.5rem;">Output</h3><div class="cipher-buttons"><button onclick="runCipher('${type}', 'encode')">Encode</button><button onclick="runCipher('${type}', 'decode')">Decode</button></div><pre id="cipherOut"></pre></div></div>`;
+  area.innerHTML = \`<div class="tools-side-by-side"><div><h3 style="margin-top: 0;">Input</h3><textarea id="cipherIn" placeholder="Enter text..."></textarea></div><div><h3 style="margin-top: 0; margin-bottom: 0.5rem;">Output</h3><div class="cipher-buttons"><button onclick="runCipher('\${type}', 'encode')">Encode</button><button onclick="runCipher('\${type}', 'decode')">Decode</button></div><pre id="cipherOut"></pre></div></div>\`;
 }
 function runCipher(type, mode) {
   const input = document.getElementById('cipherIn').value;
@@ -1374,10 +1375,10 @@ function runIDE() {
 function sendChat() {
   const log = document.getElementById('chatLog'), inp = document.getElementById('chatInput');
   if(!inp.value)return;
-  log.innerHTML += `<div class="chat-msg user-msg">${inp.value}</div>`;
+  log.innerHTML += \`<div class="chat-msg user-msg">\${inp.value}</div>\`;
   const userVal = inp.value; inp.value='';
   setTimeout(()=> {
-    log.innerHTML += `<div class="chat-msg bot-msg">AI demo response to: "${userVal}"</div>`;
+    log.innerHTML += \`<div class="chat-msg bot-msg">AI demo response to: "\${userVal}"</div>\`;
     log.scrollTop = log.scrollHeight;
   }, 600);
 }
@@ -1402,7 +1403,7 @@ function initCanvas() {
 function clearCanvas() { paintingCanvas.getContext('2d').clearRect(0,0,800,500); }
 
 function showCreation(type) {
-  document.getElementById('creationArea').innerHTML = `<h3>${type.toUpperCase()}</h3><p>Gallery for ${type} coming soon!</p>`;
+  document.getElementById('creationArea').innerHTML = \`<h3>\${type.toUpperCase()}</h3><p>Gallery for \${type} coming soon!</p>\`;
 }
 function checkGuess() {
   const v = parseInt(document.getElementById('guessInput').value);
