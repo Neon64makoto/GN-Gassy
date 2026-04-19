@@ -6,29 +6,112 @@
   <title>GN-Neon</title>
   <style>
     :root {
-      --text: #aac0ff;
-      --border: rgba(0, 0, 200, 0.2);
-      --border-strong: rgba(0, 0, 200, 0.5);
-      --panel-size: 120px;
+      --bg: #000;
+      --panel: #111;
+      --panel-alt: #151515;
+      --border: #333;
+      --border-strong: #444;
+      --text: #fff;
+      --muted: #b3b3b3;
+      --accent: #0006ff;
+      --accent-soft: rgba(0, 0, 200, 0.14);
+      --shadow: 0 14px 32px rgba(0, 0, 0, 0.32);
+      --panel-size: 140px;
     }
 
     * {
-      margin: 0;
-      padding: 0;
       box-sizing: border-box;
     }
 
-    html, body {
-      width: 100%;
-      height: 100%;
-      font-family: 'Courier New', monospace;
-      background: #000;
-      color: var(--text);
-      overflow: hidden;
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+      font-size: 16px;
     }
 
     body {
-      background: linear-gradient(135deg, #0a0a1a 0%, #1a0a2e 100%);
+      background: #000;
+      color: var(--text);
+      font-family: Arial, sans-serif;
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      transition: opacity 0.5s ease;
+    }
+
+    /* Splash / Loading Overlay */
+    #splashOverlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: linear-gradient(45deg, #0a0a0a 25%, #1a1a2e 25%, #1a1a2e 50%, #0a0a0a 50%, #0a0a0a 75%, #1a1a2e 75%, #1a1a2e);
+      background-size: 40px 40px;
+      animation: loading-stripes 0.8s linear infinite;
+      z-index: 2000;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: opacity 0.8s ease, visibility 0.8s;
+    }
+
+    #splashOverlay.fade-out {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    #splashText {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #fff;
+      text-shadow: 0 0 20px #0044ff;
+      letter-spacing: 4px;
+      text-align: center;
+      pointer-events: none;
+    }
+
+    #splashSubtext {
+      margin-top: 1rem;
+      color: #7799ff;
+      font-size: 1rem;
+      pointer-events: none;
+    }
+
+    @keyframes loading-stripes {
+      0% {
+        background-position: 0 0;
+      }
+      100% {
+        background-position: 40px 40px;
+      }
+    }
+
+    /* Styled scrollbars */
+    ::-webkit-scrollbar {
+      width: 12px;
+      height: 12px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #0a0a0a;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #0600ff;
+      border-radius: 6px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #0044ff;
+    }
+
+    /* Firefox scrollbar styling */
+    * {
+      scrollbar-color: #0600ff #0a0a0a;
+      scrollbar-width: thin;
     }
 
     body.video-bg {
@@ -92,22 +175,11 @@
       color: #8b8b8b;
     }
 
-    input:focus, textarea:focus {
-      outline: none;
-      border-color: #0044ff;
-      box-shadow: 0 0 15px rgba(0, 68, 255, 0.5);
-    }
-
-    textarea {
-      resize: vertical;
-      font-family: 'Courier New', monospace;
-    }
-
     /* ═══════════════════════════════════════════════════════════
        UNIFIED DIAGONAL PANEL LAYOUT (Opera GX style)
        ═══════════════════════════════════════════════════════════ */
 
-    /* ─── LOGO CONNECTOR (square corner piece) ──────────────────── */
+    /* ─── LOGO CONNECTOR (corner piece) ─────────────────────── */
     .logo-connector {
       position: fixed;
       top: 0;
@@ -122,14 +194,6 @@
       align-items: center;
       justify-content: center;
       box-shadow: 0 0 20px rgba(0, 68, 255, 0.5), inset 0 0 15px rgba(0, 68, 255, 0.2);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
-    }
-
-    .logo-connector.visible {
-      opacity: 1;
-      pointer-events: auto;
     }
 
     .logo-connector span {
@@ -165,15 +229,12 @@
       gap: 0;
       transform: translateX(calc(-1 * var(--panel-size)));
       transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.35s;
-      opacity: 0;
-      pointer-events: none;
-
+      opacity: 1;
+      pointer-events: auto;
     }
 
     .left-panel.visible {
       transform: translateX(0);
-      opacity: 1;
-      pointer-events: auto;
     }
 
     .left-panel.ui-hidden {
@@ -236,22 +297,19 @@
       padding-left: var(--panel-size);
       transform: translateY(calc(-1 * var(--panel-size)));
       transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.35s;
-      opacity: 0;
-      pointer-events: none;
-
+      opacity: 1;
+      pointer-events: auto;
     }
 
     .topbar.visible {
       transform: translateY(0);
-      opacity: 1;
-      pointer-events: auto;
     }
 
     .topbar.ui-hidden {
       opacity: 0;
       pointer-events: none;
     }
-
+    
     .topbar.ui-hidden.hover-reveal {
       opacity: 1;
       pointer-events: auto;
@@ -259,119 +317,12 @@
     }
 
     .topbar-row1 {
-      display: flex;
-      gap: 0.5rem;
-      align-items: center;
-      justify-content: center;
       width: 100%;
+      display: none;
     }
 
-    .music-controls {
-      display: flex;
-      gap: 1rem;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      flex-wrap: wrap;
-    }
-
-    .music-info {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.25rem;
+    .nav {
       text-align: center;
-    }
-
-    .music-title {
-      font-size: 0.9rem;
-      color: #0044ff;
-      font-weight: bold;
-    }
-
-    .music-artist {
-      font-size: 0.75rem;
-      color: var(--text);
-    }
-
-    .music-btn-row {
-      display: flex;
-      gap: 0.5rem;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .music-btn {
-      padding: 0.5rem 0.75rem;
-      font-size: 0.9rem;
-      background: rgba(0, 0, 200, 0.3);
-      border: 1px solid rgba(0, 0, 200, 0.5);
-      border-radius: 4px;
-      color: #aac0ff;
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-
-    .music-btn:hover {
-      background: rgba(0, 0, 255, 0.5);
-      border-color: #0044ff;
-      color: #fff;
-      box-shadow: 0 0 10px rgba(0, 68, 255, 0.4);
-    }
-
-    .volume-control {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .volume-slider {
-      width: 80px;
-      height: 4px;
-      border-radius: 2px;
-      background: rgba(0, 0, 200, 0.3);
-      outline: none;
-      -webkit-appearance: none;
-      appearance: none;
-    }
-
-    .volume-slider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: #0044ff;
-      cursor: pointer;
-      box-shadow: 0 0 8px rgba(0, 68, 255, 0.6);
-    }
-
-    .volume-slider::-moz-range-thumb {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: #0044ff;
-      cursor: pointer;
-      border: none;
-      box-shadow: 0 0 8px rgba(0, 68, 255, 0.6);
-    }
-
-    .mute-btn {
-      padding: 0.5rem 0.75rem;
-      font-size: 0.9rem;
-      background: rgba(0, 0, 200, 0.3);
-      border: 1px solid rgba(0, 0, 200, 0.5);
-      border-radius: 4px;
-      color: #aac0ff;
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-
-    .mute-btn:hover {
-      background: rgba(0, 0, 255, 0.5);
-      border-color: #0044ff;
-      color: #fff;
-      box-shadow: 0 0 10px rgba(0, 68, 255, 0.4);
     }
 
     .topbar-brand {
@@ -386,88 +337,7 @@
       align-items: center;
     }
 
-    /* ─── INTERLOCKING TRIANGLE ELEMENTS ─────────────────────────────── */
-    /* Logo top-right protruding triangle */
-    .logo-tri-top-right {
-      position: fixed;
-      top: 0;
-      left: var(--panel-size);
-      width: 0;
-      height: 0;
-      border-style: solid;
-      border-width: 0 var(--panel-size) var(--panel-size) 0;
-      border-color: transparent rgba(17, 17, 17, 0.97) transparent transparent;
-      z-index: 121;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
-    }
-
-    .logo-tri-top-right.visible {
-      opacity: 1;
-    }
-
-    /* Logo bottom-left protruding triangle */
-    .logo-tri-bottom-left {
-      position: fixed;
-      top: var(--panel-size);
-      left: 0;
-      width: 0;
-      height: 0;
-      border-style: solid;
-      border-width: 0 0 var(--panel-size) var(--panel-size);
-      border-color: transparent transparent rgba(17, 17, 17, 0.97) transparent;
-      z-index: 121;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
-    }
-
-    .logo-tri-bottom-left.visible {
-      opacity: 1;
-    }
-
-    /* Nav panel top-right connecting triangle */
-    .nav-tri-top-right {
-      position: fixed;
-      top: 0;
-      left: var(--panel-size);
-      width: 0;
-      height: 0;
-      border-style: solid;
-      border-width: var(--panel-size) 0 0 var(--panel-size);
-      border-color: transparent transparent transparent rgba(17, 17, 17, 0.97);
-      z-index: 111;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
-    }
-
-    .nav-tri-top-right.visible {
-      opacity: 1;
-    }
-
-    /* Music panel top-left connecting triangle */
-    .music-tri-top-left {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 0;
-      height: 0;
-      border-style: solid;
-      border-width: 0 var(--panel-size) var(--panel-size) 0;
-      border-color: transparent rgba(17, 17, 17, 0.97) transparent transparent;
-      z-index: 111;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
-    }
-
-    .music-tri-top-left.visible {
-      opacity: 1;
-    }
-
-    /* ─── HOVER TRIGGER ZONES ────────────────────────────────────── */
+    /* ─── HOVER TRIGGER ZONES ─────────────────────────────────────────────── */
     .trigger-zone-left {
       position: fixed;
       top: 0;
@@ -486,271 +356,635 @@
       z-index: 500;
     }
 
-    #mainContent {
-      position: relative;
-      z-index: 1;
-      padding-top: 0;
-      padding-left: 0;
-      margin-top: 0;
-      margin-left: 0;
-      transition: opacity 0.3s ease;
+    #muteBtn {
+      padding: 0.6rem 0.8rem;
+      font-size: 1rem;
+      min-width: 60px;
     }
 
-    #mainContent.ui-hidden {
+    /* ─── STYLIZED VOLUME SLIDER ─────────────────────────────────────── */
+    #volumeSlider {
+      -webkit-appearance: none;
+      width: 100px;
+      height: 6px;
+      background: #222;
+      border-radius: 3px;
+      outline: none;
+      border: 1px solid #333;
+      cursor: pointer;
+      margin-left: 0.5rem;
+    }
+    #volumeInput {
+      width: 50px;
+      padding: 0.2rem 0.4rem;
+      margin: 0;
+      font-size: 0.9rem;
+      text-align: center;
+      background: #0c0c0c;
+      border: 1px solid var(--border-strong);
+      border-radius: 4px;
+      color: var(--text);
+    }
+
+    #volumeSlider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 14px;
+      height: 14px;
+      background: #0044ff;
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(0, 68, 255, 0.8);
+      border: 1px solid #fff;
+    }
+
+    #volumeSlider::-moz-range-thumb {
+      width: 14px;
+      height: 14px;
+      background: #0044ff;
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(0, 68, 255, 0.8);
+      border: 1px solid #fff;
+    }
+
+    /* ─── MUSIC CONTROLS ──────────────────────────────────────────────── */
+    .music-controls {
+      width: 100%;
+      max-width: 780px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.45rem 1rem 0.6rem;
+      border-top: 1px solid rgba(0, 0, 200, 0.25);
+      margin-top: 0.4rem;
+    }
+
+    .music-info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      line-height: 1.25;
+    }
+
+    .music-title {
+      font-size: 0.95rem;
+      font-weight: bold;
+      color: #fff;
+      letter-spacing: 0.02em;
+    }
+
+    .music-artist {
+      font-size: 0.8rem;
+      color: #7799ff;
+    }
+
+    .music-btn-row {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .music-btn {
+      margin: 0;
+      padding: 0.35rem 0.65rem;
+      font-size: 1rem;
+      background: transparent;
+      border: 1px solid rgba(0, 0, 200, 0.45);
+      border-radius: 6px;
+      color: #aac0ff;
+      cursor: pointer;
+      transition: all 0.15s;
+      min-width: unset;
+    }
+
+    .music-btn:hover {
+      background: rgba(0, 0, 255, 0.25);
+      transform: translateY(-1px);
+      border-color: #0044ff;
+      color: #fff;
+    }
+
+    .music-btn.active-loop {
+      background: rgba(0, 0, 255, 0.35);
+      border-color: #0044ff;
+      color: #fff;
+    }
+
+    .music-seek-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      width: 100%;
+    }
+
+    .music-time {
+      font-size: 0.78rem;
+      color: #7799ff;
+      white-space: nowrap;
+      min-width: 38px;
+      text-align: center;
+    }
+
+    #seekBar {
+      flex: 1;
+      -webkit-appearance: none;
+      appearance: none;
+      height: 4px;
+      border-radius: 2px;
+      background: linear-gradient(to right, #0044ff 0%, #333 0%);
+      outline: none;
+      cursor: pointer;
+      margin: 0;
+      padding: 0;
+      border: none;
+    }
+
+    #seekBar::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #0044ff;
+      cursor: pointer;
+    }
+
+    /* ─── MAIN CONTENT ────────────────────────────────────────────────── */
+    .page-shell {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 2rem;
+      transition: opacity 0.4s;
+    }
+    .page-shell.wide-shell {
+      max-width: 95vw;
+    }
+
+    .page-shell.ui-hidden {
       opacity: 0;
       pointer-events: none;
     }
 
-    #mainContent.ui-hidden.hover-reveal {
-      opacity: 1;
-      pointer-events: auto;
+    .site-title {
+      margin: 0.5rem 0 1.5rem;
+      text-align: center;
+      letter-spacing: 0.04em;
+      font-size: 3rem;
+      color: blue;
     }
 
-    .page-shell {
-      padding: 2rem;
-      max-width: 1400px;
-      margin: 0 auto;
+    #content {
+      width: 100%;
+      min-height: auto;
+      padding: 1rem 0 1rem;
     }
 
-    .page-shell h1 {
-      font-size: 2.5rem;
-      margin-bottom: 1.5rem;
-      color: #0044ff;
-      text-shadow: 0 0 20px rgba(0, 68, 255, 0.5);
+    .panel {
+      background: linear-gradient(180deg, rgba(0, 0, 0, 1), rgba(0, 0, 150, 0.5));
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(5px);
+      padding: 10px;
     }
 
-    .page-shell p {
+    .home-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.9fr);
+      gap: 1.5rem;
+      align-items: stretch;
+    }
+
+    .games-panel {
+      background: linear-gradient(180deg, rgba(0, 0, 0, 1), rgba(0, 0, 150, 0.5));
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(5px);
+      padding: 10px;
+      width: 90vw;
+      margin-left: calc(50% - 45vw);
+      position: relative;
+    }
+
+    .games-panel h2 {
+      padding: 2rem 2rem 1rem 2rem;
+      margin: 0;
+    }
+
+    .games-menu {
+      padding: 0 2rem 2rem 2rem;
+      text-align: center;
+    }
+
+    #gamesContent {
+      width: 100%;
+    }
+
+    .hero-panel h2,
+    .patch-panel h3,
+    .calc-panel h2,
+    .games-panel h2,
+    .about-panel h2 {
+      margin-top: 0;
+      font-size: 2rem;
+    }
+
+    .lead {
+      color: #d2d2d2;
       line-height: 1.6;
-      margin-bottom: 1rem;
-      color: var(--text);
+      font-size: 1.15rem;
     }
 
-    .page-shell a {
-      color: #0044ff;
-      text-decoration: none;
-      transition: text-shadow 0.2s;
+    .image-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
     }
 
-    .page-shell a:hover {
-      text-shadow: 0 0 10px rgba(0, 68, 255, 0.7);
+    .image-card {
+      background: var(--panel-alt);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem;
+    }
+
+    .image-card img {
+      width: 100%;
+      display: block;
+      border-radius: 8px;
+    }
+
+    .image-card span {
+      display: block;
+      margin-top: 0.75rem;
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    .patch-panel {
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      max-height: 600px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .version-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+      padding: 0.5rem 0.8rem;
+      border-radius: 999px;
+      border: 1px solid rgba(0, 0, 225, 1);
+      background: rgba(0, 0, 150, 0.08);
+      color: var(--accent);
+      font-size: 0.9rem;
+    }
+
+    .patch-list {
+      margin: 1rem 0 0;
+      padding-left: 1.5rem;
+      line-height: 1.65;
+      font-size: 0.95rem;
+    }
+
+    .patch-list li + li {
+      margin-top: 0.75rem;
+    }
+
+    .section-copy {
+      color: var(--muted);
+      font-size: 1.1rem;
+    }
+
+    .calc-panel,
+    .games-panel,
+    .about-panel {
+      padding: 2rem;
+    }
+
+    .calc-panel h2,
+    .games-panel h2,
+    .about-panel h2 {
+      font-size: 2rem;
+    }
+
+    .calc-panel h3,
+    .games-panel h3,
+    .about-panel h3 {
+      font-size: 1.5rem;
     }
 
     .button-row {
       display: flex;
       flex-wrap: wrap;
-      gap: 1rem;
-      margin: 1.5rem 0;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
     }
 
-    .sideBox {
-      background: rgba(0, 0, 200, 0.1);
-      border: 1px solid var(--border-strong);
-      border-radius: 8px;
-      padding: 1.5rem;
-      margin: 1.5rem 0;
-      color: var(--text);
-    }
-
-    .sideBox h3 {
-      color: #0044ff;
-      margin-bottom: 1rem;
-    }
-
-    .sideBox ul {
-      list-style: none;
-      padding-left: 0;
-    }
-
-    .sideBox li {
-      padding: 0.5rem 0;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .sideBox li:last-child {
-      border-bottom: none;
-    }
-
-    .sideBox li a {
-      color: #0044ff;
-      text-decoration: none;
-      transition: all 0.2s;
-    }
-
-    .sideBox li a:hover {
-      color: #fff;
-      text-shadow: 0 0 10px rgba(0, 68, 255, 0.7);
+    #scratchFrame {
+      width: 100%;
+      height: 55vh;
+      border: none;
+      border-radius: 10px;
+      background: #000;
     }
 
     .games-layout {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1.5rem;
-      margin: 2rem 0;
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+      justify-content: center;
+      width: 100%;
+      padding: 0.5rem 1rem 1rem 1rem;
+      margin: 0;
+      box-sizing: border-box;
     }
 
-    .game-card {
-      background: rgba(0, 0, 200, 0.15);
-      border: 1px solid var(--border-strong);
-      border-radius: 8px;
-      padding: 1rem;
+    .games-menu {
       text-align: center;
-      cursor: pointer;
-      transition: all 0.3s;
     }
 
-    .game-card:hover {
-      background: rgba(0, 0, 255, 0.25);
-      border-color: #0044ff;
-      box-shadow: 0 0 20px rgba(0, 68, 255, 0.4);
-      transform: translateY(-5px);
-    }
-
-    .game-card h3 {
-      color: #0044ff;
-      margin-bottom: 0.5rem;
-    }
-
-    .game-card p {
-      font-size: 0.9rem;
-      color: var(--text);
-    }
-
-    .creations-layout {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1.5rem;
-      margin: 2rem 0;
-    }
-
-    .creation-card {
-      background: rgba(0, 0, 200, 0.15);
-      border: 1px solid var(--border-strong);
-      border-radius: 8px;
-      overflow: hidden;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-
-    .creation-card:hover {
-      border-color: #0044ff;
-      box-shadow: 0 0 20px rgba(0, 68, 255, 0.4);
-      transform: translateY(-5px);
-    }
-
-    .creation-card img {
-      width: 100%;
-      height: 150px;
-      object-fit: cover;
+    .games-menu button {
       display: block;
+      width: 40%;
+      margin: 0.5rem auto;
+      font-size: 1rem;
+      padding: 0.75rem 1rem;
     }
 
-    .creation-card h3 {
-      color: #0044ff;
-      padding: 1rem 1rem 0.5rem;
-      margin: 0;
-    }
-
-    .creation-card p {
-      padding: 0 1rem 1rem;
-      margin: 0;
+    .back-button {
+      display: block;
+      margin: 0.5rem auto 1rem;
       font-size: 0.9rem;
-      color: var(--text);
+      padding: 0.5rem 1rem;
     }
 
-    .tools-layout {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1.5rem;
-      margin: 2rem 0;
+    .wip-container {
+      text-align: center;
+      padding: 2rem 1rem;
     }
 
-    .tool-card {
-      background: rgba(0, 0, 200, 0.15);
-      border: 1px solid var(--border-strong);
-      border-radius: 8px;
-      padding: 1.5rem;
-      cursor: pointer;
-      transition: all 0.3s;
+    .wip-container h2 {
+      font-size: 1.5rem;
+      margin-bottom: 0.75rem;
     }
 
-    .tool-card:hover {
-      background: rgba(0, 0, 255, 0.25);
-      border-color: #0044ff;
-      box-shadow: 0 0 20px rgba(0, 68, 255, 0.4);
+    .wip-container p {
+      color: #b3b3b3;
+      font-size: 1rem;
     }
 
-    .tool-card h3 {
-      color: #0044ff;
-      margin-bottom: 0.5rem;
-    }
-
-    .tool-card p {
+    .sideBox {
+      width: 18%;
+      padding: 1rem;
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 10px;
+      overflow-y: auto;
+      height: 55vh;
+      box-shadow: var(--shadow);
       font-size: 0.9rem;
-      color: var(--text);
-      margin-bottom: 1rem;
     }
 
-    .tool-card button {
-      width: 100%;
-    }
-
-    #splashOverlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(135deg, #0a0a1a 0%, #1a0a2e 100%);
+    .centerBox {
+      width: 50%;
+      text-align: center;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      z-index: 9999;
-      cursor: pointer;
+      flex-shrink: 0;
     }
 
-    #splashText {
-      font-size: 3rem;
-      color: #0044ff;
-      text-shadow: 0 0 30px rgba(0, 68, 255, 0.8);
-      margin-bottom: 1rem;
-      font-weight: bold;
-      letter-spacing: 2px;
+    .sideBox {
+      flex-shrink: 0;
     }
 
-    #splashSubtext {
-      font-size: 1.2rem;
-      color: var(--text);
-      text-shadow: 0 0 15px rgba(0, 68, 255, 0.5);
-      animation: pulse 1.5s ease-in-out infinite;
+    #gameControls,
+    #gameNotes {
+      white-space: pre-line;
+      color: #ddd;
+      line-height: 1.5;
+      font-size: 0.95rem;
     }
 
-    @keyframes pulse {
-      0%, 100% { opacity: 0.6; }
-      50% { opacity: 1; }
+    .canvas-wrap {
+      position: relative;
+      display: inline-block;
     }
 
-    .vTag {
+    #grid {
+      border: 1px solid white;
+      background: #000;
+    }
+
+    #axesLabels {
+      position: absolute;
+      font-size: 0.8em;
+      color: #ccc;
+    }
+
+    #graphResults {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      background: #0e0e0e;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      text-align: left;
+      font-size: 1.05rem;
+    }
+
+    .version-tag {
       position: fixed;
-      bottom: 1rem;
-      right: 1rem;
-      background: rgba(0, 0, 200, 0.3);
-      border: 1px solid #0044ff;
-      border-radius: 4px;
-      padding: 0.5rem 1rem;
-      color: #0044ff;
-      font-size: 0.9rem;
-      z-index: 100;
-      pointer-events: none;
+      bottom: 5px;
+      right: 10px;
+      color: gray;
+      font-size: 0.85rem;
+      z-index: 200;
+      transition: opacity 0.4s;
     }
 
-    .vTag.ui-hidden {
-      display: none;
+    .version-tag.ui-hidden {
+      opacity: 0;
+    }
+
+    /* ─── AUDIO VISUALIZER ────────────────────────────────────────────── */
+    #visualizerCanvas {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 175vh;
+      z-index: -1;
+      pointer-events: none;
+      display: block;
+    }
+
+    /* ─── NEW TOOLS & SECTIONS ─────────────────────────────────────────── */
+    .embed-container { width: 100%; height: 80vh; border-radius: 12px; overflow: hidden; border: 1px solid #333; margin-top: 1rem; }
+    .embed-container iframe { width: 100%; height: 100%; border: none; }
+    #ideContainer { display: flex; flex-direction: row; gap: 1rem; height: 400px; }
+    #ideInput { flex: 1; height: 100%; background: #111; color: #0f0; font-family: monospace; margin: 0; }
+    #ideOutput { flex: 1; height: 100%; background: white; border-radius: 8px; border: none; }
+    #paintingCanvas { background: white; border-radius: 8px; display: block; margin: 0 auto; }
+    #chatContainer { height: 400px; background: #0a0a0a; border: 1px solid #333; border-radius: 8px; display: flex; flex-direction: column; overflow: hidden; }
+    #chatLog { flex: 1; overflow-y: auto; padding: 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
+    .chat-msg { padding: 0.5rem 0.8rem; border-radius: 8px; max-width: 80%; }
+    .user-msg { align-self: flex-end; background: #0044ff; color: white; }
+    .bot-msg { align-self: flex-start; background: #222; color: #7799ff; }
+    .chat-input-row { display: flex; padding: 0.5rem; background: #111; border-top: 1px solid #333; }
+    #chatInput { flex: 1; margin: 0; }
+
+    /* ─── RESPONSIVE ──────────────────────────────────────────────────── */
+    @media (max-width: 1200px) {
+      html,
+      body {
+        font-size: 15px;
+      }
+
+      .site-title {
+        font-size: 2.5rem;
+      }
+    }
+
+    @media (max-width: 960px) {
+      html,
+      body {
+        font-size: 14px;
+      }
+
+      .site-title {
+        font-size: 2.2rem;
+      }
+
+      .home-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .games-layout {
+        flex-direction: column;
+      }
+
+      .sideBox,
+      .centerBox {
+        width: 100%;
+      }
+
+      .patch-panel h3 {
+        font-size: 1.3rem;
+      }
+
+      .patch-panel {
+        max-height: 400px;
+      }
     }
 
     @media (max-width: 768px) {
-      .page-shell h1 {
+      html,
+      body {
+        font-size: 13px;
+      }
+
+      .page-shell {
+        padding: 2rem 1rem 5rem;
+      }
+
+      .site-title {
         font-size: 1.8rem;
+        margin: 0.5rem 0 1rem;
+      }
+
+      .hero-panel,
+      .patch-panel,
+      .calc-panel,
+      .games-panel,
+      .about-panel {
+        padding: 1.5rem;
+      }
+
+      .patch-panel {
+        max-height: 350px;
+      }
+
+      .topbar {
+        gap: 0.5rem;
+      }
+
+      .topbar-right {
+        right: 0.5rem;
+      }
+
+      .hero-panel h2,
+      .patch-panel h3,
+      .calc-panel h2,
+      .games-panel h2,
+      .about-panel h2 {
+        font-size: 1.5rem;
+      }
+
+      .image-row {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+      }
+
+      .sideBox {
+        padding: 1rem;
+        font-size: 0.9rem;
+      }
+
+      #scratchFrame {
+        height: 50vh;
+      }
+
+      button {
+        margin: 0.4rem;
+        font-size: 1rem;
+        padding: 0.6rem 0.8rem;
+      }
+
+      input {
+        margin: 0.4rem;
+        font-size: 1rem;
+        padding: 0.6rem 0.6rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      html,
+      body {
+        font-size: 12px;
+      }
+
+      .page-shell {
+        padding: 2rem 0.75rem 5rem;
+      }
+
+      .site-title {
+        font-size: 1.5rem;
+        margin: 0.4rem 0 0.8rem;
+      }
+
+      .hero-panel,
+      .patch-panel,
+      .calc-panel,
+      .games-panel,
+      .about-panel {
+        padding: 1rem;
+      }
+
+      .hero-panel h2,
+      .patch-panel h3,
+      .calc-panel h2,
+      .games-panel h2,
+      .about-panel h2 {
+        font-size: 1.3rem;
       }
 
       .button-row {
@@ -782,18 +1016,10 @@
       .games-layout {
         gap: 0.5rem;
       }
-
-      .creations-layout {
-        gap: 0.5rem;
-      }
-
-      .tools-layout {
-        gap: 0.5rem;
-      }
     }
   </style>
 </head>
-<body>
+<body class="video-bg">
   <audio id="bgMusic" style="display:none;" crossorigin="anonymous"></audio>
 
   <!-- Click to Enter Splash -->
@@ -810,12 +1036,6 @@
   <div class="logo-connector" id="logoConnector">
     <span>GN<br>NEON</span>
   </div>
-
-  <!-- Interlocking triangles -->
-  <div class="logo-tri-top-right" id="logoTriTopRight"></div>
-  <div class="logo-tri-bottom-left" id="logoTriBottomLeft"></div>
-  <div class="nav-tri-top-right" id="navTriTopRight"></div>
-  <div class="music-tri-top-left" id="musicTriTopLeft"></div>
 
   <!-- Left panel (nav) -->
   <div class="left-panel" id="leftPanel">
@@ -841,322 +1061,592 @@
         <button class="music-btn" onclick="musicPrev()" title="Previous">&#9664;&#9664;</button>
         <button class="music-btn" id="mcPlayPause" onclick="musicPlayPause()" title="Play/Pause">&#9646;&#9646;</button>
         <button class="music-btn" onclick="musicNext()" title="Next">&#9654;&#9654;</button>
+        <button class="music-btn" id="mcLoop" onclick="musicToggleLoop()" title="Loop">&#8635;</button>
       </div>
-      <div class="volume-control">
-        <span style="font-size: 0.9rem;">Vol:</span>
-        <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="50" oninput="setVolume(this.value)">
-        <button class="mute-btn" id="muteBtn" onclick="toggleMute()" title="Mute">🔊</button>
+      <div class="music-seek-row">
+        <span class="music-time" id="mcCurrent">0:00</span>
+        <input type="range" id="seekBar" min="0" max="100" value="0" oninput="musicSeek(this.value)">
+        <span class="music-time" id="mcDuration">0:00</span>
       </div>
+    </div>
+    <div class="topbar-right">
+      <input type="number" id="volumeInput" min="0" max="100" value="50" oninput="setVolumeFromInput(this.value)">
+      <input type="range" id="volumeSlider" min="0" max="100" value="50" oninput="setVolume(this.value)">
+      <button id="muteBtn" onclick="toggleMute()">Mute</button>
     </div>
   </div>
 
-  <!-- Main content -->
-  <div class="content-overlay">
-    <div id="mainContent">
-      <div class="page-shell" id="pageShell"></div>
-    </div>
-  </div>
+  <main class="page-shell" id="mainContent">
+    <h1 class="site-title">GN-Neon</h1>
+    <div id="content">Loading...</div>
+  </main>
 
-  <div class="vTag" id="vTag">VISUALIZER MODE</div>
+  <canvas id="visualizerCanvas"></canvas>
+  <div class="version-tag" id="vTag">v0.52</div>
 
-  <script>
-    let currentPage = 'home';
-    let isVisualizerMode = false;
-    let isMuted = false;
-    let currentVolume = 50;
+<script>
+// ─── STATE ───────────────────────────────────────────────────────────────────
+let currentIndex = 0;
+let isMuted = false;
+let currentTrack = 0;
+let isLooping = false;
+let seekDragging = false;
+let isVisualizerMode = false;
 
-    const musicPlaylist = [
-      { title: 'Super Mario RPG', artist: 'Yoko Shimomura', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3' },
-      { title: 'The Legend of Zelda', artist: 'Koji Kondo', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3' },
-      { title: 'Final Fantasy VII', artist: 'Nobuo Uematsu', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3' },
-      { title: 'Chrono Trigger', artist: 'Yasunori Mitsuda', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3' },
-      { title: 'Castlevania', artist: 'Michiru Yamane', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3' }
-    ];
+// ─── PLAYLIST ────────────────────────────────────────────────────────────────
+const playlist = [
+  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Super%20Mario%20RPG.mp3',
+  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Neon%20Cobra.mp3',
+  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Disco%20Pervert.mp3',
+  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/They%20Live!.mp3',
+  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/One%20Night%20In%20Tokyo.mp3',
+  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/A%20Kind%20Of%20Deutsch.mp3',
+  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Military%20Fashion%20Show.mp3',
+  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Hotline%20-%20Original%20Mix.mp3',
+  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Strange%20Timez%20(feat.%20Robert%20Smith).mp3',
+  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Not%20Like%20Us.mp3',
+  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Notion.mp3',
+  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Write%20This%20Down.mp3',
+  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Temporary%20Love%20(feat.%20CG5).mp3',
+  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Falling%20Down.mp3',
+  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Why%20Cant%20This%20Be%20Easy.mp3',
+  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/But%20Can%20You%20Do%20This.mp3',
+  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Philly%20Nice%20(B-Side).mp3',
+  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Pain_is_just_freddy_fazbear.mp3',
+  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/dq%20blizzard.mp3',
+  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/MC%20Chris%20Is%20Dead.mp3',
+  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Super%20Mario%20RPG%20Waltz%20of%20the%20Forest%20(4K).mp3'
+];
 
-    let currentTrack = 0;
+const trackMeta = [
+  { title: 'SMRPG Rawest Forrest', artist: 'Martin Hagwell' },
+  { title: 'Neon Cobra', artist: 'Shockwave-Sound' },
+  { title: 'Disco Pervert', artist: 'Nightstop' },
+  { title: 'They Live!', artist: 'Evil Nine' },
+  { title: 'One Night In Tokyo', artist: 'Beast in Black' },
+  { title: 'A Kind of Deutsch', artist: 'And One' },
+  { title: 'Military Fashion Show', artist: 'And One' },
+  { title: 'Hotline', artist: 'Jasper Byrne' },
+  { title: 'Strange Timez', artist: 'Gorillaz' },
+  { title: 'Not Like Us', artist: 'Kendrick Lamar' },
+  { title: 'Notion', artist: 'The Rare Occasions' },
+  { title: 'Write This Down', artist: 'SoulChef' },
+  { title: 'Temporary Love', artist: 'The Living Tombstone' },
+  { title: 'Falling Down', artist: 'Space Cowboy' },
+  { title: 'Why Cant This be Easy', artist: 'Red Vox' },
+  { title: 'But Can You Do This', artist: 'Lolnein' },
+  { title: 'Philly Nice (B-Side)', artist: 'Rozebud' },
+  { title: 'FNAF 1 (trust)', artist: 'Silva Gunner' },
+  { title: 'DQ Blizzard', artist: 'MC Chris' },
+  { title: 'SILI', artist: 'BLOW' },
+  { title: 'SMRPG Waltz of The Forest', artist: 'Psyguy' }
+];
 
-    function load(page) {
-      currentPage = page;
-      renderPage();
+// ─── SPLASH LOGIC ────────────────────────────────────────────────────────────
+function enterSite() {
+  const overlay = document.getElementById('splashOverlay');
+  if (overlay.classList.contains('ready')) {
+    overlay.classList.add('fade-out');
+    ensureAudioContext();
+    const audio = document.getElementById('bgMusic');
+    audio.play().catch(e => console.warn("Audio start blocked:", e));
+  }
+}
+
+// ─── AUDIO ENGINE ────────────────────────────────────────────────────────────
+let audioCtx = null, analyser = null, sourceNode = null, audioContextReady = false;
+
+function ensureAudioContext() {
+  if (audioContextReady) { if (audioCtx.state === 'suspended') audioCtx.resume(); return; }
+  const audio = document.getElementById('bgMusic');
+  try {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    analyser = audioCtx.createAnalyser();
+    analyser.fftSize = 512;
+    analyser.smoothingTimeConstant = 0.8;
+    sourceNode = audioCtx.createMediaElementSource(audio);
+    sourceNode.connect(analyser);
+    analyser.connect(audioCtx.destination);
+    audioContextReady = true;
+  } catch (e) { console.warn(e); }
+}
+
+function initMusic() {
+  const audio = document.getElementById('bgMusic');
+  audio.src = playlist[currentTrack];
+  audio.volume = 0.5;
+  audio.addEventListener('ended', () => isLooping ? (audio.currentTime = 0, audio.play()) : musicNext());
+  audio.addEventListener('timeupdate', updateSeekBar);
+  audio.addEventListener('play', () => { document.getElementById('mcPlayPause').innerHTML = '&#9646;&#9646;'; });
+  audio.addEventListener('pause', () => document.getElementById('mcPlayPause').innerHTML = '&#9654;');
+  updateTrackDisplay();
+}
+
+function updateTrackDisplay() {
+  document.getElementById('mcTitle').textContent = trackMeta[currentTrack].title;
+  document.getElementById('mcArtist').textContent = trackMeta[currentTrack].artist;
+}
+
+function updateSeekBar() {
+  if (seekDragging) return;
+  const audio = document.getElementById('bgMusic'), bar = document.getElementById('seekBar');
+  if (!audio.duration) return;
+  const pct = (audio.currentTime / audio.duration) * 100;
+  bar.value = pct;
+  bar.style.background = `linear-gradient(to right, #0044ff ${pct}%, #333 ${pct}%)`;
+  document.getElementById('mcCurrent').textContent = fmtTime(audio.currentTime);
+  document.getElementById('mcDuration').textContent = fmtTime(audio.duration);
+}
+
+function fmtTime(s) { const m = Math.floor(s/60), sec = Math.floor(s%60); return `${m}:${sec.toString().padStart(2,'0')}`; }
+
+function musicPlayPause() { const a = document.getElementById('bgMusic'); ensureAudioContext(); a.paused ? a.play() : a.pause(); }
+function musicNext() { currentTrack = (currentTrack + 1) % playlist.length; const a = document.getElementById('bgMusic'); a.src = playlist[currentTrack]; updateTrackDisplay(); a.play(); }
+function musicPrev() { const a = document.getElementById('bgMusic'); if(a.currentTime > 3) a.currentTime = 0; else currentTrack = (currentTrack - 1 + playlist.length) % playlist.length; a.src = playlist[currentTrack]; updateTrackDisplay(); a.play(); }
+function musicToggleLoop() { isLooping = !isLooping; document.getElementById('mcLoop').classList.toggle('active-loop', isLooping); }
+function musicSeek(v) { const a = document.getElementById('bgMusic'); seekDragging = true; a.currentTime = (v/100)*a.duration; setTimeout(()=>seekDragging=false, 200); }
+function setVolume(v) {
+  const audio = document.getElementById('bgMusic');
+  audio.volume = Math.min(v / 100, 1.0);
+  document.getElementById('volumeInput').value = v;
+  document.getElementById('volumeSlider').value = v;
+  if (v > 0) { isMuted = false; document.getElementById('muteBtn').innerText = "Mute"; }
+}
+function setVolumeFromInput(v) {
+  let val = parseInt(v);
+  if (isNaN(val)) val = 0;
+  if (val > 100) val = 100;
+  if (val < 0) val = 0;
+  setVolume(val);
+}
+function toggleMute() { isMuted = !isMuted; const b = document.getElementById('muteBtn'); b.innerText = isMuted ? 'Unmute' : 'Mute'; document.querySelectorAll('audio').forEach(a => a.muted = isMuted); }
+
+// ─── VISUALIZER MODE ──────────────────────────────────────────────────────────
+function toggleVisualizerMode() {
+  isVisualizerMode = !isVisualizerMode;
+  const main = document.getElementById('mainContent');
+  const top = document.getElementById('topbar');
+  const left = document.getElementById('leftPanel');
+  const logo = document.getElementById('logoConnector');
+  const tag = document.getElementById('vTag');
+  const btn = document.getElementById('vizModeBtn');
+
+  if (isVisualizerMode) {
+    main.classList.add('ui-hidden');
+    top.classList.add('ui-hidden');
+    left.classList.add('ui-hidden');
+    logo.style.opacity = '0';
+    logo.style.pointerEvents = 'none';
+    tag.classList.add('ui-hidden');
+    btn.innerText = "Exit Mode";
+    document.addEventListener('keydown', exitVizOnEsc);
+  } else {
+    main.classList.remove('ui-hidden');
+    top.classList.remove('ui-hidden');
+    left.classList.remove('ui-hidden');
+    logo.style.opacity = '';
+    logo.style.pointerEvents = '';
+    tag.classList.remove('ui-hidden');
+    btn.innerText = "Visualizer";
+    top.classList.remove('hover-reveal');
+    left.classList.remove('hover-reveal');
+    document.removeEventListener('keydown', exitVizOnEsc);
+  }
+}
+function exitVizOnEsc(e) { if(e.key === 'Escape') toggleVisualizerMode(); }
+
+// ─── UNIFIED PANEL HOVER REVEAL ───────────────────────────────────────────────
+(function() {
+  const topbar = document.getElementById('topbar');
+  const leftPanel = document.getElementById('leftPanel');
+  const triggerLeft = document.querySelector('.trigger-zone-left');
+  const triggerTop = document.querySelector('.trigger-zone-top');
+  
+  let hideTimer = null;
+  let isNear = false;
+
+  const showBoth = () => { 
+    topbar.classList.add('visible'); 
+    leftPanel.classList.add('visible');
+    if (isVisualizerMode) { 
+      topbar.classList.add('hover-reveal');
+      leftPanel.classList.add('hover-reveal');
     }
-
-    function renderPage() {
-      const shell = document.getElementById('pageShell');
-      const content = getPageContent(currentPage);
-      shell.innerHTML = content;
-    }
-
-    function getPageContent(page) {
-      const pages = {
-        home: `
-          <h1>Home</h1>
-          <p>Welcome to GN-Neon (Goober Network). Take a look at these cats.</p>
-          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin: 2rem 0;">
-            <img src="https://placekitten.com/300/300" alt="Cat 1" style="border-radius: 8px; border: 1px solid #0044ff;">
-            <img src="https://placekitten.com/300/300?image=1" alt="Cat 2" style="border-radius: 8px; border: 1px solid #0044ff;">
-          </div>
-        `,
-        tools: `
-          <h1>Tools</h1>
-          <p>Useful tools and utilities for creative projects.</p>
-          <div class="tools-layout">
-            <div class="tool-card">
-              <h3>IDE</h3>
-              <p>Integrated Development Environment for coding</p>
-              <button onclick="alert('IDE Tool')">Open IDE</button>
-            </div>
-            <div class="tool-card">
-              <h3>Canvas</h3>
-              <p>Digital canvas for drawing and painting</p>
-              <button onclick="alert('Canvas Tool')">Open Canvas</button>
-            </div>
-            <div class="tool-card">
-              <h3>AI Chatbot</h3>
-              <p>Conversational AI assistant</p>
-              <button onclick="alert('AI Chatbot')">Open Chatbot</button>
-            </div>
-          </div>
-        `,
-        games: `
-          <h1>Games</h1>
-          <p>Fun games to play and enjoy.</p>
-          <div class="games-layout">
-            <div class="game-card" onclick="alert('Starting Snake Game')">
-              <h3>🐍 Snake</h3>
-              <p>Classic snake game</p>
-            </div>
-            <div class="game-card" onclick="alert('Starting Pong Game')">
-              <h3>🎮 Pong</h3>
-              <p>Retro pong game</p>
-            </div>
-            <div class="game-card" onclick="alert('Starting Flappy Bird')">
-              <h3>🐦 Flappy Bird</h3>
-              <p>Flappy bird clone</p>
-            </div>
-            <div class="game-card" onclick="alert('Starting Breakout')">
-              <h3>🧱 Breakout</h3>
-              <p>Brick breaker game</p>
-            </div>
-          </div>
-        `,
-        creations: `
-          <h1>Creations</h1>
-          <p>Creative projects and artwork.</p>
-          <div class="creations-layout">
-            <div class="creation-card">
-              <img src="https://placekitten.com/300/200" alt="Creation 1">
-              <h3>Neon Nights</h3>
-              <p>A digital art piece inspired by cyberpunk aesthetics</p>
-            </div>
-            <div class="creation-card">
-              <img src="https://placekitten.com/300/200?image=2" alt="Creation 2">
-              <h3>Digital Dreams</h3>
-              <p>Surreal digital artwork</p>
-            </div>
-            <div class="creation-card">
-              <img src="https://placekitten.com/300/200?image=3" alt="Creation 3">
-              <h3>Tech Fusion</h3>
-              <p>Blend of technology and art</p>
-            </div>
-          </div>
-        `,
-        about: `
-          <h1>About</h1>
-          <p>GN-Neon is a creative platform dedicated to digital art, gaming, and interactive experiences.</p>
-          <div class="sideBox">
-            <h3>Our Mission</h3>
-            <p>To provide a space for creative expression and digital innovation.</p>
-          </div>
-          <div class="sideBox">
-            <h3>Features</h3>
-            <ul>
-              <li>Interactive tools and utilities</li>
-              <li>Gaming experiences</li>
-              <li>Creative showcases</li>
-              <li>Community engagement</li>
-            </ul>
-          </div>
-        `
-      };
-      return pages[page] || pages.home;
-    }
-
-    function toggleVisualizerMode() {
-      isVisualizerMode = !isVisualizerMode;
-      const main = document.getElementById('mainContent');
-      const top = document.getElementById('topbar');
-      const left = document.getElementById('leftPanel');
-      const logo = document.getElementById('logoConnector');
-      const tag = document.getElementById('vTag');
-      const btn = document.getElementById('vizModeBtn');
-
-      if (isVisualizerMode) {
-        main.classList.add('ui-hidden');
-        top.classList.add('ui-hidden');
-        left.classList.add('ui-hidden');
-        logo.style.opacity = '0';
-        logo.style.pointerEvents = 'none';
-        tag.classList.add('ui-hidden');
-        btn.innerText = "Exit Mode";
-        document.addEventListener('keydown', exitVizOnEsc);
-      } else {
-        main.classList.remove('ui-hidden');
-        top.classList.remove('ui-hidden');
-        left.classList.remove('ui-hidden');
-        logo.style.opacity = '';
-        logo.style.pointerEvents = '';
-        tag.classList.remove('ui-hidden');
-        btn.innerText = "Visualizer";
-        top.classList.remove('hover-reveal');
-        left.classList.remove('hover-reveal');
-        document.removeEventListener('keydown', exitVizOnEsc);
+    clearTimeout(hideTimer); 
+  };
+  
+  const hideBoth = () => { 
+    if(!isNear) {
+      topbar.classList.remove('visible'); 
+      leftPanel.classList.remove('visible');
+      if (isVisualizerMode) { 
+        topbar.classList.remove('hover-reveal');
+        leftPanel.classList.remove('hover-reveal');
       }
     }
-    function exitVizOnEsc(e) { if(e.key === 'Escape') toggleVisualizerMode(); }
+  };
 
-    // ─── UNIFIED PANEL HOVER REVEAL ───────────────────────────────────────────────
-    (function() {
-      const topbar = document.getElementById('topbar');
-      const leftPanel = document.getElementById('leftPanel');
-      const logoConnector = document.getElementById('logoConnector');
-      const logoTriTopRight = document.getElementById('logoTriTopRight');
-      const logoTriBottomLeft = document.getElementById('logoTriBottomLeft');
-      const navTriTopRight = document.getElementById('navTriTopRight');
-      const musicTriTopLeft = document.getElementById('musicTriTopLeft');
-      const triggerLeft = document.querySelector('.trigger-zone-left');
-      const triggerTop = document.querySelector('.trigger-zone-top');
-      
-      let hideTimer = null;
-      let isNear = false;
-
-      const showBoth = () => { 
-        topbar.classList.add('visible'); 
-        leftPanel.classList.add('visible');
-        logoConnector.classList.add('visible');
-        logoTriTopRight.classList.add('visible');
-        logoTriBottomLeft.classList.add('visible');
-        navTriTopRight.classList.add('visible');
-        musicTriTopLeft.classList.add('visible');
-        if (isVisualizerMode) { 
-          topbar.classList.add('hover-reveal');
-          leftPanel.classList.add('hover-reveal');
-        }
+  // Trigger zones
+  triggerLeft.addEventListener('mouseenter', showBoth);
+  triggerTop.addEventListener('mouseenter', showBoth);
+  
+  // Panel hover
+  topbar.addEventListener('mouseenter', showBoth);
+  leftPanel.addEventListener('mouseenter', showBoth);
+  
+  // Mouse move tracking
+  document.addEventListener('mousemove', (e) => {
+    if (e.clientX < 8 || e.clientY < 8) { isNear = true; showBoth(); } 
+    else { 
+      isNear = false; 
+      if(!topbar.matches(':hover') && !leftPanel.matches(':hover')) { 
         clearTimeout(hideTimer); 
-      };
-      
-      const hideBoth = () => { 
-        if(!isNear) {
-          topbar.classList.remove('visible'); 
-          leftPanel.classList.remove('visible');
-          logoConnector.classList.remove('visible');
-          logoTriTopRight.classList.remove('visible');
-          logoTriBottomLeft.classList.remove('visible');
-          navTriTopRight.classList.remove('visible');
-          musicTriTopLeft.classList.remove('visible');
-          if (isVisualizerMode) { 
-            topbar.classList.remove('hover-reveal');
-            leftPanel.classList.remove('hover-reveal');
-          }
-        }
-      };
-
-      // Trigger zones
-      triggerLeft.addEventListener('mouseenter', showBoth);
-      triggerTop.addEventListener('mouseenter', showBoth);
-      
-      // Panel hover
-      topbar.addEventListener('mouseenter', showBoth);
-      leftPanel.addEventListener('mouseenter', showBoth);
-      
-      // Mouse move tracking
-      document.addEventListener('mousemove', (e) => {
-        if (e.clientX < 8 || e.clientY < 8) { isNear = true; showBoth(); } 
-        else { 
-          isNear = false; 
-          if(!topbar.matches(':hover') && !leftPanel.matches(':hover')) { 
-            clearTimeout(hideTimer); 
-            hideTimer = setTimeout(hideBoth, 500); 
-          } 
-        }
-      });
-      
-      // Hide on leave
-      topbar.addEventListener('mouseleave', () => {
-        if(!leftPanel.matches(':hover')) {
-          clearTimeout(hideTimer);
-          hideTimer = setTimeout(hideBoth, 500);
-        }
-      });
-      leftPanel.addEventListener('mouseleave', () => {
-        if(!topbar.matches(':hover')) {
-          clearTimeout(hideTimer);
-          hideTimer = setTimeout(hideBoth, 500);
-        }
-      });
-    })();
-
-    // ─── MUSIC PLAYER ─────────────────────────────────────────────────────────────
-    function loadTrack(index) {
-      const track = musicPlaylist[index];
-      const audio = document.getElementById('bgMusic');
-      audio.src = track.url;
-      document.getElementById('mcTitle').innerText = track.title;
-      document.getElementById('mcArtist').innerText = track.artist;
-      audio.play();
-      updatePlayPauseBtn();
+        hideTimer = setTimeout(hideBoth, 500); 
+      } 
     }
+  });
+  
+  // Hide on leave
+  topbar.addEventListener('mouseleave', () => { if(!isNear) hideTimer = setTimeout(hideBoth, 500); });
+  leftPanel.addEventListener('mouseleave', () => { if(!isNear) hideTimer = setTimeout(hideBoth, 500); });
+  triggerLeft.addEventListener('mouseleave', () => { if(!isNear) hideTimer = setTimeout(hideBoth, 500); });
+  triggerTop.addEventListener('mouseleave', () => { if(!isNear) hideTimer = setTimeout(hideBoth, 500); });
+  
+  hideTimer = setTimeout(hideBoth, 1500);
+})();
 
-    function musicPlayPause() {
-      const audio = document.getElementById('bgMusic');
-      if (audio.paused) {
-        audio.play();
-      } else {
-        audio.pause();
+// ─── VISUALIZER DRAW ─────────────────────────────────────────────────────────
+(function() {
+  const canvas = document.getElementById('visualizerCanvas'), ctx = canvas.getContext('2d');
+  const resize = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; };
+  resize(); window.addEventListener('resize', resize);
+
+  function draw() {
+    requestAnimationFrame(draw);
+    const W = canvas.width, H = canvas.height;
+    ctx.clearRect(0, 0, W, H);
+    if (!audioContextReady || !analyser) { drawIdle(ctx, W, H); return; }
+    
+    const bufferLength = analyser.frequencyBinCount, dataArray = new Uint8Array(bufferLength);
+    analyser.getByteFrequencyData(dataArray);
+    
+    const barCount = 120, gap = 2, barW = (W - gap * (barCount - 1)) / barCount;
+    const maxHeight = H * 0.45;
+    
+    for (let i = 0; i < barCount; i++) {
+      const rawVal = dataArray[i];
+      let intensity = rawVal / 255;
+      intensity = Math.pow(intensity, 1.5);
+      
+      const barH = intensity * maxHeight;
+      const x = i * (barW + gap);
+      const y = H - barH;
+      const opacity = 0.5 + (intensity * 0.5);
+      
+      ctx.fillStyle = `rgba(0, 0, 255, ${opacity})`;
+      ctx.fillRect(x, y, barW, barH);
+    }
+  }
+  
+  function drawIdle(ctx, W, H) {
+    const barCount = 120, gap = 2, barW = (W - gap * (barCount - 1)) / barCount;
+    for (let i = 0; i < barCount; i++) {
+      ctx.fillStyle = 'rgba(0, 0, 255, 0.2)';
+      ctx.fillRect(i * (barW + gap), H - 2, barW, 2);
+    }
+  }
+  draw();
+})();
+
+// ─── PAGES DATA ──────────────────────────────────────────────────────────────
+const pages = {
+  home: `
+    <section class="home-grid">
+      <article class="panel hero-panel">
+        <h2>Home</h2>
+        <p class="lead">Welcome to GN-Neon (Goober Network). Take a look at these cats.</p>
+        <div class="image-row">
+          <figure class="image-card">
+            <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/sili2.jpg" alt="Cat image">
+            <span>sili2.jpg</span>
+          </figure>
+          <figure class="image-card">
+            <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/sili3.jpg" alt="Cat image">
+            <span>sili3.jpg</span>
+          </figure>
+        </div>
+      </article>
+
+      <aside class="panel patch-panel">
+        <div class="version-chip">Latest overhaul · v0.52</div>
+        <h3>Patch Notes</h3>
+        <ul class="patch-list">
+          <li>Renamed to <strong>GN-Neon</strong>.</li>
+          <li>New <strong>Tools</strong> section with IDE, Canvas, and AI Chatbot.</li>
+          <li>Added <strong>Creations</strong> section.</li>
+          <li>Refined visualizer contrast and deep blue styling.</li>
+        </ul>
+      </aside>
+    </section>
+  `,
+  tools: `
+    <section class="panel games-panel">
+      <h2>Tools</h2>
+      <div class="games-menu" id="toolsMenu">
+        <button onclick="showTool('calc')">Calculators</button>
+        <button onclick="showTool('ide')">HTML IDE</button>
+        <button onclick="showTool('chat')">AI Chatbot</button>
+        <button onclick="showTool('canvas')">Painting Canvas</button>
+        <button onclick="showTool('ciphers')">Ciphers</button>
+      </div>
+      <div id="toolArea"></div>
+    </section>
+  `,
+  games: `
+    <section class="panel games-panel">
+      <h2>Games</h2>
+      <div class="games-menu" id="gamesMenu">
+        <button onclick="showScratchGames()">Scratch Games</button>
+        <button onclick="showEmulators()">Emulators</button>
+        <button onclick="showTool('guess')">Number Guessing Game</button>
+      </div>
+      <div id="gamesContent"></div>
+    </section>
+  `,
+  creations: `
+    <section class="panel games-panel">
+      <h2>Creations</h2>
+      <div class="games-menu" id="creationsMenu">
+        <button onclick="showCreation('code')">Code</button>
+        <button onclick="showCreation('videos')">Map Videos</button>
+        <button onclick="showCreation('images')">Map Images</button>
+      </div>
+      <div id="creationArea"></div>
+    </section>
+  `,
+  about: `
+    <section class="panel about-panel">
+      <h2>About</h2>
+      <p class="section-copy">This is GN-Neon. The GN stands for Goober Network. I made this site to bypass lightspeed filter. Why? Because I can.<br /><br />I (Neon64) made this site to provide games, tools, and unblocked content for everyone.</p>
+    </section>
+  `
+};
+
+function load(page) {
+  const main = document.getElementById('mainContent');
+  if (page !== 'home' && page !== 'games') {
+    main.classList.add('wide-shell');
+  } else {
+    main.classList.remove('wide-shell');
+  }
+  document.getElementById("content").innerHTML = pages[page];
+  if (page === 'games') {
+    setTimeout(() => {
+      const gamesMenu = document.querySelector('.games-menu');
+      if (gamesMenu) gamesMenu.style.display = 'block';
+    }, 0);
+  }
+}
+
+function enterRun(e, fn) {
+  if (e.key === "Enter") fn();
+}
+
+function showTool(type) {
+  const area = document.getElementById("toolArea"), toolsMenu = document.getElementById("toolsMenu");
+  if (toolsMenu) toolsMenu.style.display = 'none';
+  if (type === 'calc') {
+    area.innerHTML = `<button class="back-button" onclick="load('tools')">← Back to Tools</button><h3>Calculators</h3><div class="games-menu"><button onclick="showCalc('simple')">Simple</button><button onclick="showCalc('volume')">Volume</button><button onclick="showCalc('graph')">Graph</button></div><div id="calcArea"></div>`;
+  } else if (type === 'ide') {
+    area.innerHTML = `<button class="back-button" onclick="load('tools')">← Back to Tools</button><h3>HTML IDE</h3><div id="ideContainer"><textarea id="ideInput" placeholder="Write HTML/CSS/JS here..." oninput="runIDE()"></textarea><iframe id="ideOutput"></iframe></div>`;
+  } else if (type === 'chat') {
+    area.innerHTML = `<button class="back-button" onclick="load('tools')">← Back to Tools</button><h3>AI Chatbot</h3><div id="chatContainer"><div id="chatLog"></div><div class="chat-input-row"><input id="chatInput" placeholder="Ask something..." onkeydown="if(event.key==='Enter')sendChat()"><button onclick="sendChat()">Send</button></div></div>`;
+  } else if (type === 'canvas') {
+    area.innerHTML = `<button class="back-button" onclick="load('tools')">← Back to Tools</button><h3>Painting Canvas</h3><canvas id="paintingCanvas" width="800" height="500"></canvas><div style="text-align:center; margin-top:1rem;"><input type="color" id="brushColor" value="#0000ff"><input type="range" id="brushSize" min="1" max="50" value="5"><button onclick="clearCanvas()">Clear</button></div>`;
+    initCanvas();
+  } else if (type === 'ciphers') {
+    area.innerHTML = `<button class="back-button" onclick="load('tools')">← Back to Tools</button><h3>Ciphers</h3><div class="games-menu"><button onclick="showCipher('caesar')">Caesar</button><button onclick="showCipher('atbash')">Atbash</button></div><div id="cipherArea"></div>`;
+  } else if (type === 'guess') {
+    area.innerHTML = `<button class="back-button" onclick="load('games')">← Back to Games</button><h3>Number Guessing</h3><p>Guess a number between 1 and 100:</p><input id="guessInput" type="number"><button onclick="checkGuess()">Guess</button><p id="guessMsg"></p>`;
+    window.secretNum = Math.floor(Math.random() * 100) + 1;
+  }
+}
+
+function showCalc(type) {
+  const c = document.getElementById("calcArea");
+  if (type === "simple") {
+    c.innerHTML = `<h3>Simple Calculator</h3><input id="simpleInput" placeholder="2+2*3" onkeydown="enterRun(event, calcSimple)"><button onclick="calcSimple()">Calc</button><p id="simpleOut"></p>`;
+  } else if (type === "volume") {
+    c.innerHTML = `<h3>Volume Calculator</h3>Cube (Side): <input id="cubeSide" onkeydown="enterRun(event, volCube)"><button onclick="volCube()">Calc</button><p id="cubeOut"></p>Sphere (Radius): <input id="sphereR" onkeydown="enterRun(event, volSphere)"><button onclick="volSphere()">Calc</button><p id="sphereOut"></p>Rectangular Prism (L, W, H): <input id="recL" placeholder="Length" onkeydown="enterRun(event, volRect)"><input id="recW" placeholder="Width" onkeydown="enterRun(event, volRect)"><input id="recH" placeholder="Height" onkeydown="enterRun(event, volRect)"><button onclick="volRect()">Calc</button><p id="rectOut"></p>Cylinder (R, H): <input id="cylR" placeholder="Radius" onkeydown="enterRun(event, volCyl)"><input id="cylH" placeholder="Height" onkeydown="enterRun(event, volCyl)"><button onclick="volCyl()">Calc</button><p id="cylOut"></p>Pyramid (Base, Height): <input id="pyrB" placeholder="Base Area" onkeydown="enterRun(event, volPyr)"><input id="pyrH" placeholder="Height" onkeydown="enterRun(event, volPyr)"><button onclick="volPyr()">Calc</button><p id="pyrOut"></p>`;
+  } else if (type === "graph") {
+    c.innerHTML = `<h3>Graph Calculator</h3>X: <input id="xmin" value="-10"> to <input id="xmax" value="10"><br>Y: <input id="ymin" value="-10"> to <input id="ymax" value="10"><br><br>y=<input id="eq1" onkeydown="enterRun(event, drawGraph)"><br>y=<input id="eq2" onkeydown="enterRun(event, drawGraph)"><br>y=<input id="eq3" onkeydown="enterRun(event, drawGraph)"><br>y=<input id="eq4" onkeydown="enterRun(event, drawGraph)"><br>y=<input id="eq5" onkeydown="enterRun(event, drawGraph)"><br><br><button onclick="drawGraph()">Graph</button><br><br><div class="canvas-wrap"><canvas id="grid" width="400" height="400"></canvas><div id="axesLabels"></div></div>`;
+  }
+}
+
+function calcSimple() { try { simpleOut.innerText = eval(simpleInput.value); } catch { simpleOut.innerText = "Error"; } }
+function volCube() { const v = parseFloat(cubeSide.value); cubeOut.innerText = !isNaN(v) ? v ** 3 : "Invalid"; }
+function volSphere() { const v = parseFloat(sphereR.value); sphereOut.innerText = !isNaN(v) ? (4 / 3) * Math.PI * v ** 3 : "Invalid"; }
+function volRect() { const l = parseFloat(recL.value), w = parseFloat(recW.value), h = parseFloat(recH.value); rectOut.innerText = !isNaN(l) && !isNaN(w) && !isNaN(h) ? l * w * h : "Invalid"; }
+function volCyl() { const r = parseFloat(cylR.value), h = parseFloat(cylH.value); cylOut.innerText = !isNaN(r) && !isNaN(h) ? Math.PI * r * r * h : "Invalid"; }
+function volPyr() { const b = parseFloat(pyrB.value), h = parseFloat(pyrH.value); pyrOut.innerText = !isNaN(b) && !isNaN(h) ? (b * h) / 3 : "Invalid"; }
+
+function drawGraph() {
+  const canvas = document.getElementById("grid"); if (!canvas) return;
+  const ctx = canvas.getContext("2d"); ctx.fillStyle = "black"; ctx.fillRect(0, 0, 400, 400);
+  const xminVal = parseFloat(xmin.value), xmaxVal = parseFloat(xmax.value), yminVal = parseFloat(ymin.value), ymaxVal = parseFloat(ymax.value), width = 400, height = 400;
+  ctx.strokeStyle = "#333"; ctx.lineWidth = 1;
+  for (let i = 0; i <= 10; i++) { const x = i * (width / 10), y = i * (height / 10); ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, height); ctx.stroke(); ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(width, y); ctx.stroke(); }
+  ctx.strokeStyle = "white"; ctx.lineWidth = 2;
+  const xZero = (-xminVal / (xmaxVal - xminVal)) * width, yZero = (ymaxVal / (ymaxVal - yminVal)) * height;
+  ctx.beginPath(); ctx.moveTo(xZero, 0); ctx.lineTo(xZero, height); ctx.stroke(); ctx.beginPath(); ctx.moveTo(0, yZero); ctx.lineTo(width, yZero); ctx.stroke();
+  ctx.fillStyle = "white"; ctx.font = "10px Arial";
+  for (let i = 0; i <= 10; i++) { const xVal = xminVal + (i / 10) * (xmaxVal - xminVal), yVal = yminVal + (i / 10) * (ymaxVal - yminVal), px = i * (width / 10), py = height - i * (height / 10); ctx.fillText(xVal.toFixed(1), px, yZero + 10); ctx.fillText(yVal.toFixed(1), xZero + 5, py); }
+  const eqs = [eq1.value, eq2.value, eq3.value, eq4.value, eq5.value], colors = ["red", "cyan", "lime", "yellow", "orange"];
+  let resultsHTML = "<h3>Results</h3>"; const functions = [];
+  eqs.forEach((expr, i) => {
+    if (!expr) return; expr = expr.replace(/(\d)x/g, "$1*x");
+    let fn; try { fn = (x) => eval(expr.replace(/x/g, "(" + x + ")")); functions.push({ fn, color: colors[i], expr }); } catch { return; }
+    ctx.strokeStyle = colors[i]; ctx.lineWidth = 2; ctx.beginPath();
+    let first = true;
+    for (let px = 0; px <= width; px++) { const x = xminVal + (px / width) * (xmaxVal - xminVal); let y; try { y = fn(x); } catch { continue; } const py = ((ymaxVal - y) / (ymaxVal - yminVal)) * height; if (py >= 0 && py <= height) { if (first) { ctx.moveTo(px, py); first = false; } else { ctx.lineTo(px, py); } } }
+    ctx.stroke();
+    try { const y0 = fn(0); resultsHTML += `<p style="color:${colors[i]}">y=${expr} → y(0) = ${y0.toFixed(2)}</p>`; } catch {}
+  });
+  for (let i = 0; i < functions.length; i++) {
+    for (let j = i + 1; j < functions.length; j++) {
+      for (let x = xminVal; x <= xmaxVal; x += 0.1) {
+        let y1, y2; try { y1 = functions[i].fn(x); y2 = functions[j].fn(x); } catch { continue; }
+        if (Math.abs(y1 - y2) < 0.1) { resultsHTML += `<p>Intersection ≈ (${x.toFixed(2)}, ${y1.toFixed(2)})</p>`; break; }
       }
-      updatePlayPauseBtn();
     }
+  }
+  let existing = document.getElementById("graphResults"); if (!existing) { const div = document.createElement("div"); div.id = "graphResults"; canvas.parentElement.appendChild(div); existing = div; } existing.innerHTML = resultsHTML;
+}
 
-    function updatePlayPauseBtn() {
-      const audio = document.getElementById('bgMusic');
-      const btn = document.getElementById('mcPlayPause');
-      btn.innerText = audio.paused ? '▶' : '⏸';
-    }
+const games = ["https://turbowarp.org/10128407/embed?addons=pause,fullscreen", "https://turbowarp.org/1143765424/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/1075310827/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/941803602/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/973637218/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/883776962/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/898492644/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/916303075/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/978483855/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/959847748/embed?addons=pause,fullscreen&fps=60"];
+const titles = ["Paper Minecraft (Not Made By Me)", "Sisyphean Escalator", "Gambling but Mid", "Laser Dodge", "Goober Dodger", "Neon's Hostile Road", "Mid Cookie Clicker", "Asteroid Assault", "Reel 'Em In", "Cats Hate Rats"];
+const controls = [`Modding Guide: ▶️ https://youtu.be/PexNsUvqD5w\n[1 to 9] - Select Item    [Click] - Place or Mine\n[WASD] - Move / Jump  [E] - Open/Close Inventory\n[E+hover] - Open / Close Chest, Crafting Table, Door\n[Space] - Drop single tile from a stack while dragging.\n[F] - Eat food       [N] - Label a sign or chest\n[Q] - Drop item      [P] - Pause / Unpause\n[T] - Talk / Command    [O] - Save your game\n[M] - Music / Sounds   [Shift] - Sprint`, `Type the letters shown fast enough or fall.\n\nNot case sensitive.`, `::At BlackJack::\nUse arrow keys to bet:\n\nLeft and Right set the bet to 0 and max\n\nUp and down will change the bet by 10, or if holding "." will change it by 500\n1\nEnter to place bet, and after will be the hit button.\n\nSpace to stand.\n\n::At Slots::\nS to Spin\n\nSame betting controls.`, `Use the mouse to dodge the lasers that get faster with time!\n\nPress the left mouse button to become invincible for three seconds with a 10 second cool down so use it wisely!`, `Use the mouse to dodge the goobers, and don't stay in the border too long.\n\nThat's really about it.`, `ASD to move.\nW for a 3-second long power-up of invincibility.\nSpace to Start/Restart on the game-over screen.\n\n1 and 2 control the arcade scan filter.\n3 and 4 control the arcade cabinet overlay.\n5 and 6 control the arcade music (on/off)\n\n(60 fps Is highly recommended)`, `It's Cookie Clicker, but worse.\n\nUse your mouse.`, `Left mouse button to fire a weak auxiliary laser that overheats quickly.\n\nSpace for Main powerful laser.\n\nW for a backup shield that lasts 10 seconds, but has limited uses.\n\nUse your mouse to aim the laser.`, `Use Left Mouse Button to fire the harpoon and try to get the best fish, and buy upgrades.\n \nBeware of the explosive mine, it takes $50 dollars to repair the harpoon and the explosion might scare a few good fish away.\n\n\nThis is still a work in progress and I plan on adding more things like power ups, multipliers, and maybe a high score system.\n\nF to show debug menu \nG to hide debug menu`, `goober.\n\nUse mouse 1 to hit the rats.\nuse F to turn off the yarn.\nUse G to turn them back on.\n`];
+const notes = [`*** Credits ***\nAll the graphics are taken from the Minecraft wiki page and have not been created by me. I have rescaled them and broken them up to make the game work, but that is it at present.\n\nORIGNAL PROJECT MADE BY GRIFFPATCH ON SCRATCH, NOT ME:\n\nCheck him out he does great stuf, https://scratch.mit.edu/users/griffpatch/`, `The game is based on this video by the way:\n\nhttps://youtu.be/2Gby1XQ4Z2M?feature=shared`, `Don't gamble in real life, also this technically is not correct, and if you do it quick enough you can easily break most of this.\n\nThe special codes are:\n\nL E O\n\nN F S M W\n`, `Not much to add, I could have done a better job with the randomization of everything, but I am not gonna be working on this any further.`, `<b>!!!VOLUME WARNING!!!</b>\n\nI made all of this in scratch.\n\nFor now there is a max of 15 goobers on screen at a time.\n`, `Added a normal and hard mode to the game, plus a secret Most Wanted mode.\n\nI made most of these sprites in scratch and the ships were made in Pixil Art\n\nlink to my Pixil Art profile here: https://www.pixilart.com/neon64makoto\n\nArcade cabinet overlay here:https://forums.launchbox-app.com/files/file/2726-generic-arcade-1080p-overlay/    (i used the 4th one)\n\nMost sounds were found here:\nhttps://pixabay.com/sound-effects/search/arcade/\nhttps://downloads.khinsider.com/game-soundtracks/album/five-nights-at-freddy-s-fnaf-2-sfx\n\nPlus this for hard mode music: https://www.youtube.com/watch?v=R6ZHn2XEbGk\n\nAnd this for <b>****MW****</b> mode:\nhttps://www.youtube.com/watch?v=kG5LF_QS1JU`, `I stole all the assets I obviously stole and made the assets I obviously made. Not much else.\n\nSecret code this time is:\n\nD R G`, `I made everything except for the crosshair which you can find here: https://nohat.cc/f/red-crosshair-png-transparent/m2i8N4N4K9Z5A0K9-201907232239.html\nAnd the asteroid is here: https://assets.website-files.com/62cc3ac38e15ba20d4ff98f5/62d908ddf4c208aa8b54b424_asteroid-8bit-picture.png\n\nEverything else was either made in scratch or made on my Pixil art profile\n\nLink to my Pixil art profile: https://www.pixilart.com/neon64makoto/gallery\n\n\n\n\ngoober.`, `Everything was pretty much made in scratch except for the harpoon and boat clip art. Also the fish are just a part of scratch's sprite library.`, `<b>!!!VOLUME WARNING!!!</b>`];
 
-    function musicNext() {
-      currentTrack = (currentTrack + 1) % musicPlaylist.length;
-      loadTrack(currentTrack);
-    }
+function showScratchGames() {
+  const content = document.getElementById('gamesContent'), gamesMenu = document.querySelector('.games-menu'); if (gamesMenu) gamesMenu.style.display = 'none';
+  content.innerHTML = `<button class="back-button" onclick="load('games')">← Back to Games Menu</button><div class="games-layout"><div class="sideBox"><h3>Controls</h3><div id="gameControls"></div></div><div class="centerBox"><iframe id="scratchFrame" allowfullscreen title="GN-Neon Scratch game viewer"></iframe><h3 id="gameTitle"></h3><div class="button-row" style="justify-content:center; margin-top:1rem;"><button onclick="prevGame()">◀</button><button onclick="nextGame()">▶</button></div></div><div class="sideBox"><h3>Notes / Credits</h3><div id="gameNotes"></div></div></div>`;
+  currentIndex = 0; updateGame();
+}
 
-    function musicPrev() {
-      currentTrack = (currentTrack - 1 + musicPlaylist.length) % musicPlaylist.length;
-      loadTrack(currentTrack);
-    }
+function showEmulators() {
+  const content = document.getElementById('gamesContent'), gamesMenu = document.querySelector('.games-menu'); if (gamesMenu) gamesMenu.style.display = 'none';
+  content.innerHTML = `<button class="back-button" onclick="load('games')">← Back to Games Menu</button><div class="games-menu" style="max-width: 400px; margin: 2rem auto;"><h3>Select Emulator</h3><button onclick="navigateTo('nes')">NES</button><button onclick="navigateTo('snes')">SNES</button><button onclick="navigateTo('genesis')">Genesis</button></div>`;
+}
 
-    function setVolume(value) {
-      currentVolume = value;
-      const audio = document.getElementById('bgMusic');
-      audio.volume = value / 100;
-      if (value > 0) isMuted = false;
-      updateMuteBtn();
-    }
+function navigateTo(emulator) {
+  const content = document.getElementById('gamesContent');
+  if (emulator === 'nes') {
+    content.innerHTML = `<button class="back-button" onclick="showEmulators()">← Back to Emulators</button><div style="width: 100%; max-width: 900px; margin: 2rem auto;"><h2 style="padding: 0 0 1rem 0;">NES Emulator</h2><div style="width:100%;height:500px;max-width:100%; background: #000; border-radius: 10px; overflow: hidden; border: 1px solid #333;"><div id="game"></div></div><script>window.EJS_player='#game';window.EJS_core='nes';window.EJS_gameName='cpu_dummy_reads';window.EJS_color='#0006ff';window.EJS_startOnLoaded=true;window.EJS_pathtodata='https://cdn.jsdelivr.net/gh/EmulatorJS/EmulatorJS@latest/data/';window.EJS_url='https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Roms/cpu_dummy_reads.nes';<\/script><script src="https://cdn.jsdelivr.net/gh/EmulatorJS/EmulatorJS@latest/data/loader.js"><\/script></div>`;
+  } else {
+    content.innerHTML = `<div class="wip-container"><h2>${emulator.toUpperCase()} Emulator</h2><p>Work in Progress</p><p style="color: #888; margin-top: 1rem;">This section is currently under development.</p><button class="back-button" onclick="showEmulators()">← Back to Emulators</button></div>`;
+  }
+}
 
-    function toggleMute() {
-      const audio = document.getElementById('bgMusic');
-      isMuted = !isMuted;
-      audio.muted = isMuted;
-      updateMuteBtn();
-    }
+function updateGame() {
+  const f = document.getElementById("scratchFrame"); if (!f) return;
+  f.src = games[currentIndex]; document.getElementById("gameTitle").innerText = titles[currentIndex];
+  document.getElementById("gameControls").innerHTML = controls[currentIndex] || "";
+  document.getElementById("gameNotes").innerHTML = notes[currentIndex] || "";
+}
 
-    function updateMuteBtn() {
-      const btn = document.getElementById('muteBtn');
-      btn.innerText = isMuted ? '🔇' : '🔊';
-    }
+function nextGame() { currentIndex = (currentIndex + 1) % games.length; updateGame(); }
+function prevGame() { currentIndex = (currentIndex - 1 + games.length) % games.length; updateGame(); }
 
-    function enterSite() {
-      document.getElementById('splashOverlay').style.display = 'none';
-      renderPage();
-      loadTrack(0);
-    }
-  </script>
+function showCipher(type) {
+  const area = document.getElementById("cipherArea");
+  area.innerHTML = `<h3>${type.toUpperCase()}</h3><textarea id="cipherIn" placeholder="Enter text..."></textarea><div><button onclick="runCipher('${type}', 'encode')">Encode</button><button onclick="runCipher('${type}', 'decode')">Decode</button></div><pre id="cipherOut"></pre>`;
+}
+function runCipher(type, mode) {
+  const input = document.getElementById('cipherIn').value;
+  let out = "";
+  if (type === 'caesar') {
+    const shift = mode === 'encode' ? 3 : -3;
+    out = input.replace(/[a-z]/gi, c => {
+      const code = c.charCodeAt(0);
+      const isUpper = code >= 65 && code <= 90;
+      const base = isUpper ? 65 : 97;
+      let shifted = (code - base + shift) % 26;
+      if (shifted < 0) shifted += 26;
+      return String.fromCharCode(base + shifted);
+    });
+  } else if (type === 'atbash') {
+    out = input.replace(/[a-z]/gi, c => String.fromCharCode((c <= "Z" ? 155 : 219) - c.charCodeAt(0)));
+  }
+  document.getElementById('cipherOut').innerText = out;
+}
+function runIDE() {
+  const out = document.getElementById('ideOutput').contentWindow.document;
+  out.open(); out.write(document.getElementById('ideInput').value); out.close();
+}
+function sendChat() {
+  const log = document.getElementById('chatLog'), inp = document.getElementById('chatInput');
+  if(!inp.value)return;
+  log.innerHTML += `<div class="chat-msg user-msg">${inp.value}</div>`;
+  const userVal = inp.value; inp.value='';
+  setTimeout(()=> {
+    log.innerHTML += `<div class="chat-msg bot-msg">AI demo response to: "${userVal}"</div>`;
+    log.scrollTop = log.scrollHeight;
+  }, 600);
+}
+
+function initCanvas() {
+  const cvs = document.getElementById('paintingCanvas'), ctx = cvs.getContext('2d');
+  let painting = false;
+  cvs.onmousedown = () => painting = true;
+  cvs.onmouseup = () => { painting = false; ctx.beginPath(); };
+  cvs.onmousemove = (e) => {
+    if(!painting) return;
+    ctx.lineWidth = document.getElementById('brushSize').value;
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = document.getElementById('brushColor').value;
+    const rect = cvs.getBoundingClientRect();
+    ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+  };
+}
+function clearCanvas() { paintingCanvas.getContext('2d').clearRect(0,0,800,500); }
+function showEmbed(url) {
+  const area = document.getElementById('embedArea');
+  area.style.display = 'block';
+  area.innerHTML = `<iframe src="${url}"></iframe>`;
+}
+function showCreation(type) {
+  const area = document.getElementById('creationArea'), creationsMenu = document.getElementById('creationsMenu');
+  if (creationsMenu) creationsMenu.style.display = 'none';
+  area.innerHTML = `<button class="back-button" onclick="load('creations')">← Back to Creations</button><h3>${type.toUpperCase()}</h3><p>Gallery for ${type} coming soon!</p>`;
+}
+function checkGuess() {
+  const v = parseInt(document.getElementById('guessInput').value);
+  const msg = document.getElementById('guessMsg');
+  if(v === window.secretNum) msg.innerText = "Correct!";
+  else msg.innerText = v < window.secretNum ? "Too low!" : "Too high!";
+}
+
+// ─── BOOT ─────────────────────────────────────────────────────────────────────
+function setVideoBackground(videoUrl) {
+  const video = document.createElement('video');
+  video.id = 'videoBg'; video.autoplay = true; video.loop = true; video.muted = true; video.src = videoUrl;
+  video.addEventListener('canplay', () => {
+    const splash = document.getElementById('splashOverlay');
+    splash.classList.add('ready');
+    document.getElementById('splashText').innerText = "!!!WARNING MUSIC WILL PLAY!!!";
+    document.getElementById('splashSubtext').innerText = "CLICK TO ENTER";
+  });
+  document.body.insertBefore(video, document.body.firstChild);
+  document.body.classList.add('video-bg');
+}
+
+load("home");
+setVideoBackground('https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/FlatlineLoop.mp4');
+initMusic();
+</script>
 </body>
 </html>
