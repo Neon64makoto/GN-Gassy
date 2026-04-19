@@ -13,8 +13,8 @@
       --border-strong: #444;
       --text: #fff;
       --muted: #b3b3b3;
-      --neon-blue: #ff0000;
-      --neon-blue-soft: rgba(255, 0, 0, 0.14);
+      --neon-blue: #0044ff;
+      --neon-blue-soft: rgba(0, 68, 255, 0.14);
       --shadow: 0 14px 32px rgba(0, 0, 0, 0.32);
       --panel-size: 140px;
     }
@@ -67,7 +67,7 @@
       font-size: 2rem;
       font-weight: bold;
       color: #fff;
-      text-shadow: 0 0 20px #0044ff;
+      text-shadow: 0 0 20px var(--neon-blue);
       letter-spacing: 4px;
       text-align: center;
       pointer-events: none;
@@ -148,7 +148,7 @@
       padding: 1.25rem 2rem;
       border: 1px solid transparent;
       border-radius: 4px;
-      background: #0900ad;
+      background: var(--neon-blue);
       color: white;
       cursor: pointer;
       transition: background 0.16s ease, border-color 0.16s ease, transform 0.16s ease;
@@ -193,7 +193,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 0 20px var(--neon-blue), inset 0 0 15px rgba(0, 68, 255, 0.2);
+      box-shadow: 0 0 20px var(--neon-blue), inset 0 0 15px var(--neon-blue-soft);
       transform: translate(-100%, -100%);
       transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.35s;
       opacity: 0;
@@ -271,14 +271,14 @@
       font-size: 0.95rem;
       margin: 0;
       background: transparent;
-      border: 1px solid rgba(0, 68, 255, 0.3);
+      border: 1px solid var(--neon-blue-soft);
       border-radius: 6px;
       color: #aac0ff;
       transition: all 0.15s;
     }
 
     .left-panel .nav button:hover {
-      background: rgba(0, 68, 255, 0.2);
+      background: var(--neon-blue-soft);
       border-color: var(--neon-blue);
       color: #fff;
       transform: translateX(3px);
@@ -424,7 +424,7 @@
       align-items: center;
       gap: 0.3rem;
       padding: 0.45rem 1rem 0.6rem;
-      border-top: 1px solid rgba(0, 68, 255, 0.25);
+      border-top: 1px solid var(--neon-blue-soft);
       margin-top: 0.4rem;
     }
 
@@ -458,7 +458,7 @@
       padding: 0.35rem 0.65rem;
       font-size: 1rem;
       background: transparent;
-      border: 1px solid rgba(68, 100, 255, 0.45);
+      border: 1px solid var(--neon-blue-soft);
       border-radius: 6px;
       color: #aac0ff;
       cursor: pointer;
@@ -467,14 +467,14 @@
     }
 
     .music-btn:hover {
-      background: rgba(0, 68, 255, 0.25);
+      background: var(--neon-blue-soft);
       transform: translateY(-1px);
       border-color: var(--neon-blue);
       color: #fff;
     }
 
     .music-btn.active-loop {
-      background: rgba(0, 68, 255, 0.35);
+      background: var(--neon-blue-soft);
       border-color: var(--neon-blue);
       color: #fff;
     }
@@ -540,7 +540,7 @@
       text-align: center;
       letter-spacing: 0.04em;
       font-size: 3rem;
-      color: blue;
+      color: var(--neon-blue);
     }
 
     #content {
@@ -550,7 +550,7 @@
     }
 
     .panel {
-      background: linear-gradient(180deg, rgba(0, 0, 0, 1), rgba(0, 0, 150, 0.5));
+      background: linear-gradient(180deg, rgba(0, 0, 0, 1), rgba(0, 68, 255, 0.15));
       border: 1px solid var(--border);
       border-radius: 14px;
       box-shadow: var(--shadow);
@@ -566,7 +566,7 @@
     }
 
     .games-panel {
-      background: linear-gradient(180deg, rgba(0, 0, 0, 1), rgba(0, 0, 150, 0.5));
+      background: linear-gradient(180deg, rgba(0, 0, 0, 1), rgba(0, 68, 255, 0.15));
       border: 1px solid var(--border);
       border-radius: 14px;
       box-shadow: var(--shadow);
@@ -650,9 +650,9 @@
       margin-bottom: 0.5rem;
       padding: 0.5rem 0.8rem;
       border-radius: 999px;
-      border: 1px solid rgba(0, 0, 225, 1);
-      background: rgba(0, 0, 150, 0.08);
-      color: var(--accent);
+      border: 1px solid var(--neon-blue);
+      background: var(--neon-blue-soft);
+      color: var(--neon-blue);
       font-size: 0.9rem;
     }
 
@@ -845,7 +845,7 @@
     #chatContainer { height: 400px; background: #0a0a0a; border: 1px solid #333; border-radius: 8px; display: flex; flex-direction: column; overflow: hidden; }
     #chatLog { flex: 1; overflow-y: auto; padding: 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
     .chat-msg { padding: 0.5rem 0.8rem; border-radius: 8px; max-width: 80%; }
-    .user-msg { align-self: flex-end; background: #0044ff; color: white; }
+    .user-msg { align-self: flex-end; background: var(--neon-blue); color: white; }
     .bot-msg { align-self: flex-start; background: #222; color: #7799ff; }
     .chat-input-row { display: flex; padding: 0.5rem; background: #111; border-top: 1px solid #333; }
     #chatInput { flex: 1; margin: 0; }
@@ -1053,7 +1053,7 @@
       <button onclick="load('games')">Games</button>
       <button onclick="load('creations')">Creations</button>
       <button onclick="load('about')">About</button>
-      <button onclick="toggleVisualizerMode()" id="vizModeBtn" style="border: 1px solid var(--neon-blue); background: rgba(0,68,255,0.1);">Visualizer</button>
+      <button onclick="toggleVisualizerMode()" id="vizModeBtn" style="border: 1px solid var(--neon-blue); background: var(--neon-blue-soft);">Visualizer</button>
     </nav>
   </div>
 
@@ -1475,7 +1475,7 @@ function showTool(type) {
   } else if (type === 'chat') {
     area.innerHTML = `<button class="back-button" onclick="load('tools')">← Back to Tools</button><h3>AI Chatbot</h3><div id="chatContainer"><div id="chatLog"></div><div class="chat-input-row"><input id="chatInput" placeholder="Ask something..." onkeydown="if(event.key==='Enter')sendChat()"><button onclick="sendChat()">Send</button></div></div>`;
   } else if (type === 'canvas') {
-    area.innerHTML = `<button class="back-button" onclick="load('tools')">← Back to Tools</button><h3>Painting Canvas</h3><canvas id="paintingCanvas" width="800" height="500"></canvas><div style="text-align:center; margin-top:1rem;"><input type="color" id="brushColor" value="#0000ff"><input type="range" id="brushSize" min="1" max="50" value="5"><button onclick="clearCanvas()">Clear</button></div>`;
+    area.innerHTML = `<button class="back-button" onclick="load('tools')">← Back to Tools</button><h3>Painting Canvas</h3><canvas id="paintingCanvas" width="800" height="500"></canvas><div style="text-align:center; margin-top:1rem;"><input type="color" id="brushColor" value="#0044ff"><input type="range" id="brushSize" min="1" max="50" value="5"><button onclick="clearCanvas()">Clear</button></div>`;
     initCanvas();
   } else if (type === 'ciphers') {
     area.innerHTML = `<button class="back-button" onclick="load('tools')">← Back to Tools</button><h3>Ciphers</h3><div class="games-menu"><button onclick="showCipher('caesar')">Caesar</button><button onclick="showCipher('atbash')">Atbash</button></div><div id="cipherArea"></div>`;
@@ -1555,7 +1555,7 @@ function showEmulators() {
 function navigateTo(emulator) {
   const content = document.getElementById('gamesContent');
   if (emulator === 'nes') {
-    content.innerHTML = `<button class="back-button" onclick="showEmulators()">← Back to Emulators</button><div style="width: 100%; max-width: 900px; margin: 2rem auto;"><h2 style="padding: 0 0 1rem 0;">NES Emulator</h2><div style="width:100%;height:500px;max-width:100%; background: #000; border-radius: 10px; overflow: hidden; border: 1px solid #333;"><div id="game"></div></div><script>window.EJS_player='#game';window.EJS_core='nes';window.EJS_gameName='cpu_dummy_reads';window.EJS_color='#0006ff';window.EJS_startOnLoaded=true;window.EJS_pathtodata='https://cdn.jsdelivr.net/gh/EmulatorJS/EmulatorJS@latest/data/';window.EJS_url='https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Roms/cpu_dummy_reads.nes';<\/script><script src="https://cdn.jsdelivr.net/gh/EmulatorJS/EmulatorJS@latest/data/loader.js"><\/script></div>`;
+    content.innerHTML = `<button class="back-button" onclick="showEmulators()">← Back to Emulators</button><div style="width: 100%; max-width: 900px; margin: 2rem auto;"><h2 style="padding: 0 0 1rem 0;">NES Emulator</h2><div style="width:100%;height:500px;max-width:100%; background: #000; border-radius: 10px; overflow: hidden; border: 1px solid #333;"><div id="game"></div></div><script>window.EJS_player='#game';window.EJS_core='nes';window.EJS_gameName='cpu_dummy_reads';window.EJS_color='#0044ff';window.EJS_startOnLoaded=true;window.EJS_pathtodata='https://cdn.jsdelivr.net/gh/EmulatorJS/EmulatorJS@latest/data/';window.EJS_url='https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Roms/cpu_dummy_reads.nes';<\/script><script src="https://cdn.jsdelivr.net/gh/EmulatorJS/EmulatorJS@latest/data/loader.js"><\/script></div>`;
   } else {
     content.innerHTML = `<div class="wip-container"><h2>${emulator.toUpperCase()} Emulator</h2><p>Work in Progress</p><p style="color: #888; margin-top: 1rem;">This section is currently under development.</p><button class="back-button" onclick="showEmulators()">← Back to Emulators</button></div>`;
   }
