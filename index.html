@@ -187,22 +187,18 @@
   width: var(--panel-size);
   height: var(--panel-size);
   z-index: 120;
-
-  background: rgba(17, 17, 17, 0.97);
+  background: rgba(17,17,17,0.97);
   border: 2px solid #0044ff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 
-  /* 🔥 DIAGONAL SHAPE */
-  clip-path: polygon(
-    0 0,
-    100% 0,
-    70% 100%,
-    0 100%
-  );
-
-  transform: translate(-100%, -100%) rotate(-10deg);
-  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transform: translate(-140px,-140px);
+  transition: transform 0.35s cubic-bezier(0.2,0.8,0.2,1);
 }
-
+.logo-connector.visible {
+  transform: translate(0,0);
+}
     .logo-connector.visible {
       opacity: 1;
       pointer-events: auto;
@@ -232,20 +228,30 @@
   height: calc(100vh - var(--panel-size));
   z-index: 110;
 
-  background: rgba(17, 17, 17, 0.97);
+  background: rgba(17,17,17,0.97);
   border-right: 2px solid #0044ff;
-  backdrop-filter: blur(10px);
 
-  /* 🔥 THIS CREATES THE ANGLE */
-  clip-path: polygon(
-    0 0,
-    100% 60px,
-    100% 100%,
-    0 100%
-  );
+  transform: translateX(calc(-1 * var(--panel-size)));
+  transition: transform 0.35s cubic-bezier(0.2,0.8,0.2,1);
+}
 
-  transform: translateX(-100%);
-  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+.left-panel.visible {
+  transform: translateX(0);
+}
+
+/* triangle connector */
+.left-panel::before {
+  content: "";
+  position: absolute;
+  top: -60px;
+  right: 0;
+  width: 60px;
+  height: 60px;
+  background: rgba(17,17,17,0.97);
+  border-top: 2px solid #0044ff;
+  border-right: 2px solid #0044ff;
+  transform: skewY(40deg);
+  transform-origin: bottom right;
 }
 
     .left-panel.visible {
@@ -303,20 +309,30 @@
   height: var(--panel-size);
   z-index: 110;
 
-  background: rgba(17, 17, 17, 0.97);
+  background: rgba(17,17,17,0.97);
   border-bottom: 2px solid #0044ff;
-  backdrop-filter: blur(10px);
 
-  /* 🔥 ANGLED LEFT EDGE */
-  clip-path: polygon(
-    60px 0,
-    100% 0,
-    100% 100%,
-    0 100%
-  );
+  transform: translateY(calc(-1 * var(--panel-size)));
+  transition: transform 0.35s cubic-bezier(0.2,0.8,0.2,1);
+}
 
-  transform: translateY(-100%);
-  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+.topbar.visible {
+  transform: translateY(0);
+}
+
+/* triangle connector */
+.topbar::before {
+  content: "";
+  position: absolute;
+  left: -60px;
+  bottom: 0;
+  width: 60px;
+  height: 60px;
+  background: rgba(17,17,17,0.97);
+  border-left: 2px solid #0044ff;
+  border-bottom: 2px solid #0044ff;
+  transform: skewX(40deg);
+  transform-origin: bottom right;
 }
 
     .topbar.visible {
@@ -1340,6 +1356,7 @@ function exitVizOnEsc(e) { if(e.key === 'Escape') toggleVisualizerMode(); }
     if (isVisualizerMode) { 
       topbar.classList.add('hover-reveal');
       leftPanel.classList.add('hover-reveal');
+      document.getElementById('logoConnector').classList.add('visible');
     }
     clearTimeout(hideTimer); 
   };
@@ -1353,6 +1370,7 @@ function exitVizOnEsc(e) { if(e.key === 'Escape') toggleVisualizerMode(); }
       if (isVisualizerMode) { 
         topbar.classList.remove('hover-reveal');
         leftPanel.classList.remove('hover-reveal');
+        document.getElementById('logoConnector').classList.remove('visible');
       }
     }
   };
