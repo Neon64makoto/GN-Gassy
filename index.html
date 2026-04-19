@@ -661,13 +661,14 @@
     }
 
     #graphResults {
-      margin-top: 1.5rem;
+      margin-top: 0;
       padding: 1rem;
-      background: #0e0e0e;
+      background: #0a0a0a;
       border: 1px solid var(--border);
-      border-radius: 10px;
+      border-radius: 8px;
       text-align: left;
       font-size: 1.05rem;
+      width: 100%;
     }
 
     .version-tag {
@@ -710,6 +711,23 @@
     .bot-msg { align-self: flex-start; background: #222; color: #7799ff; }
     .chat-input-row { display: flex; padding: 0.5rem; background: #111; border-top: 1px solid #333; }
     #chatInput { flex: 1; margin: 0; }
+    .tools-side-by-side { display: flex; gap: 1.5rem; }
+    .tools-side-by-side > div { flex: 1; }
+    .tools-side-by-side textarea { width: 100%; height: 200px; margin: 0; }
+    .tools-side-by-side pre { width: 100%; height: 200px; margin: 0; padding: 1rem; background: #0a0a0a; border: 1px solid var(--border); border-radius: 8px; overflow-y: auto; color: #7799ff; white-space: pre-wrap; word-wrap: break-word; }
+    .cipher-buttons { display: flex; gap: 0.5rem; margin: 0 0 1rem 0; align-items: center; flex-wrap: nowrap; width: 100%; order: -1; }
+    .cipher-buttons button { margin: 0; padding: 0.5rem 0.75rem; font-size: 0.95rem; flex-shrink: 0; }
+    .graph-layout { display: flex; gap: 1.5rem; align-items: flex-start; }
+    .graph-layout .graph-inputs { flex: 0 0 auto; display: flex; flex-direction: column; gap: 0.75rem; }
+    .graph-layout .graph-inputs input { width: 100%; }
+    .graph-layout .graph-outputs { flex: 1; display: flex; flex-direction: column; gap: 0; }
+    .graph-layout .canvas-wrap { flex-shrink: 0; }
+    .graph-layout #grid { display: block; max-width: 100%; height: auto; }
+    #graphResults { margin-top: 0; padding: 1rem; background: #0a0a0a; border: 1px solid var(--border); border-radius: 8px; min-height: 50px; }
+    .ide-layout { display: flex; gap: 1.5rem; height: 350px; }
+    .ide-layout > div { flex: 1; display: flex; flex-direction: column; }
+    #ideInput { margin: 0; flex: 1; }
+    #ideOutput { margin: 0; flex: 1; }
 
     /* ─── RESPONSIVE ──────────────────────────────────────────────────── */
     @media (max-width: 1200px) {
@@ -905,7 +923,6 @@
         <button onclick="load('tools')">Tools</button>
         <button onclick="load('games')">Games</button>
         <button onclick="load('creations')">Creations</button>
-        <button onclick="load('unblocked')">Unblocked</button>
         <button onclick="load('about')">About</button>
         <button onclick="toggleVisualizerMode()" id="vizModeBtn" style="border: 1px solid #0044ff; background: rgba(0,0,255,0.1);">Visualizer</button>
       </nav>
@@ -940,7 +957,7 @@
   </main>
 
   <canvas id="visualizerCanvas"></canvas>
-  <div class="version-tag" id="vTag">v0.40</div>
+  <div class="version-tag" id="vTag">v0.46</div>
 
 <script>
 // ─── STATE ───────────────────────────────────────────────────────────────────
@@ -1150,12 +1167,12 @@ const pages = {
       </article>
 
       <aside class="panel patch-panel">
-        <div class="version-chip">Latest overhaul · v0.40</div>
+        <div class="version-chip">Latest overhaul · v0.46</div>
         <h3>Patch Notes</h3>
         <ul class="patch-list">
           <li>Renamed to <strong>GN-Neon</strong>.</li>
           <li>New <strong>Tools</strong> section with IDE, Canvas, and AI Chatbot.</li>
-          <li>Added <strong>Creations</strong> and <strong>Unblocked</strong> sections.</li>
+          <li>Added <strong>Creations</strong> section.</li>
           <li>Refined visualizer contrast and deep blue styling.</li>
         </ul>
       </aside>
@@ -1198,17 +1215,7 @@ const pages = {
       <div id="creationArea"></div>
     </section>
   `,
-  unblocked: `
-    <section class="panel">
-      <h2>Unblocked</h2>
-      <div class="button-row">
-        <button onclick="showEmbed('https://www.crazygames.com')">CrazyGames</button>
-        <button onclick="showEmbed('https://www.poki.com')">Poki</button>
-        <button onclick="showEmbed('https://www.youtube.com/embed')">YouTube</button>
-      </div>
-      <div id="embedArea" class="embed-container" style="display:none;"></div>
-    </section>
-  `,
+
   about: `
     <section class="panel about-panel">
       <h2>About</h2>
@@ -1236,13 +1243,15 @@ function showTool(type) {
   if (type === 'calc') {
     area.innerHTML = `<h3>Calculators</h3><div class="button-row"><button onclick="showCalc('simple')">Simple</button><button onclick="showCalc('volume')">Volume</button><button onclick="showCalc('graph')">Graph</button></div><div id="calcArea"></div>`;
   } else if (type === 'ide') {
-    area.innerHTML = `<h3>HTML IDE</h3><div id="ideContainer"><textarea id="ideInput" placeholder="Write HTML/CSS/JS here..." oninput="runIDE()"></textarea><iframe id="ideOutput"></iframe></div>`;
+    area.innerHTML = `<h3>HTML IDE</h3><div class="ide-layout"><div><h3 style="margin: 0 0 0.5rem 0; font-size: 1.1rem;">Input</h3><textarea id="ideInput" placeholder="Write HTML/CSS/JS here..." oninput="runIDE()"></textarea></div><div><h3 style="margin: 0 0 0.5rem 0; font-size: 1.1rem;">Output</h3><iframe id="ideOutput"></iframe></div></div>`;
   } else if (type === 'chat') {
     area.innerHTML = `<h3>AI Chatbot</h3><div id="chatContainer"><div id="chatLog"></div><div class="chat-input-row"><input id="chatInput" placeholder="Ask something..." onkeydown="if(event.key==='Enter')sendChat()"><button onclick="sendChat()">Send</button></div></div>`;
   } else if (type === 'canvas') {
     area.innerHTML = `<h3>Painting Canvas</h3><canvas id="paintingCanvas" width="800" height="500"></canvas><div style="text-align:center; margin-top:1rem;"><input type="color" id="brushColor" value="#0000ff"><input type="range" id="brushSize" min="1" max="50" value="5"><button onclick="clearCanvas()">Clear</button></div>`;
     initCanvas();
   } else if (type === 'search') {
+    area.innerHTML = `<h3>Search Engine</h3><div class="wip-container" style="padding: 2rem;"><p>Work in Progress</p></div>`;
+  } else if (type === 'search2') {
     area.innerHTML = `<h3>Search Engine</h3><div style="display:flex;gap:0.5rem;"><input id="searchInput" style="flex:1" placeholder="Search Google..."><button onclick="doSearch()">Search</button></div>`;
   } else if (type === 'ciphers') {
     area.innerHTML = `<h3>Ciphers</h3><div class="button-row"><button onclick="showCipher('caesar')">Caesar</button><button onclick="showCipher('atbash')">Atbash</button></div><div id="cipherArea"></div>`;
@@ -1260,10 +1269,11 @@ function showCalc(type) {
     c.innerHTML = `<h3>Simple Calculator</h3><input id="simpleInput" placeholder="2+2*3" onkeydown="enterRun(event, calcSimple)"><button onclick="calcSimple()">Calc</button><p id="simpleOut"></p>`;
   } else if (type === "volume") {
     c.innerHTML = `<h3>Volume Calculator</h3>Cube (Side): <input id="cubeSide" onkeydown="enterRun(event, volCube)"><button onclick="volCube()">Calc</button><p id="cubeOut"></p>Sphere (Radius): <input id="sphereR" onkeydown="enterRun(event, volSphere)"><button onclick="volSphere()">Calc</button><p id="sphereOut"></p>Rectangular Prism (L, W, H): <input id="recL" placeholder="Length" onkeydown="enterRun(event, volRect)"><input id="recW" placeholder="Width" onkeydown="enterRun(event, volRect)"><input id="recH" placeholder="Height" onkeydown="enterRun(event, volRect)"><button onclick="volRect()">Calc</button><p id="rectOut"></p>Cylinder (R, H): <input id="cylR" placeholder="Radius" onkeydown="enterRun(event, volCyl)"><input id="cylH" placeholder="Height" onkeydown="enterRun(event, volCyl)"><button onclick="volCyl()">Calc</button><p id="cylOut"></p>Pyramid (Base, Height): <input id="pyrB" placeholder="Base Area" onkeydown="enterRun(event, volPyr)"><input id="pyrH" placeholder="Height" onkeydown="enterRun(event, volPyr)"><button onclick="volPyr()">Calc</button><p id="pyrOut"></p>`;
-  } else if (type === "graph") {
-    c.innerHTML = `<h3>Graph Calculator</h3>X: <input id="xmin" value="-10"> to <input id="xmax" value="10"><br>Y: <input id="ymin" value="-10"> to <input id="ymax" value="10"><br><br>y=<input id="eq1" onkeydown="enterRun(event, drawGraph)"><br>y=<input id="eq2" onkeydown="enterRun(event, drawGraph)"><br>y=<input id="eq3" onkeydown="enterRun(event, drawGraph)"><br>y=<input id="eq4" onkeydown="enterRun(event, drawGraph)"><br>y=<input id="eq5" onkeydown="enterRun(event, drawGraph)"><br><br><button onclick="drawGraph()">Graph</button><br><br><div class="canvas-wrap"><canvas id="grid" width="400" height="400"></canvas><div id="axesLabels"></div></div>`;
+  } else if (type === 'graph') {
+    c.innerHTML = `<h3>Graph Calculator</h3><div class="graph-layout"><div class="graph-inputs"><div><label>X Min:</label><input id="xmin" value="-10" style="width:100%;"></div><div><label>X Max:</label><input id="xmax" value="10" style="width:100%;"></div><div><label>Y Min:</label><input id="ymin" value="-10" style="width:100%;"></div><div><label>Y Max:</label><input id="ymax" value="10" style="width:100%;"></div><div><label>Equation 1:</label><input id="eq1" placeholder="x^2" style="width:100%;"></div><div><label>Equation 2:</label><input id="eq2" placeholder="2*x+1" style="width:100%;"></div><div><label>Equation 3:</label><input id="eq3" placeholder="" style="width:100%;"></div><div><label>Equation 4:</label><input id="eq4" placeholder="" style="width:100%;"></div><div><label>Equation 5:</label><input id="eq5" placeholder="" style="width:100%;"></div><button onclick="drawGraph()" style="width:100%;">Draw</button></div><div class="graph-outputs"><div class="canvas-wrap"><canvas id="grid" width="400" height="400"></canvas></div><div id="graphResults"></div></div></div>`;
   }
 }
+
 // ─── ORIGINAL CALCULATOR LOGIC ────────────────────────────────────────────────
 function calcSimple() { try { simpleOut.innerText = eval(simpleInput.value); } catch { simpleOut.innerText = "Error"; } }
 function volCube() { const v = parseFloat(cubeSide.value); cubeOut.innerText = !isNaN(v) ? v ** 3 : "Invalid"; }
@@ -1344,13 +1354,17 @@ function prevGame() { currentIndex = (currentIndex - 1 + games.length) % games.l
 // ─── NEW TOOLS LOGIC ──────────────────────────────────────────────────────────
 function showCipher(type) {
   const area = document.getElementById("cipherArea");
-  area.innerHTML = `<h3>${type.toUpperCase()}</h3><textarea id="cipherIn" style="width:100%; height:100px; background:#111; color:white;" placeholder="Enter text..."></textarea><br><button onclick="runCipher('${type}')">Run</button><p id="cipherOut" style="background:#000; padding:1rem; border-radius:8px; white-space:pre-wrap; margin-top:1rem;"></p>`;
+  area.innerHTML = `<div class="tools-side-by-side"><div><h3 style="margin-top: 0;">Input</h3><textarea id="cipherIn" placeholder="Enter text..."></textarea></div><div><h3 style="margin-top: 0; margin-bottom: 0;">Output</h3><div class="cipher-buttons"><button onclick="runCipher('${type}', 'encode')">Encode</button><button onclick="runCipher('${type}', 'decode')">Decode</button></div><pre id="cipherOut"></pre></div></div>`;
 }
-function runCipher(type) {
+function runCipher(type, mode) {
   const input = document.getElementById('cipherIn').value;
   let out = "";
   if (type === 'caesar') {
-    out = input.replace(/[a-z]/gi, c => String.fromCharCode((c <= "Z" ? 90 : 122) >= (c = c.charCodeAt(0) + 3) ? c : c - 26));
+    if (mode === 'encode') {
+      out = input.replace(/[a-z]/gi, c => String.fromCharCode((c <= "Z" ? 90 : 122) >= (c = c.charCodeAt(0) + 3) ? c : c - 26));
+    } else {
+      out = input.replace(/[a-z]/gi, c => String.fromCharCode((c <= "Z" ? 65 : 97) <= (c = c.charCodeAt(0) - 3) ? c : c + 26));
+    }
   } else if (type === 'atbash') {
     out = input.replace(/[a-z]/gi, c => String.fromCharCode((c <= "Z" ? 155 : 219) - c.charCodeAt(0)));
   }
@@ -1364,63 +1378,41 @@ function sendChat() {
   const log = document.getElementById('chatLog'), inp = document.getElementById('chatInput');
   if(!inp.value)return;
   log.innerHTML += `<div class="chat-msg user-msg">${inp.value}</div>`;
-  const userVal = inp.value; inp.value='';
-  setTimeout(()=> {
-    log.innerHTML += `<div class="chat-msg bot-msg">AI demo response to: "${userVal}"</div>`;
-    log.scrollTop = log.scrollHeight;
-  }, 600);
+  setTimeout(()=>log.innerHTML += `<div class="chat-msg bot-msg">I'm a placeholder chatbot. Real AI coming soon!</div>`, 300);
+  inp.value = "";
+  log.scrollTop = log.scrollHeight;
 }
-function doSearch() { window.open('https://www.google.com/search?q=' + encodeURIComponent(document.getElementById('searchInput').value), '_blank'); }
 function initCanvas() {
-  const cvs = document.getElementById('paintingCanvas'), ctx = cvs.getContext('2d');
-  let painting = false;
-  cvs.onmousedown = () => painting = true;
-  cvs.onmouseup = () => { painting = false; ctx.beginPath(); };
-  cvs.onmousemove = (e) => {
-    if(!painting) return;
-    ctx.lineWidth = document.getElementById('brushSize').value;
-    ctx.lineCap = 'round';
-    ctx.strokeStyle = document.getElementById('brushColor').value;
-    const rect = cvs.getBoundingClientRect();
-    ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
-    ctx.stroke();
+  const canvas = document.getElementById('paintingCanvas'), ctx = canvas.getContext('2d');
+  let isDrawing = false;
+  canvas.addEventListener('mousedown', ()=>isDrawing=true);
+  canvas.addEventListener('mouseup', ()=>isDrawing=false);
+  canvas.addEventListener('mousemove', (e)=>{
+    if(!isDrawing)return;
+    const rect = canvas.getBoundingClientRect(), x = e.clientX - rect.left, y = e.clientY - rect.top;
+    ctx.fillStyle = document.getElementById('brushColor').value;
     ctx.beginPath();
-    ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
-  };
-}
-function clearCanvas() { paintingCanvas.getContext('2d').clearRect(0,0,800,500); }
-function showEmbed(url) {
-  const area = document.getElementById('embedArea');
-  area.style.display = 'block';
-  area.innerHTML = `<iframe src="${url}"></iframe>`;
-}
-function showCreation(type) {
-  document.getElementById('creationArea').innerHTML = `<h3>${type.toUpperCase()}</h3><p>Gallery for ${type} coming soon!</p>`;
-}
-function checkGuess() {
-  const v = parseInt(document.getElementById('guessInput').value);
-  const msg = document.getElementById('guessMsg');
-  if(v === window.secretNum) msg.innerText = "Correct!";
-  else msg.innerText = v < window.secretNum ? "Too low!" : "Too high!";
-}
-
-// ─── BOOT ─────────────────────────────────────────────────────────────────────
-function setVideoBackground(videoUrl) {
-  const video = document.createElement('video');
-  video.id = 'videoBg'; video.autoplay = true; video.loop = true; video.muted = true; video.src = videoUrl;
-  video.addEventListener('canplay', () => {
-    const splash = document.getElementById('splashOverlay');
-    splash.classList.add('ready');
-    document.getElementById('splashText').innerText = "!!!WARNING MUSIC WILL PLAY!!!";
-    document.getElementById('splashSubtext').innerText = "CLICK TO ENTER";
+    ctx.arc(x, y, document.getElementById('brushSize').value, 0, Math.PI*2);
+    ctx.fill();
   });
-  document.body.insertBefore(video, document.body.firstChild);
-  document.body.classList.add('video-bg');
+}
+function clearCanvas() { const canvas = document.getElementById('paintingCanvas'); canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height); }
+function checkGuess() { const guess = parseInt(guessInput.value); if(guess === window.secretNum) guessMsg.innerText = "Correct!"; else guessMsg.innerText = guess < window.secretNum ? "Too low!" : "Too high!"; }
+function showCreation(type) {
+  const area = document.getElementById("creationArea");
+  if (type === 'code') area.innerHTML = `<p>Code creations coming soon</p>`;
+  else if (type === 'videos') area.innerHTML = `<p>Map videos coming soon</p>`;
+  else if (type === 'images') area.innerHTML = `<p>Map images coming soon</p>`;
 }
 
-load("home");
-setVideoBackground('https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/FlatlineLoop.mp4');
-initMusic();
+// ─── INIT ────────────────────────────────────────────────────────────────────
+window.addEventListener('load', () => {
+  initMusic();
+  setTimeout(() => {
+    document.getElementById('splashOverlay').classList.add('ready');
+  }, 1000);
+  load('home');
+});
 </script>
 </body>
 </html>
