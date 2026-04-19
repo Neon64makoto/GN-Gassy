@@ -13,8 +13,10 @@
       --border-strong: #444;
       --text: #fff;
       --muted: #b3b3b3;
-      --neon-blue: ##ff0000;
-      --neon-blue-soft: rgba(255, 0, 0, 0.14);
+      --neon-blue: #0044ff;
+      --neon-blue-soft: rgba(0, 68, 255, 0.14);
+      --neon-blue-lighter: #7799ff;
+      --neon-blue-lighter2: #aac0ff;
       --shadow: 0 14px 32px rgba(0, 0, 0, 0.32);
       --panel-size: 140px;
     }
@@ -75,7 +77,7 @@
 
     #splashSubtext {
       margin-top: 1rem;
-      color: #7799ff;
+      color: var(--neon-blue-lighter);
       font-size: 1rem;
       pointer-events: none;
     }
@@ -100,17 +102,17 @@
     }
 
     ::-webkit-scrollbar-thumb {
-      background: #0600ff;
+      background: var(--neon-blue);
       border-radius: 6px;
     }
 
     ::-webkit-scrollbar-thumb:hover {
-      background: #0044ff;
+      background: var(--neon-blue);
     }
 
     /* Firefox scrollbar styling */
     * {
-      scrollbar-color: #0600ff #0a0a0a;
+      scrollbar-color: var(--neon-blue) #0a0a0a;
       scrollbar-width: thin;
     }
 
@@ -273,7 +275,7 @@
       background: transparent;
       border: 1px solid var(--neon-blue-soft);
       border-radius: 6px;
-      color: #aac0ff;
+      color: var(--neon-blue-lighter2);
       transition: all 0.15s;
     }
 
@@ -444,7 +446,7 @@
 
     .music-artist {
       font-size: 0.8rem;
-      color: #7799ff;
+      color: var(--neon-blue-lighter);
     }
 
     .music-btn-row {
@@ -460,7 +462,7 @@
       background: transparent;
       border: 1px solid var(--neon-blue-soft);
       border-radius: 6px;
-      color: #aac0ff;
+      color: var(--neon-blue-lighter2);
       cursor: pointer;
       transition: all 0.15s;
       min-width: unset;
@@ -488,7 +490,7 @@
 
     .music-time {
       font-size: 0.78rem;
-      color: #7799ff;
+      color: var(--neon-blue-lighter);
       white-space: nowrap;
       min-width: 38px;
       text-align: center;
@@ -846,7 +848,7 @@
     #chatLog { flex: 1; overflow-y: auto; padding: 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
     .chat-msg { padding: 0.5rem 0.8rem; border-radius: 8px; max-width: 80%; }
     .user-msg { align-self: flex-end; background: var(--neon-blue); color: white; }
-    .bot-msg { align-self: flex-start; background: #222; color: #7799ff; }
+    .bot-msg { align-self: flex-start; background: #222; color: var(--neon-blue-lighter); }
     .chat-input-row { display: flex; padding: 0.5rem; background: #111; border-top: 1px solid #333; }
     #chatInput { flex: 1; margin: 0; }
 
