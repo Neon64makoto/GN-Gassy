@@ -16,6 +16,7 @@
       --accent: #0006ff;
       --accent-soft: rgba(0, 0, 200, 0.14);
       --shadow: 0 14px 32px rgba(0, 0, 0, 0.32);
+      --panel-size: 140px;
     }
 
     * {
@@ -174,37 +175,64 @@
       color: #8b8b8b;
     }
 
-    /* ─── LAYOUT STRUCTURE ─────────────────────────────────────────────────────── */
-    :root {
-      --left-panel-w: 180px;
-      --top-panel-h: 130px;
-      --logo-connector-w: 60px;
-      --logo-connector-h: 60px;
+    /* ═══════════════════════════════════════════════════════════
+       UNIFIED DIAGONAL PANEL LAYOUT (Opera GX style)
+       ═══════════════════════════════════════════════════════════ */
+
+    /* ─── LOGO CONNECTOR (diagonal angle piece) ─────────────────────────────── */
+    .logo-connector {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: var(--panel-size);
+      height: var(--panel-size);
+      z-index: 120;
+      background: rgba(17, 17, 17, 0.97);
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 4px 4px 20px rgba(0, 6, 255, 0.35);
+      /* Diagonal cut at 45 degrees */
+      clip-path: polygon(0 0, 100% 0, 0 100%);
     }
 
-    /* ─── LEFT PANEL (NAV) ─────────────────────────────────────────────────────── */
+    .logo-connector span {
+      font-size: 0.55rem;
+      font-weight: bold;
+      color: #0600ff;
+      letter-spacing: 0.5px;
+      text-shadow: 0 0 10px rgba(0, 6, 255, 0.9);
+      text-align: center;
+      line-height: 1.1;
+      user-select: none;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    /* ─── LEFT PANEL (NAV) ─────────────────────────────────────────────────── */
     .left-panel {
       position: fixed;
       top: 0;
       left: 0;
-      width: var(--left-panel-w);
+      width: var(--panel-size);
       height: 100vh;
       z-index: 110;
       background: rgba(17, 17, 17, 0.97);
       border-right: 1px solid var(--border);
       backdrop-filter: blur(10px);
-      padding-top: var(--logo-connector-h);
+      padding-top: var(--panel-size);
       display: flex;
       flex-direction: column;
       gap: 0;
-      transform: translateX(calc(-1 * var(--left-panel-w)));
-      transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.4s;
+      transform: translateX(calc(-1 * var(--panel-size)));
+      transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.35s;
       opacity: 1;
       pointer-events: auto;
-    }
-
-    .left-panel.hidden {
-      transform: translateX(calc(-1 * var(--left-panel-w)));
     }
 
     .left-panel.visible {
@@ -251,13 +279,13 @@
       box-shadow: 0 0 12px rgba(0, 68, 255, 0.4);
     }
 
-    /* ─── TOP PANEL (MUSIC) ─────────────────────────────────────────────────────── */
+    /* ─── TOP PANEL (MUSIC) ─────────────────────────────────────────────────── */
     .topbar {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
-      height: var(--top-panel-h);
+      height: var(--panel-size);
       z-index: 110;
       background: rgba(17, 17, 17, 0.97);
       border-bottom: 1px solid var(--border);
@@ -267,15 +295,11 @@
       flex-direction: column;
       align-items: center;
       gap: 0;
-      padding-left: var(--logo-connector-w);
-      transform: translateY(calc(-1 * var(--top-panel-h)));
-      transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.4s;
+      padding-left: var(--panel-size);
+      transform: translateY(calc(-1 * var(--panel-size)));
+      transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.35s;
       opacity: 1;
       pointer-events: auto;
-    }
-
-    .topbar.hidden {
-      transform: translateY(calc(-1 * var(--top-panel-h)));
     }
 
     .topbar.visible {
@@ -314,42 +338,12 @@
       align-items: center;
     }
 
-    /* ─── LOGO CONNECTOR PIECE ─────────────────────────────────────────────────────── */
-    .logo-connector {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: var(--logo-connector-w);
-      height: var(--logo-connector-h);
-      z-index: 120;
-      background: rgba(17, 17, 17, 0.97);
-      border-right: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      backdrop-filter: blur(10px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      clip-path: polygon(0 0, 100% 0, 100% 85%, 85% 100%, 0 100%);
-      box-shadow: 2px 2px 12px rgba(0, 6, 255, 0.3);
-    }
-
-    .logo-connector span {
-      font-size: 0.55rem;
-      font-weight: bold;
-      color: #0600ff;
-      letter-spacing: 0.5px;
-      text-shadow: 0 0 8px rgba(0, 6, 255, 0.8);
-      text-align: center;
-      line-height: 1.1;
-      user-select: none;
-    }
-
-    /* ─── HOVER TRIGGER ZONES ─────────────────────────────────────────────────────── */
+    /* ─── HOVER TRIGGER ZONES ─────────────────────────────────────────────── */
     .trigger-zone-left {
       position: fixed;
       top: 0;
       left: 0;
-      width: 5px;
+      width: 6px;
       height: 100vh;
       z-index: 500;
     }
@@ -359,7 +353,7 @@
       top: 0;
       left: 0;
       right: 0;
-      height: 5px;
+      height: 6px;
       z-index: 500;
     }
 
@@ -367,10 +361,6 @@
       padding: 0.6rem 0.8rem;
       font-size: 1rem;
       min-width: 60px;
-    }
-
-    .topbar .nav {
-      display: none;
     }
 
     /* ─── STYLIZED VOLUME SLIDER ─────────────────────────────────────── */
@@ -904,7 +894,7 @@
       }
 
       .page-shell {
-        padding: 9.5rem 1rem 5rem;
+        padding: 2rem 1rem 5rem;
       }
 
       .site-title {
@@ -974,7 +964,7 @@
       }
 
       .page-shell {
-        padding: 9.5rem 0.75rem 5rem;
+        padding: 2rem 0.75rem 5rem;
       }
 
       .site-title {
@@ -1043,7 +1033,7 @@
   <div class="trigger-zone-left"></div>
   <div class="trigger-zone-top"></div>
 
-  <!-- Logo connector piece -->
+  <!-- Logo connector piece (diagonal) -->
   <div class="logo-connector" id="logoConnector">
     <span>GN<br>NEON</span>
   </div>
@@ -1266,38 +1256,64 @@ function toggleVisualizerMode() {
 }
 function exitVizOnEsc(e) { if(e.key === 'Escape') toggleVisualizerMode(); }
 
-// ─── PANEL HOVER REVEAL ───────────────────────────────────────────────────────
+// ─── UNIFIED PANEL HOVER REVEAL ───────────────────────────────────────────────
 (function() {
   const topbar = document.getElementById('topbar');
   const leftPanel = document.getElementById('leftPanel');
   const triggerLeft = document.querySelector('.trigger-zone-left');
   const triggerTop = document.querySelector('.trigger-zone-top');
   
-  let topTimer = null, leftTimer = null;
-  let topNear = false, leftNear = false;
+  let hideTimer = null;
+  let isNear = false;
 
-  const showTop = () => { topbar.classList.add('visible'); if (isVisualizerMode) topbar.classList.add('hover-reveal'); clearTimeout(topTimer); };
-  const hideTop = () => { if(!topNear) { topbar.classList.remove('visible'); if (isVisualizerMode) topbar.classList.remove('hover-reveal'); } };
-  const showLeft = () => { leftPanel.classList.add('visible'); if (isVisualizerMode) leftPanel.classList.add('hover-reveal'); clearTimeout(leftTimer); };
-  const hideLeft = () => { if(!leftNear) { leftPanel.classList.remove('visible'); if (isVisualizerMode) leftPanel.classList.remove('hover-reveal'); } };
+  const showBoth = () => { 
+    topbar.classList.add('visible'); 
+    leftPanel.classList.add('visible');
+    if (isVisualizerMode) { 
+      topbar.classList.add('hover-reveal');
+      leftPanel.classList.add('hover-reveal');
+    }
+    clearTimeout(hideTimer); 
+  };
+  
+  const hideBoth = () => { 
+    if(!isNear) {
+      topbar.classList.remove('visible'); 
+      leftPanel.classList.remove('visible');
+      if (isVisualizerMode) { 
+        topbar.classList.remove('hover-reveal');
+        leftPanel.classList.remove('hover-reveal');
+      }
+    }
+  };
 
-  triggerLeft.addEventListener('mouseenter', showLeft);
-  triggerLeft.addEventListener('mouseleave', () => { leftNear = false; leftTimer = setTimeout(hideLeft, 500); });
-  triggerTop.addEventListener('mouseenter', showTop);
-  triggerTop.addEventListener('mouseleave', () => { topNear = false; topTimer = setTimeout(hideTop, 500); });
-
-  topbar.addEventListener('mouseenter', showTop);
-  topbar.addEventListener('mouseleave', () => { topNear = false; topTimer = setTimeout(hideTop, 500); });
-  leftPanel.addEventListener('mouseenter', showLeft);
-  leftPanel.addEventListener('mouseleave', () => { leftNear = false; leftTimer = setTimeout(hideLeft, 500); });
-
+  // Trigger zones
+  triggerLeft.addEventListener('mouseenter', showBoth);
+  triggerTop.addEventListener('mouseenter', showBoth);
+  
+  // Panel hover
+  topbar.addEventListener('mouseenter', showBoth);
+  leftPanel.addEventListener('mouseenter', showBoth);
+  
+  // Mouse move tracking
   document.addEventListener('mousemove', (e) => {
-    if (e.clientX < 8) { leftNear = true; showLeft(); }
-    if (e.clientY < 8) { topNear = true; showTop(); }
+    if (e.clientX < 8 || e.clientY < 8) { isNear = true; showBoth(); } 
+    else { 
+      isNear = false; 
+      if(!topbar.matches(':hover') && !leftPanel.matches(':hover')) { 
+        clearTimeout(hideTimer); 
+        hideTimer = setTimeout(hideBoth, 500); 
+      } 
+    }
   });
-
-  topTimer = setTimeout(hideTop, 1500);
-  leftTimer = setTimeout(hideLeft, 1500);
+  
+  // Hide on leave
+  topbar.addEventListener('mouseleave', () => { if(!isNear) hideTimer = setTimeout(hideBoth, 500); });
+  leftPanel.addEventListener('mouseleave', () => { if(!isNear) hideTimer = setTimeout(hideBoth, 500); });
+  triggerLeft.addEventListener('mouseleave', () => { if(!isNear) hideTimer = setTimeout(hideBoth, 500); });
+  triggerTop.addEventListener('mouseleave', () => { if(!isNear) hideTimer = setTimeout(hideBoth, 500); });
+  
+  hideTimer = setTimeout(hideBoth, 1500);
 })();
 
 // ─── VISUALIZER DRAW ─────────────────────────────────────────────────────────
@@ -1467,7 +1483,7 @@ function showCalc(type) {
     c.innerHTML = `<h3>Graph Calculator</h3>X: <input id="xmin" value="-10"> to <input id="xmax" value="10"><br>Y: <input id="ymin" value="-10"> to <input id="ymax" value="10"><br><br>y=<input id="eq1" onkeydown="enterRun(event, drawGraph)"><br>y=<input id="eq2" onkeydown="enterRun(event, drawGraph)"><br>y=<input id="eq3" onkeydown="enterRun(event, drawGraph)"><br>y=<input id="eq4" onkeydown="enterRun(event, drawGraph)"><br>y=<input id="eq5" onkeydown="enterRun(event, drawGraph)"><br><br><button onclick="drawGraph()">Graph</button><br><br><div class="canvas-wrap"><canvas id="grid" width="400" height="400"></canvas><div id="axesLabels"></div></div>`;
   }
 }
-// ─── ORIGINAL CALCULATOR LOGIC ────────────────────────────────────────────────
+
 function calcSimple() { try { simpleOut.innerText = eval(simpleInput.value); } catch { simpleOut.innerText = "Error"; } }
 function volCube() { const v = parseFloat(cubeSide.value); cubeOut.innerText = !isNaN(v) ? v ** 3 : "Invalid"; }
 function volSphere() { const v = parseFloat(sphereR.value); sphereOut.innerText = !isNaN(v) ? (4 / 3) * Math.PI * v ** 3 : "Invalid"; }
@@ -1508,7 +1524,6 @@ function drawGraph() {
   let existing = document.getElementById("graphResults"); if (!existing) { const div = document.createElement("div"); div.id = "graphResults"; canvas.parentElement.appendChild(div); existing = div; } existing.innerHTML = resultsHTML;
 }
 
-// ─── ORIGINAL GAMES DATA ─────────────────────────────────────────────────────
 const games = ["https://turbowarp.org/10128407/embed?addons=pause,fullscreen", "https://turbowarp.org/1143765424/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/1075310827/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/941803602/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/973637218/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/883776962/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/898492644/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/916303075/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/978483855/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/959847748/embed?addons=pause,fullscreen&fps=60"];
 const titles = ["Paper Minecraft (Not Made By Me)", "Sisyphean Escalator", "Gambling but Mid", "Laser Dodge", "Goober Dodger", "Neon's Hostile Road", "Mid Cookie Clicker", "Asteroid Assault", "Reel 'Em In", "Cats Hate Rats"];
 const controls = [`Modding Guide: ▶️ https://youtu.be/PexNsUvqD5w\n[1 to 9] - Select Item    [Click] - Place or Mine\n[WASD] - Move / Jump  [E] - Open/Close Inventory\n[E+hover] - Open / Close Chest, Crafting Table, Door\n[Space] - Drop single tile from a stack while dragging.\n[F] - Eat food       [N] - Label a sign or chest\n[Q] - Drop item      [P] - Pause / Unpause\n[T] - Talk / Command    [O] - Save your game\n[M] - Music / Sounds   [Shift] - Sprint`, `Type the letters shown fast enough or fall.\n\nNot case sensitive.`, `::At BlackJack::\nUse arrow keys to bet:\n\nLeft and Right set the bet to 0 and max\n\nUp and down will change the bet by 10, or if holding "." will change it by 500\n1\nEnter to place bet, and after will be the hit button.\n\nSpace to stand.\n\n::At Slots::\nS to Spin\n\nSame betting controls.`, `Use the mouse to dodge the lasers that get faster with time!\n\nPress the left mouse button to become invincible for three seconds with a 10 second cool down so use it wisely!`, `Use the mouse to dodge the goobers, and don't stay in the border too long.\n\nThat's really about it.`, `ASD to move.\nW for a 3-second long power-up of invincibility.\nSpace to Start/Restart on the game-over screen.\n\n1 and 2 control the arcade scan filter.\n3 and 4 control the arcade cabinet overlay.\n5 and 6 control the arcade music (on/off)\n\n(60 fps Is highly recommended)`, `It's Cookie Clicker, but worse.\n\nUse your mouse.`, `Left mouse button to fire a weak auxiliary laser that overheats quickly.\n\nSpace for Main powerful laser.\n\nW for a backup shield that lasts 10 seconds, but has limited uses.\n\nUse your mouse to aim the laser.`, `Use Left Mouse Button to fire the harpoon and try to get the best fish, and buy upgrades.\n \nBeware of the explosive mine, it takes $50 dollars to repair the harpoon and the explosion might scare a few good fish away.\n\n\nThis is still a work in progress and I plan on adding more things like power ups, multipliers, and maybe a high score system.\n\nF to show debug menu \nG to hide debug menu`, `goober.\n\nUse mouse 1 to hit the rats.\nuse F to turn off the yarn.\nUse G to turn them back on.\n`];
@@ -1544,7 +1559,6 @@ function updateGame() {
 function nextGame() { currentIndex = (currentIndex + 1) % games.length; updateGame(); }
 function prevGame() { currentIndex = (currentIndex - 1 + games.length) % games.length; updateGame(); }
 
-// ─── NEW TOOLS LOGIC ──────────────────────────────────────────────────────────
 function showCipher(type) {
   const area = document.getElementById("cipherArea");
   area.innerHTML = `<h3>${type.toUpperCase()}</h3><textarea id="cipherIn" placeholder="Enter text..."></textarea><div><button onclick="runCipher('${type}', 'encode')">Encode</button><button onclick="runCipher('${type}', 'decode')">Decode</button></div><pre id="cipherOut"></pre>`;
