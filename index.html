@@ -696,175 +696,26 @@
       display: block;
     }
 
-    /* ─── TOOLS SECTION STYLING ─────────────────────────────────────── */
-    .tools-container {
-      display: flex;
-      gap: 1.5rem;
-      align-items: flex-start;
-      width: 100%;
-    }
+    /* ─── NEW TOOLS & SECTIONS ─────────────────────────────────────────── */
+    .embed-container { width: 100%; height: 80vh; border-radius: 12px; overflow: hidden; border: 1px solid #333; margin-top: 1rem; }
+    .embed-container iframe { width: 100%; height: 100%; border: none; }
+    #ideContainer { display: flex; gap: 1rem; }
+    #ideInput { flex: 1; height: 300px; background: #111; color: #0f0; font-family: monospace; margin: 0; }
+    #ideOutput { flex: 1; height: 300px; background: white; border-radius: 8px; border: none; }
+    #paintingCanvas { background: white; border-radius: 8px; display: block; margin: 0 auto; }
+    #chatContainer { height: 400px; background: #0a0a0a; border: 1px solid #333; border-radius: 8px; display: flex; flex-direction: column; overflow: hidden; }
+    #chatLog { flex: 1; overflow-y: auto; padding: 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
+    .chat-msg { padding: 0.5rem 0.8rem; border-radius: 8px; max-width: 80%; }
+    .user-msg { align-self: flex-end; background: #0044ff; color: white; }
+    .bot-msg { align-self: flex-start; background: #222; color: #7799ff; }
+    .chat-input-row { display: flex; padding: 0.5rem; background: #111; border-top: 1px solid #333; gap: 0.5rem; }
+    #chatInput { flex: 1; margin: 0; }
 
-    .tools-input-panel {
-      flex: 1;
-      background: var(--panel-alt);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .tools-output-panel {
-      flex: 1;
-      background: var(--panel-alt);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .tools-input-panel h3,
-    .tools-output-panel h3 {
-      margin: 0 0 0.5rem 0;
-      font-size: 1.3rem;
-      color: #fff;
-    }
-
-    .tools-input-panel textarea,
-    .tools-input-panel input {
-      width: 100%;
-      margin: 0;
-      flex: 1;
-      min-height: 150px;
-      font-family: monospace;
-      font-size: 0.95rem;
-    }
-
-    .tools-output-panel textarea,
-    .tools-output-panel pre {
-      width: 100%;
-      margin: 0;
-      flex: 1;
-      min-height: 150px;
-      font-family: monospace;
-      font-size: 0.95rem;
-      background: #0a0a0a;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 1rem;
-      color: #7799ff;
-      white-space: pre-wrap;
-      word-wrap: break-word;
-    }
-
-    .tool-button-group {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-    }
-
-    .tool-button-group button {
-      flex: 1;
-      min-width: 120px;
-      margin: 0;
-    }
-
-    .embed-container { 
-      width: 100%; 
-      height: 80vh; 
-      border-radius: 12px; 
-      overflow: hidden; 
-      border: 1px solid #333; 
-      margin-top: 1rem; 
-    }
-    
-    .embed-container iframe { 
-      width: 100%; 
-      height: 100%; 
-      border: none; 
-    }
-
-    #ideContainer { 
-      display: flex; 
-      gap: 1rem; 
-    }
-
-    #ideInput { 
-      flex: 1;
-      height: 300px; 
-      background: #111; 
-      color: #0f0; 
-      font-family: monospace; 
-      margin: 0;
-    }
-
-    #ideOutput { 
-      flex: 1;
-      height: 300px; 
-      background: white; 
-      border-radius: 8px; 
-      border: none; 
-    }
-
-    #paintingCanvas { 
-      background: white; 
-      border-radius: 8px; 
-      display: block; 
-      margin: 0 auto; 
-    }
-
-    #chatContainer { 
-      height: 400px; 
-      background: #0a0a0a; 
-      border: 1px solid #333; 
-      border-radius: 8px; 
-      display: flex; 
-      flex-direction: column; 
-      overflow: hidden; 
-    }
-
-    #chatLog { 
-      flex: 1; 
-      overflow-y: auto; 
-      padding: 1rem; 
-      display: flex; 
-      flex-direction: column; 
-      gap: 0.5rem; 
-    }
-
-    .chat-msg { 
-      padding: 0.5rem 0.8rem; 
-      border-radius: 8px; 
-      max-width: 80%; 
-    }
-
-    .user-msg { 
-      align-self: flex-end; 
-      background: #0044ff; 
-      color: white; 
-    }
-
-    .bot-msg { 
-      align-self: flex-start; 
-      background: #222; 
-      color: #7799ff; 
-    }
-
-    .chat-input-row { 
-      display: flex; 
-      padding: 0.5rem; 
-      background: #111; 
-      border-top: 1px solid #333; 
-      gap: 0.5rem;
-    }
-
-    #chatInput { 
-      flex: 1; 
-      margin: 0; 
-    }
+    /* ─── TOOLS SIDE-BY-SIDE LAYOUT ─────────────────────────────────── */
+    .tools-side-by-side { display: flex; gap: 1.5rem; }
+    .tools-side-by-side > div { flex: 1; }
+    .tools-side-by-side textarea { width: 100%; height: 200px; margin: 0; }
+    .tools-side-by-side pre { width: 100%; height: 200px; margin: 0; padding: 1rem; background: #0a0a0a; border: 1px solid var(--border); border-radius: 8px; overflow-y: auto; color: #7799ff; white-space: pre-wrap; word-wrap: break-word; }
 
     /* ─── RESPONSIVE ──────────────────────────────────────────────────── */
     @media (max-width: 1200px) {
@@ -909,7 +760,7 @@
         max-height: 400px;
       }
 
-      .tools-container {
+      .tools-side-by-side {
         flex-direction: column;
       }
     }
@@ -983,7 +834,7 @@
         padding: 0.6rem 0.6rem;
       }
 
-      .tools-container {
+      .tools-side-by-side {
         flex-direction: column;
       }
     }
@@ -1049,7 +900,7 @@
         gap: 0.5rem;
       }
 
-      .tools-container {
+      .tools-side-by-side {
         flex-direction: column;
       }
     }
@@ -1141,7 +992,7 @@ const trackMeta = [
   { title: 'Final Fantasy VII - One-Winged Angel', artist: 'Nobuo Uematsu' }
 ];
 
-// ─── AUDIO CONTEXT ────────────────────────────────────────────────────────────
+// ─── AUDIO CONTEXT ────────────────────────────────────────────────────────
 function ensureAudioContext() {
   if (audioContextReady) return;
   try {
@@ -1157,19 +1008,13 @@ function ensureAudioContext() {
 
 function initMusic() {
   const audio = document.getElementById('bgMusic');
-  loadTrack(currentTrack);
+  audio.src = playlist[currentTrack];
   audio.volume = 0.5;
-  audio.addEventListener('ended', () => isLooping ? (audio.currentTime = 0, audio.play()) : musicNext());
+  audio.addEventListener('ended', () => isLooping ? (audio.currentTime = 0, audio.play().catch(e => console.warn('Play interrupted:', e))) : musicNext());
   audio.addEventListener('timeupdate', updateSeekBar);
   audio.addEventListener('play', () => { document.getElementById('mcPlayPause').innerHTML = '&#9646;&#9646;'; });
   audio.addEventListener('pause', () => document.getElementById('mcPlayPause').innerHTML = '&#9654;');
   updateTrackDisplay();
-}
-
-function loadTrack(index) {
-  const audio = document.getElementById('bgMusic');
-  audio.src = playlist[index];
-  audio.load();
 }
 
 function updateTrackDisplay() {
@@ -1190,13 +1035,14 @@ function updateSeekBar() {
 
 function fmtTime(s) { const m = Math.floor(s/60), sec = Math.floor(s%60); return `${m}:${sec.toString().padStart(2,'0')}`; }
 
-function musicPlayPause() { const a = document.getElementById('bgMusic'); ensureAudioContext(); a.paused ? a.play() : a.pause(); }
+function musicPlayPause() { const a = document.getElementById('bgMusic'); ensureAudioContext(); a.paused ? a.play().catch(e => console.warn('Play interrupted:', e)) : a.pause(); }
 
 function musicNext() { 
   currentTrack = (currentTrack + 1) % playlist.length; 
-  loadTrack(currentTrack);
+  const a = document.getElementById('bgMusic'); 
+  a.src = playlist[currentTrack]; 
   updateTrackDisplay(); 
-  document.getElementById('bgMusic').play().catch(e => console.warn('Play interrupted:', e));
+  a.play().catch(e => console.warn('Play interrupted:', e));
 }
 
 function musicPrev() { 
@@ -1205,7 +1051,7 @@ function musicPrev() {
     a.currentTime = 0;
   } else {
     currentTrack = (currentTrack - 1 + playlist.length) % playlist.length;
-    loadTrack(currentTrack);
+    a.src = playlist[currentTrack];
     updateTrackDisplay();
   }
   a.play().catch(e => console.warn('Play interrupted:', e));
@@ -1331,10 +1177,9 @@ const pages = {
         <div class="version-chip">Latest overhaul · v0.41</div>
         <h3>Patch Notes</h3>
         <ul class="patch-list">
-          <li>Fixed audio interruption errors on track switching.</li>
+          <li>Fixed audio interruption errors on Philly Nice and DQ Blizzard.</li>
           <li>Added cipher decryption mode (Caesar & Atbash).</li>
           <li>Redesigned Tools section with side-by-side input/output layout.</li>
-          <li>Improved styling consistency across all tools.</li>
         </ul>
       </aside>
     </section>
@@ -1414,7 +1259,7 @@ function showTool(type) {
   if (type === 'calc') {
     area.innerHTML = `<h3>Calculators</h3><div class="button-row"><button onclick="showCalc('simple')">Simple</button><button onclick="showCalc('volume')">Volume</button><button onclick="showCalc('graph')">Graph</button></div><div id="calcArea"></div>`;
   } else if (type === 'ide') {
-    area.innerHTML = `<h3>HTML IDE</h3><div class="tools-container"><div class="tools-input-panel"><h3>Input</h3><textarea id="ideInput" placeholder="Write HTML/CSS/JS here..." oninput="runIDE()"></textarea></div><div class="tools-output-panel"><h3>Output</h3><iframe id="ideOutput"></iframe></div></div>`;
+    area.innerHTML = `<h3>HTML IDE</h3><div id="ideContainer"><textarea id="ideInput" placeholder="Write HTML/CSS/JS here..." oninput="runIDE()"></textarea><iframe id="ideOutput"></iframe></div>`;
   } else if (type === 'chat') {
     area.innerHTML = `<h3>AI Chatbot</h3><div id="chatContainer"><div id="chatLog"></div><div class="chat-input-row"><input id="chatInput" placeholder="Ask something..." onkeydown="if(event.key==='Enter')sendChat()"><button onclick="sendChat()">Send</button></div></div>`;
   } else if (type === 'canvas') {
@@ -1442,7 +1287,6 @@ function showCalc(type) {
     c.innerHTML = `<h3>Graph Calculator</h3>X: <input id="xmin" value="-10"> to <input id="xmax" value="10"><br>Y: <input id="ymin" value="-10"> to <input id="ymax" value="10"><br><br>y=<input id="eq1" onkeydown="enterRun(event, drawGraph)"><br>y=<input id="eq2" onkeydown="enterRun(event, drawGraph)"><br>y=<input id="eq3" onkeydown="enterRun(event, drawGraph)"><br>y=<input id="eq4" onkeydown="enterRun(event, drawGraph)"><br>y=<input id="eq5" onkeydown="enterRun(event, drawGraph)"><br><br><button onclick="drawGraph()">Graph</button><br><br><div class="canvas-wrap"><canvas id="grid" width="400" height="400"></canvas><div id="axesLabels"></div></div>`;
   }
 }
-
 // ─── ORIGINAL CALCULATOR LOGIC ────────────────────────────────────────────────
 function calcSimple() { try { simpleOut.innerText = eval(simpleInput.value); } catch { simpleOut.innerText = "Error"; } }
 function volCube() { const v = parseFloat(cubeSide.value); cubeOut.innerText = !isNaN(v) ? v ** 3 : "Invalid"; }
@@ -1520,31 +1364,14 @@ function updateGame() {
 function nextGame() { currentIndex = (currentIndex + 1) % games.length; updateGame(); }
 function prevGame() { currentIndex = (currentIndex - 1 + games.length) % games.length; updateGame(); }
 
-// ─── CIPHER TOOLS ─────────────────────────────────────────────────────────────
+// ─── NEW TOOLS LOGIC ──────────────────────────────────────────────────────────
 function showCipher(type) {
   const area = document.getElementById("cipherArea");
-  area.innerHTML = `
-    <div class="tools-container">
-      <div class="tools-input-panel">
-        <h3>Input</h3>
-        <textarea id="cipherIn" placeholder="Enter text..."></textarea>
-        <div class="tool-button-group">
-          <button onclick="runCipher('${type}', 'encode')">Encode</button>
-          <button onclick="runCipher('${type}', 'decode')">Decode</button>
-        </div>
-      </div>
-      <div class="tools-output-panel">
-        <h3>Output</h3>
-        <pre id="cipherOut"></pre>
-      </div>
-    </div>
-  `;
+  area.innerHTML = `<div class="tools-side-by-side"><div><h3>Input</h3><textarea id="cipherIn" placeholder="Enter text..."></textarea></div><div><h3>Output</h3><button onclick="runCipher('${type}', 'encode')">Encode</button><button onclick="runCipher('${type}', 'decode')">Decode</button><pre id="cipherOut"></pre></div></div>`;
 }
-
 function runCipher(type, mode) {
   const input = document.getElementById('cipherIn').value;
   let out = "";
-  
   if (type === 'caesar') {
     if (mode === 'encode') {
       out = input.replace(/[a-z]/gi, c => String.fromCharCode((c <= "Z" ? 90 : 122) >= (c = c.charCodeAt(0) + 3) ? c : c - 26));
@@ -1554,15 +1381,12 @@ function runCipher(type, mode) {
   } else if (type === 'atbash') {
     out = input.replace(/[a-z]/gi, c => String.fromCharCode((c <= "Z" ? 155 : 219) - c.charCodeAt(0)));
   }
-  
   document.getElementById('cipherOut').innerText = out;
 }
-
 function runIDE() {
   const out = document.getElementById('ideOutput').contentWindow.document;
   out.open(); out.write(document.getElementById('ideInput').value); out.close();
 }
-
 function sendChat() {
   const log = document.getElementById('chatLog'), inp = document.getElementById('chatInput');
   if(!inp.value)return;
@@ -1573,9 +1397,7 @@ function sendChat() {
     log.scrollTop = log.scrollHeight;
   }, 600);
 }
-
 function doSearch() { window.open('https://www.google.com/search?q=' + encodeURIComponent(document.getElementById('searchInput').value), '_blank'); }
-
 function initCanvas() {
   const cvs = document.getElementById('paintingCanvas'), ctx = cvs.getContext('2d');
   let painting = false;
@@ -1593,19 +1415,15 @@ function initCanvas() {
     ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
   };
 }
-
 function clearCanvas() { paintingCanvas.getContext('2d').clearRect(0,0,800,500); }
-
 function showEmbed(url) {
   const area = document.getElementById('embedArea');
   area.style.display = 'block';
   area.innerHTML = `<iframe src="${url}"></iframe>`;
 }
-
 function showCreation(type) {
   document.getElementById('creationArea').innerHTML = `<h3>${type.toUpperCase()}</h3><p>Gallery for ${type} coming soon!</p>`;
 }
-
 function checkGuess() {
   const v = parseInt(document.getElementById('guessInput').value);
   const msg = document.getElementById('guessMsg');
