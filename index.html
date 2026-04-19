@@ -955,7 +955,7 @@
   </main>
 
   <canvas id="visualizerCanvas"></canvas>
-  <div class="version-tag" id="vTag">v0.49</div>
+  <div class="version-tag" id="vTag">v0.50</div>
 
 <script>
 // ─── STATE ───────────────────────────────────────────────────────────────────
@@ -1206,7 +1206,7 @@ const pages = {
       </article>
 
       <aside class="panel patch-panel">
-        <div class="version-chip">Latest overhaul · v0.49</div>
+        <div class="version-chip">Latest overhaul · v0.50</div>
         <h3>Patch Notes</h3>
         <ul class="patch-list">
           <li>Renamed to <strong>GN-Neon</strong>.</li>
@@ -1358,7 +1358,7 @@ const notes = [`*** Credits ***\nAll the graphics are taken from the Minecraft w
 
 function showScratchGames() {
   const content = document.getElementById('gamesContent'), gamesMenu = document.querySelector('.games-menu'); if (gamesMenu) gamesMenu.style.display = 'none';
-  content.innerHTML = `<button class="back-button" onclick="load('games')">← Back to Games Menu</button><div class="games-layout"><div class="sideBox"><h3>Controls</h3><div id="gameControls"></div></div><div class="centerBox"><div class="button-row" style="justify-content:center;"><button onclick="prevGame()">◀</button><button onclick="nextGame()">▶</button></div><iframe id="scratchFrame" allowfullscreen title="GN-Neon Scratch game viewer"></iframe><h3 id="gameTitle"></h3></div><div class="sideBox"><h3>Notes / Credits</h3><div id="gameNotes"></div></div></div>`;
+  content.innerHTML = `<button class="back-button" onclick="load('games')">← Back to Games Menu</button><div class="games-layout"><div class="sideBox"><h3>Controls</h3><div id="gameControls"></div></div><div class="centerBox"><iframe id="scratchFrame" allowfullscreen title="GN-Neon Scratch game viewer"></iframe><h3 id="gameTitle"></h3><div class="button-row" style="justify-content:center; margin-top:1rem;"><button onclick="prevGame()">◀</button><button onclick="nextGame()">▶</button></div></div><div class="sideBox"><h3>Notes / Credits</h3><div id="gameNotes"></div></div></div>`;
   currentIndex = 0; updateGame();
 }
 
