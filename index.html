@@ -575,7 +575,7 @@
 
     #scratchFrame {
       width: 100%;
-      height: 70vh;
+      height: 55vh;
       border: none;
       border-radius: 10px;
       background: #000;
@@ -583,11 +583,11 @@
 
     .games-layout {
       display: flex;
-      gap: 1rem;
+      gap: 0.75rem;
       align-items: flex-start;
       justify-content: center;
       width: 100%;
-      padding: 1rem 2rem 2rem 2rem;
+      padding: 0.5rem 1rem 1rem 1rem;
       margin: 0;
       box-sizing: border-box;
     }
@@ -598,48 +598,48 @@
 
     .games-menu button {
       display: block;
-      width: 50%;
-      margin: 0.75rem auto;
-      font-size: 1.2rem;
-      padding: 1rem 1.5rem;
+      width: 40%;
+      margin: 0.5rem auto;
+      font-size: 1rem;
+      padding: 0.75rem 1rem;
     }
 
     .back-button {
       display: block;
-      margin: 1rem auto 2rem;
-      font-size: 1rem;
-      padding: 0.7rem 1.2rem;
+      margin: 0.5rem auto 1rem;
+      font-size: 0.9rem;
+      padding: 0.5rem 1rem;
     }
 
     .wip-container {
       text-align: center;
-      padding: 3rem 1rem;
+      padding: 2rem 1rem;
     }
 
     .wip-container h2 {
-      font-size: 2rem;
-      margin-bottom: 1rem;
+      font-size: 1.5rem;
+      margin-bottom: 0.75rem;
     }
 
     .wip-container p {
       color: #b3b3b3;
-      font-size: 1.2rem;
-    }
-
-    .sideBox {
-      width: 20%;
-      padding: 1.25rem;
-      background: #111;
-      border: 1px solid #333;
-      border-radius: 12px;
-      overflow-y: auto;
-      height: 70vh;
-      box-shadow: var(--shadow);
       font-size: 1rem;
     }
 
+    .sideBox {
+      width: 18%;
+      padding: 1rem;
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 10px;
+      overflow-y: auto;
+      height: 55vh;
+      box-shadow: var(--shadow);
+      font-size: 0.9rem;
+    }
+
     .centerBox {
-      width: 55%;
+      width: 50%;
       text-align: center;
       display: flex;
       flex-direction: column;
@@ -955,7 +955,7 @@
   </main>
 
   <canvas id="visualizerCanvas"></canvas>
-  <div class="version-tag" id="vTag">v0.48</div>
+  <div class="version-tag" id="vTag">v0.49</div>
 
 <script>
 // ─── STATE ───────────────────────────────────────────────────────────────────
@@ -1206,7 +1206,7 @@ const pages = {
       </article>
 
       <aside class="panel patch-panel">
-        <div class="version-chip">Latest overhaul · v0.48</div>
+        <div class="version-chip">Latest overhaul · v0.49</div>
         <h3>Patch Notes</h3>
         <ul class="patch-list">
           <li>Renamed to <strong>GN-Neon</strong>.</li>
