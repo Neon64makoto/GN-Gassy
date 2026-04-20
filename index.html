@@ -1288,13 +1288,23 @@ function updateTrackDisplay() {
   const meta = trackMeta[currentTrack];
   document.getElementById('mcTitle').innerText = meta.title;
   document.getElementById('mcArtist').innerText = meta.artist;
-  document.getElementById('mcPlayPause').innerText = document.getElementById('bgMusic').paused ? '▶' : '⏸';
+  document.getElementById('mcPlayPause').innerText = document.getElementById('bgMusic').paused ? '▶' : '▮▮';
   localStorage.setItem('gn_neon_track', currentTrack);
 }
 
 function fmtTime(s) { const m = Math.floor(s/60), sec = Math.floor(s%60); return `${m}:${sec.toString().padStart(2,'0')}`; }
 
-function musicPlayPause() { const a = document.getElementById('bgMusic'); ensureAudioContext(); a.paused ? a.play() : a.pause(); }
+function musicPlayPause() { 
+  const a = document.getElementById('bgMusic'); 
+  ensureAudioContext(); 
+  if (a.paused) {
+    a.play();
+    document.getElementById('mcPlayPause').innerText = '▮▮';
+  } else {
+    a.pause();
+    document.getElementById('mcPlayPause').innerText = '▶';
+  }
+}
 function musicNext() { currentTrack = (currentTrack + 1) % playlist.length; const a = document.getElementById('bgMusic'); a.src = playlist[currentTrack]; updateTrackDisplay(); a.play(); }
 function musicPrev() { const a = document.getElementById('bgMusic'); if(a.currentTime > 3) a.currentTime = 0; else currentTrack = (currentTrack - 1 + playlist.length) % playlist.length; a.src = playlist[currentTrack]; updateTrackDisplay(); a.play(); }
 function musicToggleLoop() { isLooping = !isLooping; document.getElementById('mcLoop').classList.toggle('active-loop', isLooping); }
