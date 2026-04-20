@@ -1289,7 +1289,7 @@ function updateTrackDisplay() {
   const meta = trackMeta[currentTrack];
   document.getElementById('mcTitle').innerText = meta.title;
   document.getElementById('mcArtist').innerText = meta.artist;
-  document.getElementById('mcPlayPause').innerText = document.getElementById('bgMusic').paused ? '▶' : '▮▮';
+  document.getElementById('mcPlayPause').innerText = '▮▮';
   localStorage.setItem('gn_neon_track', currentTrack);
 }
 
