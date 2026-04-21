@@ -13,10 +13,10 @@
       --border-strong: #444;
       --text: #fff;
       --muted: #b3b3b3;
-      --main-color: #0000ff;
-      --panel-color: rgba(0, 50, 255, 0.25);
-      --music-text: #0000ff;
-      --menu-text: #0000ff;
+      --neon-blue: #0000ff;
+      --neon-blue-soft: rgba(0, 50, 255, 0.25);
+      --neon-blue-lighter: #0000ff;
+      --neon-blue-lighter2: #0000ff;
       --shadow: 0 14px 32px rgba(0, 0, 0, 0.32);
       --panel-size: 140px;
       --bg-gradient-top: #000000;
@@ -70,7 +70,7 @@
       font-size: 2rem;
       font-weight: bold;
       color: #fff;
-      text-shadow: 0 0 20px var(--main-color);
+      text-shadow: 0 0 20px var(--neon-blue);
       letter-spacing: 4px;
       text-align: center;
       pointer-events: none;
@@ -78,7 +78,7 @@
 
     #splashSubtext {
       margin-top: 1rem;
-      color: var(--music-text);
+      color: var(--neon-blue-lighter);
       font-size: 1rem;
       pointer-events: none;
     }
@@ -103,17 +103,17 @@
     }
 
     ::-webkit-scrollbar-thumb {
-      background: var(--main-color);
+      background: var(--neon-blue);
       border-radius: 6px;
     }
 
     ::-webkit-scrollbar-thumb:hover {
-      background: var(--main-color);
+      background: var(--neon-blue);
     }
 
     /* Firefox scrollbar styling */
     * {
-      scrollbar-color: var(--main-color) #0a0a0a;
+      scrollbar-color: var(--neon-blue) #0a0a0a;
       scrollbar-width: thin;
     }
 
@@ -150,15 +150,15 @@
       padding: 1.25rem 2rem;
       border: 1px solid transparent;
       border-radius: 4px;
-      background: var(--main-color);
+      background: var(--neon-blue);
       color: white;
       cursor: pointer;
       transition: background 0.16s ease, border-color 0.16s ease, transform 0.16s ease;
     }
 
     button:hover {
-      background: var(--main-color);
-      box-shadow: 0 0 15px var(--main-color);
+      background: var(--neon-blue);
+      box-shadow: 0 0 15px var(--neon-blue);
       transform: translateY(-2px);
     }
     
@@ -213,12 +213,12 @@
       height: var(--panel-size);
       z-index: 620; /* Higher than topbar and left-panel */
       background: rgba(17, 17, 17, 0.97);
-      border: 2px solid var(--main-color);
+      border: 2px solid var(--neon-blue);
       backdrop-filter: blur(10px);
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 0 20px var(--main-color), inset 0 0 15px var(--panel-color);
+      box-shadow: 0 0 20px var(--neon-blue), inset 0 0 15px var(--neon-blue-soft);
       transform: translate(-100%, -100%);
       transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.35s;
       opacity: 0;
@@ -233,9 +233,9 @@
     .logo-connector span {
       font-size: 0.55rem;
       font-weight: bold;
-      color: var(--main-color);
+      color: var(--neon-blue);
       letter-spacing: 0.5px;
-      text-shadow: 0 0 10px var(--main-color);
+      text-shadow: 0 0 10px var(--neon-blue);
       text-align: center;
       line-height: 1.1;
       user-select: none;
@@ -254,8 +254,8 @@
       height: 100vh;
       z-index: 610;
       background: rgba(17, 17, 17, 0.97);
-      border-right: 2px solid var(--main-color);
-      border-top: 2px solid var(--main-color);
+      border-right: 2px solid var(--neon-blue);
+      border-top: 2px solid var(--neon-blue);
       backdrop-filter: blur(10px);
       padding-top: var(--panel-size);
       display: flex;
@@ -297,18 +297,18 @@
       font-size: 0.95rem;
       margin: 0;
       background: transparent;
-      border: 1px solid var(--panel-color);
+      border: 1px solid var(--neon-blue-soft);
       border-radius: 6px;
-      color: var(--menu-text);
+      color: var(--neon-blue-lighter2);
       transition: all 0.15s;
     }
 
     .left-panel .nav button:hover {
-      background: var(--panel-color);
-      border-color: var(--main-color);
+      background: var(--neon-blue-soft);
+      border-color: var(--neon-blue);
       color: #fff;
       transform: translateX(3px);
-      box-shadow: 0 0 12px var(--main-color);
+      box-shadow: 0 0 12px var(--neon-blue);
     }
 
       /* ─── TOP PANEL (MUSIC) ──────────────────────────────────────── */
@@ -320,8 +320,8 @@
       height: var(--panel-size);
       z-index: 610;
       background: rgba(17, 17, 17, 0.97);
-      border-bottom: 2px solid var(--main-color);
-      border-left: 2px solid var(--main-color);
+      border-bottom: 2px solid var(--neon-blue);
+      border-left: 2px solid var(--neon-blue);
       backdrop-filter: blur(10px);
       padding: 0.75rem 0 0.5rem;
       display: flex;
@@ -380,17 +380,17 @@
       font-family: 'Courier New', Courier, monospace;
       font-size: 3rem;
       font-weight: bold;
-      color: var(--main-color);
-      text-shadow: 0 0 15px var(--main-color);
+      color: var(--neon-blue);
+      text-shadow: 0 0 15px var(--neon-blue);
       padding: 0.6rem 1.2rem;
       background: rgba(0, 0, 0, 0.8);
-      border: 2px solid var(--main-color);
+      border: 2px solid var(--neon-blue);
       border-radius: 8px;
       text-align: center;
       display: flex;
       align-items: baseline;
       gap: 0.2rem;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5), inset 0 0 10px var(--panel-color);
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5), inset 0 0 10px var(--neon-blue-soft);
       transform: translateY(0);
       transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.35s;
       pointer-events: none;
@@ -472,20 +472,20 @@
       -webkit-appearance: none;
       width: 14px;
       height: 14px;
-      background: var(--main-color);
+      background: var(--neon-blue);
       border-radius: 50%;
       cursor: pointer;
-      box-shadow: 0 0 10px var(--main-color);
+      box-shadow: 0 0 10px var(--neon-blue);
       border: 1px solid #fff;
     }
 
     #volumeSlider::-moz-range-thumb {
       width: 14px;
       height: 14px;
-      background: var(--main-color);
+      background: var(--neon-blue);
       border-radius: 50%;
       cursor: pointer;
-      box-shadow: 0 0 10px var(--main-color);
+      box-shadow: 0 0 10px var(--neon-blue);
       border: 1px solid #fff;
     }
 
@@ -497,7 +497,7 @@
       flex-direction: column;
       align-items: center;
       gap: 0.3rem;
-      border-top: 1px solid var(--panel-color);
+      border-top: 1px solid var(--neon-blue-soft);
       margin-top: 0.4rem;
     }
 
@@ -517,7 +517,7 @@
 
     .music-artist {
       font-size: 0.8rem;
-      color: var(--music-text);
+      color: var(--neon-blue-lighter);
     }
 
     .music-btn-row {
@@ -531,24 +531,24 @@
       padding: 0.35rem 0.65rem;
       font-size: 1rem;
       background: transparent;
-      border: 1px solid var(--panel-color);
+      border: 1px solid var(--neon-blue-soft);
       border-radius: 6px;
-      color: var(--menu-text);
+      color: var(--neon-blue-lighter2);
       cursor: pointer;
       transition: all 0.15s;
       min-width: unset;
     }
 
     .music-btn:hover {
-      background: var(--panel-color);
+      background: var(--neon-blue-soft);
       transform: translateY(-1px);
-      border-color: var(--main-color);
+      border-color: var(--neon-blue);
       color: #fff;
     }
 
     .music-btn.active-loop {
-      background: var(--panel-color);
-      border-color: var(--main-color);
+      background: var(--neon-blue-soft);
+      border-color: var(--neon-blue);
       color: #fff;
     }
 
@@ -561,7 +561,7 @@
 
     .music-time {
       font-size: 0.78rem;
-      color: var(--music-text);
+      color: var(--neon-blue-lighter);
       white-space: nowrap;
       min-width: 38px;
       text-align: center;
@@ -573,7 +573,7 @@
       appearance: none;
       height: 4px;
       border-radius: 2px;
-      background: linear-gradient(to right, var(--main-color) 0%, #333 0%);
+      background: linear-gradient(to right, var(--neon-blue) 0%, #333 0%);
       outline: none;
       cursor: pointer;
       margin: 0;
@@ -587,7 +587,7 @@
       width: 12px;
       height: 12px;
       border-radius: 50%;
-      background: var(--main-color);
+      background: var(--neon-blue);
       cursor: pointer;
     }
 
@@ -613,7 +613,7 @@
       text-align: center;
       letter-spacing: 0.04em;
       font-size: 3rem;
-      color: var(--main-color);
+      color: var(--neon-blue);
     }
 
     #content {
@@ -623,7 +623,7 @@
     }
 
     .panel {
-      background: linear-gradient(180deg, rgba(0, 0, 0, 1), var(--panel-color));
+      background: linear-gradient(180deg, rgba(0, 0, 0, 1), var(--neon-blue-soft));
       border: 1px solid var(--border);
       border-radius: 14px;
       box-shadow: var(--shadow);
@@ -639,7 +639,7 @@
     }
 
     .games-panel {
-      background: linear-gradient(180deg, rgba(0, 0, 0, 1), var(--panel-color));
+      background: linear-gradient(180deg, rgba(0, 0, 0, 1), var(--neon-blue-soft));
       border: 1px solid var(--border);
       border-radius: 14px;
       box-shadow: var(--shadow);
@@ -722,9 +722,9 @@
       margin-bottom: 0.5rem;
       padding: 0.5rem 0.8rem;
       border-radius: 999px;
-      border: 1px solid var(--main-color);
-      background: var(--panel-color);
-      color: var(--main-color);
+      border: 1px solid var(--neon-blue);
+      background: var(--neon-blue-soft);
+      color: var(--neon-blue);
       font-size: 0.9rem;
     }
 
@@ -917,8 +917,8 @@
     #chatContainer { height: 400px; background: #0a0a0a; border: 1px solid #333; border-radius: 8px; display: flex; flex-direction: column; overflow: hidden; }
     #chatLog { flex: 1; overflow-y: auto; padding: 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
     .chat-msg { padding: 0.5rem 0.8rem; border-radius: 8px; max-width: 80%; }
-    .user-msg { align-self: flex-end; background: var(--main-color); color: white; }
-    .bot-msg { align-self: flex-start; background: #222; color: var(--music-text); }
+    .user-msg { align-self: flex-end; background: var(--neon-blue); color: white; }
+    .bot-msg { align-self: flex-start; background: #222; color: var(--neon-blue-lighter); }
     .chat-input-row { display: flex; padding: 0.5rem; background: #111; border-top: 1px solid #333; }
     #chatInput { flex: 1; margin: 0; }
 
@@ -1131,7 +1131,7 @@
       <button onclick="load('games')">Games</button>
       <button onclick="load('creations')">Creations</button>
       <button onclick="load('about')">About</button>
-      <button onclick="toggleVisualizerMode()" id="vizModeBtn" style="border: 1px solid var(--main-color); background: var(--panel-color);">Visualizer</button>
+      <button onclick="toggleVisualizerMode()" id="vizModeBtn" style="border: 1px solid var(--neon-blue); background: var(--neon-blue-soft);">Visualizer</button>
       <button onclick="load('settings')" style="margin-top: auto;">Settings</button>
     </nav>
   </div>
@@ -1188,17 +1188,17 @@ let isVisualizerMode = false;
 let keepClockInViz = false;
 
 const DEFAULT_COLORS = {
-  '--main-color': '#0000ff',
-  '--panel-color': 'rgba(0, 50, 255, 0.25)',
-  '--music-text': '#0000ff',
-  '--menu-text': '#0000ff'
+  '--neon-blue': '#0000ff',
+  '--neon-blue-soft': 'rgba(0, 50, 255, 0.25)',
+  '--neon-blue-lighter': '#0000ff',
+  '--neon-blue-lighter2': '#0000ff'
 };
 
 let rainbowStates = {
-  '--main-color': { active: false, speed: 5 },
-  '--music-text': { active: false, speed: 5 },
-  '--menu-text': { active: false, speed: 5 },
-  '--panel-color': { active: false, speed: 5 }
+  '--neon-blue': { active: false, speed: 5 },
+  '--neon-blue-lighter': { active: false, speed: 5 },
+  '--neon-blue-lighter2': { active: false, speed: 5 },
+  '--neon-blue-soft': { active: false, speed: 5 }
 };
 
 let backgroundSettings = {
@@ -1216,7 +1216,7 @@ function updateRainbow() {
   for (const [key, state] of Object.entries(rainbowStates)) {
     if (state.active) {
       const hue = (time * state.speed * 10) % 360;
-      if (key === '--panel-color') {
+      if (key === '--neon-blue-soft') {
         document.documentElement.style.setProperty(key, `hsla(${hue}, 100%, 50%, 0.15)`);
       } else {
         document.documentElement.style.setProperty(key, `hsl(${hue}, 100%, 50%)`);
@@ -1371,7 +1371,7 @@ function initMusic() {
     if (!seekDragging) {
       const seekBar = document.getElementById('seekBar');
       seekBar.value = (audio.currentTime / audio.duration) * 100;
-      seekBar.style.background = `linear-gradient(to right, var(--main-color) ${seekBar.value}%, #333 ${seekBar.value}%)`;
+      seekBar.style.background = `linear-gradient(to right, var(--neon-blue) ${seekBar.value}%, #333 ${seekBar.value}%)`;
       document.getElementById('mcCurrent').innerText = fmtTime(audio.currentTime);
       localStorage.setItem('gn_neon_time', audio.currentTime);
     }
@@ -1584,8 +1584,8 @@ document.addEventListener('keydown', (e) => {
     const data = new Uint8Array(analyser.frequencyBinCount);
     analyser.getByteFrequencyData(data);
     const barCount = 80, gap = 4, barW = (W - gap * (barCount - 1)) / barCount;
-    const [r, g, b] = getRGBFromVariable('--main-color');
-    const isRainbow = rainbowStates['--main-color'].active;
+    const [r, g, b] = getRGBFromVariable('--neon-blue');
+    const isRainbow = rainbowStates['--neon-blue'].active;
     const time = Date.now() / 1000;
     
     for (let i = 0; i < barCount; i++) {
@@ -1595,7 +1595,7 @@ document.addEventListener('keydown', (e) => {
       
       let color;
       if (isRainbow) {
-        const hue = (time * rainbowStates['--main-color'].speed * 10 + (i * 2)) % 360;
+        const hue = (time * rainbowStates['--neon-blue'].speed * 10 + (i * 2)) % 360;
         color = `hsla(${hue}, 100%, 50%, ${opacity})`;
       } else {
         color = `rgba(${r}, ${g}, ${b}, ${opacity})`;
@@ -1610,7 +1610,7 @@ document.addEventListener('keydown', (e) => {
   
   function drawIdle(ctx, W, H) {
     const barCount = 120, gap = 2, barW = (W - gap * (barCount - 1)) / barCount;
-    const [r, g, b] = getRGBFromVariable('--main-color');
+    const [r, g, b] = getRGBFromVariable('--neon-blue');
     for (let i = 0; i < barCount; i++) {
       ctx.fillStyle = `rgba(${r}, ${g}, ${b}, 0.2)`;
       ctx.fillRect(i * (barW + gap), H - 2, barW, 2);
@@ -1763,13 +1763,13 @@ const pages = {
         <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px;">
           <div style="display: flex; align-items: center; justify-content: space-between;">
             <span>KEEP CLOCK IN VISUALIZER MODE</span>
-            <button onclick="toggleKeepClock()" style="margin:0; padding: 0.3rem 0.6rem; font-size: 0.8rem; background: ${keepClockInViz ? 'var(--main-color)' : '#333'}">${keepClockInViz ? 'Enabled' : 'Disabled'}</button>
+            <button onclick="toggleKeepClock()" style="margin:0; padding: 0.3rem 0.6rem; font-size: 0.8rem; background: ${keepClockInViz ? 'var(--neon-blue)' : '#333'}">${keepClockInViz ? 'Enabled' : 'Disabled'}</button>
           </div>
         </div>
         <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px;">
           <div style="display: flex; align-items: center; justify-content: space-between;">
             <span>USE VIDEO BACKGROUND</span>
-            <button onclick="toggleBackgroundVideo()" style="margin:0; padding: 0.3rem 0.6rem; font-size: 0.8rem; background: ${backgroundSettings.useVideo ? 'var(--main-color)' : '#333'}">${backgroundSettings.useVideo ? 'Enabled' : 'Disabled'}</button>
+            <button onclick="toggleBackgroundVideo()" style="margin:0; padding: 0.3rem 0.6rem; font-size: 0.8rem; background: ${backgroundSettings.useVideo ? 'var(--neon-blue)' : '#333'}">${backgroundSettings.useVideo ? 'Enabled' : 'Disabled'}</button>
           </div>
         </div>
         <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px;">
@@ -1777,7 +1777,7 @@ const pages = {
             <span>GRADIENT TOP COLOR</span>
             <div style="display: flex; gap: 0.5rem; align-items: center;">
               <input type="color" value="${backgroundSettings.gradientTop}" onchange="updateBackgroundColor('top', this.value)">
-              <button onclick="toggleBackgroundRainbow('top')" style="margin:0; padding: 0.3rem 0.6rem; font-size: 0.8rem; background: ${backgroundSettings.rainbowTop ? 'var(--main-color)' : '#333'}">Rainbow</button>
+              <button onclick="toggleBackgroundRainbow('top')" style="margin:0; padding: 0.3rem 0.6rem; font-size: 0.8rem; background: ${backgroundSettings.rainbowTop ? 'var(--neon-blue)' : '#333'}">Rainbow</button>
             </div>
           </div>
           ${backgroundSettings.rainbowTop ? `
@@ -1792,7 +1792,7 @@ const pages = {
             <span>GRADIENT BOTTOM COLOR</span>
             <div style="display: flex; gap: 0.5rem; align-items: center;">
               <input type="color" value="${backgroundSettings.gradientBottom}" onchange="updateBackgroundColor('bottom', this.value)">
-              <button onclick="toggleBackgroundRainbow('bottom')" style="margin:0; padding: 0.3rem 0.6rem; font-size: 0.8rem; background: ${backgroundSettings.rainbowBottom ? 'var(--main-color)' : '#333'}">Rainbow</button>
+              <button onclick="toggleBackgroundRainbow('bottom')" style="margin:0; padding: 0.3rem 0.6rem; font-size: 0.8rem; background: ${backgroundSettings.rainbowBottom ? 'var(--neon-blue)' : '#333'}">Rainbow</button>
             </div>
           </div>
           ${backgroundSettings.rainbowBottom ? `
@@ -1807,11 +1807,11 @@ const pages = {
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
               <span>${key.replace('--neon-', '').replace('-', ' ').toUpperCase()}</span>
               <div style="display: flex; gap: 0.5rem; align-items: center;">
-                ${key === '--panel-color' ? 
+                ${key === '--neon-blue-soft' ? 
                   `<input type="text" value="${getComputedStyle(document.documentElement).getPropertyValue(key).trim()}" onchange="updateColor('${key}', this.value)" style="width: 120px; background: #000; border: 1px solid #333; color: #fff; padding: 4px; font-size: 0.8rem;">` :
                   `<input type="color" value="${getComputedStyle(document.documentElement).getPropertyValue(key).trim()}" onchange="updateColor('${key}', this.value)">`
                 }
-                <button onclick="toggleRainbow('${key}')" style="margin:0; padding: 0.3rem 0.6rem; font-size: 0.8rem; background: ${state.active ? 'var(--main-color)' : '#333'}">Rainbow</button>
+                <button onclick="toggleRainbow('${key}')" style="margin:0; padding: 0.3rem 0.6rem; font-size: 0.8rem; background: ${state.active ? 'var(--neon-blue)' : '#333'}">Rainbow</button>
               </div>
             </div>
             ${state.active ? `
