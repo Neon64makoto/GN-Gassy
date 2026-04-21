@@ -371,20 +371,53 @@
       align-items: center;
     }
 
-    /* Digital Clock Style */
+    /* ─── DIGITAL CLOCK (7-Segment Style) ─────────────────────────────── */
     #digitalClock {
+      position: fixed;
+      top: 1.5rem;
+      right: 1.5rem;
+      z-index: 630;
       font-family: 'Courier New', Courier, monospace;
-      font-size: 1.5rem;
+      font-size: 3rem;
       font-weight: bold;
       color: var(--neon-blue);
-      text-shadow: 0 0 10px var(--neon-blue);
-      padding: 0.5rem 1rem;
-      background: rgba(0, 0, 0, 0.3);
-      border: 1px solid var(--neon-blue-soft);
+      text-shadow: 0 0 15px var(--neon-blue);
+      padding: 0.6rem 1.2rem;
+      background: rgba(0, 0, 0, 0.8);
+      border: 2px solid var(--neon-blue);
       border-radius: 8px;
-      margin-left: 1rem;
-      min-width: 120px;
       text-align: center;
+      display: flex;
+      align-items: baseline;
+      gap: 0.2rem;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5), inset 0 0 10px var(--neon-blue-soft);
+      transform: translateY(calc(-1 * (var(--panel-size) + 1.5rem)));
+      transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.35s;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    #digitalClock.visible {
+      transform: translateY(0);
+    }
+
+    #digitalClock.ui-hidden {
+      opacity: 0;
+    }
+
+    #digitalClock.ui-hidden.viz-persistent {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .clock-time {
+      letter-spacing: 2px;
+    }
+
+    .clock-ampm {
+      font-size: 1rem;
+      margin-left: 0.4rem;
+      opacity: 0.8;
     }
 
     /* ─── HOVER TRIGGER ZONES ─────────────────────────────────────────────── */
@@ -1004,6 +1037,12 @@
         font-size: 1rem;
         padding: 0.6rem 0.6rem;
       }
+
+      #digitalClock {
+        font-size: 2rem;
+        top: 1rem;
+        right: 1rem;
+      }
     }
 
     @media (max-width: 480px) {
@@ -1085,7 +1124,7 @@
   <!-- Logo connector piece (diagonal) -->
   <div class="logo-connector" id="logoConnector">
     <span style="font-size: 32px;">GN<br>NEON</span>
-</div>
+  </div>
 
   <!-- Left panel (nav) -->
   <div class="left-panel" id="leftPanel">
@@ -1124,8 +1163,13 @@
       <input type="number" id="volumeInput" min="0" max="100" value="50" oninput="setVolumeFromInput(this.value)">
       <input type="range" id="volumeSlider" min="0" max="100" value="50" oninput="setVolume(this.value)">
       <button id="muteBtn" onclick="toggleMute()">Mute</button>
-      <div id="digitalClock">00:00:00</div>
     </div>
+  </div>
+
+  <!-- Digital Clock -->
+  <div id="digitalClock">
+    <span class="clock-time" id="clockTime">12:00</span>
+    <span class="clock-ampm" id="clockAmPm">PM</span>
   </div>
 
   <main class="page-shell" id="mainContent">
@@ -1176,13 +1220,19 @@ function updateRainbow() {
 }
 updateRainbow();
 
-// ─── CLOCK LOGIC ─────────────────────────────────────────────────────────────
+// ─── CLOCK LOGIC (7-Segment, 12h, No Seconds) ──────────────────────────────────
 function updateClock() {
   const now = new Date();
-  const h = String(now.getHours()).padStart(2, '0');
+  let h = now.getHours();
   const m = String(now.getMinutes()).padStart(2, '0');
-  const s = String(now.getSeconds()).padStart(2, '0');
-  document.getElementById('digitalClock').innerText = `${h}:${m}:${s}`;
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  
+  h = h % 12;
+  h = h ? h : 12;
+  const hStr = String(h).padStart(2, '0');
+  
+  document.getElementById('clockTime').innerText = `${hStr}:${m}`;
+  document.getElementById('clockAmPm').innerText = ampm;
 }
 setInterval(updateClock, 1000);
 updateClock();
@@ -1380,11 +1430,9 @@ function toggleVisualizerMode() {
     logo.classList.add('ui-hidden');
     tag.classList.add('ui-hidden');
     btn.innerText = "Exit Mode";
+    clock.classList.add('ui-hidden');
     if (keepClockInViz) {
-      clock.style.position = 'fixed';
-      clock.style.top = '1.5rem';
-      clock.style.right = '1.5rem';
-      clock.style.zIndex = '1000';
+      clock.classList.add('viz-persistent');
     }
     document.addEventListener('keydown', exitVizOnEsc);
   } else {
@@ -1396,10 +1444,8 @@ function toggleVisualizerMode() {
     btn.innerText = "Visualizer";
     top.classList.remove('hover-reveal');
     left.classList.remove('hover-reveal');
-    clock.style.position = '';
-    clock.style.top = '';
-    clock.style.right = '';
-    clock.style.zIndex = '';
+    clock.classList.remove('ui-hidden');
+    clock.classList.remove('viz-persistent');
     document.removeEventListener('keydown', exitVizOnEsc);
   }
 }
@@ -1428,6 +1474,7 @@ document.addEventListener('keydown', (e) => {
   const topbar = document.getElementById('topbar');
   const leftPanel = document.getElementById('leftPanel');
   const logoConnector = document.getElementById('logoConnector');
+  const clock = document.getElementById('digitalClock');
   const triggerLeft = document.querySelector('.trigger-zone-left');
   const triggerTop = document.querySelector('.trigger-zone-top');
   
@@ -1437,6 +1484,7 @@ document.addEventListener('keydown', (e) => {
     topbar.classList.add('visible'); 
     leftPanel.classList.add('visible');
     logoConnector.classList.add('visible');
+    clock.classList.add('visible');
     if (isVisualizerMode) { 
       topbar.classList.add('hover-reveal');
       leftPanel.classList.add('hover-reveal');
@@ -1445,11 +1493,11 @@ document.addEventListener('keydown', (e) => {
   };
   
   const hideBoth = () => { 
-    // Check if mouse is NOT over any of the interactive elements
     if(!topbar.matches(':hover') && !leftPanel.matches(':hover') && !logoConnector.matches(':hover')) {
       topbar.classList.remove('visible'); 
       leftPanel.classList.remove('visible');
       logoConnector.classList.remove('visible');
+      clock.classList.remove('visible');
       if (isVisualizerMode) { 
         topbar.classList.remove('hover-reveal');
         leftPanel.classList.remove('hover-reveal');
@@ -1457,23 +1505,17 @@ document.addEventListener('keydown', (e) => {
     }
   };
 
-  // Trigger zones
   triggerLeft.addEventListener('mouseenter', showBoth);
   triggerTop.addEventListener('mouseenter', showBoth);
-  
-  // Panel hover
   topbar.addEventListener('mouseenter', showBoth);
   leftPanel.addEventListener('mouseenter', showBoth);
   logoConnector.addEventListener('mouseenter', showBoth);
   
-  // Mouse move tracking
   document.addEventListener('mousemove', (e) => {
-    // Show if near top or left edges
     if (e.clientX < 8 || e.clientY < 8) { 
       showBoth(); 
     } 
     else { 
-      // If not hovering over panels, start hide timer
       if(!topbar.matches(':hover') && !leftPanel.matches(':hover') && !logoConnector.matches(':hover')) { 
         clearTimeout(hideTimer); 
         hideTimer = setTimeout(hideBoth, 300); 
@@ -1481,12 +1523,9 @@ document.addEventListener('keydown', (e) => {
     }
   });
   
-  // Clear hide timer when entering panels
   topbar.addEventListener('mouseenter', () => clearTimeout(hideTimer));
   leftPanel.addEventListener('mouseenter', () => clearTimeout(hideTimer));
   logoConnector.addEventListener('mouseenter', () => clearTimeout(hideTimer));
-
-  // Hide on leave
   topbar.addEventListener('mouseleave', () => { hideTimer = setTimeout(hideBoth, 500); });
   leftPanel.addEventListener('mouseleave', () => { hideTimer = setTimeout(hideBoth, 500); });
   logoConnector.addEventListener('mouseleave', () => { hideTimer = setTimeout(hideBoth, 500); });
