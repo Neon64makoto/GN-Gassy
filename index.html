@@ -19,6 +19,8 @@
       --neon-blue-lighter2: #0000ff;
       --shadow: 0 14px 32px rgba(0, 0, 0, 0.32);
       --panel-size: 140px;
+      --bg-gradient-top: #000000;
+      --bg-gradient-bottom: #000000;
     }
 
     * {
@@ -34,7 +36,7 @@
     }
 
     body {
-      background: #000;
+      background: linear-gradient(to bottom, var(--bg-gradient-top), var(--bg-gradient-bottom));
       color: var(--text);
       font-family: Arial, sans-serif;
       background-size: cover;
@@ -1201,6 +1203,16 @@ let rainbowStates = {
   '--neon-blue-soft': { active: false, speed: 5 }
 };
 
+let backgroundSettings = {
+  useVideo: true,
+  gradientTop: '#000000',
+  gradientBottom: '#000000',
+  rainbowTop: false,
+  rainbowBottom: false,
+  rainbowTopSpeed: 5,
+  rainbowBottomSpeed: 5
+};
+
 function updateRainbow() {
   const time = Date.now() / 1000;
   for (const [key, state] of Object.entries(rainbowStates)) {
@@ -1212,6 +1224,14 @@ function updateRainbow() {
         document.documentElement.style.setProperty(key, `hsl(${hue}, 100%, 50%)`);
       }
     }
+  }
+  if (backgroundSettings.rainbowTop) {
+    const hueTop = (time * backgroundSettings.rainbowTopSpeed * 10) % 360;
+    document.documentElement.style.setProperty('--bg-gradient-top', `hsl(${hueTop}, 100%, 50%)`);
+  }
+  if (backgroundSettings.rainbowBottom) {
+    const hueBottom = (time * backgroundSettings.rainbowBottomSpeed * 10) % 360;
+    document.documentElement.style.setProperty('--bg-gradient-bottom', `hsl(${hueBottom}, 100%, 50%)`);
   }
   requestAnimationFrame(updateRainbow);
 }
@@ -1598,6 +1618,52 @@ document.addEventListener('keydown', (e) => {
 })();
 
 // ─── PAGES DATA ──────────────────────────────────────────────────────────────
+function updateBackgroundGradient() {
+  document.documentElement.style.setProperty('--bg-gradient-top', backgroundSettings.gradientTop);
+  document.documentElement.style.setProperty('--bg-gradient-bottom', backgroundSettings.gradientBottom);
+}
+
+function toggleBackgroundVideo() {
+  backgroundSettings.useVideo = !backgroundSettings.useVideo;
+  const videoBg = document.getElementById('videoBg');
+  if (videoBg) {
+    videoBg.style.display = backgroundSettings.useVideo ? 'block' : 'none';
+  }
+  localStorage.setItem('gn_neon_bg_settings', JSON.stringify(backgroundSettings));
+  load('settings');
+}
+
+function updateBackgroundColor(position, val) {
+  if (position === 'top') {
+    backgroundSettings.gradientTop = val;
+    backgroundSettings.rainbowTop = false;
+  } else {
+    backgroundSettings.gradientBottom = val;
+    backgroundSettings.rainbowBottom = false;
+  }
+  updateBackgroundGradient();
+  localStorage.setItem('gn_neon_bg_settings', JSON.stringify(backgroundSettings));
+}
+
+function toggleBackgroundRainbow(position) {
+  if (position === 'top') {
+    backgroundSettings.rainbowTop = !backgroundSettings.rainbowTop;
+  } else {
+    backgroundSettings.rainbowBottom = !backgroundSettings.rainbowBottom;
+  }
+  localStorage.setItem('gn_neon_bg_settings', JSON.stringify(backgroundSettings));
+  load('settings');
+}
+
+function updateBackgroundRainbowSpeed(position, speed) {
+  if (position === 'top') {
+    backgroundSettings.rainbowTopSpeed = parseFloat(speed);
+  } else {
+    backgroundSettings.rainbowBottomSpeed = parseFloat(speed);
+  }
+  localStorage.setItem('gn_neon_bg_settings', JSON.stringify(backgroundSettings));
+}
+
 function applySavedColors() {
   const saved = localStorage.getItem('gn_neon_colors');
   if (saved) {
@@ -1613,6 +1679,11 @@ function applySavedColors() {
   const savedClockSetting = localStorage.getItem('gn_neon_keep_clock');
   if (savedClockSetting !== null) {
     keepClockInViz = savedClockSetting === 'true';
+  }
+  const savedBgSettings = localStorage.getItem('gn_neon_bg_settings');
+  if (savedBgSettings) {
+    backgroundSettings = JSON.parse(savedBgSettings);
+    updateBackgroundGradient();
   }
 }
 
@@ -1667,6 +1738,42 @@ const pages = {
             <span>KEEP CLOCK IN VISUALIZER MODE</span>
             <button onclick="toggleKeepClock()" style="margin:0; padding: 0.3rem 0.6rem; font-size: 0.8rem; background: ${keepClockInViz ? 'var(--neon-blue)' : '#333'}">${keepClockInViz ? 'Enabled' : 'Disabled'}</button>
           </div>
+        </div>
+        <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px;">
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <span>USE VIDEO BACKGROUND</span>
+            <button onclick="toggleBackgroundVideo()" style="margin:0; padding: 0.3rem 0.6rem; font-size: 0.8rem; background: ${backgroundSettings.useVideo ? 'var(--neon-blue)' : '#333'}">${backgroundSettings.useVideo ? 'Enabled' : 'Disabled'}</button>
+          </div>
+        </div>
+        <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+            <span>GRADIENT TOP COLOR</span>
+            <div style="display: flex; gap: 0.5rem; align-items: center;">
+              <input type="color" value="${backgroundSettings.gradientTop}" onchange="updateBackgroundColor('top', this.value)">
+              <button onclick="toggleBackgroundRainbow('top')" style="margin:0; padding: 0.3rem 0.6rem; font-size: 0.8rem; background: ${backgroundSettings.rainbowTop ? 'var(--neon-blue)' : '#333'}">Rainbow</button>
+            </div>
+          </div>
+          ${backgroundSettings.rainbowTop ? `
+            <div style="display: flex; align-items: center; gap: 1rem;">
+              <span style="font-size: 0.8rem; opacity: 0.7;">Speed</span>
+              <input type="range" min="1" max="20" value="${backgroundSettings.rainbowTopSpeed}" oninput="updateBackgroundRainbowSpeed('top', this.value)" style="flex: 1;">
+            </div>
+          ` : ''}
+        </div>
+        <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+            <span>GRADIENT BOTTOM COLOR</span>
+            <div style="display: flex; gap: 0.5rem; align-items: center;">
+              <input type="color" value="${backgroundSettings.gradientBottom}" onchange="updateBackgroundColor('bottom', this.value)">
+              <button onclick="toggleBackgroundRainbow('bottom')" style="margin:0; padding: 0.3rem 0.6rem; font-size: 0.8rem; background: ${backgroundSettings.rainbowBottom ? 'var(--neon-blue)' : '#333'}">Rainbow</button>
+            </div>
+          </div>
+          ${backgroundSettings.rainbowBottom ? `
+            <div style="display: flex; align-items: center; gap: 1rem;">
+              <span style="font-size: 0.8rem; opacity: 0.7;">Speed</span>
+              <input type="range" min="1" max="20" value="${backgroundSettings.rainbowBottomSpeed}" oninput="updateBackgroundRainbowSpeed('bottom', this.value)" style="flex: 1;">
+            </div>
+          ` : ''}
         </div>
         ${Object.entries(rainbowStates).map(([key, state]) => `
           <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px;">
@@ -1965,6 +2072,13 @@ function checkGuess() {
 
 // ─── BOOT ─────────────────────────────────────────────────────────────────────
 function setVideoBackground(videoUrl) {
+  if (!backgroundSettings.useVideo) {
+    const splash = document.getElementById('splashOverlay');
+    splash.classList.add('ready');
+    document.getElementById('splashText').innerText = "!!!WARNING MUSIC WILL PLAY!!!";
+    document.getElementById('splashSubtext').innerText = "CLICK TO ENTER";
+    return;
+  }
   const video = document.createElement('video');
   video.id = 'videoBg'; video.autoplay = true; video.loop = true; video.muted = true; video.src = videoUrl;
   video.addEventListener('canplay', () => {
