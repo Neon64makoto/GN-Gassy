@@ -36,13 +36,12 @@
     }
 
     body {
-      background: linear-gradient(to bottom, var(--bg-gradient-top), var(--bg-gradient-bottom));
+      background: linear-gradient(to bottom, var(--bg-gradient-top, #000), var(--bg-gradient-bottom, #000)) no-repeat fixed;
+      background-size: cover;
       color: var(--text);
       font-family: Arial, sans-serif;
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
       transition: opacity 0.5s ease;
+      min-height: 100vh;
     }
 
     /* Splash / Loading Overlay */
@@ -119,7 +118,6 @@
     }
 
     body.video-bg {
-      background: none;
       position: relative;
     }
 
@@ -1227,11 +1225,15 @@ function updateRainbow() {
   }
   if (backgroundSettings.rainbowTop) {
     const hueTop = (time * backgroundSettings.rainbowTopSpeed * 10) % 360;
-    document.documentElement.style.setProperty('--bg-gradient-top', `hsl(${hueTop}, 100%, 50%)`);
+    const color = `hsl(${hueTop}, 100%, 50%)`;
+    document.documentElement.style.setProperty('--bg-gradient-top', color);
+    document.body.style.setProperty('--bg-gradient-top', color);
   }
   if (backgroundSettings.rainbowBottom) {
     const hueBottom = (time * backgroundSettings.rainbowBottomSpeed * 10) % 360;
-    document.documentElement.style.setProperty('--bg-gradient-bottom', `hsl(${hueBottom}, 100%, 50%)`);
+    const color = `hsl(${hueBottom}, 100%, 50%)`;
+    document.documentElement.style.setProperty('--bg-gradient-bottom', color);
+    document.body.style.setProperty('--bg-gradient-bottom', color);
   }
   requestAnimationFrame(updateRainbow);
 }
@@ -1619,15 +1621,22 @@ document.addEventListener('keydown', (e) => {
 
 // ─── PAGES DATA ──────────────────────────────────────────────────────────────
 function updateBackgroundGradient() {
-  document.documentElement.style.setProperty('--bg-gradient-top', backgroundSettings.gradientTop);
-  document.documentElement.style.setProperty('--bg-gradient-bottom', backgroundSettings.gradientBottom);
+  if (!backgroundSettings.rainbowTop) {
+    document.documentElement.style.setProperty('--bg-gradient-top', backgroundSettings.gradientTop);
+    document.body.style.setProperty('--bg-gradient-top', backgroundSettings.gradientTop);
+  }
+  if (!backgroundSettings.rainbowBottom) {
+    document.documentElement.style.setProperty('--bg-gradient-bottom', backgroundSettings.gradientBottom);
+    document.body.style.setProperty('--bg-gradient-bottom', backgroundSettings.gradientBottom);
+  }
 }
 
 function toggleBackgroundVideo() {
   backgroundSettings.useVideo = !backgroundSettings.useVideo;
   const videoBg = document.getElementById('videoBg');
   if (videoBg) {
-    videoBg.style.display = backgroundSettings.useVideo ? 'block' : 'none';
+    videoBg.style.opacity = backgroundSettings.useVideo ? '1' : '0';
+    videoBg.style.visibility = backgroundSettings.useVideo ? 'visible' : 'hidden';
   }
   localStorage.setItem('gn_neon_bg_settings', JSON.stringify(backgroundSettings));
   load('settings');
@@ -1723,8 +1732,26 @@ function resetColors() {
     document.documentElement.style.setProperty(key, val);
   }
   for (const key in rainbowStates) rainbowStates[key].active = false;
+  
+  backgroundSettings = {
+    useVideo: true,
+    gradientTop: '#000000',
+    gradientBottom: '#000000',
+    rainbowTop: false,
+    rainbowBottom: false,
+    rainbowTopSpeed: 5,
+    rainbowBottomSpeed: 5
+  };
+  updateBackgroundGradient();
+  const videoBg = document.getElementById('videoBg');
+  if (videoBg) {
+    videoBg.style.opacity = '1';
+    videoBg.style.visibility = 'visible';
+  }
+  
   localStorage.removeItem('gn_neon_colors');
   localStorage.removeItem('gn_neon_rainbow');
+  localStorage.removeItem('gn_neon_bg_settings');
   load('settings');
 }
 
@@ -2072,15 +2099,12 @@ function checkGuess() {
 
 // ─── BOOT ─────────────────────────────────────────────────────────────────────
 function setVideoBackground(videoUrl) {
-  if (!backgroundSettings.useVideo) {
-    const splash = document.getElementById('splashOverlay');
-    splash.classList.add('ready');
-    document.getElementById('splashText').innerText = "!!!WARNING MUSIC WILL PLAY!!!";
-    document.getElementById('splashSubtext').innerText = "CLICK TO ENTER";
-    return;
-  }
   const video = document.createElement('video');
   video.id = 'videoBg'; video.autoplay = true; video.loop = true; video.muted = true; video.src = videoUrl;
+  if (!backgroundSettings.useVideo) {
+    video.style.opacity = '0';
+    video.style.visibility = 'hidden';
+  }
   video.addEventListener('canplay', () => {
     const splash = document.getElementById('splashOverlay');
     splash.classList.add('ready');
