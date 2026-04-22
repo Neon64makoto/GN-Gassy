@@ -498,614 +498,384 @@
       align-items: center;
       gap: 0.3rem;
       border-top: 1px solid var(--panel-color);
-      margin-top: 0.4rem;
+      padding-top: 0.3rem;
     }
 
-    .music-info {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      line-height: 1.25;
+    .track-info {
+      width: 100%;
+      text-align: center;
+      margin-bottom: 0.1rem;
     }
 
-    .music-title {
-      font-size: 0.95rem;
+    .track-title {
+      display: block;
       font-weight: bold;
-      color: #fff;
-      letter-spacing: 0.02em;
-    }
-
-    .music-artist {
-      font-size: 0.8rem;
       color: var(--music-text);
+      font-size: 1rem;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      text-shadow: 0 0 10px var(--main-color);
     }
 
-    .music-btn-row {
+    .track-artist {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 0.1rem;
+    }
+
+    .playback-bar {
+      width: 100%;
       display: flex;
       align-items: center;
-      gap: 0.25rem;
+      gap: 0.8rem;
+    }
+
+    .time-label {
+      font-size: 0.75rem;
+      color: var(--muted);
+      min-width: 40px;
+      font-family: monospace;
+    }
+
+    .progress-container {
+      flex: 1;
+      height: 6px;
+      background: #222;
+      border-radius: 3px;
+      position: relative;
+      cursor: pointer;
+      border: 1px solid #333;
+    }
+
+    .progress-fill {
+      position: absolute;
+      top: 0; left: 0; height: 100%;
+      background: var(--main-color);
+      border-radius: 3px;
+      width: 0%;
+      box-shadow: 0 0 10px var(--main-color);
+    }
+
+    .control-buttons {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 0.1rem;
     }
 
     .music-btn {
-      margin: 0;
-      padding: 0.35rem 0.65rem;
-      font-size: 1rem;
       background: transparent;
-      border: 1px solid var(--panel-color);
-      border-radius: 6px;
-      color: var(--menu-text);
+      border: none;
+      color: var(--muted);
+      font-size: 1.2rem;
       cursor: pointer;
+      padding: 0.3rem;
+      margin: 0;
       transition: all 0.15s;
-      min-width: unset;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .music-btn:hover {
-      background: var(--panel-color);
-      transform: translateY(-1px);
-      border-color: var(--main-color);
-      color: #fff;
+      color: var(--main-color);
+      transform: scale(1.15);
+      background: transparent;
+      box-shadow: none;
     }
 
-    .music-btn.active-loop {
-      background: var(--panel-color);
-      border-color: var(--main-color);
-      color: #fff;
+    .music-btn.active {
+      color: var(--main-color);
+      text-shadow: 0 0 10px var(--main-color);
     }
 
-    .music-seek-row {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      width: 100%;
-    }
-
-    .music-time {
-      font-size: 0.78rem;
-      color: var(--music-text);
-      white-space: nowrap;
-      min-width: 38px;
-      text-align: center;
-    }
-
-    #seekBar {
-      flex: 1;
-      -webkit-appearance: none;
-      appearance: none;
-      height: 4px;
-      border-radius: 2px;
-      background: linear-gradient(to right, var(--main-color) 0%, #333 0%);
-      outline: none;
-      cursor: pointer;
-      margin: 0;
-      padding: 0;
-      border: none;
-    }
-
-    #seekBar::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: var(--main-color);
-      cursor: pointer;
-    }
-
-    /* ─── MAIN CONTENT ────────────────────────────────────────────────── */
-    .page-shell {
-      width: 100%;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 2rem 1.5rem 2rem;
-      transition: opacity 0.4s;
-    }
-    .page-shell.wide-shell {
-      max-width: 95vw;
-    }
-
-    .page-shell.ui-hidden {
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    .site-title {
-      margin: 0.5rem 0 1.5rem;
-      text-align: center;
-      letter-spacing: 0.04em;
-      font-size: 3rem;
+    .play-pause-btn {
+      font-size: 1.8rem;
       color: var(--main-color);
     }
 
-    #content {
-      width: 100%;
-      min-height: auto;
-      padding: 1rem 0 1rem;
+    /* ─── HERO & PANELS ─────────────────────────────────────────────── */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+      padding-left: calc(var(--panel-size) + 2rem);
+      padding-top: calc(var(--panel-size) + 2rem);
+      transition: padding 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    
+    .container.viz-mode {
+      padding: 0;
+      max-width: none;
     }
 
     .panel {
-      background: linear-gradient(180deg, rgba(0, 0, 0, 1), var(--panel-color));
+      background: rgba(17, 17, 17, 0.85);
       border: 1px solid var(--border);
-      border-radius: 14px;
+      border-radius: 8px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      backdrop-filter: blur(10px);
       box-shadow: var(--shadow);
-      backdrop-filter: blur(5px);
-      padding: 10px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .panel::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; width: 4px; height: 100%;
+      background: var(--main-color);
+      box-shadow: 0 0 15px var(--main-color);
+    }
+
+    h2 {
+      margin-top: 0;
+      color: var(--main-color);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-size: 1.5rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.5rem;
+      margin-bottom: 1.5rem;
     }
 
     .home-grid {
       display: grid;
-      grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.9fr);
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .hero-panel {
+      display: flex;
+      flex-direction: column;
       gap: 1.5rem;
-      align-items: stretch;
-    }
-
-    .games-panel {
-      background: linear-gradient(180deg, rgba(0, 0, 0, 1), var(--panel-color));
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(5px);
-      padding: 10px;
-      width: 90vw;
-      margin-left: calc(50% - 45vw);
-    }
-
-    .games-panel h2 {
-      padding: 2rem 2rem 1rem 2rem;
-      margin: 0;
-    }
-
-    .games-menu {
-      padding: 0 2rem 2rem 2rem;
-      text-align: center;
-    }
-
-    #gamesContent {
-      width: 100%;
-    }
-
-    .hero-panel h2,
-    .patch-panel h3,
-    .calc-panel h2,
-    .games-panel h2,
-    .about-panel h2 {
-      margin-top: 0;
-      font-size: 2rem;
-    }
-
-    .lead {
-      color: #d2d2d2;
-      line-height: 1.6;
-      font-size: 1.15rem;
     }
 
     .image-row {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      display: flex;
       gap: 1rem;
-      margin-top: 1.5rem;
+      flex-wrap: wrap;
     }
 
     .image-card {
-      background: var(--panel-alt);
+      flex: 1;
+      min-width: 280px;
+      background: #000;
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1rem;
+      border-radius: 4px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      margin: 0;
     }
 
     .image-card img {
       width: 100%;
-      display: block;
-      border-radius: 8px;
+      height: 200px;
+      object-fit: cover;
+      opacity: 0.9;
+      transition: opacity 0.3s;
+    }
+
+    .image-card:hover img {
+      opacity: 1;
     }
 
     .image-card span {
-      display: block;
-      margin-top: 0.75rem;
+      padding: 0.75rem;
+      font-size: 0.9rem;
       color: var(--muted);
-      font-size: 1rem;
+      background: var(--panel-alt);
+      border-top: 1px solid var(--border);
     }
 
-    .patch-panel {
-      padding: 2rem;
-      position: relative;
-      overflow: hidden;
-      max-height: 600px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .version-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.75rem;
-      margin-bottom: 0.5rem;
-      padding: 0.5rem 0.8rem;
-      border-radius: 999px;
-      border: 1px solid var(--main-color);
-      background: var(--panel-color);
-      color: var(--main-color);
-      font-size: 0.9rem;
-    }
-
-    .patch-list {
-      margin: 1rem 0 0;
-      padding-left: 1.5rem;
-      line-height: 1.65;
-      font-size: 0.95rem;
-    }
-
-    .patch-list li + li {
-      margin-top: 0.75rem;
-    }
-
-    .section-copy {
+    .lead {
+      font-size: 1.2rem;
+      line-height: 1.6;
       color: var(--muted);
-      font-size: 1.1rem;
     }
 
-    .calc-panel,
-    .games-panel,
-    .about-panel {
-      padding: 2rem;
-    }
-
-    .calc-panel h2,
-    .games-panel h2,
-    .about-panel h2 {
-      font-size: 2rem;
-    }
-
-    .calc-panel h3,
-    .games-panel h3,
-    .about-panel h3 {
-      font-size: 1.5rem;
-    }
-
-    .button-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-      margin-bottom: 1.5rem;
-    }
-
-    #scratchFrame {
-      width: 100%;
-      height: 55vh;
-      border: none;
-      border-radius: 10px;
-      background: #000;
-    }
-
-    .games-layout {
-      display: flex;
-      gap: 0.75rem;
-      align-items: flex-start;
-      justify-content: center;
-      width: 100%;
-      padding: 0.5rem 1rem 1rem 1rem;
-      margin: 0;
-      box-sizing: border-box;
-    }
-
-    .games-menu {
-      text-align: center;
-    }
-
-    .games-menu button {
-      display: block;
-      width: 40%;
-      margin: 0.5rem auto;
-      font-size: 1rem;
-      padding: 0.75rem 1rem;
-    }
-
-    .back-button {
-      display: block;
-      margin: 0.5rem auto 1rem;
-      font-size: 0.9rem;
-      padding: 0.5rem 1rem;
-    }
-
-    .wip-container {
-      text-align: center;
-      padding: 2rem 1rem;
-    }
-
-    .wip-container h2 {
-      font-size: 1.5rem;
-      margin-bottom: 0.75rem;
-    }
-
-    .wip-container p {
-      color: #b3b3b3;
-      font-size: 1rem;
-    }
-
-    .sideBox {
-      width: 18%;
-      padding: 1rem;
-      background: #111;
-      border: 1px solid #333;
-      border-radius: 10px;
-      overflow-y: auto;
-      height: 55vh;
-      box-shadow: var(--shadow);
-      font-size: 0.9rem;
-    }
-
-    .centerBox {
-      width: 50%;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      flex-shrink: 0;
-    }
-
-    .sideBox {
-      flex-shrink: 0;
-    }
-
-    #gameControls,
-    #gameNotes {
-      white-space: pre-line;
-      color: #ddd;
-      line-height: 1.5;
-      font-size: 0.95rem;
-    }
-
-    .canvas-wrap {
-      position: relative;
-      display: inline-block;
-    }
-
-    #grid {
-      border: 1px solid white;
-      background: #000;
-    }
-
-    #axesLabels {
-      position: absolute;
-      font-size: 0.8em;
-      color: #ccc;
-    }
-
-    #graphResults {
-      margin-top: 1rem;
-      padding: 1rem;
-      background: #0e0e0e;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      text-align: left;
-      font-size: 1.05rem;
-    }
-
-    .version-tag {
+    /* ─── VISUALIZER MODE ────────────────────────────────────────────── */
+    #visualizerContainer {
       position: fixed;
-      bottom: 5px;
-      right: 10px;
-      color: gray;
-      font-size: 0.85rem;
-      z-index: 200;
-      transition: opacity 0.4s;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: 10;
+      display: none;
+      background: transparent;
     }
 
-    .version-tag.ui-hidden {
-      opacity: 0;
-    }
-
-    /* ─── AUDIO VISUALIZER ────────────────────────────────────────────── */
     #visualizerCanvas {
-      position: fixed;
-      bottom: 0;
-      left: 0;
       width: 100%;
-      height: 175vh;
-      z-index: -1;
-      pointer-events: none;
-      display: block;
+      height: 100%;
     }
 
-    /* ─── NEW TOOLS & SECTIONS ─────────────────────────────────────────── */
-    .embed-container { width: 100%; height: 80vh; border-radius: 12px; overflow: hidden; border: 1px solid #333; margin-top: 1rem; }
-    .embed-container iframe { width: 100%; height: 100%; border: none; }
-    #ideContainer { display: flex; flex-direction: row; gap: 1rem; height: 400px; }
-    #ideInput { flex: 1; height: 100%; background: #111; color: #0f0; font-family: monospace; margin: 0; }
-    #ideOutput { flex: 1; height: 100%; background: white; border-radius: 8px; border: none; }
-    #paintingCanvas { background: white; border-radius: 8px; display: block; margin: 0 auto; }
-    #chatContainer { height: 400px; background: #0a0a0a; border: 1px solid #333; border-radius: 8px; display: flex; flex-direction: column; overflow: hidden; }
-    #chatLog { flex: 1; overflow-y: auto; padding: 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
-    .chat-msg { padding: 0.5rem 0.8rem; border-radius: 8px; max-width: 80%; }
-    .user-msg { align-self: flex-end; background: var(--main-color); color: white; }
-    .bot-msg { align-self: flex-start; background: #222; color: var(--music-text); }
-    .chat-input-row { display: flex; padding: 0.5rem; background: #111; border-top: 1px solid #333; }
-    #chatInput { flex: 1; margin: 0; }
-
-    /* ─── RESPONSIVE ──────────────────────────────────────────────────── */
-    @media (max-width: 1200px) {
-      html,
-      body {
-        font-size: 15px;
-      }
-
-      .site-title {
-        font-size: 2.5rem;
-      }
+    /* ─── UI TOGGLE BUTTON ────────────────────────────────────────────── */
+    #uiToggle {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      z-index: 1000;
+      background: rgba(0, 0, 0, 0.7);
+      border: 1px solid var(--main-color);
+      color: var(--main-color);
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.2rem;
+      transition: all 0.2s;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      padding: 0;
+      margin: 0;
     }
 
-    @media (max-width: 960px) {
-      html,
-      body {
-        font-size: 14px;
-      }
-
-      .site-title {
-        font-size: 2.2rem;
-      }
-
-      .home-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .games-layout {
-        flex-direction: column;
-      }
-
-      .sideBox,
-      .centerBox {
-        width: 100%;
-      }
-
-      .patch-panel h3 {
-        font-size: 1.3rem;
-      }
-
-      .patch-panel {
-        max-height: 400px;
-      }
+    #uiToggle:hover {
+      background: var(--main-color);
+      color: #fff;
+      box-shadow: 0 0 20px var(--main-color);
     }
 
+    /* ─── ANIMATIONS ──────────────────────────────────────────────────── */
+    @keyframes pulse {
+      0% { box-shadow: 0 0 5px var(--main-color); }
+      50% { box-shadow: 0 0 20px var(--main-color); }
+      100% { box-shadow: 0 0 5px var(--main-color); }
+    }
+
+    /* ─── CANVAS TOOL ───────────────────────────────────────────────── */
+    .canvas-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    #paintingCanvas {
+      background: #fff;
+      border: 2px solid var(--main-color);
+      cursor: crosshair;
+      width: 100%;
+      max-width: 800px;
+      height: 500px;
+    }
+    .canvas-controls {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    /* ─── EMBED AREA ────────────────────────────────────────────────── */
+    #embedArea {
+      width: 100%;
+      height: 600px;
+      border: 2px solid var(--main-color);
+      margin-top: 1rem;
+      display: none;
+    }
+    #embedArea iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* ─── CIPHER TOOL ───────────────────────────────────────────────── */
+    .cipher-box {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .cipher-box textarea {
+      width: 100%;
+      height: 100px;
+      resize: vertical;
+    }
+
+    /* ─── CHAT BOT ──────────────────────────────────────────────────── */
+    .chat-container {
+      height: 300px;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    #chatLog {
+      flex: 1;
+      padding: 1rem;
+      overflow-y: auto;
+      background: #050505;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .chat-msg {
+      padding: 0.5rem 0.75rem;
+      border-radius: 4px;
+      max-width: 80%;
+      font-size: 0.9rem;
+    }
+    .user-msg { background: var(--main-color); align-self: flex-end; }
+    .bot-msg { background: #333; align-self: flex-start; }
+    .chat-input-area {
+      display: flex;
+      border-top: 1px solid var(--border);
+    }
+    .chat-input-area input {
+      flex: 1;
+      margin: 0;
+      border: none;
+      border-radius: 0;
+    }
+    .chat-input-area button {
+      margin: 0;
+      border-radius: 0;
+      padding: 0 1rem;
+    }
+
+    /* ─── NUMBER GUESS ──────────────────────────────────────────────── */
+    .game-box {
+      text-align: center;
+      padding: 1rem;
+      background: #0c0c0c;
+      border-radius: 4px;
+    }
+
+    /* Mobile adjustments */
     @media (max-width: 768px) {
-      html,
-      body {
-        font-size: 13px;
+      .left-panel {
+        width: 80px;
       }
-
-      .page-shell {
-        padding: 2rem 1rem 5rem;
-      }
-
-      .site-title {
-        font-size: 1.8rem;
-        margin: 0.5rem 0 1rem;
-      }
-
-      .hero-panel,
-      .patch-panel,
-      .calc-panel,
-      .games-panel,
-      .about-panel {
-        padding: 1.5rem;
-      }
-
-      .patch-panel {
-        max-height: 350px;
-      }
-
       .topbar {
-        gap: 0.5rem;
+        padding-left: 80px;
+        height: 120px;
       }
-
-      .topbar-right {
-        right: 0.5rem;
+      .logo-connector {
+        width: 80px;
+        height: 80px;
       }
-
-      .hero-panel h2,
-      .patch-panel h3,
-      .calc-panel h2,
-      .games-panel h2,
-      .about-panel h2 {
-        font-size: 1.5rem;
+      .container {
+        padding-left: 100px;
+        padding-top: 140px;
       }
-
-      .image-row {
-        grid-template-columns: 1fr;
-        gap: 0.75rem;
-      }
-
-      .sideBox {
-        padding: 1rem;
-        font-size: 0.9rem;
-      }
-
-      #scratchFrame {
-        height: 50vh;
-      }
-
-      button {
-        margin: 0.4rem;
-        font-size: 1rem;
-        padding: 0.6rem 0.8rem;
-      }
-
-      input {
-        margin: 0.4rem;
-        font-size: 1rem;
-        padding: 0.6rem 0.6rem;
-      }
-
       #digitalClock {
-        font-size: 2rem;
-        top: 1rem;
-        right: 1rem;
-      }
-    }
-
-    @media (max-width: 480px) {
-      html,
-      body {
-        font-size: 12px;
-      }
-
-      .page-shell {
-        padding: 2rem 0.75rem 5rem;
-      }
-
-      .site-title {
         font-size: 1.5rem;
-        margin: 0.4rem 0 0.8rem;
+        padding: 0.3rem 0.6rem;
       }
-
-      .hero-panel,
-      .patch-panel,
-      .calc-panel,
-      .games-panel,
-      .about-panel {
-        padding: 1rem;
-      }
-
-      .hero-panel h2,
-      .patch-panel h3,
-      .calc-panel h2,
-      .games-panel h2,
-      .about-panel h2 {
-        font-size: 1.3rem;
-      }
-
-      .button-row {
-        gap: 0.5rem;
-        margin-bottom: 1rem;
-      }
-
-      button {
-        margin: 0.3rem;
-        font-size: 0.9rem;
-        padding: 0.5rem 0.6rem;
-      }
-
-      input {
-        margin: 0.3rem;
-        font-size: 0.9rem;
-        padding: 0.5rem 0.5rem;
-      }
-
-      .sideBox {
-        padding: 0.75rem;
-        font-size: 0.85rem;
-      }
-
-      #scratchFrame {
-        height: 40vh;
-      }
-
-      .games-layout {
-        gap: 0.5rem;
+      #volumeSlider {
+        width: 100px;
       }
     }
   </style>
 </head>
-<body class="video-bg">
+<body>
+  <div id="visualizerContainer">
+    <canvas id="visualizerCanvas"></canvas>
+  </div>
+
   <audio id="bgMusic" style="display:none;" crossorigin="anonymous"></audio>
 
   <!-- Click to Enter Splash -->
@@ -1127,57 +897,57 @@
   <div class="left-panel" id="leftPanel">
     <nav class="nav" aria-label="Primary">
       <button onclick="load('home')">Home</button>
-      <button onclick="load('tools')">Tools</button>
-      <button onclick="load('games')">Games</button>
       <button onclick="load('creations')">Creations</button>
-      <button onclick="load('about')">About</button>
-      <button onclick="toggleVisualizerMode()" id="vizModeBtn" style="border: 1px solid var(--main-color); background: var(--panel-color);">Visualizer</button>
-      <button onclick="load('settings')" style="margin-top: auto;">Settings</button>
+      <button onclick="load('tools')">Tools</button>
+      <button onclick="load('settings')">Settings</button>
+      <button onclick="toggleVisualizerMode()">Visualizer</button>
     </nav>
   </div>
 
-  <!-- Top panel (music) -->
-  <div class="topbar" id="topbar">
-    <div class="topbar-row1"></div>
+  <!-- Top bar (music) -->
+  <div class="topbar" id="topBar">
     <div class="music-controls">
-      <div class="music-info">
-        <span class="music-title" id="mcTitle">Super Mario RPG</span>
-        <span class="music-artist" id="mcArtist">Yoko Shimomura</span>
+      <div class="track-info">
+        <span class="track-title" id="mcTitle">Track Title</span>
+        <span class="track-artist" id="mcArtist">Artist Name</span>
       </div>
-      <div class="music-btn-row">
-        <button class="music-btn" onclick="musicPrev()" title="Previous">&#9664;&#9664;</button>
-        <button class="music-btn" id="mcPlayPause" onclick="musicPlayPause()" title="Play/Pause">&#9646;&#9646;</button>
-        <button class="music-btn" onclick="musicNext()" title="Next">&#9654;&#9654;</button>
-        <button class="music-btn" id="mcLoop" onclick="musicToggleLoop()" title="Loop">&#8635;</button>
+      
+      <div class="playback-bar">
+        <span class="time-label" id="mcCurrent">0:00</span>
+        <input type="range" id="seekBar" min="0" max="100" value="0" style="flex:1; cursor:pointer;">
+        <span class="time-label" id="mcDuration">0:00</span>
       </div>
-      <div class="music-seek-row">
-        <span class="music-time" id="mcCurrent">0:00</span>
-        <input type="range" id="seekBar" min="0" max="100" value="0" oninput="musicSeek(this.value)">
-        <span class="music-time" id="mcDuration">0:00</span>
+
+      <div class="control-buttons">
+        <button class="music-btn" onclick="musicPrev()" title="Previous">⏮</button>
+        <button class="music-btn play-pause-btn" id="mcPlayPause" onclick="musicPlayPause()" title="Play/Pause">▮▮</button>
+        <button class="music-btn" onclick="musicNext()" title="Next">⏭</button>
+        <button class="music-btn" id="loopBtn" onclick="musicToggleLoop()" title="Loop">🔁</button>
+        
+        <div style="display: flex; align-items: center; margin-left: 1rem;">
+          <button class="music-btn" id="muteBtn" onclick="musicToggleMute()" title="Mute">🔊</button>
+          <input type="range" id="volumeSlider" min="0" max="100" step="1" value="50">
+          <input type="text" id="volumeInput" value="50">
+        </div>
       </div>
-    </div>
-    <div class="topbar-right">
-      <input type="number" id="volumeInput" min="0" max="100" value="50" oninput="setVolumeFromInput(this.value)">
-      <input type="range" id="volumeSlider" min="0" max="100" value="50" oninput="setVolume(this.value)">
-      <button id="muteBtn" onclick="toggleMute()">Mute</button>
     </div>
   </div>
 
   <!-- Digital Clock -->
   <div id="digitalClock">
-    <span class="clock-time" id="clockTime">12:00</span>
-    <span class="clock-ampm" id="clockAmPm">PM</span>
+    <span class="clock-time" id="clockTime">00:00</span>
+    <span class="clock-ampm" id="clockAmPm">AM</span>
   </div>
 
-  <main class="page-shell" id="mainContent">
-    <h1 class="site-title">GN-Neon</h1>
-    <div id="content">Loading...</div>
+  <!-- Main content area -->
+  <main class="container" id="mainContent">
+    <!-- Content loaded here -->
   </main>
 
-  <canvas id="visualizerCanvas"></canvas>
-  <div class="version-tag" id="vTag">v0.53</div>
+  <!-- UI Toggle Button -->
+  <div id="uiToggle" onclick="toggleUI()" title="Toggle UI Visibility">👁</div>
 
-<script>
+  <script>
 // ─── STATE ───────────────────────────────────────────────────────────────────
 let currentIndex = 0;
 let isMuted = false;
@@ -1379,6 +1149,30 @@ function initMusic() {
   audio.addEventListener('durationchange', () => {
     document.getElementById('mcDuration').innerText = fmtTime(audio.duration);
   });
+
+  const seekBar = document.getElementById('seekBar');
+  seekBar.oninput = () => { seekDragging = true; };
+  seekBar.onchange = () => {
+    audio.currentTime = (seekBar.value / 100) * audio.duration;
+    seekDragging = false;
+  };
+
+  const volSlider = document.getElementById('volumeSlider');
+  const volInput = document.getElementById('volumeInput');
+  volSlider.oninput = () => {
+    audio.volume = volSlider.value / 100;
+    volInput.value = volSlider.value;
+    localStorage.setItem('gn_neon_volume', audio.volume);
+  };
+  volInput.onchange = () => {
+    let v = parseInt(volInput.value);
+    if (isNaN(v)) v = 50;
+    v = Math.max(0, Math.min(100, v));
+    volSlider.value = v;
+    audio.volume = v / 100;
+    localStorage.setItem('gn_neon_volume', audio.volume);
+  };
+
   updateTrackDisplay();
 }
 
@@ -1403,202 +1197,158 @@ function musicPlayPause() {
     document.getElementById('mcPlayPause').innerText = '▶';
   }
 }
-function musicNext() { currentTrack = (currentTrack + 1) % playlist.length; const a = document.getElementById('bgMusic'); a.src = playlist[currentTrack]; updateTrackDisplay(); a.play(); }
-function musicPrev() { const a = document.getElementById('bgMusic'); if(a.currentTime > 3) a.currentTime = 0; else currentTrack = (currentTrack - 1 + playlist.length) % playlist.length; a.src = playlist[currentTrack]; updateTrackDisplay(); a.play(); }
-function musicToggleLoop() { isLooping = !isLooping; document.getElementById('mcLoop').classList.toggle('active-loop', isLooping); }
-function musicSeek(v) { const a = document.getElementById('bgMusic'); seekDragging = true; a.currentTime = (v/100)*a.duration; setTimeout(()=>seekDragging=false, 200); }
-function setVolume(v) {
-  const audio = document.getElementById('bgMusic');
-  audio.volume = v / 100;
-  document.getElementById('volumeInput').value = v;
-  document.getElementById('volumeSlider').value = v;
-  if (v > 0) { isMuted = false; document.getElementById('muteBtn').innerText = "Mute"; }
-  localStorage.setItem('gn_neon_volume', audio.volume);
+
+function musicNext() { currentTrack = (currentTrack + 1) % playlist.length; musicPlay(); }
+function musicPrev() { currentTrack = (currentTrack - 1 + playlist.length) % playlist.length; musicPlay(); }
+function musicPlay() { 
+  const a = document.getElementById('bgMusic'); 
+  a.src = playlist[currentTrack]; 
+  a.play(); 
+  updateTrackDisplay(); 
+}
+function musicToggleMute() {
+  const a = document.getElementById('bgMusic');
+  isMuted = !isMuted;
+  a.muted = isMuted;
+  document.getElementById('muteBtn').innerText = isMuted ? 'Unmute' : '🔊';
   localStorage.setItem('gn_neon_mute', isMuted);
 }
-function setVolumeFromInput(v) {
-  let val = parseInt(v);
-  if (isNaN(val)) val = 0;
-  if (val > 100) val = 100;
-  if (val < 0) val = 0;
-  setVolume(val);
-}
-function toggleMute() { 
-  isMuted = !isMuted; 
-  const b = document.getElementById('muteBtn'); 
-  b.innerText = isMuted ? 'Unmute' : 'Mute'; 
-  document.querySelectorAll('audio').forEach(a => a.muted = isMuted);
-  localStorage.setItem('gn_neon_mute', isMuted);
+function musicToggleLoop() {
+  isLooping = !isLooping;
+  document.getElementById('loopBtn').classList.toggle('active', isLooping);
 }
 
-// ─── VISUALIZER MODE ──────────────────────────────────────────────────────────
-function toggleVisualizerMode() {
-  isVisualizerMode = !isVisualizerMode;
-  const main = document.getElementById('mainContent');
-  const top = document.getElementById('topbar');
+// ─── UI CONTROLS ─────────────────────────────────────────────────────────────
+let uiVisible = true;
+let hoverTimer = null;
+
+function toggleUI() {
+  uiVisible = !uiVisible;
   const left = document.getElementById('leftPanel');
+  const top = document.getElementById('topBar');
   const logo = document.getElementById('logoConnector');
-  const tag = document.getElementById('vTag');
-  const btn = document.getElementById('vizModeBtn');
   const clock = document.getElementById('digitalClock');
+  const main = document.getElementById('mainContent');
 
-  if (isVisualizerMode) {
-    main.classList.add('ui-hidden');
-    top.classList.add('ui-hidden');
+  if (!uiVisible) {
     left.classList.add('ui-hidden');
-    logo.classList.add('ui-hidden');
-    tag.classList.add('ui-hidden');
-    btn.innerText = "Exit Mode";
+    top.classList.add('ui-hidden');
+    logo.classList.remove('visible');
     clock.classList.add('ui-hidden');
-    if (keepClockInViz) {
-      clock.classList.add('viz-persistent');
-    }
-    document.addEventListener('keydown', exitVizOnEsc);
+    if (keepClockInViz) clock.classList.add('viz-persistent');
   } else {
-    main.classList.remove('ui-hidden');
-    top.classList.remove('ui-hidden');
     left.classList.remove('ui-hidden');
-    logo.classList.remove('ui-hidden');
-    tag.classList.remove('ui-hidden');
-    btn.innerText = "Visualizer";
-    top.classList.remove('hover-reveal');
-    left.classList.remove('hover-reveal');
+    top.classList.remove('ui-hidden');
+    logo.classList.add('visible');
     clock.classList.remove('ui-hidden');
     clock.classList.remove('viz-persistent');
-    document.removeEventListener('keydown', exitVizOnEsc);
   }
 }
-function exitVizOnEsc(e) { if(e.key === 'Escape') toggleVisualizerMode(); }
 
-// ─── KEYBOARD SHORTCUTS ──────────────────────────────────────────────────────
-document.addEventListener('keydown', (e) => {
-  if (e.ctrlKey) {
-    if (e.key === 'ArrowLeft') { e.preventDefault(); musicPrev(); }
-    if (e.key === 'ArrowRight') { e.preventDefault(); musicNext(); }
-    if (e.key === 'ArrowUp') { 
-      e.preventDefault(); 
-      const v = Math.min(100, Math.round(document.getElementById('bgMusic').volume * 100) + 5);
-      setVolume(v);
-    }
-    if (e.key === 'ArrowDown') { 
-      e.preventDefault(); 
-      const v = Math.max(0, Math.round(document.getElementById('bgMusic').volume * 100) - 5);
-      setVolume(v);
-    }
+// Corner reveal logic
+document.addEventListener('mousemove', (e) => {
+  if (uiVisible) return;
+  const left = document.getElementById('leftPanel');
+  const top = document.getElementById('topBar');
+  const logo = document.getElementById('logoConnector');
+  const clock = document.getElementById('digitalClock');
+
+  const inLeftZone = e.clientX < 50;
+  const inTopZone = e.clientY < 50;
+  const inCornerZone = (e.clientX < 100 && e.clientY < 100);
+
+  if (inLeftZone || inTopZone || inCornerZone) {
+    left.classList.add('hover-reveal');
+    top.classList.add('hover-reveal');
+    logo.classList.add('visible');
+    clock.classList.add('topbar-active');
+    clearTimeout(hoverTimer);
+  } else {
+    hoverTimer = setTimeout(() => {
+      left.classList.remove('hover-reveal');
+      top.classList.remove('hover-reveal');
+      logo.classList.remove('visible');
+      clock.classList.remove('topbar-active');
+    }, 800);
   }
 });
 
-// ─── UNIFIED PANEL HOVER REVEAL ───────────────────────────────────────────────
-(function() {
-  const topbar = document.getElementById('topbar');
-  const leftPanel = document.getElementById('leftPanel');
-  const logoConnector = document.getElementById('logoConnector');
+function toggleVisualizerMode() {
+  isVisualizerMode = !isVisualizerMode;
+  const viz = document.getElementById('visualizerContainer');
+  const main = document.getElementById('mainContent');
   const clock = document.getElementById('digitalClock');
-  const triggerLeft = document.querySelector('.trigger-zone-left');
-  const triggerTop = document.querySelector('.trigger-zone-top');
-  
-  let hideTimer = null;
 
-  const showBoth = () => { 
-    topbar.classList.add('visible'); 
-    leftPanel.classList.add('visible');
-    logoConnector.classList.add('visible');
-    clock.classList.add('topbar-active');
-    if (isVisualizerMode) { 
-      topbar.classList.add('hover-reveal');
-      leftPanel.classList.add('hover-reveal');
-    }
-    clearTimeout(hideTimer); 
-  };
-  
-  const hideBoth = () => { 
-    if(!topbar.matches(':hover') && !leftPanel.matches(':hover') && !logoConnector.matches(':hover')) {
-      topbar.classList.remove('visible'); 
-      leftPanel.classList.remove('visible');
-      logoConnector.classList.remove('visible');
-      clock.classList.remove('topbar-active');
-      if (isVisualizerMode) { 
-        topbar.classList.remove('hover-reveal');
-        leftPanel.classList.remove('hover-reveal');
-      }
-    }
-  };
+  if (isVisualizerMode) {
+    viz.style.display = 'block';
+    main.style.display = 'none';
+    if (uiVisible) toggleUI();
+  } else {
+    viz.style.display = 'none';
+    main.style.display = 'block';
+    if (!uiVisible) toggleUI();
+  }
+}
 
-  triggerLeft.addEventListener('mouseenter', showBoth);
-  triggerTop.addEventListener('mouseenter', showBoth);
-  topbar.addEventListener('mouseenter', showBoth);
-  leftPanel.addEventListener('mouseenter', showBoth);
-  logoConnector.addEventListener('mouseenter', showBoth);
-  
-  document.addEventListener('mousemove', (e) => {
-    if (e.clientX < 8 || e.clientY < 8) { 
-      showBoth(); 
-    } 
-    else { 
-      if(!topbar.matches(':hover') && !leftPanel.matches(':hover') && !logoConnector.matches(':hover')) { 
-        clearTimeout(hideTimer); 
-        hideTimer = setTimeout(hideBoth, 300); 
-      } 
-    }
-  });
-  
-  topbar.addEventListener('mouseenter', () => clearTimeout(hideTimer));
-  leftPanel.addEventListener('mouseenter', () => clearTimeout(hideTimer));
-  logoConnector.addEventListener('mouseenter', () => clearTimeout(hideTimer));
-  topbar.addEventListener('mouseleave', () => { hideTimer = setTimeout(hideBoth, 500); });
-  leftPanel.addEventListener('mouseleave', () => { hideTimer = setTimeout(hideBoth, 500); });
-  logoConnector.addEventListener('mouseleave', () => { hideTimer = setTimeout(hideBoth, 500); });
-  
-  hideTimer = setTimeout(hideBoth, 1500);
-})();
-
-// ─── VISUALIZER ──────────────────────────────────────────────────────────────
+// ─── VISUALIZER ENGINE ───────────────────────────────────────────────────────
 (function() {
-  const canvas = document.getElementById('visualizerCanvas');
-  const ctx = canvas.getContext('2d');
-  let W, H;
-
+  const cvs = document.getElementById('visualizerCanvas');
+  const ctx = cvs.getContext('2d');
+  
   function resize() {
-    W = canvas.width = window.innerWidth;
-    H = canvas.height = window.innerHeight;
+    cvs.width = window.innerWidth;
+    cvs.height = window.innerHeight;
   }
   window.addEventListener('resize', resize);
   resize();
 
   function getRGBFromVariable(varName) {
-    const val = getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
-    if (val.startsWith('#')) {
-      const r = parseInt(val.slice(1, 3), 16), g = parseInt(val.slice(3, 5), 16), b = parseInt(val.slice(5, 7), 16);
-      return [r, g, b];
-    } else if (val.startsWith('rgb')) {
-      const match = val.match(/\d+/g);
-      return [parseInt(match[0]), parseInt(match[1]), parseInt(match[2])];
+    const color = getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+    if (color.startsWith('rgba')) {
+      const match = color.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+      return match ? [match[1], match[2], match[3]] : [0, 0, 255];
     }
-    return [0, 0, 255];
+    const temp = document.createElement('div');
+    temp.style.color = color;
+    document.body.appendChild(temp);
+    const rgb = getComputedStyle(temp).color.match(/\d+/g);
+    document.body.removeChild(temp);
+    return rgb ? rgb.map(Number) : [0, 0, 255];
   }
 
   function draw() {
     requestAnimationFrame(draw);
-    ctx.clearRect(0, 0, W, H);
-    if (!audioContextReady || !analyser) { drawIdle(ctx, W, H); return; }
-    const data = new Uint8Array(analyser.frequencyBinCount);
-    analyser.getByteFrequencyData(data);
-    const barCount = 80, gap = 4, barW = (W - gap * (barCount - 1)) / barCount;
-    const [r, g, b] = getRGBFromVariable('--main-color');
-    const isRainbow = rainbowStates['--main-color'].active;
-    const time = Date.now() / 1000;
+    if (!isVisualizerMode) return;
     
+    const W = cvs.width, H = cvs.height;
+    ctx.clearRect(0, 0, W, H);
+
+    if (!audioContextReady) {
+      drawIdle(ctx, W, H);
+      return;
+    }
+
+    const bufferLength = analyser.frequencyBinCount;
+    const dataArray = new Uint8Array(bufferLength);
+    analyser.getByteFrequencyData(dataArray);
+
+    const barCount = 80;
+    const gap = 4;
+    const barW = (W / barCount) - gap;
+    
+    const isRainbow = rainbowStates['--main-color'].active;
+    const [r, g, b] = getRGBFromVariable('--main-color');
+
     for (let i = 0; i < barCount; i++) {
-      const val = data[i * 2] || 0;
-      const h = (val / 255) * (H * 0.4);
-      const opacity = 0.3 + (val / 255) * 0.7;
+      const val = dataArray[i];
+      const h = (val / 255) * (H * 0.6);
       
       let color;
       if (isRainbow) {
-        const hue = (time * rainbowStates['--main-color'].speed * 10 + (i * 2)) % 360;
-        color = `hsla(${hue}, 100%, 50%, ${opacity})`;
+        const hue = (Date.now() / 50 + i * 2) % 360;
+        color = `hsl(${hue}, 100%, 50%)`;
       } else {
-        color = `rgba(${r}, ${g}, ${b}, ${opacity})`;
+        color = `rgb(${r}, ${g}, ${b})`;
       }
       
       ctx.fillStyle = color;
@@ -1805,7 +1555,7 @@ const pages = {
         ${Object.entries(rainbowStates).map(([key, state]) => `
           <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px;">
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
-              <span>${key.replace('--neon-', '').replace('-', ' ').toUpperCase()}</span>
+              <span>${key.replace('--', '').replace('-', ' ').toUpperCase()}</span>
               <div style="display: flex; gap: 0.5rem; align-items: center;">
                 ${key === '--panel-color' ? 
                   `<input type="text" value="${getComputedStyle(document.documentElement).getPropertyValue(key).trim()}" onchange="updateColor('${key}', this.value)" style="width: 120px; background: #000; border: 1px solid #333; color: #fff; padding: 4px; font-size: 0.8rem;">` :
@@ -1842,219 +1592,105 @@ const pages = {
           </figure>
         </div>
       </article>
-
-      <aside class="panel patch-panel">
-        <div class="version-chip">Latest overhaul · v0.53</div>
-        <h3>Patch Notes</h3>
-        <ul class="patch-list">
-          <li>Renamed to <strong>GN-Neon</strong>.</li>
-          <li>New <strong>Tools</strong> section with IDE, Canvas, and AI Chatbot.</li>
-          <li>Added <strong>Creations</strong> section.</li>
-          <li>Refined visualizer contrast and deep blue styling.</li>
-        </ul>
-      </aside>
-    </section>
-  `,
-  tools: `
-    <section class="panel games-panel">
-      <h2>Tools</h2>
-      <div class="games-menu" id="toolsMenu">
-        <button onclick="showTool('calc')">Calculators</button>
-        <button onclick="showTool('ide')">HTML IDE</button>
-        <button class="under-construction"><span>AI Chatbot</span></button>
-        <button onclick="showTool('canvas')">Painting Canvas</button>
-        <button onclick="showTool('ciphers')">Ciphers</button>
-      </div>
-      <div id="toolArea"></div>
-    </section>
-  `,
-  games: `
-    <section class="panel games-panel">
-      <h2>Games</h2>
-      <div class="games-menu" id="gamesMenu">
-        <button onclick="showScratchGames()">Scratch Games</button>
-        <button class="under-construction"><span>Emulators</span></button>
-        <button class="under-construction"><span>Number Guessing Game</span></button>
-      </div>
-      <div id="gamesContent"></div>
     </section>
   `,
   creations: `
-    <section class="panel games-panel">
+    <section class="panel">
       <h2>Creations</h2>
-      <div class="games-menu" id="creationsMenu">
-        <button class="under-construction"><span>Code</span></button>
-        <button class="under-construction"><span>Map Videos</span></button>
-        <button class="under-construction"><span>Map Images</span></button>
+      <div class="image-row">
+        <figure class="image-card">
+          <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/sili1.jpg" alt="Cat image">
+          <span>sili1.jpg</span>
+        </figure>
+        <button class="under-construction"><span>Add New Creation</span></button>
       </div>
-      <div id="creationArea"></div>
     </section>
   `,
-  about: `
-    <section class="panel about-panel">
-      <h2>About</h2>
-      <p class="section-copy">This is GN-Neon. The GN stands for Goober Network. I made this site to bypass lightspeed filter. Why? Because I can.<br /><br />I (Neon64) made this site to provide games, tools, and unblocked content for everyone.</p>
+  tools: `
+    <section class="panel">
+      <h2>Tools</h2>
+      <div style="display: flex; gap: 1rem; margin-bottom: 2rem;">
+        <button onclick="showCreation('paint')">Paint</button>
+        <button onclick="showCreation('cipher')">Cipher</button>
+        <button onclick="showCreation('chat')">AI Chat</button>
+        <button onclick="showCreation('game')">Game</button>
+      </div>
+      <div id="toolArea"></div>
     </section>
   `
 };
 
+const toolContents = {
+  paint: `
+    <div class="canvas-container">
+      <div class="canvas-controls">
+        <input type="color" id="brushColor" value="#0000ff">
+        <input type="range" id="brushSize" min="1" max="50" value="5">
+        <button onclick="clearCanvas()">Clear</button>
+      </div>
+      <canvas id="paintingCanvas"></canvas>
+    </div>
+  `,
+  cipher: `
+    <div class="cipher-box">
+      <textarea id="cipherInput" placeholder="Enter text..."></textarea>
+      <div style="display: flex; gap: 1rem;">
+        <button onclick="runCipher('enc')">Encrypt</button>
+        <button onclick="runCipher('dec')">Decrypt</button>
+      </div>
+      <textarea id="cipherOutput" readonly placeholder="Result..."></textarea>
+    </div>
+  `,
+  chat: `
+    <div class="chat-container">
+      <div id="chatLog"></div>
+      <div class="chat-input-area">
+        <input type="text" id="chatInput" placeholder="Say something...">
+        <button onclick="sendChat()">Send</button>
+      </div>
+    </div>
+  `,
+  game: `
+    <div class="game-box">
+      <h3>Number Guess (1-100)</h3>
+      <input type="number" id="guessInput" placeholder="42">
+      <button onclick="checkGuess()">Guess</button>
+      <p id="guessMsg"></p>
+    </div>
+  `
+};
+
 function load(page) {
-  const main = document.getElementById('mainContent');
-  if (page !== 'home' && page !== 'games') {
-    main.classList.add('wide-shell');
-  } else {
-    main.classList.remove('wide-shell');
-  }
-  document.getElementById("content").innerHTML = pages[page];
-  if (page === 'games') {
-    setTimeout(() => {
-      const gamesMenu = document.querySelector('.games-menu');
-      if (gamesMenu) gamesMenu.style.display = 'block';
-    }, 0);
-  }
+  const content = document.getElementById('mainContent');
+  content.innerHTML = pages[page];
+  content.classList.remove('viz-mode');
+  if(page === 'tools') showCreation('paint');
 }
 
-function enterRun(e, fn) {
-  if (e.key === "Enter") fn();
+function showCreation(type) {
+  const area = document.getElementById('toolArea');
+  area.innerHTML = toolContents[type];
+  if(type === 'paint') initCanvas();
+  if(type === 'game') window.secretNum = Math.floor(Math.random()*100)+1;
 }
 
-function showTool(type) {
-  const area = document.getElementById("toolArea"), toolsMenu = document.getElementById("toolsMenu");
-  if (toolsMenu) toolsMenu.style.display = 'none';
-  if (type === 'calc') {
-    area.innerHTML = `<button class="back-button" onclick="load('tools')">← Back to Tools</button><h3>Calculators</h3><div class="games-menu"><button onclick="showCalc('simple')">Simple</button><button onclick="showCalc('volume')">Volume</button><button onclick="showCalc('graph')">Graph</button></div><div id="calcArea"></div>`;
-  } else if (type === 'ide') {
-    area.innerHTML = `<button class="back-button" onclick="load('tools')">← Back to Tools</button><h3>HTML IDE</h3><div id="ideContainer"><textarea id="ideInput" placeholder="Write HTML/CSS/JS here..." oninput="runIDE()"></textarea><iframe id="ideOutput"></iframe></div>`;
-  } else if (type === 'chat') {
-    area.innerHTML = `<button class="back-button" onclick="load('tools')">← Back to Tools</button><h3>AI Chatbot</h3><div id="chatContainer"><div id="chatLog"></div><div class="chat-input-row"><input id="chatInput" placeholder="Ask something..." onkeydown="if(event.key==='Enter')sendChat()"><button onclick="sendChat()">Send</button></div></div>`;
-  } else if (type === 'canvas') {
-    area.innerHTML = `<button class="back-button" onclick="load('tools')">← Back to Tools</button><h3>Painting Canvas</h3><canvas id="paintingCanvas" width="800" height="500"></canvas><div style="text-align:center; margin-top:1rem;"><input type="color" id="brushColor" value="#0000ff"><input type="range" id="brushSize" min="1" max="50" value="5"><button onclick="clearCanvas()">Clear</button></div>`;
-    initCanvas();
-  } else if (type === 'ciphers') {
-    area.innerHTML = `<button class="back-button" onclick="load('tools')">← Back to Tools</button><h3>Ciphers</h3><div class="games-menu"><button onclick="showCipher('caesar')">Caesar</button><button onclick="showCipher('atbash')">Atbash</button></div><div id="cipherArea"></div>`;
-  } else if (type === 'guess') {
-    area.innerHTML = `<button class="back-button" onclick="load('games')">← Back to Games</button><h3>Number Guessing</h3><p>Guess a number between 1 and 100:</p><input id="guessInput" type="number"><button onclick="checkGuess()">Guess</button><p id="guessMsg"></p>`;
-    window.secretNum = Math.floor(Math.random() * 100) + 1;
-  }
-}
-
-function showCalc(type) {
-  const c = document.getElementById("calcArea");
-  if (type === "simple") {
-    c.innerHTML = `<h3>Simple Calculator</h3><input id="simpleInput" placeholder="2+2*3" onkeydown="enterRun(event, calcSimple)"><button onclick="calcSimple()">Calc</button><p id="simpleOut"></p>`;
-  } else if (type === "volume") {
-    c.innerHTML = `<h3>Volume Calculator</h3>Cube (Side): <input id="cubeSide" onkeydown="enterRun(event, volCube)"><button onclick="volCube()">Calc</button><p id="cubeOut"></p>Sphere (Radius): <input id="sphereR" onkeydown="enterRun(event, volSphere)"><button onclick="volSphere()">Calc</button><p id="sphereOut"></p>Rectangular Prism (L, W, H): <input id="recL" placeholder="Length" onkeydown="enterRun(event, volRect)"><input id="recW" placeholder="Width" onkeydown="enterRun(event, volRect)"><input id="recH" placeholder="Height" onkeydown="enterRun(event, volRect)"><button onclick="volRect()">Calc</button><p id="rectOut"></p>Cylinder (R, H): <input id="cylR" placeholder="Radius" onkeydown="enterRun(event, volCyl)"><input id="cylH" placeholder="Height" onkeydown="enterRun(event, volCyl)"><button onclick="volCyl()">Calc</button><p id="cylOut"></p>Pyramid (Base, Height): <input id="pyrB" placeholder="Base Area" onkeydown="enterRun(event, volPyr)"><input id="pyrH" placeholder="Height" onkeydown="enterRun(event, volPyr)"><button onclick="volPyr()">Calc</button><p id="pyrOut"></p>`;
-  } else if (type === "graph") {
-    c.innerHTML = `<h3>Graph Calculator</h3>X: <input id="xmin" value="-10"> to <input id="xmax" value="10"><br>Y: <input id="ymin" value="-10"> to <input id="ymax" value="10"><br><br>y=<input id="eq1" onkeydown="enterRun(event, drawGraph)"><br>y=<input id="eq2" onkeydown="enterRun(event, drawGraph)"><br>y=<input id="eq3" onkeydown="enterRun(event, drawGraph)"><br>y=<input id="eq4" onkeydown="enterRun(event, drawGraph)"><br>y=<input id="eq5" onkeydown="enterRun(event, drawGraph)"><br><br><button onclick="drawGraph()">Graph</button><br><br><div class="canvas-wrap"><canvas id="grid" width="400" height="400"></canvas><div id="axesLabels"></div></div>`;
-  }
-}
-
-function calcSimple() { const i = document.getElementById("simpleInput"), o = document.getElementById("simpleOut"); try { o.innerText = eval(i.value); } catch { o.innerText = "Error"; } }
-function volCube() { const v = parseFloat(cubeSide.value); cubeOut.innerText = !isNaN(v) ? v ** 3 : "Invalid"; }
-function volSphere() { const v = parseFloat(sphereR.value); sphereOut.innerText = !isNaN(v) ? (4 / 3) * Math.PI * v ** 3 : "Invalid"; }
-function volRect() { const l = parseFloat(recL.value), w = parseFloat(recW.value), h = parseFloat(recH.value); rectOut.innerText = !isNaN(l) && !isNaN(w) && !isNaN(h) ? l * w * h : "Invalid"; }
-function volCyl() { const r = parseFloat(cylR.value), h = parseFloat(cylH.value); cylOut.innerText = !isNaN(r) && !isNaN(h) ? Math.PI * r * r * h : "Invalid"; }
-function volPyr() { const b = parseFloat(pyrB.value), h = parseFloat(pyrH.value); pyrOut.innerText = !isNaN(b) && !isNaN(h) ? (b * h) / 3 : "Invalid"; }
-
-function drawGraph() {
-  const canvas = document.getElementById("grid"); if (!canvas) return;
-  const ctx = canvas.getContext("2d"); ctx.fillStyle = "black"; ctx.fillRect(0, 0, 400, 400);
-  const xminVal = parseFloat(xmin.value), xmaxVal = parseFloat(xmax.value), yminVal = parseFloat(ymin.value), ymaxVal = parseFloat(ymax.value), width = 400, height = 400;
-  ctx.strokeStyle = "#333"; ctx.lineWidth = 1;
-  for (let i = 0; i <= 10; i++) { const x = i * (width / 10), y = i * (height / 10); ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, height); ctx.stroke(); ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(width, y); ctx.stroke(); }
-  ctx.strokeStyle = "white"; ctx.lineWidth = 2;
-  const xZero = (-xminVal / (xmaxVal - xminVal)) * width, yZero = (ymaxVal / (ymaxVal - yminVal)) * height;
-  ctx.beginPath(); ctx.moveTo(xZero, 0); ctx.lineTo(xZero, height); ctx.stroke(); ctx.beginPath(); ctx.moveTo(0, yZero); ctx.lineTo(width, yZero); ctx.stroke();
-  ctx.fillStyle = "white"; ctx.font = "10px Arial";
-  for (let i = 0; i <= 10; i++) { const xVal = xminVal + (i / 10) * (xmaxVal - xminVal), yVal = yminVal + (i / 10) * (ymaxVal - yminVal), px = i * (width / 10), py = height - i * (height / 10); ctx.fillText(xVal.toFixed(1), px, yZero + 10); ctx.fillText(yVal.toFixed(1), xZero + 5, py); }
-  const eqs = [eq1.value, eq2.value, eq3.value, eq4.value, eq5.value], colors = ["red", "cyan", "lime", "yellow", "orange"];
-  let resultsHTML = "<h3>Results</h3>"; const functions = [];
-  eqs.forEach((expr, i) => {
-    if (!expr) return; expr = expr.replace(/(\d)x/g, "$1*x");
-    let fn; try { fn = (x) => eval(expr.replace(/x/g, "(" + x + ")")); functions.push({ fn, color: colors[i], expr }); } catch { return; }
-    ctx.strokeStyle = colors[i]; ctx.lineWidth = 2; ctx.beginPath();
-    let first = true;
-    for (let px = 0; px <= width; px++) { const x = xminVal + (px / width) * (xmaxVal - xminVal); let y; try { y = fn(x); } catch { continue; } const py = ((ymaxVal - y) / (ymaxVal - yminVal)) * height; if (py >= 0 && py <= height) { if (first) { ctx.moveTo(px, py); first = false; } else { ctx.lineTo(px, py); } } }
-    ctx.stroke();
-    try { const y0 = fn(0); resultsHTML += `<p style="color:${colors[i]}">y=${expr} → y(0) = ${y0.toFixed(2)}</p>`; } catch {}
-  });
-  for (let i = 0; i < functions.length; i++) {
-    for (let j = i + 1; j < functions.length; j++) {
-      for (let x = xminVal; x <= xmaxVal; x += 0.1) {
-        let y1, y2; try { y1 = functions[i].fn(x); y2 = functions[j].fn(x); } catch { continue; }
-        if (Math.abs(y1 - y2) < 0.1) { resultsHTML += `<p>Intersection ≈ (${x.toFixed(2)}, ${y1.toFixed(2)})</p>`; break; }
-      }
-    }
-  }
-  let existing = document.getElementById("graphResults"); if (!existing) { const div = document.createElement("div"); div.id = "graphResults"; canvas.parentElement.appendChild(div); existing = div; } existing.innerHTML = resultsHTML;
-}
-
-const games = ["https://turbowarp.org/1109852074/embed?addons=stuck,pause,fullscreen,fps=60&hqpen", "https://turbowarp.org/10128407/embed?addons=pause,fullscreen", "https://turbowarp.org/1143765424/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/1075310827/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/941803602/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/973637218/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/883776962/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/898492644/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/916303075/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/978483855/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/959847748/embed?addons=pause,fullscreen&fps=60"];
-const titles = ["Block Blast (Not Made By Me)", "Paper Minecraft (Not Made By Me)", "Sisyphean Escalator", "Gambling but Mid", "Laser Dodge", "Goober Dodger", "Neon's Hostile Road", "Mid Cookie Clicker", "Asteroid Assault", "Reel 'Em In", "Cats Hate Rats"];
-const controls = [`Click and drag blocks to match 3 or more of the same color.\n\nClear the board to advance to the next level.\n\nUse strategy to plan your moves!`, `Modding Guide: ▶️ https://youtu.be/PexNsUvqD5w\n[1 to 9] - Select Item    [Click] - Place or Mine\n[WASD] - Move / Jump  [E] - Open/Close Inventory\n[E+hover] - Open / Close Chest, Crafting Table, Door\n[Space] - Drop single tile from a stack while dragging.\n[F] - Eat food       [N] - Label a sign or chest\n[Q] - Drop item      [P] - Pause / Unpause\n[T] - Talk / Command    [O] - Save your game\n[M] - Music / Sounds   [Shift] - Sprint`, `Type the letters shown fast enough or fall.\n\nNot case sensitive.`, `::At BlackJack::\nUse arrow keys to bet:\n\nLeft and Right set the bet to 0 and max\n\nUp and down will change the bet by 10, or if holding "." will change it by 500\n1\nEnter to place bet, and after will be the hit button.\n\nSpace to stand.\n\n::At Slots::\nS to Spin\n\nSame betting controls.`, `Use the mouse to dodge the lasers that get faster with time!\n\nPress the left mouse button to become invincible for three seconds with a 10 second cool down so use it wisely!`, `Use the mouse to dodge the goobers, and don't stay in the border too long.\n\nThat's really about it.`, `ASD to move.\nW for a 3-second long power-up of invincibility.\nSpace to Start/Restart on the game-over screen.\n\n1 and 2 control the arcade scan filter.\n3 and 4 control the arcade cabinet overlay.\n5 and 6 control the arcade music (on/off)\n\n(60 fps Is highly recommended)`, `It's Cookie Clicker, but worse.\n\nUse your mouse.`, `Left mouse button to fire a weak auxiliary laser that overheats quickly.\n\nSpace for Main powerful laser.\n\nW for a backup shield that lasts 10 seconds, but has limited uses.\n\nUse your mouse to aim the laser.`, `Use Left Mouse Button to fire the harpoon and try to get the fish, and buy upgrades.\n \nBeware of the explosive mine, it takes $50 dollars to repair the harpoon and the explosion might scare a few good fish away.\n\n\nThis is still a work in progress and I plan on adding more things like power ups, multipliers, and maybe a high score system.\n\nF to show debug menu \nG to hide debug menu`, `goober.\n\nUse mouse 1 to hit the rats.\nuse F to turn off the yarn.\nUse G to turn them back on.\n`];
-const notes = [`Block Blast is a puzzle game where you match blocks.\n\nIt's not made by me, but it's a fun game to play!`, `*** Credits ***\nAll the graphics are taken from the Minecraft wiki page and have not been created by me. I have rescaled them and broken them up to make the game work, but that is it at present.\n\nORIGNAL PROJECT MADE BY GRIFFPATCH ON SCRATCH, NOT ME:\n\nCheck him out he does great stuf, https://scratch.mit.edu/users/griffpatch/`, `The game is based on this video by the way:\n\nhttps://youtu.be/2Gby1XQ4Z2M?feature=shared`, `Don't gamble in real life, also this technically is not correct, and if you do it quick enough you can easily break most of this.\n\nThe special codes are:\n\nL E O\n\nN F S M W\n`, `Not much to add, I could have done a better job with the randomization of everything, but I am not gonna be working on this any further.`, `<b>!!!VOLUME WARNING!!!</b>\n\nI made this game to be difficult and stressful on purpose.\n\nIf you don't like loud noises or flashing lights, I would recommend not playing this game.`, `This is a game I made in a day, so don't expect too much.\n\nAlso, the hitbox for the asteroids is a bit wonky.`, `This game is unfinished and buggy.\n\nI am not going to work on it anymore.`, `I made this game as a joke.\n\nIt's not very good.`, `This game is still in development.\n\nI plan on adding more features soon.`, `This game is a work in progress.\n\nI plan on adding more content soon.`];
-
-function showScratchGames() {
-  const content = document.getElementById('gamesContent'), gamesMenu = document.querySelector('.games-menu'); if (gamesMenu) gamesMenu.style.display = 'none';
-  content.innerHTML = `<button class="back-button" onclick="load('games')">← Back to Games Menu</button><div class="games-layout"><div class="sideBox"><h3>Controls</h3><div id="gameControls"></div></div><div class="centerBox"><iframe id="scratchFrame" allowfullscreen title="GN-Neon Scratch game viewer"></iframe><h3 id="gameTitle"></h3><div class="button-row" style="justify-content:center; margin-top:1rem;"><button onclick="prevGame()">◀</button><button onclick="nextGame()">▶</button></div></div><div class="sideBox"><h3>Notes / Credits</h3><div id="gameNotes"></div></div></div>`;
-  currentIndex = 0; updateGame();
-}
-
-function showEmulators() {
-  const content = document.getElementById('gamesContent'), gamesMenu = document.querySelector('.games-menu'); if (gamesMenu) gamesMenu.style.display = 'none';
-  content.innerHTML = `<button class="back-button" onclick="load('games')">← Back to Emulators</button><div class="games-menu" style="max-width: 400px; margin: 2rem auto;"><h3>Select Emulator</h3><button onclick="navigateTo('nes')">NES</button><button onclick="navigateTo('snes')">SNES</button><button onclick="navigateTo('genesis')">Genesis</button></div>`;
-}
-
-function navigateTo(emulator) {
-  const content = document.getElementById('gamesContent');
-  if (emulator === 'nes') {
-    content.innerHTML = `<button class="back-button" onclick="showEmulators()">← Back to Emulators</button><div style="width: 100%; max-width: 900px; margin: 2rem auto;"><h2 style="padding: 0 0 1rem 0;">NES Emulator</h2><div style="width:100%;height:500px;max-width:100%; background: #000; border-radius: 10px; overflow: hidden; border: 1px solid #333;"><div id="game"></div></div><script>window.EJS_player='#game';window.EJS_core='nes';window.EJS_gameName='cpu_dummy_reads';window.EJS_color='#0044ff';window.EJS_startOnLoaded=true;window.EJS_pathtodata='https://cdn.jsdelivr.net/gh/EmulatorJS/EmulatorJS@latest/data/';window.EJS_url='https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Roms/cpu_dummy_reads.nes';<\/script><script src="https://cdn.jsdelivr.net/gh/EmulatorJS/EmulatorJS@latest/data/loader.js"><\/script></div>`;
-  } else {
-    content.innerHTML = `<div class="wip-container"><h2>${emulator.toUpperCase()} Emulator</h2><p>Work in Progress</p><p style="color: #888; margin-top: 1rem;">This section is currently under development.</p><button class="back-button" onclick="showEmulators()">← Back to Emulators</button></div>`;
-  }
-}
-
-function updateGame() {
-  const f = document.getElementById("scratchFrame"); if (!f) return;
-  f.src = games[currentIndex]; document.getElementById("gameTitle").innerText = titles[currentIndex];
-  document.getElementById("gameControls").innerHTML = controls[currentIndex] || "";
-  document.getElementById("gameNotes").innerHTML = notes[currentIndex] || "";
-}
-
-function nextGame() { currentIndex = (currentIndex + 1) % games.length; updateGame(); }
-function prevGame() { currentIndex = (currentIndex - 1 + games.length) % games.length; updateGame(); }
-
-function showCipher(type) {
-  const area = document.getElementById("cipherArea");
-  area.innerHTML = `<h3>${type.toUpperCase()}</h3><textarea id="cipherIn" placeholder="Enter text..."></textarea><div><button onclick="runCipher('${type}', 'encode')">Encode</button><button onclick="runCipher('${type}', 'decode')">Decode</button></div><pre id="cipherOut"></pre>`;
-}
-function runCipher(type, mode) {
-  const input = document.getElementById('cipherIn').value;
+function runCipher(mode) {
+  const inp = document.getElementById('cipherInput').value;
   let out = "";
-  if (type === 'caesar') {
-    const shift = mode === 'encode' ? 3 : -3;
-    out = input.replace(/[a-z]/gi, c => {
-      const code = c.charCodeAt(0);
-      const isUpper = code >= 65 && code <= 90;
-      const base = isUpper ? 65 : 97;
-      let shifted = (code - base + shift) % 26;
-      if (shifted < 0) shifted += 26;
-      return String.fromCharCode(base + shifted);
-    });
-  } else if (type === 'atbash') {
-    out = input.replace(/[a-z]/gi, c => String.fromCharCode((c <= "Z" ? 155 : 219) - c.charCodeAt(0)));
+  for(let i=0; i<inp.length; i++) {
+    let char = inp.charCodeAt(i);
+    out += String.fromCharCode(mode === 'enc' ? char + 3 : char - 3);
   }
-  document.getElementById('cipherOut').innerText = out;
+  document.getElementById('cipherOutput').value = out;
 }
-function runIDE() {
-  const out = document.getElementById('ideOutput').contentWindow.document;
-  out.open(); out.write(document.getElementById('ideInput').value); out.close();
-}
+
 function sendChat() {
-  const log = document.getElementById('chatLog'), inp = document.getElementById('chatInput');
-  if(!inp.value)return;
-  log.innerHTML += `<div class="chat-msg user-msg">${inp.value}</div>`;
-  const userVal = inp.value; inp.value='';
+  const inp = document.getElementById('chatInput');
+  const userVal = inp.value;
+  if(!userVal) return;
+  const log = document.getElementById('chatLog');
+  log.innerHTML += `<div class="chat-msg user-msg">${userVal}</div>`;
+  inp.value = "";
   setTimeout(()=> {
     log.innerHTML += `<div class="chat-msg bot-msg">AI demo response to: "${userVal}"</div>`;
     log.scrollTop = log.scrollHeight;
@@ -2083,11 +1719,6 @@ function showEmbed(url) {
   const area = document.getElementById('embedArea');
   area.style.display = 'block';
   area.innerHTML = `<iframe src="${url}"></iframe>`;
-}
-function showCreation(type) {
-  const area = document.getElementById('creationArea'), creationsMenu = document.getElementById('creationsMenu');
-  if (creationsMenu) creationsMenu.style.display = 'none';
-  area.innerHTML = `<button class="back-button" onclick="load('creations')">← Back to Creations</button><h3>${type.toUpperCase()}</h3><div id="embedArea"></div>`;
 }
 
 function checkGuess() {
