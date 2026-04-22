@@ -1638,6 +1638,13 @@ function toggleBackgroundVideo() {
     videoBg.style.opacity = backgroundSettings.useVideo ? '1' : '0';
     videoBg.style.visibility = backgroundSettings.useVideo ? 'visible' : 'hidden';
   }
+  const buttons = document.querySelectorAll(`button[onclick="toggleBackgroundVideo()"]`);
+  buttons.forEach(btn => {
+    btn.style.background = backgroundSettings.useVideo ? 'var(--main-color)' : '#333';
+    btn.style.color = backgroundSettings.useVideo ? '#fff' : '#888';
+    btn.style.borderColor = backgroundSettings.useVideo ? 'var(--main-color)' : '#555';
+    btn.textContent = backgroundSettings.useVideo ? 'Enabled' : 'Disabled';
+  });
   localStorage.setItem('gn_neon_bg_settings', JSON.stringify(backgroundSettings));
   load('settings');
 }
@@ -1660,6 +1667,13 @@ function toggleBackgroundRainbow(position) {
   } else {
     backgroundSettings.rainbowBottom = !backgroundSettings.rainbowBottom;
   }
+  const isActive = position === 'top' ? backgroundSettings.rainbowTop : backgroundSettings.rainbowBottom;
+  const buttons = document.querySelectorAll(`button[onclick="toggleBackgroundRainbow('${position}')"]`);
+  buttons.forEach(btn => {
+    btn.style.background = isActive ? 'var(--main-color)' : '#333';
+    btn.style.color = isActive ? '#fff' : '#888';
+    btn.style.borderColor = isActive ? 'var(--main-color)' : '#555';
+  });
   localStorage.setItem('gn_neon_bg_settings', JSON.stringify(backgroundSettings));
   load('settings');
 }
@@ -1709,6 +1723,12 @@ function updateColor(key, val) {
 function toggleRainbow(key) {
   rainbowStates[key].active = !rainbowStates[key].active;
   saveRainbow();
+  const buttons = document.querySelectorAll(`button[onclick="toggleRainbow('${key}')"]`);
+  buttons.forEach(btn => {
+    btn.style.background = rainbowStates[key].active ? 'var(--main-color)' : '#333';
+    btn.style.color = rainbowStates[key].active ? '#fff' : '#888';
+    btn.style.borderColor = rainbowStates[key].active ? 'var(--main-color)' : '#555';
+  });
   load('settings');
 }
 
@@ -1723,6 +1743,13 @@ function saveRainbow() {
 function toggleKeepClock() {
   keepClockInViz = !keepClockInViz;
   localStorage.setItem('gn_neon_keep_clock', keepClockInViz);
+  const buttons = document.querySelectorAll(`button[onclick="toggleKeepClock()"]`);
+  buttons.forEach(btn => {
+    btn.style.background = keepClockInViz ? 'var(--main-color)' : '#333';
+    btn.style.color = keepClockInViz ? '#fff' : '#888';
+    btn.style.borderColor = keepClockInViz ? 'var(--main-color)' : '#555';
+    btn.textContent = keepClockInViz ? 'Enabled' : 'Disabled';
+  });
   load('settings');
 }
 
