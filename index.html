@@ -1201,6 +1201,41 @@ let rainbowStates = {
   '--panel-color': { active: false, speed: 5 }
 };
 
+function applySongColor(trackIndex) {
+  if (!songColorEnabled) return;
+  const color = songColors[trackIndex] || '#0000ff';
+  document.documentElement.style.setProperty('--main-color', color);
+  document.documentElement.style.setProperty('--music-text', color);
+  document.documentElement.style.setProperty('--menu-text', color);
+  const rgb = parseInt(color.slice(1), 16);
+  const r = (rgb >> 16) & 255;
+  const g = (rgb >> 8) & 255;
+  const b = rgb & 255;
+  document.documentElement.style.setProperty('--panel-color', `rgba(${r}, ${g}, ${b}, 0.25)`);
+}
+
+function toggleSongColor() {
+  songColorEnabled = !songColorEnabled;
+  localStorage.setItem('gn_neon_song_color', songColorEnabled);
+  if (songColorEnabled) {
+    applySongColor(currentTrack);
+  } else {
+    const saved = localStorage.getItem('gn_neon_colors');
+    const colors = saved ? JSON.parse(saved) : { ...DEFAULT_COLORS };
+    document.documentElement.style.setProperty('--main-color', colors['--main-color']);
+    document.documentElement.style.setProperty('--music-text', colors['--music-text']);
+    document.documentElement.style.setProperty('--menu-text', colors['--menu-text']);
+    document.documentElement.style.setProperty('--panel-color', colors['--panel-color']);
+  }
+  const buttons = document.querySelectorAll(`button[onclick="toggleSongColor()"]`);
+  buttons.forEach(btn => {
+    btn.style.background = songColorEnabled ? 'var(--main-color)' : '#333';
+    btn.style.color = songColorEnabled ? '#fff' : '#888';
+    btn.style.borderColor = songColorEnabled ? 'var(--main-color)' : '#555';
+    btn.textContent = songColorEnabled ? 'Enabled' : 'Disabled';
+  });
+}
+
 let backgroundSettings = {
   useVideo: true,
   gradientTop: '#000000',
@@ -1305,6 +1340,32 @@ const trackMeta = [
   { title: 'SMRPG Waltz of The Forest', artist: 'Psyguy' }
 ];
 
+const songColors = [
+  '#ff0000',
+  '#ff1493',
+  '#800080',
+  '#00ff00',
+  '#0000ff',
+  '#ff0000',
+  '#ff8800',
+  '#800080',
+  '#00ccff',
+  '#ff0000',
+  '#ffaa00',
+  '#ffaa00',
+  '#ffff00',
+  '#0000ff',
+  '#00ccff',
+  '#ffff00',
+  '#800080',
+  '#0000ff',
+  '#00aa00',
+  '#00aa00',
+  '#ff0000'
+];
+
+let songColorEnabled = false;
+
 // ─── SPLASH LOGIC ────────────────────────────────────────────────────────────
 function enterSite() {
   const overlay = document.getElementById('splashOverlay');
@@ -1388,6 +1449,7 @@ function updateTrackDisplay() {
   document.getElementById('mcArtist').innerText = meta.artist;
   document.getElementById('mcPlayPause').innerText = '▮▮';
   localStorage.setItem('gn_neon_track', currentTrack);
+  applySongColor(currentTrack);
 }
 
 function fmtTime(s) { const m = Math.floor(s/60), sec = Math.floor(s%60); return `${m}:${sec.toString().padStart(2,'0')}`; }
@@ -1403,8 +1465,8 @@ function musicPlayPause() {
     document.getElementById('mcPlayPause').innerText = '▶';
   }
 }
-function musicNext() { currentTrack = (currentTrack + 1) % playlist.length; const a = document.getElementById('bgMusic'); a.src = playlist[currentTrack]; updateTrackDisplay(); a.play(); }
-function musicPrev() { const a = document.getElementById('bgMusic'); if(a.currentTime > 3) a.currentTime = 0; else currentTrack = (currentTrack - 1 + playlist.length) % playlist.length; a.src = playlist[currentTrack]; updateTrackDisplay(); a.play(); }
+function musicNext() { currentTrack = (currentTrack + 1) % playlist.length; const a = document.getElementById('bgMusic'); a.src = playlist[currentTrack]; updateTrackDisplay(); applySongColor(currentTrack); a.play(); }
+function musicPrev() { const a = document.getElementById('bgMusic'); if(a.currentTime > 3) a.currentTime = 0; else currentTrack = (currentTrack - 1 + playlist.length) % playlist.length; a.src = playlist[currentTrack]; updateTrackDisplay(); applySongColor(currentTrack); a.play(); }
 function musicToggleLoop() { isLooping = !isLooping; document.getElementById('mcLoop').classList.toggle('active-loop', isLooping); }
 function musicSeek(v) { const a = document.getElementById('bgMusic'); seekDragging = true; a.currentTime = (v/100)*a.duration; setTimeout(()=>seekDragging=false, 200); }
 function setVolume(v) {
@@ -1706,6 +1768,13 @@ function applySavedColors() {
     backgroundSettings = JSON.parse(savedBgSettings);
     updateBackgroundGradient();
   }
+  const savedSongColor = localStorage.getItem('gn_neon_song_color');
+  if (savedSongColor !== null) {
+    songColorEnabled = savedSongColor === 'true';
+    if (songColorEnabled) {
+      applySongColor(currentTrack);
+    }
+  }
 }
 
 function updateColor(key, val) {
@@ -1792,6 +1861,12 @@ const pages = {
           <div style="display: flex; align-items: center; justify-content: space-between;">
             <span>USE VIDEO BACKGROUND</span>
             <button onclick="toggleBackgroundVideo()" style="margin:0; padding: 0.3rem 0.6rem; font-size: 0.8rem; background: ${backgroundSettings.useVideo ? 'var(--main-color)' : '#333'}; color: ${backgroundSettings.useVideo ? '#fff' : '#888'}; border: 1px solid ${backgroundSettings.useVideo ? 'var(--main-color)' : '#555'}; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.boxShadow='0 0 8px ' + (${backgroundSettings.useVideo} ? 'var(--main-color)' : 'rgba(255,255,255,0.1)')" onmouseout="this.style.boxShadow='none'">${backgroundSettings.useVideo ? 'Enabled' : 'Disabled'}</button>
+          </div>
+        </div>
+        <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px;">
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <span>SONG COLOR CHANGING</span>
+            <button onclick="toggleSongColor()" style="margin:0; padding: 0.3rem 0.6rem; font-size: 0.8rem; background: ${songColorEnabled ? 'var(--main-color)' : '#333'}; color: ${songColorEnabled ? '#fff' : '#888'}; border: 1px solid ${songColorEnabled ? 'var(--main-color)' : '#555'}; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.boxShadow='0 0 8px ' + (${songColorEnabled} ? 'var(--main-color)' : 'rgba(255,255,255,0.1)')" onmouseout="this.style.boxShadow='none'">${songColorEnabled ? 'Enabled' : 'Disabled'}</button>
           </div>
         </div>
         <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px;">
