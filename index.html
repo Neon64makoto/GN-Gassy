@@ -1646,7 +1646,6 @@ function toggleBackgroundVideo() {
     btn.textContent = backgroundSettings.useVideo ? 'Enabled' : 'Disabled';
   });
   localStorage.setItem('gn_neon_bg_settings', JSON.stringify(backgroundSettings));
-  load('settings');
 }
 
 function updateBackgroundColor(position, val) {
@@ -1675,7 +1674,6 @@ function toggleBackgroundRainbow(position) {
     btn.style.borderColor = isActive ? 'var(--main-color)' : '#555';
   });
   localStorage.setItem('gn_neon_bg_settings', JSON.stringify(backgroundSettings));
-  load('settings');
 }
 
 function updateBackgroundRainbowSpeed(position, speed) {
@@ -1729,7 +1727,6 @@ function toggleRainbow(key) {
     btn.style.color = rainbowStates[key].active ? '#fff' : '#888';
     btn.style.borderColor = rainbowStates[key].active ? 'var(--main-color)' : '#555';
   });
-  load('settings');
 }
 
 function updateRainbowSpeed(key, speed) {
@@ -1750,7 +1747,6 @@ function toggleKeepClock() {
     btn.style.borderColor = keepClockInViz ? 'var(--main-color)' : '#555';
     btn.textContent = keepClockInViz ? 'Enabled' : 'Disabled';
   });
-  load('settings');
 }
 
 function resetColors() {
