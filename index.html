@@ -1996,6 +1996,9 @@ const pages = {
 };
 
 function load(page) {
+  if (isVisualizerMode) {
+    toggleVisualizerMode();
+  }
   const main = document.getElementById('mainContent');
   if (page !== 'home' && page !== 'games') {
     main.classList.add('wide-shell');
@@ -2003,6 +2006,25 @@ function load(page) {
     main.classList.remove('wide-shell');
   }
   document.getElementById("content").innerHTML = pages[page];
+  const navButtons = document.querySelectorAll('.left-panel .nav button');
+  navButtons.forEach(btn => {
+    btn.style.background = 'transparent';
+    btn.style.color = 'var(--menu-text)';
+    btn.style.borderColor = 'var(--panel-color)';
+  });
+  const pageButtonMap = {
+    'home': 0,
+    'tools': 1,
+    'games': 2,
+    'creations': 3,
+    'about': 4
+  };
+  const buttonIndex = pageButtonMap[page];
+  if (buttonIndex !== undefined && navButtons[buttonIndex]) {
+    navButtons[buttonIndex].style.background = 'var(--main-color)';
+    navButtons[buttonIndex].style.color = '#fff';
+    navButtons[buttonIndex].style.borderColor = 'var(--main-color)';
+  }
   if (page === 'games') {
     setTimeout(() => {
       const gamesMenu = document.querySelector('.games-menu');
