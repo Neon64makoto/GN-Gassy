@@ -151,9 +151,9 @@
       border: 1px solid transparent;
       border-radius: 4px;
       background: var(--main-color);
-      color: white;
+      color: var(--button-text-color, white);
       cursor: pointer;
-      transition: background 0.16s ease, border-color 0.16s ease, transform 0.16s ease;
+      transition: background 0.16s ease, border-color 0.16s ease, transform 0.16s ease, color 0.2s ease;
     }
 
     button:hover {
@@ -2016,10 +2016,12 @@ function getColorBrightness(hexColor) {
 function updateNavButtonTextColor() {
   const mainColorValue = getComputedStyle(document.documentElement).getPropertyValue('--main-color').trim();
   const brightness = getColorBrightness(mainColorValue);
+  const textColor = brightness > 128 ? '#000' : '#fff';
+  document.documentElement.style.setProperty('--button-text-color', textColor);
   const navButtons = document.querySelectorAll('.left-panel .nav button');
   navButtons.forEach(btn => {
     if (btn.style.background === 'var(--main-color)' || btn.style.background.includes('rgb')) {
-      btn.style.color = brightness > 128 ? '#000' : '#fff';
+      btn.style.color = textColor;
     }
   });
 }
@@ -2055,7 +2057,9 @@ function load(page) {
     navButtons[buttonIndex].style.background = 'var(--main-color)';
     const mainColorValue = getComputedStyle(document.documentElement).getPropertyValue('--main-color').trim();
     const brightness = getColorBrightness(mainColorValue);
-    navButtons[buttonIndex].style.color = brightness > 128 ? '#000' : '#fff';
+    const textColor = brightness > 128 ? '#000' : '#fff';
+    navButtons[buttonIndex].style.color = textColor;
+    document.documentElement.style.setProperty('--button-text-color', textColor);
     navButtons[buttonIndex].style.borderColor = 'var(--main-color)';
   }
   if (page === 'games') {
