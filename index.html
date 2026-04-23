@@ -2122,6 +2122,9 @@ function load(page) {
     main.classList.remove('wide-shell');
   }
   document.getElementById("content").innerHTML = pages[page];
+  if (page === 'settings') {
+    setTimeout(() => updateSettingsButtonAppearances(), 50);
+  }
   const navButtons = document.querySelectorAll('.left-panel .nav button');
   navButtons.forEach(btn => {
     btn.style.background = 'transparent';
@@ -2354,10 +2357,7 @@ function setVideoBackground(videoUrl) {
   document.body.classList.add('video-bg');
 }
 
-setTimeout(() => {
-  applySavedColors();
-  updateSettingsButtonAppearances();
-}, 100);
+applySavedColors();
 load("home");
 setVideoBackground('https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/FlatlineLoop.mp4');
 initMusic();
