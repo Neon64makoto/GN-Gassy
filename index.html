@@ -1230,7 +1230,9 @@ function toggleSongColor() {
   const buttons = document.querySelectorAll(`button[onclick="toggleSongColor()"]`);
   buttons.forEach(btn => {
     btn.style.background = songColorEnabled ? 'var(--main-color)' : '#333';
-    btn.style.color = songColorEnabled ? '#fff' : '#888';
+    const mainColorValue = getComputedStyle(document.documentElement).getPropertyValue('--main-color').trim();
+    const brightness = getColorBrightness(mainColorValue);
+    btn.style.color = songColorEnabled ? (brightness > 128 ? '#000' : '#fff') : '#888';
     btn.style.borderColor = songColorEnabled ? 'var(--main-color)' : '#555';
     btn.textContent = songColorEnabled ? 'Enabled' : 'Disabled';
   });
@@ -1703,7 +1705,9 @@ function toggleBackgroundVideo() {
   const buttons = document.querySelectorAll(`button[onclick="toggleBackgroundVideo()"]`);
   buttons.forEach(btn => {
     btn.style.background = backgroundSettings.useVideo ? 'var(--main-color)' : '#333';
-    btn.style.color = backgroundSettings.useVideo ? '#fff' : '#888';
+    const mainColorValue = getComputedStyle(document.documentElement).getPropertyValue('--main-color').trim();
+    const brightness = getColorBrightness(mainColorValue);
+    btn.style.color = backgroundSettings.useVideo ? (brightness > 128 ? '#000' : '#fff') : '#888';
     btn.style.borderColor = backgroundSettings.useVideo ? 'var(--main-color)' : '#555';
     btn.textContent = backgroundSettings.useVideo ? 'Enabled' : 'Disabled';
   });
@@ -1732,7 +1736,9 @@ function toggleBackgroundRainbow(position) {
   const buttons = document.querySelectorAll(`button[onclick="toggleBackgroundRainbow('${position}')"]`);
   buttons.forEach(btn => {
     btn.style.background = isActive ? 'var(--main-color)' : '#333';
-    btn.style.color = isActive ? '#fff' : '#888';
+    const mainColorValue = getComputedStyle(document.documentElement).getPropertyValue('--main-color').trim();
+    const brightness = getColorBrightness(mainColorValue);
+    btn.style.color = isActive ? (brightness > 128 ? '#000' : '#fff') : '#888';
     btn.style.borderColor = isActive ? 'var(--main-color)' : '#555';
   });
   localStorage.setItem('gn_neon_bg_settings', JSON.stringify(backgroundSettings));
@@ -1793,7 +1799,9 @@ function toggleRainbow(key) {
   const buttons = document.querySelectorAll(`button[onclick="toggleRainbow('${key}')"]`);
   buttons.forEach(btn => {
     btn.style.background = rainbowStates[key].active ? 'var(--main-color)' : '#333';
-    btn.style.color = rainbowStates[key].active ? '#fff' : '#888';
+    const mainColorValue = getComputedStyle(document.documentElement).getPropertyValue('--main-color').trim();
+    const brightness = getColorBrightness(mainColorValue);
+    btn.style.color = rainbowStates[key].active ? (brightness > 128 ? '#000' : '#fff') : '#888';
     btn.style.borderColor = rainbowStates[key].active ? 'var(--main-color)' : '#555';
   });
 }
@@ -1812,7 +1820,9 @@ function toggleKeepClock() {
   const buttons = document.querySelectorAll(`button[onclick="toggleKeepClock()"]`);
   buttons.forEach(btn => {
     btn.style.background = keepClockInViz ? 'var(--main-color)' : '#333';
-    btn.style.color = keepClockInViz ? '#fff' : '#888';
+    const mainColorValue = getComputedStyle(document.documentElement).getPropertyValue('--main-color').trim();
+    const brightness = getColorBrightness(mainColorValue);
+    btn.style.color = keepClockInViz ? (brightness > 128 ? '#000' : '#fff') : '#888';
     btn.style.borderColor = keepClockInViz ? 'var(--main-color)' : '#555';
     btn.textContent = keepClockInViz ? 'Enabled' : 'Disabled';
   });
