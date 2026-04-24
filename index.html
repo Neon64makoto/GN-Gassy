@@ -264,20 +264,6 @@
       transform: translate(-50%, -50%);
     }
 
-    /* ─── CUSTOM COLOR PICKERS ─────────────────────────────────────────── */
-    input[type="color"] {
-      -webkit-appearance: none;
-      border: 1px solid var(--border);
-      width: 40px;
-      height: 40px;
-      cursor: pointer;
-      background: transparent;
-      padding: 0;
-      border-radius: 4px;
-    }
-    input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
-    input[type="color"]::-webkit-color-swatch { border: none; border-radius: 4px; }
-
         /* ─── LEFT PANEL (NAV) ──────────────────────────────────────── */
     .left-panel {
       position: fixed;
@@ -1292,12 +1278,6 @@ function updateRainbow() {
       } else {
         document.documentElement.style.setProperty(key, `hsl(${hue}, 100%, 50%)`);
       }
-    } else {
-      const saved = localStorage.getItem('gn_neon_colors');
-      const colors = saved ? JSON.parse(saved) : { ...DEFAULT_COLORS };
-      if (colors[key]) {
-        document.documentElement.style.setProperty(key, colors[key]);
-      }
     }
   }
   if (backgroundSettings.rainbowTop) {
@@ -1566,33 +1546,31 @@ function toggleVisualizerMode() {
   const btn = document.getElementById('vizModeBtn');
   const clock = document.getElementById('digitalClock');
 
-    if (isVisualizerMode) {
-      main.classList.add('ui-hidden');
-      top.classList.add('ui-hidden');
-      left.classList.add('ui-hidden');
-      logo.classList.add('ui-hidden');
-      document.getElementById('logoConnector').classList.add('ui-hidden');
-      tag.classList.add('ui-hidden');
-      btn.innerText = "Exit Mode";
-      clock.classList.add('ui-hidden');
-      if (keepClockInViz) {
-        clock.classList.add('viz-persistent');
-      }
-      document.addEventListener('keydown', exitVizOnEsc);
-    } else {
-      main.classList.remove('ui-hidden');
-      top.classList.remove('ui-hidden');
-      left.classList.remove('ui-hidden');
-      logo.classList.remove('ui-hidden');
-      document.getElementById('logoConnector').classList.remove('ui-hidden');
-      tag.classList.remove('ui-hidden');
-      btn.innerText = "Visualizer";
-      top.classList.remove('hover-reveal');
-      left.classList.remove('hover-reveal');
-      clock.classList.remove('ui-hidden');
-      clock.classList.remove('viz-persistent');
-      document.removeEventListener('keydown', exitVizOnEsc);
+  if (isVisualizerMode) {
+    main.classList.add('ui-hidden');
+    top.classList.add('ui-hidden');
+    left.classList.add('ui-hidden');
+    logo.classList.add('ui-hidden');
+    tag.classList.add('ui-hidden');
+    btn.innerText = "Exit Mode";
+    clock.classList.add('ui-hidden');
+    if (keepClockInViz) {
+      clock.classList.add('viz-persistent');
     }
+    document.addEventListener('keydown', exitVizOnEsc);
+  } else {
+    main.classList.remove('ui-hidden');
+    top.classList.remove('ui-hidden');
+    left.classList.remove('ui-hidden');
+    logo.classList.remove('ui-hidden');
+    tag.classList.remove('ui-hidden');
+    btn.innerText = "Visualizer";
+    top.classList.remove('hover-reveal');
+    left.classList.remove('hover-reveal');
+    clock.classList.remove('ui-hidden');
+    clock.classList.remove('viz-persistent');
+    document.removeEventListener('keydown', exitVizOnEsc);
+  }
 }
 function exitVizOnEsc(e) { if(e.key === 'Escape') toggleVisualizerMode(); }
 
@@ -1855,21 +1833,6 @@ function updateSettingsButtonAppearances() {
       btn.style.borderColor = state.active ? 'var(--main-color)' : '#555';
     });
   });
-  const customUrlInput = document.getElementById('customBgUrlInput');
-  if (customUrlInput) customUrlInput.value = backgroundSettings.customVideoUrl || '';
-}
-
-function saveCustomBackground() {
-  const url = document.getElementById('customBgUrlInput').value;
-  backgroundSettings.customVideoUrl = url;
-  const video = document.getElementById('videoBg');
-  if (video && url) {
-    video.src = url;
-    video.load();
-    video.play();
-  }
-  localStorage.setItem('gn_neon_bg_settings', JSON.stringify(backgroundSettings));
-  alert('Background URL saved!');
 }
 
 function applySavedColors() {
@@ -1992,13 +1955,6 @@ const pages = {
             <span>USE VIDEO BACKGROUND</span>
             <button onclick="toggleBackgroundVideo()" style="margin:0; padding: 0.3rem 0.6rem; font-size: 0.8rem; background: ${backgroundSettings.useVideo ? 'var(--main-color)' : '#333'}; border: 1px solid ${backgroundSettings.useVideo ? 'var(--main-color)' : '#555'}; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.boxShadow='0 0 8px ' + (${backgroundSettings.useVideo} ? 'var(--main-color)' : 'rgba(255,255,255,0.1)')" onmouseout="this.style.boxShadow='none'">${backgroundSettings.useVideo ? 'Enabled' : 'Disabled'}</button>
           </div>
-          <div id="bgVideoUrlContainer" style="margin-top:1rem;">
-            <label style="display:block; margin-bottom:0.5rem; font-size:0.8rem; opacity:0.7;">CUSTOM BACKGROUND URL (VIDEO/IMAGE)</label>
-            <div style="display:flex; gap:0.5rem;">
-              <input type="text" id="customBgUrlInput" style="flex:1; background:#000; border:1px solid #333; color:white; padding:4px; font-size:0.8rem; margin:0;" placeholder="Paste URL here..." value="${backgroundSettings.customVideoUrl || ''}">
-              <button onclick="saveCustomBackground()" style="margin:0; padding: 0.3rem 0.6rem; font-size: 0.8rem;">SAVE</button>
-            </div>
-          </div>
         </div>
         <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px;">
           <div style="display: flex; align-items: center; justify-content: space-between;">
@@ -2098,7 +2054,6 @@ const pages = {
         <button class="under-construction"><span>AI Chatbot</span></button>
         <button onclick="showTool('canvas')">Painting Canvas</button>
         <button onclick="showTool('ciphers')">Ciphers</button>
-        <button onclick="showTool('dict')">Dictionary</button>
       </div>
       <div id="toolArea"></div>
     </section>
@@ -2210,16 +2165,6 @@ function showTool(type) {
   if (toolsMenu) toolsMenu.style.display = 'none';
   if (type === 'calc') {
     area.innerHTML = `<button class="back-button" onclick="load('tools')">← Back to Tools</button><h3>Calculators</h3><div class="games-menu"><button onclick="showCalc('simple')">Simple</button><button onclick="showCalc('volume')">Volume</button><button onclick="showCalc('graph')">Graph</button></div><div id="calcArea"></div>`;
-  } else if (type === 'dict') {
-    area.innerHTML = `
-      <button class="back-button" onclick="load('tools')">← Back to Tools</button>
-      <h3>Dictionary</h3>
-      <div style="display:flex; gap:0.5rem; margin-bottom:1rem;">
-        <input type="text" id="dictInput" placeholder="Enter word..." style="flex:1; background:#111; border:1px solid var(--border); color:white; padding:0.5rem; border-radius:4px; margin:0;" onkeydown="if(event.key==='Enter')searchDict()">
-        <button onclick="searchDict()" style="margin:0; padding:0.5rem 1rem;">SEARCH</button>
-      </div>
-      <div id="dictResults" style="background:#0a0a0a; border:1px solid #333; border-radius:8px; padding:1rem; min-height:100px; line-height:1.6;"></div>
-    `;
   } else if (type === 'ide') {
     area.innerHTML = `<button class="back-button" onclick="load('tools')">← Back to Tools</button><h3>HTML IDE</h3><div id="ideContainer"><textarea id="ideInput" placeholder="Write HTML/CSS/JS here..." oninput="runIDE()"></textarea><iframe id="ideOutput"></iframe></div>`;
   } else if (type === 'chat') {
@@ -2252,31 +2197,6 @@ function volSphere() { const v = parseFloat(sphereR.value); sphereOut.innerText 
 function volRect() { const l = parseFloat(recL.value), w = parseFloat(recW.value), h = parseFloat(recH.value); rectOut.innerText = !isNaN(l) && !isNaN(w) && !isNaN(h) ? l * w * h : "Invalid"; }
 function volCyl() { const r = parseFloat(cylR.value), h = parseFloat(cylH.value); cylOut.innerText = !isNaN(r) && !isNaN(h) ? Math.PI * r * r * h : "Invalid"; }
 function volPyr() { const b = parseFloat(pyrB.value), h = parseFloat(pyrH.value); pyrOut.innerText = !isNaN(b) && !isNaN(h) ? (b * h) / 3 : "Invalid"; }
-
-async function searchDict() {
-  const word = document.getElementById('dictInput').value.trim();
-  const results = document.getElementById('dictResults');
-  if (!word) return;
-  results.innerHTML = 'Searching...';
-  try {
-    const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
-    if (!response.ok) throw new Error('Word not found');
-    const data = await response.json();
-    const entry = data[0];
-    let html = `<h4 style="color:var(--main-color); margin:0;">${entry.word.toUpperCase()}</h4>`;
-    if (entry.phonetic) html += `<p style="color:var(--muted); font-size:0.8rem; margin:0.2rem 0 1rem 0;">${entry.phonetic}</p>`;
-    entry.meanings.forEach(m => {
-      html += `<div style="margin-bottom:1rem;"><strong style="color:var(--music-text);">${m.partOfSpeech}</strong><ul style="margin:0.5rem 0; padding-left:1.2rem;">`;
-      m.definitions.slice(0, 3).forEach(d => {
-        html += `<li>${d.definition}</li>`;
-      });
-      html += `</ul></div>`;
-    });
-    results.innerHTML = html;
-  } catch (err) {
-    results.innerHTML = `<p style="color:#ff4444;">${err.message}</p>`;
-  }
-}
 
 function drawGraph() {
   const canvas = document.getElementById("grid"); if (!canvas) return;
