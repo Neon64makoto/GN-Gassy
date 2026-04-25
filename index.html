@@ -219,6 +219,24 @@
       color: #8b8b8b;
     }
 
+    /* Styled color pickers */
+    input[type="color"] {
+      -webkit-appearance: none;
+      border: 1px solid var(--border-strong);
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      cursor: pointer;
+      background: none;
+    }
+    input[type="color"]::-webkit-color-swatch-wrapper {
+      padding: 0;
+    }
+    input[type="color"]::-webkit-color-swatch {
+      border: none;
+      border-radius: 4px;
+    }
+
     /* ═══════════════════════════════════════════════════════════
        UNIFIED DIAGONAL PANEL LAYOUT (Opera GX style)
        ═══════════════════════════════════════════════════════════ */
@@ -247,6 +265,12 @@
     .logo-connector.visible {
       transform: translate(0, 0);
       opacity: 1;
+    }
+
+    .logo-connector.ui-hidden {
+      opacity: 0 !important;
+      pointer-events: none !important;
+      transform: translate(-100%, -100%) !important;
     }
 
     .logo-connector span {
@@ -489,16 +513,6 @@
 
     #volumeSlider::-webkit-slider-thumb {
       -webkit-appearance: none;
-      width: 14px;
-      height: 14px;
-      background: var(--main-color);
-      border-radius: 50%;
-      cursor: pointer;
-      box-shadow: 0 0 10px var(--main-color);
-      border: 1px solid #fff;
-    }
-
-    #volumeSlider::-moz-range-thumb {
       width: 14px;
       height: 14px;
       background: var(--main-color);
@@ -1214,6 +1228,9 @@ const DEFAULT_COLORS = {
   '--menu-text': '#0000ff'
 };
 
+// Memory for colors before rainbow
+let preRainbowColors = { ...DEFAULT_COLORS };
+
 let rainbowStates = {
   '--main-color': { active: false, speed: 5 },
   '--music-text': { active: false, speed: 5 },
@@ -1265,7 +1282,8 @@ let backgroundSettings = {
   rainbowTop: false,
   rainbowBottom: false,
   rainbowTopSpeed: 5,
-  rainbowBottomSpeed: 5
+  rainbowBottomSpeed: 5,
+  customBg: null
 };
 
 function updateRainbow() {
@@ -1320,7 +1338,7 @@ const playlist = [
   'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Disco%20Pervert.mp3',
   'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/They%20Live!.mp3',
   'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/One%20Night%20In%20Tokyo.mp3',
-  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/A%20Kind%20Of%20Deutsch.mp3',
+  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/A%20Kind%20of%20Deutsch.mp3',
   'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Military%20Fashion%20Show.mp3',
   'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Hotline%20-%20Original%20Mix.mp3',
   'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Strange%20Timez%20(feat.%20Robert%20Smith).mp3',
@@ -1363,27 +1381,7 @@ const trackMeta = [
 ];
 
 const songColors = [
-  '#ff0000',    //SMPRG
-  '#ff00ff',    //Neon Cobra
-  '#8400ff',    //Disco
-  '#00ff00',    //They live
-  '#0000ff',    //One night
-  '#ff0000',    //A kind of german
-  '#ff8800',    //Fashion show
-  '#8400ff',    //hotline
-  '#00ccff',    //Strange
-  '#ff0000',    //Not like us
-  '#ff4800',    //Notion
-  '#ffe100',    //Write this down
-  '#0000ff',    //Temp love
-  '#0084ff',    //Falling
-  '#00ccff',    //Why cant this be easy
-  '#ffff00',    //But can you do
-  '#ea00ff',    //Philly
-  '#ff7300',    //Fnaf trus
-  '#ffffff',    //DQ
-  '#00ff00',    //Mc is dead
-  '#ff0000'     //SMRPG 2
+  '#ff0000', '#ff00ff', '#8400ff', '#00ff00', '#0000ff', '#ff0000', '#ff8800', '#8400ff', '#00ccff', '#ff0000', '#ff4800', '#ffe100', '#0000ff', '#0084ff', '#00ccff', '#ffff00', '#ea00ff', '#ff7300', '#ffffff', '#00ff00', '#ff0000'
 ];
 
 let songColorEnabled = false;
@@ -1550,7 +1548,7 @@ function toggleVisualizerMode() {
     main.classList.add('ui-hidden');
     top.classList.add('ui-hidden');
     left.classList.add('ui-hidden');
-    logo.classList.add('ui-hidden');
+    logo.classList.add('ui-hidden'); // Change 1: Hide logo in visualizer mode
     tag.classList.add('ui-hidden');
     btn.innerText = "Exit Mode";
     clock.classList.add('ui-hidden');
@@ -1606,7 +1604,11 @@ document.addEventListener('keydown', (e) => {
   const showBoth = () => { 
     topbar.classList.add('visible'); 
     leftPanel.classList.add('visible');
-    logoConnector.classList.add('visible');
+    // Change 1 Fix: Only show logo if NOT in visualizer mode
+    if (!isVisualizerMode) {
+      logoConnector.classList.add('visible');
+      logoConnector.classList.remove('ui-hidden');
+    }
     clock.classList.add('topbar-active');
     if (isVisualizerMode) { 
       topbar.classList.add('hover-reveal');
@@ -1624,6 +1626,7 @@ document.addEventListener('keydown', (e) => {
       if (isVisualizerMode) { 
         topbar.classList.remove('hover-reveal');
         leftPanel.classList.remove('hover-reveal');
+        logoConnector.classList.add('ui-hidden'); // Ensure hidden in viz mode
       }
     }
   };
@@ -1733,6 +1736,14 @@ function updateBackgroundGradient() {
     document.documentElement.style.setProperty('--bg-gradient-bottom', backgroundSettings.gradientBottom);
     document.body.style.setProperty('--bg-gradient-bottom', backgroundSettings.gradientBottom);
   }
+  // Change 3: Apply custom background if exists
+  if (backgroundSettings.customBg) {
+    document.body.style.backgroundImage = `url(${backgroundSettings.customBg})`;
+    document.body.style.backgroundSize = 'cover';
+    document.body.style.backgroundAttachment = 'fixed';
+  } else {
+    document.body.style.backgroundImage = `linear-gradient(to bottom, var(--bg-gradient-top), var(--bg-gradient-bottom))`;
+  }
 }
 
 function toggleBackgroundVideo() {
@@ -1754,8 +1765,8 @@ function toggleBackgroundVideo() {
   localStorage.setItem('gn_neon_bg_settings', JSON.stringify(backgroundSettings));
 }
 
-function updateBackgroundColor(position, val) {
-  if (position === 'top') {
+function updateBackgroundColor(type, val) {
+  if (type === 'top') {
     backgroundSettings.gradientTop = val;
     backgroundSettings.rainbowTop = false;
   } else {
@@ -1764,40 +1775,50 @@ function updateBackgroundColor(position, val) {
   }
   updateBackgroundGradient();
   localStorage.setItem('gn_neon_bg_settings', JSON.stringify(backgroundSettings));
+  updateSettingsButtonAppearances();
 }
 
-function toggleBackgroundRainbow(position) {
-  if (position === 'top') {
-    backgroundSettings.rainbowTop = !backgroundSettings.rainbowTop;
-  } else {
-    backgroundSettings.rainbowBottom = !backgroundSettings.rainbowBottom;
-  }
-  const isActive = position === 'top' ? backgroundSettings.rainbowTop : backgroundSettings.rainbowBottom;
-  const buttons = document.querySelectorAll(`button[onclick="toggleBackgroundRainbow('${position}')"]`);
-  buttons.forEach(btn => {
-    btn.style.background = isActive ? 'var(--main-color)' : '#333';
-    const mainColorValue = getComputedStyle(document.documentElement).getPropertyValue('--main-color').trim();
-    const brightness = getColorBrightness(mainColorValue);
-    btn.style.color = isActive ? (brightness > 128 ? '#000' : '#fff') : '#888';
-    btn.style.borderColor = isActive ? 'var(--main-color)' : '#555';
-  });
+function toggleBackgroundRainbow(type) {
+  if (type === 'top') backgroundSettings.rainbowTop = !backgroundSettings.rainbowTop;
+  else backgroundSettings.rainbowBottom = !backgroundSettings.rainbowBottom;
+  updateBackgroundGradient();
+  localStorage.setItem('gn_neon_bg_settings', JSON.stringify(backgroundSettings));
+  updateSettingsButtonAppearances();
+}
+
+function updateBackgroundRainbowSpeed(type, val) {
+  if (type === 'top') backgroundSettings.rainbowTopSpeed = parseFloat(val);
+  else backgroundSettings.rainbowBottomSpeed = parseFloat(val);
   localStorage.setItem('gn_neon_bg_settings', JSON.stringify(backgroundSettings));
 }
 
-function updateBackgroundRainbowSpeed(position, speed) {
-  if (position === 'top') {
-    backgroundSettings.rainbowTopSpeed = parseFloat(speed);
-  } else {
-    backgroundSettings.rainbowBottomSpeed = parseFloat(speed);
+// Change 3: Background upload functions
+function handleBgUpload(input) {
+  const file = input.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      backgroundSettings.customBg = e.target.result;
+      updateBackgroundGradient();
+      localStorage.setItem('gn_neon_bg_settings', JSON.stringify(backgroundSettings));
+      load('settings');
+    };
+    reader.readAsDataURL(file);
   }
+}
+
+function removeCustomBg() {
+  backgroundSettings.customBg = null;
+  updateBackgroundGradient();
   localStorage.setItem('gn_neon_bg_settings', JSON.stringify(backgroundSettings));
+  load('settings');
 }
 
 function updateSettingsButtonAppearances() {
   const mainColorValue = getComputedStyle(document.documentElement).getPropertyValue('--main-color').trim();
   const brightness = getColorBrightness(mainColorValue);
   const textColor = brightness > 128 ? '#000' : '#fff';
-  document.documentElement.style.setProperty('--button-text-color', textColor);
+
   document.querySelectorAll(`button[onclick="toggleKeepClock()"]`).forEach(btn => {
     btn.style.background = keepClockInViz ? 'var(--main-color)' : '#333';
     btn.style.color = keepClockInViz ? textColor : '#888';
@@ -1839,6 +1860,7 @@ function applySavedColors() {
   const saved = localStorage.getItem('gn_neon_colors');
   if (saved) {
     const colors = JSON.parse(saved);
+    preRainbowColors = { ...colors }; // Change 2: Store pre-rainbow memory
     for (const [key, val] of Object.entries(colors)) {
       document.documentElement.style.setProperty(key, val);
     }
@@ -1868,25 +1890,25 @@ function applySavedColors() {
 
 function updateColor(key, val) {
   if (rainbowStates[key]) rainbowStates[key].active = false;
+  preRainbowColors[key] = val; // Change 2: Update memory on manual change
   document.documentElement.style.setProperty(key, val);
   const saved = localStorage.getItem('gn_neon_colors');
   const colors = saved ? JSON.parse(saved) : { ...DEFAULT_COLORS };
   colors[key] = val;
   localStorage.setItem('gn_neon_colors', JSON.stringify(colors));
   saveRainbow();
+  updateSettingsButtonAppearances(); // Ensure UI updates
 }
 
 function toggleRainbow(key) {
   rainbowStates[key].active = !rainbowStates[key].active;
+  // Change 2: Revert to pre-rainbow color when disabling
+  if (!rainbowStates[key].active) {
+    const colorToRestore = preRainbowColors[key] || DEFAULT_COLORS[key];
+    document.documentElement.style.setProperty(key, colorToRestore);
+  }
   saveRainbow();
-  const buttons = document.querySelectorAll(`button[onclick="toggleRainbow('${key}')"]`);
-  buttons.forEach(btn => {
-    btn.style.background = rainbowStates[key].active ? 'var(--main-color)' : '#333';
-    const mainColorValue = getComputedStyle(document.documentElement).getPropertyValue('--main-color').trim();
-    const brightness = getColorBrightness(mainColorValue);
-    btn.style.color = rainbowStates[key].active ? (brightness > 128 ? '#000' : '#fff') : '#888';
-    btn.style.borderColor = rainbowStates[key].active ? 'var(--main-color)' : '#555';
-  });
+  updateSettingsButtonAppearances();
 }
 
 function updateRainbowSpeed(key, speed) {
@@ -1900,15 +1922,7 @@ function saveRainbow() {
 function toggleKeepClock() {
   keepClockInViz = !keepClockInViz;
   localStorage.setItem('gn_neon_keep_clock', keepClockInViz);
-  const buttons = document.querySelectorAll(`button[onclick="toggleKeepClock()"]`);
-  buttons.forEach(btn => {
-    btn.style.background = keepClockInViz ? 'var(--main-color)' : '#333';
-    const mainColorValue = getComputedStyle(document.documentElement).getPropertyValue('--main-color').trim();
-    const brightness = getColorBrightness(mainColorValue);
-    btn.style.color = keepClockInViz ? (brightness > 128 ? '#000' : '#fff') : '#888';
-    btn.style.borderColor = keepClockInViz ? 'var(--main-color)' : '#555';
-    btn.textContent = keepClockInViz ? 'Enabled' : 'Disabled';
-  });
+  updateSettingsButtonAppearances();
 }
 
 function resetColors() {
@@ -1916,6 +1930,7 @@ function resetColors() {
     document.documentElement.style.setProperty(key, val);
   }
   for (const key in rainbowStates) rainbowStates[key].active = false;
+  preRainbowColors = { ...DEFAULT_COLORS };
   
   backgroundSettings = {
     useVideo: true,
@@ -1924,7 +1939,8 @@ function resetColors() {
     rainbowTop: false,
     rainbowBottom: false,
     rainbowTopSpeed: 5,
-    rainbowBottomSpeed: 5
+    rainbowBottomSpeed: 5,
+    customBg: null
   };
   updateBackgroundGradient();
   const videoBg = document.getElementById('videoBg');
@@ -1937,6 +1953,31 @@ function resetColors() {
   localStorage.removeItem('gn_neon_rainbow');
   localStorage.removeItem('gn_neon_bg_settings');
   load('settings');
+}
+
+// Change 4: Dictionary API function
+async function searchDictionary() {
+  const word = document.getElementById('dictInput').value.trim();
+  const resultsDiv = document.getElementById('dictResults');
+  if (!word) return;
+  resultsDiv.innerHTML = 'Searching...';
+  try {
+    const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
+    if (!response.ok) throw new Error('Word not found');
+    const data = await response.json();
+    const entry = data[0];
+    let html = `<div style="font-size: 1.5rem; color: var(--main-color);">${entry.word}</div>`;
+    if (entry.phonetic) html += `<div style="font-style: italic; opacity: 0.7;">${entry.phonetic}</div>`;
+    entry.meanings.forEach(m => {
+      html += `<div style="margin-top: 1rem; border-left: 2px solid var(--main-color); padding-left: 1rem;">
+        <div style="font-weight: bold; color: var(--music-text); text-transform: uppercase; font-size: 0.8rem;">${m.partOfSpeech}</div>
+        <div style="margin-top: 5px;">${m.definitions[0].definition}</div>
+      </div>`;
+    });
+    resultsDiv.innerHTML = html;
+  } catch (e) {
+    resultsDiv.innerHTML = `<div style="color: #ff6464;">Error: ${e.message}</div>`;
+  }
 }
 
 const pages = {
@@ -1966,7 +2007,7 @@ const pages = {
           <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
             <span>GRADIENT TOP COLOR</span>
             <div style="display: flex; gap: 0.5rem; align-items: center;">
-              <input type="color" value="${backgroundSettings.gradientTop}" onchange="updateBackgroundColor('top', this.value)">
+              <input type="color" value="${backgroundSettings.gradientTop}" oninput="updateBackgroundColor('top', this.value)">
               <button onclick="toggleBackgroundRainbow('top')" style="margin:0; padding: 0.3rem 0.6rem; font-size: 0.8rem; background: ${backgroundSettings.rainbowTop ? 'var(--main-color)' : '#333'}; border: 1px solid ${backgroundSettings.rainbowTop ? 'var(--main-color)' : '#555'}; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.boxShadow='0 0 8px ' + (${backgroundSettings.rainbowTop} ? 'var(--main-color)' : 'rgba(255,255,255,0.1)')" onmouseout="this.style.boxShadow='none'">Rainbow</button>
             </div>
           </div>
@@ -1981,7 +2022,7 @@ const pages = {
           <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
             <span>GRADIENT BOTTOM COLOR</span>
             <div style="display: flex; gap: 0.5rem; align-items: center;">
-              <input type="color" value="${backgroundSettings.gradientBottom}" onchange="updateBackgroundColor('bottom', this.value)">
+              <input type="color" value="${backgroundSettings.gradientBottom}" oninput="updateBackgroundColor('bottom', this.value)">
               <button onclick="toggleBackgroundRainbow('bottom')" style="margin:0; padding: 0.3rem 0.6rem; font-size: 0.8rem; background: ${backgroundSettings.rainbowBottom ? 'var(--main-color)' : '#333'}; border: 1px solid ${backgroundSettings.rainbowBottom ? 'var(--main-color)' : '#555'}; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.boxShadow='0 0 8px ' + (${backgroundSettings.rainbowBottom} ? 'var(--main-color)' : 'rgba(255,255,255,0.1)')" onmouseout="this.style.boxShadow='none'">Rainbow</button>
             </div>
           </div>
@@ -1992,14 +2033,24 @@ const pages = {
             </div>
           ` : ''}
         </div>
+        <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px;">
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <span>CUSTOM BACKGROUND IMAGE</span>
+            <div style="display: flex; gap: 0.5rem; align-items: center;">
+              <button onclick="document.getElementById('bgUpload').click()" style="margin:0; padding: 0.3rem 0.6rem; font-size: 0.8rem; background: var(--main-color);">Upload</button>
+              ${backgroundSettings.customBg ? `<button onclick="removeCustomBg()" style="margin:0; padding: 0.3rem 0.6rem; font-size: 0.8rem; background: #ff6464;">Remove</button>` : ''}
+              <input type="file" id="bgUpload" style="display:none" accept="image/*" onchange="handleBgUpload(this)">
+            </div>
+          </div>
+        </div>
         ${Object.entries(rainbowStates).map(([key, state]) => `
           <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px;">
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
-              <span>${key.replace('--', '').replace('-', ' ').toUpperCase()}</span>
+              <span style="text-transform: uppercase;">${key.replace('--', '').replace('-', ' ')}</span>
               <div style="display: flex; gap: 0.5rem; align-items: center;">
                 ${key === '--panel-color' ? 
-                  `<input type="text" value="${getComputedStyle(document.documentElement).getPropertyValue(key).trim()}" onchange="updateColor('${key}', this.value)" style="width: 120px; background: #000; border: 1px solid #333; color: #fff; padding: 4px; font-size: 0.8rem;">` :
-                  `<input type="color" value="${getComputedStyle(document.documentElement).getPropertyValue(key).trim()}" onchange="updateColor('${key}', this.value)">`
+                  `<input type="text" value="${getComputedStyle(document.documentElement).getPropertyValue(key).trim()}" oninput="updateColor('${key}', this.value)" style="width: 120px; font-size: 0.8rem;">` :
+                  `<input type="color" value="${getComputedStyle(document.documentElement).getPropertyValue(key).trim()}" oninput="updateColor('${key}', this.value)">`
                 }
                 <button onclick="toggleRainbow('${key}')" style="margin:0; padding: 0.3rem 0.6rem; font-size: 0.8rem; background: ${state.active ? 'var(--main-color)' : '#333'}; border: 1px solid ${state.active ? 'var(--main-color)' : '#555'}; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.boxShadow='0 0 8px ' + (${state.active} ? 'var(--main-color)' : 'rgba(255,255,255,0.1)')" onmouseout="this.style.boxShadow='none'">Rainbow</button>
               </div>
@@ -2054,6 +2105,7 @@ const pages = {
         <button class="under-construction"><span>AI Chatbot</span></button>
         <button onclick="showTool('canvas')">Painting Canvas</button>
         <button onclick="showTool('ciphers')">Ciphers</button>
+        <button onclick="showTool('dict')">Dictionary</button>
       </div>
       <div id="toolArea"></div>
     </section>
@@ -2174,6 +2226,8 @@ function showTool(type) {
     initCanvas();
   } else if (type === 'ciphers') {
     area.innerHTML = `<button class="back-button" onclick="load('tools')">← Back to Tools</button><h3>Ciphers</h3><div class="games-menu"><button onclick="showCipher('caesar')">Caesar</button><button onclick="showCipher('atbash')">Atbash</button></div><div id="cipherArea"></div>`;
+  } else if (type === 'dict') {
+    area.innerHTML = `<button class="back-button" onclick="load('tools')">← Back to Tools</button><h3>Dictionary</h3><div style="display: flex; gap: 0.5rem;"><input type="text" id="dictInput" placeholder="Enter a word..." style="flex: 1;" onkeydown="if(event.key==='Enter') searchDictionary()"><button onclick="searchDictionary()" style="margin:0; padding: 0.5rem 1rem;">Search</button></div><div id="dictResults" style="margin-top: 1rem; background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px; max-height: 300px; overflow-y: auto;">Results will appear here...</div>`;
   } else if (type === 'guess') {
     area.innerHTML = `<button class="back-button" onclick="load('games')">← Back to Games</button><h3>Number Guessing</h3><p>Guess a number between 1 and 100:</p><input id="guessInput" type="number"><button onclick="checkGuess()">Guess</button><p id="guessMsg"></p>`;
     window.secretNum = Math.floor(Math.random() * 100) + 1;
@@ -2196,171 +2250,116 @@ function volCube() { const v = parseFloat(cubeSide.value); cubeOut.innerText = !
 function volSphere() { const v = parseFloat(sphereR.value); sphereOut.innerText = !isNaN(v) ? (4 / 3) * Math.PI * v ** 3 : "Invalid"; }
 function volRect() { const l = parseFloat(recL.value), w = parseFloat(recW.value), h = parseFloat(recH.value); rectOut.innerText = !isNaN(l) && !isNaN(w) && !isNaN(h) ? l * w * h : "Invalid"; }
 function volCyl() { const r = parseFloat(cylR.value), h = parseFloat(cylH.value); cylOut.innerText = !isNaN(r) && !isNaN(h) ? Math.PI * r * r * h : "Invalid"; }
-function volPyr() { const b = parseFloat(pyrB.value), h = parseFloat(pyrH.value); pyrOut.innerText = !isNaN(b) && !isNaN(h) ? (b * h) / 3 : "Invalid"; }
+function volPyr() { const b = parseFloat(pyrB.value), h = parseFloat(pyrH.value); pyrOut.innerText = !isNaN(b) && !isNaN(h) ? (1 / 3) * b * h : "Invalid"; }
 
 function drawGraph() {
-  const canvas = document.getElementById("grid"); if (!canvas) return;
-  const ctx = canvas.getContext("2d"); ctx.fillStyle = "black"; ctx.fillRect(0, 0, 400, 400);
-  const xminVal = parseFloat(xmin.value), xmaxVal = parseFloat(xmax.value), yminVal = parseFloat(ymin.value), ymaxVal = parseFloat(ymax.value), width = 400, height = 400;
-  ctx.strokeStyle = "#333"; ctx.lineWidth = 1;
-  for (let i = 0; i <= 10; i++) { const x = i * (width / 10), y = i * (height / 10); ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, height); ctx.stroke(); ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(width, y); ctx.stroke(); }
-  ctx.strokeStyle = "white"; ctx.lineWidth = 2;
-  const xZero = (-xminVal / (xmaxVal - xminVal)) * width, yZero = (ymaxVal / (ymaxVal - yminVal)) * height;
-  ctx.beginPath(); ctx.moveTo(xZero, 0); ctx.lineTo(xZero, height); ctx.stroke(); ctx.beginPath(); ctx.moveTo(0, yZero); ctx.lineTo(width, yZero); ctx.stroke();
-  ctx.fillStyle = "white"; ctx.font = "10px Arial";
-  for (let i = 0; i <= 10; i++) { const xVal = xminVal + (i / 10) * (xmaxVal - xminVal), yVal = yminVal + (i / 10) * (ymaxVal - yminVal), px = i * (width / 10), py = height - i * (height / 10); ctx.fillText(xVal.toFixed(1), px, yZero + 10); ctx.fillText(yVal.toFixed(1), xZero + 5, py); }
-  const eqs = [eq1.value, eq2.value, eq3.value, eq4.value, eq5.value], colors = ["red", "cyan", "lime", "yellow", "orange"];
-  let resultsHTML = "<h3>Results</h3>"; const functions = [];
-  eqs.forEach((expr, i) => {
-    if (!expr) return; expr = expr.replace(/(\d)x/g, "$1*x");
-    let fn; try { fn = (x) => eval(expr.replace(/x/g, "(" + x + ")")); functions.push({ fn, color: colors[i], expr }); } catch { return; }
-    ctx.strokeStyle = colors[i]; ctx.lineWidth = 2; ctx.beginPath();
-    let first = true;
-    for (let px = 0; px <= width; px++) { const x = xminVal + (px / width) * (xmaxVal - xminVal); let y; try { y = fn(x); } catch { continue; } const py = ((ymaxVal - y) / (ymaxVal - yminVal)) * height; if (py >= 0 && py <= height) { if (first) { ctx.moveTo(px, py); first = false; } else { ctx.lineTo(px, py); } } }
-    ctx.stroke();
-    try { const y0 = fn(0); resultsHTML += `<p style="color:${colors[i]}">y=${expr} → y(0) = ${y0.toFixed(2)}</p>`; } catch {}
-  });
-  for (let i = 0; i < functions.length; i++) {
-    for (let j = i + 1; j < functions.length; j++) {
-      for (let x = xminVal; x <= xmaxVal; x += 0.1) {
-        let y1, y2; try { y1 = functions[i].fn(x); y2 = functions[j].fn(x); } catch { continue; }
-        if (Math.abs(y1 - y2) < 0.1) { resultsHTML += `<p>Intersection ≈ (${x.toFixed(2)}, ${y1.toFixed(2)})</p>`; break; }
-      }
+  const canvas = document.getElementById('grid'), ctx = canvas.getContext('2d');
+  const xmin = parseFloat(document.getElementById('xmin').value), xmax = parseFloat(document.getElementById('xmax').value);
+  const ymin = parseFloat(document.getElementById('ymin').value), ymax = parseFloat(document.getElementById('ymax').value);
+  const eqs = [eq1.value, eq2.value, eq3.value, eq4.value, eq5.value].filter(e => e.trim() !== "");
+  const colors = ['#00ff00', '#ff0000', '#0000ff', '#ffff00', '#ff00ff'];
+  ctx.clearRect(0, 0, 400, 400);
+  ctx.strokeStyle = '#444'; ctx.lineWidth = 1;
+  const zeroX = (0 - xmin) * 400 / (xmax - xmin), zeroY = 400 - (0 - ymin) * 400 / (ymax - ymin);
+  ctx.beginPath(); ctx.moveTo(zeroX, 0); ctx.lineTo(zeroX, 400); ctx.moveTo(0, zeroY); ctx.lineTo(400, zeroY); ctx.stroke();
+  eqs.forEach((eq, idx) => {
+    ctx.strokeStyle = colors[idx]; ctx.lineWidth = 2; ctx.beginPath();
+    for (let i = 0; i <= 400; i++) {
+      const x = xmin + i * (xmax - xmin) / 400;
+      try {
+        const y = eval(eq.replace(/x/g, `(${x})`).replace(/Math\./g, '').replace(/sin/g, 'Math.sin').replace(/cos/g, 'Math.cos').replace(/tan/g, 'Math.tan').replace(/sqrt/g, 'Math.sqrt').replace(/pow/g, 'Math.pow').replace(/PI/g, 'Math.PI').replace(/E/g, 'Math.E').replace(/abs/g, 'Math.abs').replace(/log/g, 'Math.log'));
+        const canvasY = 400 - (y - ymin) * 400 / (ymax - ymin);
+        if (i === 0) ctx.moveTo(i, canvasY); else ctx.lineTo(i, canvasY);
+      } catch (e) { }
     }
-  }
-  let existing = document.getElementById("graphResults"); if (!existing) { const div = document.createElement("div"); div.id = "graphResults"; canvas.parentElement.appendChild(div); existing = div; } existing.innerHTML = resultsHTML;
+    ctx.stroke();
+  });
 }
 
-const games = ["https://turbowarp.org/1109852074/embed?addons=stuck,pause,fullscreen,fps=60&hqpen", "https://turbowarp.org/10128407/embed?addons=pause,fullscreen", "https://turbowarp.org/1143765424/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/1075310827/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/941803602/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/973637218/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/883776962/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/898492644/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/916303075/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/978483855/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/959847748/embed?addons=pause,fullscreen&fps=60"];
-const titles = ["Block Blast (Not Made By Me)", "Paper Minecraft (Not Made By Me)", "Sisyphean Escalator", "Gambling but Mid", "Laser Dodge", "Goober Dodger", "Neon's Hostile Road", "Mid Cookie Clicker", "Asteroid Assault", "Reel 'Em In", "Cats Hate Rats"];
-const controls = [`Click and drag blocks to match 3 or more of the same color.\n\nClear the board to advance to the next level.\n\nUse strategy to plan your moves!`, `Modding Guide: ▶️ https://youtu.be/PexNsUvqD5w\n[1 to 9] - Select Item    [Click] - Place or Mine\n[WASD] - Move / Jump  [E] - Open/Close Inventory\n[E+hover] - Open / Close Chest, Crafting Table, Door\n[Space] - Drop single tile from a stack while dragging.\n[F] - Eat food       [N] - Label a sign or chest\n[Q] - Drop item      [P] - Pause / Unpause\n[T] - Talk / Command    [O] - Save your game\n[M] - Music / Sounds   [Shift] - Sprint`, `Type the letters shown fast enough or fall.\n\nNot case sensitive.`, `::At BlackJack::\nUse arrow keys to bet:\n\nLeft and Right set the bet to 0 and max\n\nUp and down will change the bet by 10, or if holding "." will change it by 500\n1\nEnter to place bet, and after will be the hit button.\n\nSpace to stand.\n\n::At Slots::\nS to Spin\n\nSame betting controls.`, `Use the mouse to dodge the lasers that get faster with time!\n\nPress the left mouse button to become invincible for three seconds with a 10 second cool down so use it wisely!`, `Use the mouse to dodge the goobers, and don't stay in the border too long.\n\nThat's really about it.`, `ASD to move.\nW for a 3-second long power-up of invincibility.\nSpace to Start/Restart on the game-over screen.\n\n1 and 2 control the arcade scan filter.\n3 and 4 control the arcade cabinet overlay.\n5 and 6 control the arcade music (on/off)\n\n(60 fps Is highly recommended)`, `It's Cookie Clicker, but worse.\n\nUse your mouse.`, `Left mouse button to fire a weak auxiliary laser that overheats quickly.\n\nSpace for Main powerful laser.\n\nW for a backup shield that lasts 10 seconds, but has limited uses.\n\nUse your mouse to aim the laser.`, `Use Left Mouse Button to fire the harpoon and try to get the fish, and buy upgrades.\n \nBeware of the explosive mine, it takes $50 dollars to repair the harpoon and the explosion might scare a few good fish away.\n\n\nThis is still a work in progress and I plan on adding more things like power ups, multipliers, and maybe a high score system.\n\nF to show debug menu \nG to hide debug menu`, `goober.\n\nUse mouse 1 to hit the rats.\nuse F to turn off the yarn.\nUse G to turn them back on.\n`];
-const notes = [`Block Blast is a puzzle game where you match blocks.\n\nIt's not made by me, but it's a fun game to play!`, `*** Credits ***\nAll the graphics are taken from the Minecraft wiki page and have not been created by me. I have rescaled them and broken them up to make the game work, but that is it at present.\n\nORIGNAL PROJECT MADE BY GRIFFPATCH ON SCRATCH, NOT ME:\n\nCheck him out he does great stuf, https://scratch.mit.edu/users/griffpatch/`, `The game is based on this video by the way:\n\nhttps://youtu.be/2Gby1XQ4Z2M?feature=shared`, `Don't gamble in real life, also this technically is not correct, and if you do it quick enough you can easily break most of this.\n\nThe special codes are:\n\nL E O\n\nN F S M W\n`, `Not much to add, I could have done a better job with the randomization of everything, but I am not gonna be working on this any further.`, `<b>!!!VOLUME WARNING!!!</b>\n\nI made this game to be difficult and stressful on purpose.\n\nIf you don't like loud noises or flashing lights, I would recommend not playing this game.`, `This is a game I made in a day, so don't expect too much.\n\nAlso, the hitbox for the asteroids is a bit wonky.`, `This game is unfinished and buggy.\n\nI am not going to work on it anymore.`, `I made this game as a joke.\n\nIt's not very good.`, `This game is still in development.\n\nI plan on adding more features soon.`, `This game is a work in progress.\n\nI plan on adding more content soon.`];
-
-function showScratchGames() {
-  const content = document.getElementById('gamesContent'), gamesMenu = document.querySelector('.games-menu'); if (gamesMenu) gamesMenu.style.display = 'none';
-  content.innerHTML = `<button class="back-button" onclick="load('games')">← Back to Games Menu</button><div class="games-layout"><div class="sideBox"><h3>Controls</h3><div id="gameControls"></div></div><div class="centerBox"><iframe id="scratchFrame" allowfullscreen title="GN-Neon Scratch game viewer"></iframe><h3 id="gameTitle"></h3><div class="button-row" style="justify-content:center; margin-top:1rem;"><button onclick="prevGame()">◀</button><button onclick="nextGame()">▶</button></div></div><div class="sideBox"><h3>Notes / Credits</h3><div id="gameNotes"></div></div></div>`;
-  currentIndex = 0; updateGame();
-}
-
-function showEmulators() {
-  const content = document.getElementById('gamesContent'), gamesMenu = document.querySelector('.games-menu'); if (gamesMenu) gamesMenu.style.display = 'none';
-  content.innerHTML = `<button class="back-button" onclick="load('games')">← Back to Emulators</button><div class="games-menu" style="max-width: 400px; margin: 2rem auto;"><h3>Select Emulator</h3><button onclick="navigateTo('nes')">NES</button><button onclick="navigateTo('snes')">SNES</button><button onclick="navigateTo('genesis')">Genesis</button></div>`;
-}
-
-function navigateTo(emulator) {
-  const content = document.getElementById('gamesContent');
-  if (emulator === 'nes') {
-    content.innerHTML = `<button class="back-button" onclick="showEmulators()">← Back to Emulators</button><div style="width: 100%; max-width: 900px; margin: 2rem auto;"><h2 style="padding: 0 0 1rem 0;">NES Emulator</h2><div style="width:100%;height:500px;max-width:100%; background: #000; border-radius: 10px; overflow: hidden; border: 1px solid #333;"><div id="game"></div></div><script>window.EJS_player='#game';window.EJS_core='nes';window.EJS_gameName='cpu_dummy_reads';window.EJS_color='#0044ff';window.EJS_startOnLoaded=true;window.EJS_pathtodata='https://cdn.jsdelivr.net/gh/EmulatorJS/EmulatorJS@latest/data/';window.EJS_url='https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Roms/cpu_dummy_reads.nes';<\/script><script src="https://cdn.jsdelivr.net/gh/EmulatorJS/EmulatorJS@latest/data/loader.js"><\/script></div>`;
-  } else {
-    content.innerHTML = `<div class="wip-container"><h2>${emulator.toUpperCase()} Emulator</h2><p>Work in Progress</p><p style="color: #888; margin-top: 1rem;">This section is currently under development.</p><button class="back-button" onclick="showEmulators()">← Back to Emulators</button></div>`;
-  }
-}
-
-function updateGame() {
-  const f = document.getElementById("scratchFrame"); if (!f) return;
-  f.src = games[currentIndex]; document.getElementById("gameTitle").innerText = titles[currentIndex];
-  document.getElementById("gameControls").innerHTML = controls[currentIndex] || "";
-  document.getElementById("gameNotes").innerHTML = notes[currentIndex] || "";
-}
-
-function nextGame() { currentIndex = (currentIndex + 1) % games.length; updateGame(); }
-function prevGame() { currentIndex = (currentIndex - 1 + games.length) % games.length; updateGame(); }
-
-function showCipher(type) {
-  const area = document.getElementById("cipherArea");
-  area.innerHTML = `<h3>${type.toUpperCase()}</h3><textarea id="cipherIn" placeholder="Enter text..."></textarea><div><button onclick="runCipher('${type}', 'encode')">Encode</button><button onclick="runCipher('${type}', 'decode')">Decode</button></div><pre id="cipherOut"></pre>`;
-}
-function runCipher(type, mode) {
-  const input = document.getElementById('cipherIn').value;
-  let out = "";
-  if (type === 'caesar') {
-    const shift = mode === 'encode' ? 3 : -3;
-    out = input.replace(/[a-z]/gi, c => {
-      const code = c.charCodeAt(0);
-      const isUpper = code >= 65 && code <= 90;
-      const base = isUpper ? 65 : 97;
-      let shifted = (code - base + shift) % 26;
-      if (shifted < 0) shifted += 26;
-      return String.fromCharCode(base + shifted);
-    });
-  } else if (type === 'atbash') {
-    out = input.replace(/[a-z]/gi, c => String.fromCharCode((c <= "Z" ? 155 : 219) - c.charCodeAt(0)));
-  }
-  document.getElementById('cipherOut').innerText = out;
-}
 function runIDE() {
-  const out = document.getElementById('ideOutput').contentWindow.document;
-  out.open(); out.write(document.getElementById('ideInput').value); out.close();
-}
-function sendChat() {
-  const log = document.getElementById('chatLog'), inp = document.getElementById('chatInput');
-  if(!inp.value)return;
-  log.innerHTML += `<div class="chat-msg user-msg">${inp.value}</div>`;
-  const userVal = inp.value; inp.value='';
-  setTimeout(()=> {
-    log.innerHTML += `<div class="chat-msg bot-msg">AI demo response to: "${userVal}"</div>`;
-    log.scrollTop = log.scrollHeight;
-  }, 600);
+  const input = document.getElementById('ideInput').value, output = document.getElementById('ideOutput');
+  output.srcdoc = input;
 }
 
 function initCanvas() {
-  const cvs = document.getElementById('paintingCanvas'), ctx = cvs.getContext('2d');
-  let painting = false;
-  cvs.onmousedown = (e) => { painting = true; ctx.beginPath(); ctx.moveTo(e.clientX - cvs.getBoundingClientRect().left, e.clientY - cvs.getBoundingClientRect().top); };
-  cvs.onmouseup = () => { painting = false; ctx.beginPath(); };
-  cvs.onmousemove = (e) => {
-    if(!painting) return;
-    ctx.lineWidth = document.getElementById('brushSize').value;
-    ctx.lineCap = 'round';
-    ctx.strokeStyle = document.getElementById('brushColor').value;
-    const rect = cvs.getBoundingClientRect();
-    ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+  const canvas = document.getElementById('paintingCanvas'), ctx = canvas.getContext('2d');
+  let drawing = false;
+  canvas.onmousedown = () => drawing = true; canvas.onmouseup = () => { drawing = false; ctx.beginPath(); };
+  canvas.onmousemove = (e) => {
+    if (!drawing) return;
+    ctx.lineWidth = document.getElementById('brushSize').value; ctx.lineCap = 'round'; ctx.strokeStyle = document.getElementById('brushColor').value;
+    const rect = canvas.getBoundingClientRect(); ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top); ctx.stroke(); ctx.beginPath(); ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
   };
 }
-function clearCanvas() { paintingCanvas.getContext('2d').clearRect(0,0,800,500); }
-function showEmbed(url) {
-  const area = document.getElementById('embedArea');
-  area.style.display = 'block';
-  area.innerHTML = `<iframe src="${url}"></iframe>`;
+function clearCanvas() { const c = document.getElementById('paintingCanvas'); c.getContext('2d').clearRect(0, 0, c.width, c.height); }
+
+function showCipher(type) {
+  const area = document.getElementById("cipherArea");
+  if (type === 'caesar') {
+    area.innerHTML = `<h4>Caesar Cipher</h4>Text: <input id="caesarIn"><br>Shift: <input id="caesarShift" type="number" value="3"><br><button onclick="runCaesar(true)">Encrypt</button><button onclick="runCaesar(false)">Decrypt</button><p id="caesarOut"></p>`;
+  } else if (type === 'atbash') {
+    area.innerHTML = `<h4>Atbash Cipher</h4>Text: <input id="atbashIn"><br><button onclick="runAtbash()">Convert</button><p id="atbashOut"></p>`;
+  }
 }
-function showCreation(type) {
-  const area = document.getElementById('creationArea'), creationsMenu = document.getElementById('creationsMenu');
-  if (creationsMenu) creationsMenu.style.display = 'none';
-  area.innerHTML = `<button class="back-button" onclick="load('creations')">← Back to Creations</button><h3>${type.toUpperCase()}</h3><div id="embedArea"></div>`;
+function runCaesar(enc) {
+  const text = caesarIn.value, shift = parseInt(caesarShift.value) * (enc ? 1 : -1);
+  caesarOut.innerText = text.split('').map(c => {
+    if (c.match(/[a-z]/i)) {
+      const code = c.charCodeAt(0), base = code < 91 ? 65 : 97;
+      return String.fromCharCode((code - base + shift + 26) % 26 + base);
+    } return c;
+  }).join('');
+}
+function runAtbash() {
+  atbashOut.innerText = atbashIn.value.split('').map(c => {
+    if (c.match(/[a-z]/i)) {
+      const code = c.charCodeAt(0), base = code < 91 ? 65 : 97;
+      return String.fromCharCode(25 - (code - base) + base);
+    } return c;
+  }).join('');
 }
 
 function checkGuess() {
-  const v = parseInt(document.getElementById('guessInput').value);
-  const msg = document.getElementById('guessMsg');
-  if(v === window.secretNum) msg.innerText = "Correct!";
-  else msg.innerText = v < window.secretNum ? "Too low!" : "Too high!";
+  const val = parseInt(guessInput.value);
+  if (val === secretNum) guessMsg.innerText = "Correct! New number generated."; secretNum = Math.floor(Math.random() * 100) + 1;
+  else guessMsg.innerText = val < secretNum ? "Higher!" : "Lower!";
 }
 
-// ─── BOOT ─────────────────────────────────────────────────────────────────────
-function setVideoBackground(videoUrl) {
-  const video = document.createElement('video');
-  video.id = 'videoBg'; video.autoplay = true; video.loop = true; video.muted = true; video.src = videoUrl;
+function showScratchGames() {
+  const content = document.getElementById("gamesContent"), menu = document.getElementById("gamesMenu");
+  menu.style.display = 'none';
+  content.innerHTML = `<button class="back-button" onclick="load('games')">← Back to Games</button><div class="games-menu"><button onclick="launchScratch('10128431')">The Ninja</button><button onclick="launchScratch('11654051')">Appel</button></div><div id="scratchArea"></div>`;
+}
+function launchScratch(id) {
+  document.getElementById("scratchArea").innerHTML = `<iframe id="scratchFrame" src="https://scratch.mit.edu/projects/${id}/embed" allowtransparency="true" width="485" height="402" frameborder="0" scrolling="no" allowfullscreen></iframe>`;
+}
+
+// ─── INITIALIZATION ──────────────────────────────────────────────────────────
+window.onload = () => {
+  initMusic();
+  applySavedColors();
+  load('home');
+  
+  const logo = document.getElementById('logoConnector');
+  const left = document.getElementById('leftPanel');
+  const top = document.getElementById('topbar');
+  
+  setTimeout(() => {
+    logo.classList.add('visible');
+    left.classList.add('visible');
+    top.classList.add('visible');
+    document.getElementById('splashOverlay').classList.add('ready');
+    document.getElementById('splashText').innerText = 'CLICK TO ENTER';
+    document.getElementById('splashSubtext').innerText = 'System Initialized';
+  }, 1500);
+
+  // Background initialization
   if (!backgroundSettings.useVideo) {
-    video.style.opacity = '0';
-    video.style.visibility = 'hidden';
+    const videoBg = document.getElementById('videoBg');
+    if (videoBg) { videoBg.style.opacity = '0'; videoBg.style.visibility = 'hidden'; }
   }
-  video.addEventListener('canplay', () => {
-    const splash = document.getElementById('splashOverlay');
-    splash.classList.add('ready');
-    document.getElementById('splashText').innerText = "!!!WARNING MUSIC WILL PLAY!!!";
-    document.getElementById('splashSubtext').innerText = "CLICK TO ENTER";
-  });
-  document.body.insertBefore(video, document.body.firstChild);
-  document.body.classList.add('video-bg');
-}
-
-applySavedColors();
-load("home");
-setVideoBackground('https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/FlatlineLoop.mp4');
-initMusic();
+  updateBackgroundGradient();
+};
 </script>
 </body>
 </html>
