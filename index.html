@@ -498,6 +498,16 @@
       border: 1px solid #fff;
     }
 
+    #volumeSlider::-moz-range-thumb {
+      width: 14px;
+      height: 14px;
+      background: var(--main-color);
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 0 10px var(--main-color);
+      border: 1px solid #fff;
+    }
+
     /* ─── MUSIC CONTROLS ──────────────────────────────────────────────── */
     .music-controls {
       width: 100%;
@@ -1175,59 +1185,6 @@
         grid-template-columns: 1fr !important;
       }
     }
-    
-    /* Code Viewer Styles */
-    #codeViewerOverlay {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.95);
-      backdrop-filter: blur(15px);
-      z-index: 3000;
-      display: none;
-      flex-direction: column;
-      padding: 2rem;
-    }
-    #codeViewerOverlay.visible {
-      display: flex;
-    }
-    .code-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1rem;
-      border-bottom: 1px solid var(--main-color);
-      padding-bottom: 0.5rem;
-    }
-    .code-content {
-      flex: 1;
-      background: #0a0a0a;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 1.5rem;
-      overflow: auto;
-      font-family: 'Courier New', Courier, monospace;
-      font-size: 1rem;
-      line-height: 1.5;
-      color: #0f0;
-      white-space: pre-wrap;
-    }
-    .close-code-btn {
-      background: #440000;
-      border: 1px solid #ff0000;
-      padding: 0.5rem 1rem;
-      font-size: 0.9rem;
-    }
-    
-    .section-header {
-      border-left: 4px solid var(--main-color);
-      padding-left: 1rem;
-      margin: 2rem 0 1rem;
-      color: var(--main-color);
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      font-weight: bold;
-    }
   </style>
 </head>
 <body class="video-bg">
@@ -1304,23 +1261,13 @@
       <p id="lightboxDesc" style="color: var(--muted); line-height: 1.6;"></p>
     </div>
   </div>
-  
-  <!-- Code Viewer Overlay -->
-  <div id="codeViewerOverlay">
-    <div class="code-header">
-      <h3 id="codeViewerTitle" style="margin: 0; color: var(--main-color);">Code Viewer</h3>
-      <button class="close-code-btn" onclick="closeCodeViewer()">Close</button>
-    </div>
-    <div class="code-content" id="codeViewerContent">Loading code...</div>
-  </div>
-
   <main class="page-shell" id="mainContent">
     <h1 class="site-title">GN-Neon</h1>
     <div id="content">Loading...</div>
   </main>
 
   <canvas id="visualizerCanvas"></canvas>
-  <div class="version-tag" id="vTag">v0.75</div>
+  <div class="version-tag" id="vTag">v0.85</div>
 
 <script>
 // ─── STATE ───────────────────────────────────────────────────────────────────
@@ -1345,9 +1292,6 @@ let rainbowStates = {
   '--menu-text': { active: false, speed: 5 },
   '--panel-color': { active: false, speed: 5 }
 };
-
-let songColorEnabled = localStorage.getItem('gn_neon_song_color') === 'true';
-const songColors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ffa500', '#800080', '#008000', '#ffc0cb', '#a52a2a'];
 
 function applySongColor(trackIndex) {
   if (!songColorEnabled) return;
@@ -1375,7 +1319,15 @@ function toggleSongColor() {
     document.documentElement.style.setProperty('--menu-text', colors['--menu-text']);
     document.documentElement.style.setProperty('--panel-color', colors['--panel-color']);
   }
-  updateSettingsButtonAppearances();
+  const buttons = document.querySelectorAll(`button[onclick="toggleSongColor()"]`);
+  buttons.forEach(btn => {
+    btn.style.background = songColorEnabled ? 'var(--main-color)' : '#333';
+    const mainColorValue = getComputedStyle(document.documentElement).getPropertyValue('--main-color').trim();
+    const brightness = getColorBrightness(mainColorValue);
+    btn.style.color = songColorEnabled ? (brightness > 128 ? '#000' : '#fff') : '#888';
+    btn.style.borderColor = songColorEnabled ? 'var(--main-color)' : '#555';
+    btn.textContent = songColorEnabled ? 'Enabled' : 'Disabled';
+  });
 }
 
 let backgroundSettings = {
@@ -1394,168 +1346,158 @@ function updateRainbow() {
     if (state.active) {
       const hue = (time * state.speed * 10) % 360;
       if (key === '--panel-color') {
-        document.documentElement.style.setProperty(key, `hsla(${hue}, 100%, 50%, 0.25)`);
+        document.documentElement.style.setProperty(key, `hsla(${hue}, 100%, 50%, 0.15)`);
       } else {
         document.documentElement.style.setProperty(key, `hsl(${hue}, 100%, 50%)`);
       }
     }
   }
   if (backgroundSettings.rainbowTop) {
-    const hue = (time * backgroundSettings.rainbowTopSpeed * 10) % 360;
-    document.documentElement.style.setProperty('--bg-gradient-top', `hsl(${hue}, 100%, 10%)`);
+    const hueTop = (time * backgroundSettings.rainbowTopSpeed * 10) % 360;
+    const color = `hsl(${hueTop}, 100%, 50%)`;
+    document.documentElement.style.setProperty('--bg-gradient-top', color);
+    document.body.style.setProperty('--bg-gradient-top', color);
   }
   if (backgroundSettings.rainbowBottom) {
-    const hue = (time * backgroundSettings.rainbowBottomSpeed * 10) % 360;
-    document.documentElement.style.setProperty('--bg-gradient-bottom', `hsl(${hue}, 100%, 10%)`);
+    const hueBottom = (time * backgroundSettings.rainbowBottomSpeed * 10) % 360;
+    const color = `hsl(${hueBottom}, 100%, 50%)`;
+    document.documentElement.style.setProperty('--bg-gradient-bottom', color);
+    document.body.style.setProperty('--bg-gradient-bottom', color);
   }
   requestAnimationFrame(updateRainbow);
 }
 updateRainbow();
 
-function toggleRainbow(key) {
-  rainbowStates[key].active = !rainbowStates[key].active;
-  localStorage.setItem('gn_neon_rainbow', JSON.stringify(rainbowStates));
-  updateSettingsButtonAppearances();
+// ─── CLOCK LOGIC (7-Segment, 12h, No Seconds) ──────────────────────────────────
+function updateClock() {
+  const now = new Date();
+  let h = now.getHours();
+  const m = String(now.getMinutes()).padStart(2, '0');
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  
+  h = h % 12;
+  h = h ? h : 12;
+  const hStr = String(h).padStart(2, '0');
+  
+  document.getElementById('clockTime').innerText = `${hStr}:${m}`;
+  document.getElementById('clockAmPm').innerText = ampm;
 }
+setInterval(updateClock, 1000);
+updateClock();
 
-function updateRainbowSpeed(key, val) {
-  rainbowStates[key].speed = parseInt(val);
-  localStorage.setItem('gn_neon_rainbow', JSON.stringify(rainbowStates));
-}
-
-function updateColor(key, val) {
-  document.documentElement.style.setProperty(key, val);
-  const saved = localStorage.getItem('gn_neon_colors');
-  const colors = saved ? JSON.parse(saved) : { ...DEFAULT_COLORS };
-  colors[key] = val;
-  localStorage.setItem('gn_neon_colors', JSON.stringify(colors));
-}
-
-function toggleBackgroundVideo() {
-  backgroundSettings.useVideo = !backgroundSettings.useVideo;
-  const video = document.getElementById('videoBg');
-  if (video) {
-    video.style.opacity = backgroundSettings.useVideo ? '1' : '0';
-    video.style.visibility = backgroundSettings.useVideo ? 'visible' : 'hidden';
-  }
-  localStorage.setItem('gn_neon_bg_settings', JSON.stringify(backgroundSettings));
-  updateSettingsButtonAppearances();
-}
-
-function updateBackgroundColor(pos, val) {
-  if (pos === 'top') {
-    backgroundSettings.gradientTop = val;
-    document.documentElement.style.setProperty('--bg-gradient-top', val);
-  } else {
-    backgroundSettings.gradientBottom = val;
-    document.documentElement.style.setProperty('--bg-gradient-bottom', val);
-  }
-  localStorage.setItem('gn_neon_bg_settings', JSON.stringify(backgroundSettings));
-}
-
-function toggleBackgroundRainbow(pos) {
-  if (pos === 'top') backgroundSettings.rainbowTop = !backgroundSettings.rainbowTop;
-  else backgroundSettings.rainbowBottom = !backgroundSettings.rainbowBottom;
-  localStorage.setItem('gn_neon_bg_settings', JSON.stringify(backgroundSettings));
-  updateSettingsButtonAppearances();
-}
-
-function updateBackgroundRainbowSpeed(pos, val) {
-  if (pos === 'top') backgroundSettings.rainbowTopSpeed = parseInt(val);
-  else backgroundSettings.rainbowBottomSpeed = parseInt(val);
-  localStorage.setItem('gn_neon_bg_settings', JSON.stringify(backgroundSettings));
-}
-
-function toggleKeepClock() {
-  keepClockInViz = !keepClockInViz;
-  localStorage.setItem('gn_neon_keep_clock', keepClockInViz.toString());
-  updateSettingsButtonAppearances();
-}
-
-function updateSettingsButtonAppearances() {
-  const settingsPanel = document.querySelector('.panel h2');
-  if (!settingsPanel || settingsPanel.innerText !== 'Settings') return;
-  load('settings');
-}
-
-function applySavedColors() {
-  const savedColors = localStorage.getItem('gn_neon_colors');
-  if (savedColors) {
-    const colors = JSON.parse(savedColors);
-    for (const [key, val] of Object.entries(colors)) {
-      document.documentElement.style.setProperty(key, val);
-    }
-  }
-  const savedRainbow = localStorage.getItem('gn_neon_rainbow');
-  if (savedRainbow) rainbowStates = JSON.parse(savedRainbow);
-  const savedBg = localStorage.getItem('gn_neon_bg_settings');
-  if (savedBg) {
-    backgroundSettings = JSON.parse(savedBg);
-    document.documentElement.style.setProperty('--bg-gradient-top', backgroundSettings.gradientTop);
-    document.documentElement.style.setProperty('--bg-gradient-bottom', backgroundSettings.gradientBottom);
-  }
-  const savedClock = localStorage.getItem('gn_neon_keep_clock');
-  if (savedClock) keepClockInViz = savedClock === 'true';
-}
-
-function resetColors() {
-  for (const [key, val] of Object.entries(DEFAULT_COLORS)) {
-    document.documentElement.style.setProperty(key, val);
-  }
-  for (const key in rainbowStates) rainbowStates[key].active = false;
-  backgroundSettings.rainbowTop = false;
-  backgroundSettings.rainbowBottom = false;
-  backgroundSettings.useVideo = true;
-  backgroundSettings.gradientTop = '#000000';
-  backgroundSettings.gradientBottom = '#000000';
-  document.documentElement.style.setProperty('--bg-gradient-top', '#000000');
-  document.documentElement.style.setProperty('--bg-gradient-bottom', '#000000');
-  const videoBg = document.getElementById('videoBg');
-  if (videoBg) {
-    videoBg.style.opacity = '1';
-    videoBg.style.visibility = 'visible';
-  }
-  localStorage.removeItem('gn_neon_colors');
-  localStorage.removeItem('gn_neon_rainbow');
-  localStorage.removeItem('gn_neon_bg_settings');
-  load('settings');
-}
-
-// ─── MUSIC ───────────────────────────────────────────────────────────────────
+// ─── PLAYLIST ────────────────────────────────────────────────────────────────
 const playlist = [
-  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/SuperMarioRPG.mp3',
-  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/BewareTheForestsMushrooms.mp3',
-  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/FightAgainstAnArmedBoss.mp3',
-  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/TheRoadIsFullOfDanger.mp3',
-  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/HelloHappyKingdom.mp3',
-  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/LetTheGameBegin.mp3',
-  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/TheMerry-Go-RoundBrokeDown.mp3',
-  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Power-Up.mp3',
-  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Underground.mp3',
-  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Athletic.mp3',
-  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Castle.mp3'
+  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Super%20Mario%20RPG.mp3',
+  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Neon%20Cobra.mp3',
+  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Disco%20Pervert.mp3',
+  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/They%20Live!.mp3',
+  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/One%20Night%20In%20Tokyo.mp3',
+  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/A%20Kind%20Of%20Deutsch.mp3',
+  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Military%20Fashion%20Show.mp3',
+  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Hotline%20-%20Original%20Mix.mp3',
+  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Strange%20Timez%20(feat.%20Robert%20Smith).mp3',
+  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Not%20Like%20Us.mp3',
+  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Notion.mp3',
+  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Write%20This%20Down.mp3',
+  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Temporary%20Love%20(feat.%20CG5).mp3',
+  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Falling%20Down.mp3',
+  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Why%20Cant%20This%20Be%20Easy.mp3',
+  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/But%20Can%20You%20Do%20This.mp3',
+  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Philly%20Nice%20(B-Side).mp3',
+  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Pain_is_just_freddy_fazbear.mp3',
+  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/dq%20blizzard.mp3',
+  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/MC%20Chris%20Is%20Dead.mp3',
+  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Super%20Mario%20RPG%20Waltz%20of%20the%20Forest%20(4K).mp3'
 ];
 
 const trackMeta = [
-  { title: 'Super Mario RPG', artist: 'Yoko Shimomura' },
-  { title: 'Beware The Forests Mushrooms', artist: 'Yoko Shimomura' },
-  { title: 'Fight Against An Armed Boss', artist: 'Yoko Shimomura' },
-  { title: 'The Road Is Full Of Danger', artist: 'Yoko Shimomura' },
-  { title: 'Hello Happy Kingdom', artist: 'Yoko Shimomura' },
-  { title: 'Let The Game Begin', artist: 'Yoko Shimomura' },
-  { title: 'The Merry-Go-Round Broke Down', artist: 'Cliff Friend' },
-  { title: 'Power-Up', artist: 'Koji Kondo' },
-  { title: 'Underground', artist: 'Koji Kondo' },
-  { title: 'Athletic', artist: 'Koji Kondo' },
-  { title: 'Castle', artist: 'Koji Kondo' }
+  { title: 'SMRPG Rawest Forrest', artist: 'Martin Hagwell' },
+  { title: 'Neon Cobra', artist: 'Shockwave-Sound' },
+  { title: 'Disco Pervert', artist: 'Nightstop' },
+  { title: 'They Live!', artist: 'Evil Nine' },
+  { title: 'One Night In Tokyo', artist: 'Beast in Black' },
+  { title: 'A Kind of Deutsch', artist: 'And One' },
+  { title: 'Military Fashion Show', artist: 'And One' },
+  { title: 'Hotline', artist: 'Jasper Byrne' },
+  { title: 'Strange Timez', artist: 'Gorillaz' },
+  { title: 'Not Like Us', artist: 'Kendrick Lamar' },
+  { title: 'Notion', artist: 'The Rare Occasions' },
+  { title: 'Write This Down', artist: 'SoulChef' },
+  { title: 'Temporary Love', artist: 'The Living Tombstone' },
+  { title: 'Falling Down', artist: 'Space Cowboy' },
+  { title: 'Why Cant This be Easy', artist: 'Red Vox' },
+  { title: 'But Can You Do This', artist: 'Lolnein' },
+  { title: 'Philly Nice (B-Side)', artist: 'Rozebud' },
+  { title: 'FNAF 1 (trust)', artist: 'Silva Gunner' },
+  { title: 'DQ Blizzard', artist: 'MC Chris' },
+  { title: 'MC Chris is Dead', artist: 'MC Chris' },
+  { title: 'SMRPG Waltz of The Forest', artist: 'Psyguy' }
 ];
 
-let audioCtx, analyser, sourceNode, audioContextReady = false;
+const songColors = [
+  '#ff0000',    //SMPRG
+  '#ff00ff',    //Neon Cobra
+  '#8400ff',    //Disco
+  '#00ff00',    //They live
+  '#0000ff',    //One night
+  '#ff0000',    //A kind of german
+  '#ff8800',    //Fashion show
+  '#8400ff',    //hotline
+  '#00ccff',    //Strange
+  '#ff0000',    //Not like us
+  '#ff4800',    //Notion
+  '#ffe100',    //Write this down
+  '#0000ff',    //Temp love
+  '#0084ff',    //Falling
+  '#00ccff',    //Why cant this be easy
+  '#ffff00',    //But can you do
+  '#ea00ff',    //Philly
+  '#ff7300',    //Fnaf trus
+  '#ffffff',    //DQ
+  '#00ff00',    //Mc is dead
+  '#ff0000'     //SMRPG 2
+];
+
+let songColorEnabled = false;
+
+// ─── SPLASH LOGIC ────────────────────────────────────────────────────────────
+function enablePerformanceMode(event) {
+  event.stopPropagation();
+  for (const key in rainbowStates) {
+    rainbowStates[key].active = false;
+  }
+  backgroundSettings.useVideo = false;
+  localStorage.setItem('gn_neon_rainbow', JSON.stringify(rainbowStates));
+  localStorage.setItem('gn_neon_bg_settings', JSON.stringify(backgroundSettings));
+  const videoBg = document.getElementById('videoBg');
+  if (videoBg) {
+    videoBg.style.opacity = '0';
+    videoBg.style.visibility = 'hidden';
+  }
+  const overlay = document.getElementById('splashOverlay');
+  overlay.classList.add('fade-out');
+  ensureAudioContext();
+  const audio = document.getElementById('bgMusic');
+  audio.play().catch(e => console.warn("Audio start blocked:", e));
+}
+
+function enterSite() {
+  const overlay = document.getElementById('splashOverlay');
+  if (overlay.classList.contains('ready')) {
+    overlay.classList.add('fade-out');
+    ensureAudioContext();
+    const audio = document.getElementById('bgMusic');
+    audio.play().catch(e => console.warn("Audio start blocked:", e));
+  }
+}
+
+// ─── AUDIO ENGINE ────────────────────────────────────────────────────────────
+let audioCtx = null, analyser = null, sourceNode = null, audioContextReady = false;
 
 function ensureAudioContext() {
-  if (audioContextReady) return;
+  if (audioContextReady) { if (audioCtx.state === 'suspended') audioCtx.resume(); return; }
+  const audio = document.getElementById('bgMusic');
   try {
-    const audio = document.getElementById('bgMusic');
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     analyser = audioCtx.createAnalyser();
     analyser.fftSize = 512;
@@ -1569,6 +1511,8 @@ function ensureAudioContext() {
 
 function initMusic() {
   const audio = document.getElementById('bgMusic');
+  
+  // Load saved music state
   const savedTrack = localStorage.getItem('gn_neon_track');
   const savedTime = localStorage.getItem('gn_neon_time');
   const savedVolume = localStorage.getItem('gn_neon_volume');
@@ -1817,38 +1761,256 @@ document.addEventListener('keydown', (e) => {
     analyser.getByteFrequencyData(data);
     const barCount = 80, gap = 4, barW = (W - gap * (barCount - 1)) / barCount;
     const [r, g, b] = getRGBFromVariable('--main-color');
+    const isRainbow = rainbowStates['--main-color'].active;
+    const time = Date.now() / 1000;
     
     for (let i = 0; i < barCount; i++) {
-      const h = (data[i] / 255) * (H * 0.6);
-      ctx.fillStyle = `rgba(${r}, ${g}, ${b}, 0.6)`;
+      const val = data[i * 2] || 0;
+      const h = (val / 255) * (H * 0.4);
+      const opacity = 0.3 + (val / 255) * 0.7;
+      
+      let color;
+      if (isRainbow) {
+        const hue = (time * rainbowStates['--main-color'].speed * 10 + (i * 2)) % 360;
+        color = `hsla(${hue}, 100%, 50%, ${opacity})`;
+      } else {
+        color = `rgba(${r}, ${g}, ${b}, ${opacity})`;
+      }
+      
+      ctx.fillStyle = color;
       ctx.fillRect(i * (barW + gap), H - h, barW, h);
-      ctx.fillStyle = `rgba(${r}, ${g}, ${b}, 0.2)`;
-      ctx.fillRect(i * (barW + gap), H - h - 10, barW, 5);
+      ctx.shadowBlur = 15; ctx.shadowColor = isRainbow ? color : `rgba(${r}, ${g}, ${b}, 0.8)`;
     }
+    ctx.shadowBlur = 0;
   }
-  function drawIdle(ctx, w, h) {
+  
+  function drawIdle(ctx, W, H) {
+    const barCount = 120, gap = 2, barW = (W - gap * (barCount - 1)) / barCount;
     const [r, g, b] = getRGBFromVariable('--main-color');
-    ctx.fillStyle = `rgba(${r}, ${g}, ${b}, 0.1)`;
-    for(let i=0; i<40; i++) {
-      const x = (w/40)*i, barH = 10 + Math.sin(Date.now()/500 + i)*10;
-      ctx.fillRect(x, h-barH, (w/40)-4, barH);
+    for (let i = 0; i < barCount; i++) {
+      ctx.fillStyle = `rgba(${r}, ${g}, ${b}, 0.2)`;
+      ctx.fillRect(i * (barW + gap), H - 2, barW, 2);
     }
   }
   draw();
 })();
 
-// ─── CLOCK ────────────────────────────────────────────────────────────────────
-function updateClock() {
-  const now = new Date();
-  let h = now.getHours(), m = now.getMinutes(), ampm = h >= 12 ? 'PM' : 'AM';
-  h = h % 12 || 12;
-  document.getElementById('clockTime').innerText = `${h}:${m.toString().padStart(2, '0')}`;
-  document.getElementById('clockAmPm').innerText = ampm;
+// ─── PAGES DATA ──────────────────────────────────────────────────────────────
+function updateBackgroundGradient() {
+  if (!backgroundSettings.rainbowTop) {
+    document.documentElement.style.setProperty('--bg-gradient-top', backgroundSettings.gradientTop);
+    document.body.style.setProperty('--bg-gradient-top', backgroundSettings.gradientTop);
+  }
+  if (!backgroundSettings.rainbowBottom) {
+    document.documentElement.style.setProperty('--bg-gradient-bottom', backgroundSettings.gradientBottom);
+    document.body.style.setProperty('--bg-gradient-bottom', backgroundSettings.gradientBottom);
+  }
 }
-setInterval(updateClock, 1000);
-updateClock();
 
-// ─── PAGES ────────────────────────────────────────────────────────────────────
+function toggleBackgroundVideo() {
+  backgroundSettings.useVideo = !backgroundSettings.useVideo;
+  const videoBg = document.getElementById('videoBg');
+  if (videoBg) {
+    videoBg.style.opacity = backgroundSettings.useVideo ? '1' : '0';
+    videoBg.style.visibility = backgroundSettings.useVideo ? 'visible' : 'hidden';
+  }
+  const buttons = document.querySelectorAll(`button[onclick="toggleBackgroundVideo()"]`);
+  buttons.forEach(btn => {
+    btn.style.background = backgroundSettings.useVideo ? 'var(--main-color)' : '#333';
+    const mainColorValue = getComputedStyle(document.documentElement).getPropertyValue('--main-color').trim();
+    const brightness = getColorBrightness(mainColorValue);
+    btn.style.color = backgroundSettings.useVideo ? (brightness > 128 ? '#000' : '#fff') : '#888';
+    btn.style.borderColor = backgroundSettings.useVideo ? 'var(--main-color)' : '#555';
+    btn.textContent = backgroundSettings.useVideo ? 'Enabled' : 'Disabled';
+  });
+  localStorage.setItem('gn_neon_bg_settings', JSON.stringify(backgroundSettings));
+}
+
+function updateBackgroundColor(position, val) {
+  if (position === 'top') {
+    backgroundSettings.gradientTop = val;
+    backgroundSettings.rainbowTop = false;
+  } else {
+    backgroundSettings.gradientBottom = val;
+    backgroundSettings.rainbowBottom = false;
+  }
+  updateBackgroundGradient();
+  localStorage.setItem('gn_neon_bg_settings', JSON.stringify(backgroundSettings));
+}
+
+function toggleBackgroundRainbow(position) {
+  if (position === 'top') {
+    backgroundSettings.rainbowTop = !backgroundSettings.rainbowTop;
+  } else {
+    backgroundSettings.rainbowBottom = !backgroundSettings.rainbowBottom;
+  }
+  const isActive = position === 'top' ? backgroundSettings.rainbowTop : backgroundSettings.rainbowBottom;
+  const buttons = document.querySelectorAll(`button[onclick="toggleBackgroundRainbow('${position}')"]`);
+  buttons.forEach(btn => {
+    btn.style.background = isActive ? 'var(--main-color)' : '#333';
+    const mainColorValue = getComputedStyle(document.documentElement).getPropertyValue('--main-color').trim();
+    const brightness = getColorBrightness(mainColorValue);
+    btn.style.color = isActive ? (brightness > 128 ? '#000' : '#fff') : '#888';
+    btn.style.borderColor = isActive ? 'var(--main-color)' : '#555';
+  });
+  localStorage.setItem('gn_neon_bg_settings', JSON.stringify(backgroundSettings));
+}
+
+function updateBackgroundRainbowSpeed(position, speed) {
+  if (position === 'top') {
+    backgroundSettings.rainbowTopSpeed = parseFloat(speed);
+  } else {
+    backgroundSettings.rainbowBottomSpeed = parseFloat(speed);
+  }
+  localStorage.setItem('gn_neon_bg_settings', JSON.stringify(backgroundSettings));
+}
+
+function updateSettingsButtonAppearances() {
+  const mainColorValue = getComputedStyle(document.documentElement).getPropertyValue('--main-color').trim();
+  const brightness = getColorBrightness(mainColorValue);
+  const textColor = brightness > 128 ? '#000' : '#fff';
+  document.documentElement.style.setProperty('--button-text-color', textColor);
+  document.querySelectorAll(`button[onclick="toggleKeepClock()"]`).forEach(btn => {
+    btn.style.background = keepClockInViz ? 'var(--main-color)' : '#333';
+    btn.style.color = keepClockInViz ? textColor : '#888';
+    btn.style.borderColor = keepClockInViz ? 'var(--main-color)' : '#555';
+    btn.textContent = keepClockInViz ? 'Enabled' : 'Disabled';
+  });
+  document.querySelectorAll(`button[onclick="toggleBackgroundVideo()"]`).forEach(btn => {
+    btn.style.background = backgroundSettings.useVideo ? 'var(--main-color)' : '#333';
+    btn.style.color = backgroundSettings.useVideo ? textColor : '#888';
+    btn.style.borderColor = backgroundSettings.useVideo ? 'var(--main-color)' : '#555';
+    btn.textContent = backgroundSettings.useVideo ? 'Enabled' : 'Disabled';
+  });
+  document.querySelectorAll(`button[onclick="toggleSongColor()"]`).forEach(btn => {
+    btn.style.background = songColorEnabled ? 'var(--main-color)' : '#333';
+    btn.style.color = songColorEnabled ? textColor : '#888';
+    btn.style.borderColor = songColorEnabled ? 'var(--main-color)' : '#555';
+    btn.textContent = songColorEnabled ? 'Enabled' : 'Disabled';
+  });
+  document.querySelectorAll(`button[onclick="toggleBackgroundRainbow('top')"]`).forEach(btn => {
+    btn.style.background = backgroundSettings.rainbowTop ? 'var(--main-color)' : '#333';
+    btn.style.color = backgroundSettings.rainbowTop ? textColor : '#888';
+    btn.style.borderColor = backgroundSettings.rainbowTop ? 'var(--main-color)' : '#555';
+  });
+  document.querySelectorAll(`button[onclick="toggleBackgroundRainbow('bottom')"]`).forEach(btn => {
+    btn.style.background = backgroundSettings.rainbowBottom ? 'var(--main-color)' : '#333';
+    btn.style.color = backgroundSettings.rainbowBottom ? textColor : '#888';
+    btn.style.borderColor = backgroundSettings.rainbowBottom ? 'var(--main-color)' : '#555';
+  });
+  Object.entries(rainbowStates).forEach(([key, state]) => {
+    document.querySelectorAll(`button[onclick="toggleRainbow('${key}')"]`).forEach(btn => {
+      btn.style.background = state.active ? 'var(--main-color)' : '#333';
+      btn.style.color = state.active ? textColor : '#888';
+      btn.style.borderColor = state.active ? 'var(--main-color)' : '#555';
+    });
+  });
+}
+
+function applySavedColors() {
+  const saved = localStorage.getItem('gn_neon_colors');
+  if (saved) {
+    const colors = JSON.parse(saved);
+    for (const [key, val] of Object.entries(colors)) {
+      document.documentElement.style.setProperty(key, val);
+    }
+  }
+  const savedRainbow = localStorage.getItem('gn_neon_rainbow');
+  if (savedRainbow) {
+    rainbowStates = JSON.parse(savedRainbow);
+  }
+  const savedClockSetting = localStorage.getItem('gn_neon_keep_clock');
+  if (savedClockSetting !== null) {
+    keepClockInViz = savedClockSetting === 'true';
+  }
+  const savedBgSettings = localStorage.getItem('gn_neon_bg_settings');
+  if (savedBgSettings) {
+    backgroundSettings = JSON.parse(savedBgSettings);
+    updateBackgroundGradient();
+  }
+  const savedSongColor = localStorage.getItem('gn_neon_song_color');
+  if (savedSongColor !== null) {
+    songColorEnabled = savedSongColor === 'true';
+    if (songColorEnabled) {
+      applySongColor(currentTrack);
+    }
+  }
+  updateSettingsButtonAppearances();
+}
+
+function updateColor(key, val) {
+  if (rainbowStates[key]) rainbowStates[key].active = false;
+  document.documentElement.style.setProperty(key, val);
+  const saved = localStorage.getItem('gn_neon_colors');
+  const colors = saved ? JSON.parse(saved) : { ...DEFAULT_COLORS };
+  colors[key] = val;
+  localStorage.setItem('gn_neon_colors', JSON.stringify(colors));
+  saveRainbow();
+}
+
+function toggleRainbow(key) {
+  rainbowStates[key].active = !rainbowStates[key].active;
+  saveRainbow();
+  const buttons = document.querySelectorAll(`button[onclick="toggleRainbow('${key}')"]`);
+  buttons.forEach(btn => {
+    btn.style.background = rainbowStates[key].active ? 'var(--main-color)' : '#333';
+    const mainColorValue = getComputedStyle(document.documentElement).getPropertyValue('--main-color').trim();
+    const brightness = getColorBrightness(mainColorValue);
+    btn.style.color = rainbowStates[key].active ? (brightness > 128 ? '#000' : '#fff') : '#888';
+    btn.style.borderColor = rainbowStates[key].active ? 'var(--main-color)' : '#555';
+  });
+}
+
+function updateRainbowSpeed(key, speed) {
+  rainbowStates[key].speed = parseFloat(speed);
+  saveRainbow();
+}
+
+function saveRainbow() {
+  localStorage.setItem('gn_neon_rainbow', JSON.stringify(rainbowStates));
+}
+function toggleKeepClock() {
+  keepClockInViz = !keepClockInViz;
+  localStorage.setItem('gn_neon_keep_clock', keepClockInViz);
+  const buttons = document.querySelectorAll(`button[onclick="toggleKeepClock()"]`);
+  buttons.forEach(btn => {
+    btn.style.background = keepClockInViz ? 'var(--main-color)' : '#333';
+    const mainColorValue = getComputedStyle(document.documentElement).getPropertyValue('--main-color').trim();
+    const brightness = getColorBrightness(mainColorValue);
+    btn.style.color = keepClockInViz ? (brightness > 128 ? '#000' : '#fff') : '#888';
+    btn.style.borderColor = keepClockInViz ? 'var(--main-color)' : '#555';
+    btn.textContent = keepClockInViz ? 'Enabled' : 'Disabled';
+  });
+}
+
+function resetColors() {
+  for (const [key, val] of Object.entries(DEFAULT_COLORS)) {
+    document.documentElement.style.setProperty(key, val);
+  }
+  for (const key in rainbowStates) rainbowStates[key].active = false;
+  
+  backgroundSettings = {
+    useVideo: true,
+    gradientTop: '#000000',
+    gradientBottom: '#000000',
+    rainbowTop: false,
+    rainbowBottom: false,
+    rainbowTopSpeed: 5,
+    rainbowBottomSpeed: 5
+  };
+  updateBackgroundGradient();
+  const videoBg = document.getElementById('videoBg');
+  if (videoBg) {
+    videoBg.style.opacity = '1';
+    videoBg.style.visibility = 'visible';
+  }
+  
+  localStorage.removeItem('gn_neon_colors');
+  localStorage.removeItem('gn_neon_rainbow');
+  localStorage.removeItem('gn_neon_bg_settings');
+  load('settings');
+}
+
 const pages = {
   settings: `
     <section class="panel">
@@ -1857,19 +2019,19 @@ const pages = {
         <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px;">
           <div style="display: flex; align-items: center; justify-content: space-between;">
             <span>KEEP CLOCK IN VISUALIZER MODE</span>
-            <button onclick="toggleKeepClock()" style="margin:0; padding: 0.3rem 0.6rem; font-size: 0.8rem; background: ${keepClockInViz ? 'var(--main-color)' : '#333'}; border: 1px solid ${keepClockInViz ? 'var(--main-color)' : '#555'}; transition: all 0.2s ease; cursor: pointer;">${keepClockInViz ? 'Enabled' : 'Disabled'}</button>
+            <button onclick="toggleKeepClock()" style="margin:0; padding: 0.3rem 0.6rem; font-size: 0.8rem; background: ${keepClockInViz ? 'var(--main-color)' : '#333'}; border: 1px solid ${keepClockInViz ? 'var(--main-color)' : '#555'}; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.boxShadow='0 0 8px ' + (${keepClockInViz} ? 'var(--main-color)' : 'rgba(255,255,255,0.1)')" onmouseout="this.style.boxShadow='none'">${keepClockInViz ? 'Enabled' : 'Disabled'}</button>
           </div>
         </div>
         <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px;">
           <div style="display: flex; align-items: center; justify-content: space-between;">
             <span>USE VIDEO BACKGROUND</span>
-            <button onclick="toggleBackgroundVideo()" style="margin:0; padding: 0.3rem 0.6rem; font-size: 0.8rem; background: ${backgroundSettings.useVideo ? 'var(--main-color)' : '#333'}; border: 1px solid ${backgroundSettings.useVideo ? 'var(--main-color)' : '#555'}; transition: all 0.2s ease; cursor: pointer;">${backgroundSettings.useVideo ? 'Enabled' : 'Disabled'}</button>
+            <button onclick="toggleBackgroundVideo()" style="margin:0; padding: 0.3rem 0.6rem; font-size: 0.8rem; background: ${backgroundSettings.useVideo ? 'var(--main-color)' : '#333'}; border: 1px solid ${backgroundSettings.useVideo ? 'var(--main-color)' : '#555'}; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.boxShadow='0 0 8px ' + (${backgroundSettings.useVideo} ? 'var(--main-color)' : 'rgba(255,255,255,0.1)')" onmouseout="this.style.boxShadow='none'">${backgroundSettings.useVideo ? 'Enabled' : 'Disabled'}</button>
           </div>
         </div>
         <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px;">
           <div style="display: flex; align-items: center; justify-content: space-between;">
             <span>SONG COLOR CHANGING</span>
-            <button onclick="toggleSongColor()" style="margin:0; padding: 0.3rem 0.6rem; font-size: 0.8rem; background: ${songColorEnabled ? 'var(--main-color)' : '#333'}; border: 1px solid ${songColorEnabled ? 'var(--main-color)' : '#555'}; transition: all 0.2s ease; cursor: pointer;">${songColorEnabled ? 'Enabled' : 'Disabled'}</button>
+            <button onclick="toggleSongColor()" style="margin:0; padding: 0.3rem 0.6rem; font-size: 0.8rem; background: ${songColorEnabled ? 'var(--main-color)' : '#333'}; border: 1px solid ${songColorEnabled ? 'var(--main-color)' : '#555'}; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.boxShadow='0 0 8px ' + (${songColorEnabled} ? 'var(--main-color)' : 'rgba(255,255,255,0.1)')" onmouseout="this.style.boxShadow='none'">${songColorEnabled ? 'Enabled' : 'Disabled'}</button>
           </div>
         </div>
         <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px;">
@@ -1877,7 +2039,7 @@ const pages = {
             <span>GRADIENT TOP COLOR</span>
             <div style="display: flex; gap: 0.5rem; align-items: center;">
               <input type="color" value="${backgroundSettings.gradientTop}" onchange="updateBackgroundColor('top', this.value)">
-              <button onclick="toggleBackgroundRainbow('top')" style="margin:0; padding: 0.3rem 0.6rem; font-size: 0.8rem; background: ${backgroundSettings.rainbowTop ? 'var(--main-color)' : '#333'}; border: 1px solid ${backgroundSettings.rainbowTop ? 'var(--main-color)' : '#555'}; transition: all 0.2s ease; cursor: pointer;">Rainbow</button>
+              <button onclick="toggleBackgroundRainbow('top')" style="margin:0; padding: 0.3rem 0.6rem; font-size: 0.8rem; background: ${backgroundSettings.rainbowTop ? 'var(--main-color)' : '#333'}; border: 1px solid ${backgroundSettings.rainbowTop ? 'var(--main-color)' : '#555'}; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.boxShadow='0 0 8px ' + (${backgroundSettings.rainbowTop} ? 'var(--main-color)' : 'rgba(255,255,255,0.1)')" onmouseout="this.style.boxShadow='none'">Rainbow</button>
             </div>
           </div>
           ${backgroundSettings.rainbowTop ? `
@@ -1892,7 +2054,7 @@ const pages = {
             <span>GRADIENT BOTTOM COLOR</span>
             <div style="display: flex; gap: 0.5rem; align-items: center;">
               <input type="color" value="${backgroundSettings.gradientBottom}" onchange="updateBackgroundColor('bottom', this.value)">
-              <button onclick="toggleBackgroundRainbow('bottom')" style="margin:0; padding: 0.3rem 0.6rem; font-size: 0.8rem; background: ${backgroundSettings.rainbowBottom ? 'var(--main-color)' : '#333'}; border: 1px solid ${backgroundSettings.rainbowBottom ? 'var(--main-color)' : '#555'}; transition: all 0.2s ease; cursor: pointer;">Rainbow</button>
+              <button onclick="toggleBackgroundRainbow('bottom')" style="margin:0; padding: 0.3rem 0.6rem; font-size: 0.8rem; background: ${backgroundSettings.rainbowBottom ? 'var(--main-color)' : '#333'}; border: 1px solid ${backgroundSettings.rainbowBottom ? 'var(--main-color)' : '#555'}; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.boxShadow='0 0 8px ' + (${backgroundSettings.rainbowBottom} ? 'var(--main-color)' : 'rgba(255,255,255,0.1)')" onmouseout="this.style.boxShadow='none'">Rainbow</button>
             </div>
           </div>
           ${backgroundSettings.rainbowBottom ? `
@@ -1911,7 +2073,7 @@ const pages = {
                   `<input type="text" value="${getComputedStyle(document.documentElement).getPropertyValue(key).trim()}" onchange="updateColor('${key}', this.value)" style="width: 120px; background: #000; border: 1px solid #333; color: #fff; padding: 4px; font-size: 0.8rem;">` :
                   `<input type="color" value="${getComputedStyle(document.documentElement).getPropertyValue(key).trim()}" onchange="updateColor('${key}', this.value)">`
                 }
-                <button onclick="toggleRainbow('${key}')" style="margin:0; padding: 0.3rem 0.6rem; font-size: 0.8rem; background: ${state.active ? 'var(--main-color)' : '#333'}; border: 1px solid ${state.active ? 'var(--main-color)' : '#555'}; transition: all 0.2s ease; cursor: pointer;">Rainbow</button>
+                <button onclick="toggleRainbow('${key}')" style="margin:0; padding: 0.3rem 0.6rem; font-size: 0.8rem; background: ${state.active ? 'var(--main-color)' : '#333'}; border: 1px solid ${state.active ? 'var(--main-color)' : '#555'}; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.boxShadow='0 0 8px ' + (${state.active} ? 'var(--main-color)' : 'rgba(255,255,255,0.1)')" onmouseout="this.style.boxShadow='none'">Rainbow</button>
               </div>
             </div>
             ${state.active ? `
@@ -1944,7 +2106,7 @@ const pages = {
       </article>
 
       <aside class="panel patch-panel">
-        <div class="version-chip">Latest overhaul · v0.75</div>
+        <div class="version-chip">Latest overhaul · v0.85</div>
         <h3>Patch Notes</h3>
         <ul class="patch-list">
           <li>Added music changes colors option <strong>in settings</strong>.</li>
@@ -1977,8 +2139,8 @@ const pages = {
       <div class="games-menu" id="gamesMenu">
         <button onclick="showScratchGames()">Scratch Games</button>
         <button onclick="showWebGames()">Normal Games (WIP)</button>
-        <button onclick="showEmulators()">Emulators</button>
-        <button onclick="showTool('guess')">Number Guessing Game</button>
+        <button class="under-construction"><span>Emulators</span></button>
+        <button class="under-construction"><span>Number Guessing Game</span></button>
       </div>
       <div id="gamesContent"></div>
     </section>
@@ -1987,9 +2149,10 @@ const pages = {
     <section class="panel games-panel">
       <h2>Creations</h2>
       <div class="games-menu" id="creationsMenu">
-        <button onclick="showCreationsTab('map_images')">Map Images</button>
-        <button onclick="showCreationsTab('code')">Code</button>
+        <button onclick="showCreationsTab('images')">Images</button>
+        <button class="under-construction"><span>Code</span></button>
         <button class="under-construction"><span>Map Videos</span></button>
+        <button class="under-construction"><span>Map Images</span></button>
       </div>
       <div id="creationArea"></div>
     </section>
@@ -2062,6 +2225,12 @@ function load(page) {
     document.documentElement.style.setProperty('--button-text-color', textColor);
     navButtons[buttonIndex].style.borderColor = 'var(--main-color)';
   }
+  if (page === 'games') {
+    setTimeout(() => {
+      const gamesMenu = document.querySelector('.games-menu');
+      if (gamesMenu) gamesMenu.style.display = 'block';
+    }, 0);
+  }
 }
 
 function enterRun(e, fn) {
@@ -2075,14 +2244,15 @@ function showTool(type) {
     area.innerHTML = `<button class="back-button" onclick="load('tools')">← Back to Tools</button><h3>Calculators</h3><div class="games-menu"><button onclick="showCalc('simple')">Simple</button><button onclick="showCalc('volume')">Volume</button><button onclick="showCalc('graph')">Graph</button></div><div id="calcArea"></div>`;
   } else if (type === 'ide') {
     area.innerHTML = `<button class="back-button" onclick="load('tools')">← Back to Tools</button><h3>HTML IDE</h3><div id="ideContainer"><textarea id="ideInput" placeholder="Write HTML/CSS/JS here..." oninput="runIDE()"></textarea><iframe id="ideOutput"></iframe></div>`;
+  } else if (type === 'chat') {
+    area.innerHTML = `<button class="back-button" onclick="load('tools')">← Back to Tools</button><h3>AI Chatbot</h3><div id="chatContainer"><div id="chatLog"></div><div class="chat-input-row"><input id="chatInput" placeholder="Ask something..." onkeydown="if(event.key==='Enter')sendChat()"><button onclick="sendChat()">Send</button></div></div>`;
   } else if (type === 'canvas') {
     area.innerHTML = `<button class="back-button" onclick="load('tools')">← Back to Tools</button><h3>Painting Canvas</h3><canvas id="paintingCanvas" width="800" height="500"></canvas><div style="text-align:center; margin-top:1rem;"><input type="color" id="brushColor" value="#0000ff"><input type="range" id="brushSize" min="1" max="50" value="5"><button onclick="clearCanvas()">Clear</button></div>`;
     initCanvas();
   } else if (type === 'ciphers') {
     area.innerHTML = `<button class="back-button" onclick="load('tools')">← Back to Tools</button><h3>Ciphers</h3><div class="games-menu"><button onclick="showCipher('caesar')">Caesar</button><button onclick="showCipher('atbash')">Atbash</button></div><div id="cipherArea"></div>`;
   } else if (type === 'guess') {
-    const content = document.getElementById('gamesContent'), gamesMenu = document.querySelector('.games-menu'); if (gamesMenu) gamesMenu.style.display = 'none';
-    content.innerHTML = `<button class="back-button" onclick="load('games')">← Back to Games</button><h3>Number Guessing</h3><p>Guess a number between 1 and 100:</p><input id="guessInput" type="number"><button onclick="checkGuess()">Guess</button><p id="guessMsg"></p>`;
+    area.innerHTML = `<button class="back-button" onclick="load('games')">← Back to Games</button><h3>Number Guessing</h3><p>Guess a number between 1 and 100:</p><input id="guessInput" type="number"><button onclick="checkGuess()">Guess</button><p id="guessMsg"></p>`;
     window.secretNum = Math.floor(Math.random() * 100) + 1;
   }
 }
@@ -2127,6 +2297,14 @@ function drawGraph() {
     ctx.stroke();
     try { const y0 = fn(0); resultsHTML += `<p style="color:${colors[i]}">y=${expr} → y(0) = ${y0.toFixed(2)}</p>`; } catch {}
   });
+  for (let i = 0; i < functions.length; i++) {
+    for (let j = i + 1; j < functions.length; j++) {
+      for (let x = xminVal; x <= xmaxVal; x += 0.1) {
+        let y1, y2; try { y1 = functions[i].fn(x); y2 = functions[j].fn(x); } catch { continue; }
+        if (Math.abs(y1 - y2) < 0.1) { resultsHTML += `<p>Intersection ≈ (${x.toFixed(2)}, ${y1.toFixed(2)})</p>`; break; }
+      }
+    }
+  }
   let existing = document.getElementById("graphResults"); if (!existing) { const div = document.createElement("div"); div.id = "graphResults"; canvas.parentElement.appendChild(div); existing = div; } existing.innerHTML = resultsHTML;
 }
 
@@ -2134,11 +2312,11 @@ const games = ["https://turbowarp.org/1109852074/embed?addons=stuck,pause,fullsc
 const titles = ["Block Blast (Not Made By Me)", "Paper Minecraft (Not Made By Me)", "Sisyphean Escalator", "Gambling but Mid", "Laser Dodge", "Goober Dodger", "Neon's Hostile Road", "Mid Cookie Clicker", "Asteroid Assault", "Reel 'Em In", "Cats Hate Rats"];
 const controls = [`Click and drag blocks to match 3 or more of the same color.\n\nClear the board to advance to the next level.\n\nUse strategy to plan your moves!`, `Modding Guide: ▶️ https://youtu.be/PexNsUvqD5w\n[1 to 9] - Select Item    [Click] - Place or Mine\n[WASD] - Move / Jump  [E] - Open/Close Inventory\n[E+hover] - Open / Close Chest, Crafting Table, Door\n[Space] - Drop single tile from a stack while dragging.\n[F] - Eat food       [N] - Label a sign or chest\n[Q] - Drop item      [P] - Pause / Unpause\n[T] - Talk / Command    [O] - Save your game\n[M] - Music / Sounds   [Shift] - Sprint`, `Type the letters shown fast enough or fall.\n\nNot case sensitive.`, `::At BlackJack::\nUse arrow keys to bet:\n\nLeft and Right set the bet to 0 and max\n\nUp and down will change the bet by 10, or if holding "." will change it by 500\n1\nEnter to place bet, and after will be the hit button.\n\nSpace to stand.\n\n::At Slots::\nS to Spin\n\nSame betting controls.`, `Use the mouse to dodge the lasers that get faster with time!\n\nPress the left mouse button to become invincible for three seconds with a 10 second cool down so use it wisely!`, `Use the mouse to dodge the goobers, and don't stay in the border too long.\n\nThat's really about it.`, `ASD to move.\nW for a 3-second long power-up of invincibility.\nSpace to Start/Restart on the game-over screen.\n\n1 and 2 control the arcade scan filter.\n3 and 4 control the arcade cabinet overlay.\n5 and 6 control the arcade music (on/off)\n\n(60 fps Is highly recommended)`, `It's Cookie Clicker, but worse.\n\nUse your mouse.`, `Left mouse button to fire a weak auxiliary laser that overheats quickly.\n\nSpace for Main powerful laser.\n\nW for a backup shield that lasts 10 seconds, but has limited uses.\n\nUse your mouse to aim the laser.`, `Use Left Mouse Button to fire the harpoon and try to get the fish, and buy upgrades.\n \nBeware of the explosive mine, it takes $50 dollars to repair the harpoon and the explosion might scare a few good fish away.\n\n\nThis is still a work in progress and I plan on adding more things like power ups, multipliers, and maybe a high score system.\n\nF to show debug menu \nG to hide debug menu`, `goober.\n\nUse mouse 1 to hit the rats.\nuse F to turn off the yarn.\nUse G to turn them back on.\n`];
 const notes = [`Block Blast is a puzzle game where you match blocks.\n\nIt's not made by me, but it's a fun game to play!`, `*** Credits ***\nAll the graphics are taken from the Minecraft wiki page and have not been created by me. I have rescaled them and broken them up to make the game work, but that is it at present.\n\nORIGNAL PROJECT MADE BY GRIFFPATCH ON SCRATCH, NOT ME:\n\nCheck him out he does great stuf, https://scratch.mit.edu/users/griffpatch/`, `The game is based on this video by the way:\n\nhttps://youtu.be/2Gby1XQ4Z2M?feature=shared`, `Don't gamble in real life, also this technically is not correct, and if you do it quick enough you can easily break most of this.\n\nThe special codes are:\n\nL E O\n\nN F S M W\n`, `Not much to add, I could have done a better job with the randomization of everything, but I am not gonna be working on this any further.`, `<b>!!!VOLUME WARNING!!!</b>\n\nI made this game to be difficult and stressful on purpose.\n\nIf you don't like loud noises or flashing lights, I would recommend not playing this game.`, `This is a game I made in a day, so don't expect too much.\n\nAlso, the hitbox for the asteroids is a bit wonky.`, `This game is unfinished and buggy.\n\nI am not going to work on it anymore.`, `I made this game as a joke.\n\nIt's not very good.`, `This game is still in development.\n\nI plan on adding more features soon.`, `This game is a work in progress.\n\nI plan on adding more content soon.`];
-const webGames = ["https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@e5c5b7bfb0151445a947ec8493779c29de5644dc/index.html?t="];
+const webgames = ["https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@e5c5b7bfb0151445a947ec8493779c29de5644dc/index.html?t="];
 const webTitles = ["Test WebGame 1"];
 const webControls = ["Test control info for web game."];
 const webNotes = ["Test notes for web game."];
-
+  
 function showScratchGames() {
   const content = document.getElementById('gamesContent'), gamesMenu = document.querySelector('.games-menu'); if (gamesMenu) gamesMenu.style.display = 'none';
   content.innerHTML = `<button class="back-button" onclick="load('games')">← Back to Games Menu</button><div class="games-layout"><div class="sideBox"><h3>Controls</h3><div id="gameControls"></div></div><div class="centerBox"><iframe id="scratchFrame" allowfullscreen title="GN-Neon Scratch game viewer"></iframe><h3 id="gameTitle"></h3><div class="button-row" style="justify-content:center; margin-top:1rem;"><button onclick="prevGame()">◀</button><button onclick="nextGame()">▶</button></div></div><div class="sideBox"><h3>Notes / Credits</h3><div id="gameNotes"></div></div></div>`;
@@ -2147,7 +2325,7 @@ function showScratchGames() {
 
 function showWebGames() {
   const content = document.getElementById('gamesContent'), gamesMenu = document.querySelector('.games-menu'); if (gamesMenu) gamesMenu.style.display = 'none';
-  content.innerHTML = `<button class="back-button" onclick="load('games')">← Back to Games Menu</button><div class="games-layout"><div class="sideBox"><h3>Controls</h3><div id="gameControls"></div></div><div class="centerBox"><iframe id="webGameFrame" allowfullscreen title="GN-Neon Web game viewer"></iframe><h3 id="gameTitle"></h3><div class="button-row" style="justify-content:center; margin-top:1rem;"><button onclick="prevWebGame()">◀</button><button onclick="nextWebGame()">▶</button></div></div><div class="sideBox"><h3>Notes / Credits</h3><div id="gameNotes"></div></div></div>`;
+  content.innerHTML = `<button class="back-button" onclick="load('games')">← Back to Games Menu</button><div class="games-layout"><div class="sideBox"><h3>Controls</h3><div id="gameControls"></div></div><div class="centerBox"><iframe id="webGameFrame" allowfullscreen title="GN-Neon Web game viewer"></iframe><h3 id="gameTitle"></h3><div class="button-row" style="justify-content:center; margin-top:1rem;"><button onclick="prevGame()">◀</button><button onclick="nextGame()">▶</button></div></div><div class="sideBox"><h3>Notes / Credits</h3><div id="gameNotes"></div></div></div>`;
   currentIndex = 0; updateWebGame();
 }
 
@@ -2184,8 +2362,8 @@ function updateWebGame() {
 
 function nextGame() { currentIndex = (currentIndex + 1) % games.length; updateGame(); }
 function prevGame() { currentIndex = (currentIndex - 1 + games.length) % games.length; updateGame(); }
-function nextWebGame() { currentIndex = (currentIndex + 1) % webGames.length; updateWebGame(); }
-function prevWebGame() { currentIndex = (currentIndex - 1 + webGames.length) % webGames.length; updateWebGame(); }
+function nextWebGame() { currentIndex = (currentIndex + 1) % games.length; updateWebGame(); }
+function prevWebGame() { currentIndex = (currentIndex - 1 + games.length) % games.length; updateWebGame(); }
 
 function showCipher(type) {
   const area = document.getElementById("cipherArea");
@@ -2248,7 +2426,7 @@ function showEmbed(url) {
   area.innerHTML = `<iframe src="${url}"></iframe>`;
 }
 function showCreation(type) {
-  const area = document.getElementById("creationArea"), creationsMenu = document.getElementById("creationsMenu");
+  const area = document.getElementById('creationArea'), creationsMenu = document.getElementById('creationsMenu');
   if (creationsMenu) creationsMenu.style.display = 'none';
   area.innerHTML = `<button class="back-button" onclick="load('creations')">← Back to Creations</button><h3>${type.toUpperCase()}</h3><div id="embedArea"></div>`;
 }
@@ -2260,67 +2438,28 @@ function checkGuess() {
   else msg.innerText = v < window.secretNum ? "Too low!" : "Too high!";
 }
 
+
 function showCreationsTab(tab) {
   const area = document.getElementById('creationArea');
   const menu = document.getElementById('creationsMenu');
-  if (menu) menu.style.display = 'none';
-  
-  if (tab === 'map_images') {
+  if (tab === 'images') {
+    menu.style.display = 'none';
     area.innerHTML = `
       <button class="back-button" onclick="load('creations')">← Back to Creations</button>
-      
-      <div class="section-header">Flatline City</div>
       <div class="image-row creations-grid">
-        <figure class="image-card" style="cursor: pointer;" onclick="openLightbox('https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC3.png', 'FC3.png', 'Flatline City Creation 3')">
+        <figure class="image-card" style="cursor: pointer;" onclick="openLightbox('https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC3.png', 'FC3.png', 'Temporary description for FC3.png. This is one of the creations in the gallery.')">
           <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC3.png" alt="Creation FC3">
           <span>FC3.png</span>
         </figure>
-        <figure class="image-card" style="cursor: pointer;" onclick="openLightbox('https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC6.png', 'FC6.png', 'Flatline City Creation 6')">
+        <figure class="image-card" style="cursor: pointer;" onclick="openLightbox('https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC6.png', 'FC6.png', 'Temporary description for FC6.png. This is one of the creations in the gallery.')">
           <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC6.png" alt="Creation FC6">
           <span>FC6.png</span>
         </figure>
-        <figure class="image-card" style="cursor: pointer;" onclick="openLightbox('https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC9.png', 'FC9.png', 'Flatline City Creation 9')">
+        <figure class="image-card" style="cursor: pointer;" onclick="openLightbox('https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC9.png', 'FC9.png', 'Temporary description for FC9.png. This is one of the creations in the gallery.')">
           <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC9.png" alt="Creation FC9">
           <span>FC9.png</span>
         </figure>
       </div>
-      
-      <div class="section-header">Snow Road Sili</div>
-      <div class="wip-container"><p>Work in Progress</p></div>
-      
-      <div class="section-header">K-City</div>
-      <div class="wip-container"><p>Work in Progress</p></div>
-      
-      <div class="section-header">Spring Sili</div>
-      <div class="wip-container"><p>Work in Progress</p></div>
-    `;
-  } else if (tab === 'code') {
-    area.innerHTML = `
-      <button class="back-button" onclick="load('creations')">← Back to Creations</button>
-      
-      <div class="section-header">Python</div>
-      <div class="image-row creations-grid">
-        <figure class="image-card" style="cursor: pointer;" onclick="openCodeViewer('https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/main.py', 'main.py')">
-          <div style="height: 150px; background: #222; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-size: 2rem; color: #ffd43b; font-weight: bold;">Python</div>
-          <span>main.py</span>
-        </figure>
-        <figure class="image-card" style="cursor: pointer;" onclick="openCodeViewer('https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/gamble.py', 'gamble.py')">
-          <div style="height: 150px; background: #222; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-size: 2rem; color: #ffd43b; font-weight: bold;">Python</div>
-          <span>gamble.py</span>
-        </figure>
-      </div>
-      
-      <div class="section-header">HTML</div>
-      <div class="wip-container"><p>Work in Progress</p></div>
-      
-      <div class="section-header">JS</div>
-      <div class="wip-container"><p>Work in Progress</p></div>
-      
-      <div class="section-header">CSS</div>
-      <div class="wip-container"><p>Work in Progress</p></div>
-      
-      <div class="section-header">C#</div>
-      <div class="wip-container"><p>Work in Progress</p></div>
     `;
   }
 }
@@ -2335,50 +2474,7 @@ function openLightbox(src, title, desc) {
 function closeLightbox() {
   document.getElementById('lightboxOverlay').classList.remove('visible');
 }
-
-function openCodeViewer(url, title) {
-  const overlay = document.getElementById('codeViewerOverlay');
-  const content = document.getElementById('codeViewerContent');
-  document.getElementById('codeViewerTitle').innerText = title;
-  overlay.classList.add('visible');
-  content.innerText = "Loading code...";
-  
-  fetch(url)
-    .then(response => response.text())
-    .then(text => {
-      content.innerText = text;
-    })
-    .catch(err => {
-      content.innerText = "Error loading code: " + err;
-    });
-}
-
-function closeCodeViewer() {
-  document.getElementById('codeViewerOverlay').classList.remove('visible');
-}
-
 // ─── BOOT ─────────────────────────────────────────────────────────────────────
-function enterSite() {
-  const splash = document.getElementById('splashOverlay');
-  splash.classList.add('fade-out');
-  ensureAudioContext();
-  document.getElementById('bgMusic').play();
-}
-
-function enablePerformanceMode(event) {
-  event.stopPropagation();
-  backgroundSettings.useVideo = false;
-  const video = document.getElementById('videoBg');
-  if (video) {
-    video.style.opacity = '0';
-    video.style.visibility = 'hidden';
-  }
-  for (const key in rainbowStates) rainbowStates[key].active = false;
-  backgroundSettings.rainbowTop = false;
-  backgroundSettings.rainbowBottom = false;
-  enterSite();
-}
-
 function setVideoBackground(videoUrl) {
   const video = document.createElement('video');
   video.id = 'videoBg'; video.autoplay = true; video.loop = true; video.muted = true; video.src = videoUrl;
@@ -2403,3 +2499,4 @@ initMusic();
 </script>
 </body>
 </html>
+
