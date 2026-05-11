@@ -1139,6 +1139,52 @@
         gap: 0.5rem;
       }
     }
+
+    /* Lightbox Styles */
+    #lightboxOverlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(10px);
+      z-index: 3000;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      padding: 20px;
+      cursor: pointer;
+    }
+    #lightboxOverlay.visible {
+      display: flex;
+    }
+    #lightboxImg {
+      max-width: 95%;
+      max-height: 80vh;
+      object-fit: contain;
+      border: 2px solid var(--main-color);
+      border-radius: 8px;
+      box-shadow: 0 0 30px var(--main-color);
+    }
+    .lightbox-details {
+      width: 95%;
+      max-width: 1200px;
+      margin-top: 20px;
+      padding: 20px;
+      background: rgba(17, 17, 17, 0.9);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      text-align: center;
+      cursor: default;
+    }
+    .creations-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    }
+    @media (max-width: 768px) {
+      .creations-grid {
+        grid-template-columns: 1fr !important;
+      }
+    }
   </style>
 </head>
 <body class="video-bg">
@@ -1206,6 +1252,15 @@
     <span class="clock-ampm" id="clockAmPm">PM</span>
   </div>
 
+
+  <!-- Lightbox Overlay -->
+  <div id="lightboxOverlay" onclick="closeLightbox()">
+    <img id="lightboxImg" src="" alt="Full Screen Creation">
+    <div class="lightbox-details" onclick="event.stopPropagation()">
+      <h3 id="lightboxTitle" style="margin-top: 0; color: var(--main-color);"></h3>
+      <p id="lightboxDesc" style="color: var(--muted); line-height: 1.6;"></p>
+    </div>
+  </div>
   <main class="page-shell" id="mainContent">
     <h1 class="site-title">GN-Neon</h1>
     <div id="content">Loading...</div>
@@ -2094,6 +2149,7 @@ const pages = {
     <section class="panel games-panel">
       <h2>Creations</h2>
       <div class="games-menu" id="creationsMenu">
+        <button onclick="showCreationsTab('images')">Images</button>
         <button class="under-construction"><span>Code</span></button>
         <button class="under-construction"><span>Map Videos</span></button>
         <button class="under-construction"><span>Map Images</span></button>
@@ -2382,6 +2438,42 @@ function checkGuess() {
   else msg.innerText = v < window.secretNum ? "Too low!" : "Too high!";
 }
 
+
+function showCreationsTab(tab) {
+  const area = document.getElementById('creationArea');
+  const menu = document.getElementById('creationsMenu');
+  if (tab === 'images') {
+    menu.style.display = 'none';
+    area.innerHTML = `
+      <button class="back-button" onclick="load('creations')">← Back to Creations</button>
+      <div class="image-row creations-grid">
+        <figure class="image-card" style="cursor: pointer;" onclick="openLightbox('https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC3.png', 'FC3.png', 'Temporary description for FC3.png. This is one of the creations in the gallery.')">
+          <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC3.png" alt="Creation FC3">
+          <span>FC3.png</span>
+        </figure>
+        <figure class="image-card" style="cursor: pointer;" onclick="openLightbox('https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC6.png', 'FC6.png', 'Temporary description for FC6.png. This is one of the creations in the gallery.')">
+          <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC6.png" alt="Creation FC6">
+          <span>FC6.png</span>
+        </figure>
+        <figure class="image-card" style="cursor: pointer;" onclick="openLightbox('https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC9.png', 'FC9.png', 'Temporary description for FC9.png. This is one of the creations in the gallery.')">
+          <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC9.png" alt="Creation FC9">
+          <span>FC9.png</span>
+        </figure>
+      </div>
+    `;
+  }
+}
+
+function openLightbox(src, title, desc) {
+  document.getElementById('lightboxImg').src = src;
+  document.getElementById('lightboxTitle').innerText = title;
+  document.getElementById('lightboxDesc').innerText = desc;
+  document.getElementById('lightboxOverlay').classList.add('visible');
+}
+
+function closeLightbox() {
+  document.getElementById('lightboxOverlay').classList.remove('visible');
+}
 // ─── BOOT ─────────────────────────────────────────────────────────────────────
 function setVideoBackground(videoUrl) {
   const video = document.createElement('video');
