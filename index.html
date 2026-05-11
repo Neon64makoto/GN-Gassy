@@ -1185,6 +1185,58 @@
         grid-template-columns: 1fr !important;
       }
     }
+  /* Code Viewer Styles */
+    #codeViewerOverlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(15px);
+      z-index: 3000;
+      display: none;
+      flex-direction: column;
+      padding: 2rem;
+    }
+    #codeViewerOverlay.visible {
+      display: flex;
+    }
+    .code-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid var(--main-color);
+      padding-bottom: 0.5rem;
+    }
+    .code-content {
+      flex: 1;
+      background: #0a0a0a;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      overflow: auto;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 1rem;
+      line-height: 1.5;
+      color: #0f0;
+      white-space: pre-wrap;
+    }
+    .close-code-btn {
+      background: #440000;
+      border: 1px solid #ff0000;
+      padding: 0.5rem 1rem;
+      font-size: 0.9rem;
+    }
+    
+    .section-header {
+      border-left: 4px solid var(--main-color);
+      padding-left: 1rem;
+      margin: 2rem 0 1rem;
+      color: var(--main-color);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body class="video-bg">
@@ -1261,6 +1313,15 @@
       <p id="lightboxDesc" style="color: var(--muted); line-height: 1.6;"></p>
     </div>
   </div>
+  <!-- Code Viewer Overlay -->
+  <div id="codeViewerOverlay">
+    <div class="code-header">
+      <h3 id="codeViewerTitle" style="margin: 0; color: var(--main-color);">Code Viewer</h3>
+      <button class="close-code-btn" onclick="closeCodeViewer()">Close</button>
+    </div>
+    <div class="code-content" id="codeViewerContent">Loading code...</div>
+  </div>
+
   <main class="page-shell" id="mainContent">
     <h1 class="site-title">GN-Neon</h1>
     <div id="content">Loading...</div>
@@ -2149,10 +2210,9 @@ const pages = {
     <section class="panel games-panel">
       <h2>Creations</h2>
       <div class="games-menu" id="creationsMenu">
-        <button onclick="showCreationsTab('images')">Images</button>
-        <button class="under-construction"><span>Code</span></button>
+        <button onclick="showCreationsTab('map_images')">Map Images</button>
+        <button onclick="showCreationsTab('code')">Code</button>
         <button class="under-construction"><span>Map Videos</span></button>
-        <button class="under-construction"><span>Map Images</span></button>
       </div>
       <div id="creationArea"></div>
     </section>
@@ -2474,6 +2534,103 @@ function openLightbox(src, title, desc) {
 function closeLightbox() {
   document.getElementById('lightboxOverlay').classList.remove('visible');
 }
+function showCreationsTab(tab) {
+  const area = document.getElementById('creationArea');
+  const menu = document.getElementById('creationsMenu');
+  if (menu) menu.style.display = 'none';
+  
+  if (tab === 'map_images') {
+    area.innerHTML = `
+      <button class="back-button" onclick="load('creations')">← Back to Creations</button>
+      
+      <div class="section-header">Flatline City</div>
+      <div class="image-row creations-grid">
+        <figure class="image-card" style="cursor: pointer;" onclick="openLightbox('https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC3.png', 'FC3.png', 'Flatline City Creation 3')">
+          <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC3.png" alt="Creation FC3">
+          <span>FC3.png</span>
+        </figure>
+        <figure class="image-card" style="cursor: pointer;" onclick="openLightbox('https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC6.png', 'FC6.png', 'Flatline City Creation 6')">
+          <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC6.png" alt="Creation FC6">
+          <span>FC6.png</span>
+        </figure>
+        <figure class="image-card" style="cursor: pointer;" onclick="openLightbox('https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC9.png', 'FC9.png', 'Flatline City Creation 9')">
+          <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC9.png" alt="Creation FC9">
+          <span>FC9.png</span>
+        </figure>
+      </div>
+      
+      <div class="section-header">Snow Road Sili</div>
+      <div class="wip-container"><p>Work in Progress</p></div>
+      
+      <div class="section-header">K-City</div>
+      <div class="wip-container"><p>Work in Progress</p></div>
+      
+      <div class="section-header">Spring Sili</div>
+      <div class="wip-container"><p>Work in Progress</p></div>
+    `;
+  } else if (tab === 'code') {
+    area.innerHTML = `
+      <button class="back-button" onclick="load('creations')">← Back to Creations</button>
+      
+      <div class="section-header">Python</div>
+      <div class="image-row creations-grid">
+        <figure class="image-card" style="cursor: pointer;" onclick="openCodeViewer('https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/main.py', 'main.py')">
+          <div style="height: 150px; background: #222; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-size: 2rem; color: #ffd43b; font-weight: bold;">Python</div>
+          <span>main.py</span>
+        </figure>
+        <figure class="image-card" style="cursor: pointer;" onclick="openCodeViewer('https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/gamble.py', 'gamble.py')">
+          <div style="height: 150px; background: #222; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-size: 2rem; color: #ffd43b; font-weight: bold;">Python</div>
+          <span>gamble.py</span>
+        </figure>
+      </div>
+      
+      <div class="section-header">HTML</div>
+      <div class="wip-container"><p>Work in Progress</p></div>
+      
+      <div class="section-header">JS</div>
+      <div class="wip-container"><p>Work in Progress</p></div>
+      
+      <div class="section-header">CSS</div>
+      <div class="wip-container"><p>Work in Progress</p></div>
+      
+      <div class="section-header">C#</div>
+      <div class="wip-container"><p>Work in Progress</p></div>
+    `;
+  }
+}
+
+function openLightbox(src, title, desc) {
+  document.getElementById('lightboxImg').src = src;
+  document.getElementById('lightboxTitle').innerText = title;
+  document.getElementById('lightboxDesc').innerText = desc;
+  document.getElementById('lightboxOverlay').classList.add('visible');
+}
+
+function closeLightbox() {
+  document.getElementById('lightboxOverlay').classList.remove('visible');
+}
+
+function openCodeViewer(url, title) {
+  const overlay = document.getElementById('codeViewerOverlay');
+  const content = document.getElementById('codeViewerContent');
+  document.getElementById('codeViewerTitle').innerText = title;
+  overlay.classList.add('visible');
+  content.innerText = "Loading code...";
+  
+  fetch(url)
+    .then(response => response.text())
+    .then(text => {
+      content.innerText = text;
+    })
+    .catch(err => {
+      content.innerText = "Error loading code: " + err;
+    });
+}
+
+function closeCodeViewer() {
+  document.getElementById('codeViewerOverlay').classList.remove('visible');
+}
+
 // ─── BOOT ─────────────────────────────────────────────────────────────────────
 function setVideoBackground(videoUrl) {
   const video = document.createElement('video');
