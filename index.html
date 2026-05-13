@@ -1550,7 +1550,7 @@ function enterSite() {
     const audio = document.getElementById('bgMusic');
     audio.play().catch(e => console.warn("Audio start blocked:", e));
     if (backgroundSettings.useVideo) {
-      setVideoBackground(\'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/FlatlineLoop.mp4\');
+      setVideoBackground('https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/FlatlineLoop.mp4');
     }
   }
 }
@@ -2655,6 +2655,16 @@ function setVideoBackground(videoUrl) {
 applySavedColors();
 load("home");
 initMusic();
+// Start background video if enabled
+if (backgroundSettings.useVideo) {
+  setVideoBackground('https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/FlatlineLoop.mp4');
+} else {
+  // If video is disabled, immediately show the click-to-enter prompt
+  const splash = document.getElementById('splashOverlay');
+  splash.classList.add('ready');
+  document.getElementById('splashText').innerText = "!!!WARNING MUSIC WILL PLAY!!!";
+  document.getElementById('splashSubtext').innerText = "CLICK TO ENTER";
+}
 </script>
 </body>
 </html>
