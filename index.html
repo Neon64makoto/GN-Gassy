@@ -2546,60 +2546,6 @@ function checkGuess() {
   else msg.innerText = v < window.secretNum ? "Too low!" : "Too high!";
 }
 
-
-function showCreationsTab(tab) {
-  const area = document.getElementById('creationArea');
-  const menu = document.getElementById('creationsMenu');
-  if (tab === 'images') {
-    menu.style.display = 'none';
-    area.innerHTML = `
-      <button class="back-button" onclick="load('creations')">← Back to Creations</button>
-      <div class="image-row creations-grid">
-        <figure class="image-card" style="cursor: pointer;" onclick="openLightbox('https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC3.png', 'FC3.png', 'Temporary description for FC3.png. This is one of the creations in the gallery.')">
-          <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC3.png" alt="Creation FC3">
-          <span>FC3.png</span>
-        </figure>
-        <figure class="image-card" style="cursor: pointer;" onclick="openLightbox('https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC6.png', 'FC6.png', 'Temporary description for FC6.png. This is one of the creations in the gallery.')">
-          <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC6.png" alt="Creation FC6">
-          <span>FC6.png</span>
-        </figure>
-        <figure class="image-card" style="cursor: pointer;" onclick="openLightbox('https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC9.png', 'FC9.png', 'Temporary description for FC9.png. This is one of the creations in the gallery.')">
-          <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC9.png" alt="Creation FC9">
-          <span>FC9.png</span>
-        </figure>
-        <figure class="image-card" style="cursor: pointer;" onclick="openLightbox('https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC11.png', 'FC11.png', 'Temporary description for FC11.png. This is one of the creations in the gallery.')">
-          <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC11.png" alt="Creation FC11">
-          <span>FC11.png</span>
-        </figure>
-        <figure class="image-card" style="cursor: pointer;" onclick="openLightbox('https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/SR1.png', 'SR1.png', 'Temporary description for SR1.png. This is one of the creations in the gallery.')">
-          <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/SR1.png" alt="Creation SR1">
-          <span>SR1.png</span>
-        </figure>
-        <figure class="image-card" style="cursor: pointer;" onclick="openLightbox('https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/SR2.png', 'SR2.png', 'Temporary description for SR2.png. This is one of the creations in the gallery.')">
-          <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/SR2.png" alt="Creation SR2">
-          <span>SR2.png</span>
-        </figure>
-        <figure class="image-card" style="cursor: pointer;" onclick="openLightbox('https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/SR3.png', 'SR3.png', 'Temporary description for SR3.png. This is one of the creations in the gallery.')">
-          <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/SR3.png" alt="Creation SR3">
-          <span>SR3.png</span>
-        </figure>
-        <figure class="image-card" style="cursor: pointer;" onclick="openLightbox('https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/SR4.png', 'SR4.png', 'Temporary description for SR4.png. This is one of the creations in the gallery.')">
-          <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/SR4.png" alt="Creation SR4">
-          <span>SR4.png</span>
-        </figure>
-        <figure class="image-card" style="cursor: pointer;" onclick="openLightbox('https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/SR5.png', 'SR5.png', 'Temporary description for SR5.png. This is one of the creations in the gallery.')">
-          <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/SR5.png" alt="Creation SR5">
-          <span>SR5.png</span>
-        </figure>
-        <figure class="image-card" style="cursor: pointer;" onclick="openLightbox('https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/SR6.png', 'SR6.png', 'Temporary description for SR6.png. This is one of the creations in the gallery.')">
-          <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/SR6.png" alt="Creation SR6">
-          <span>SR6.png</span>
-        </figure>
-      </div>
-    `;
-  }
-}
-
 function openLightbox(src, title, desc) {
   document.getElementById('lightboxImg').src = src;
   document.getElementById('lightboxTitle').innerText = title;
