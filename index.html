@@ -706,24 +706,33 @@
     }
 
     .image-card {
-      background: var(--panel-alt);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1rem;
-    }
+  background: var(--panel-alt);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
 
-    .image-card img {
-      width: 100%;
-      display: block;
-      border-radius: 8px;
-    }
+.image-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0 15px var(--main-color);
+}
 
-    .image-card span {
-      display: block;
-      margin-top: 0.75rem;
-      color: var(--muted);
-      font-size: 1rem;
-    }
+.image-card img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  display: block;
+}
+
+.image-card span {
+  display: block;
+  padding: 0.75rem;
+  color: var(--muted);
+  font-size: 0.95rem;
+  text-align: center;
+}
 
     .patch-panel {
       padding: 2rem;
@@ -1521,6 +1530,25 @@ const songColors = [
 
 let songColorEnabled = false;
 
+const creations = [
+  {
+    image: 'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/SR1.png',
+    title: 'SR1.png',
+    description: 'Temporary description for SR1.png.'
+  },
+
+  {
+    image: 'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/SR2.png',
+    title: 'SR2.png',
+    description: 'Temporary description for SR2.png.'
+  },
+
+  {
+    image: 'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/SR3.png',
+    title: 'SR3.png',
+    description: 'Temporary description for SR3.png.'
+  }
+];
 // ─── SPLASH LOGIC ────────────────────────────────────────────────────────────
 function enablePerformanceMode(event) {
   event.stopPropagation();
@@ -1855,7 +1883,27 @@ document.addEventListener('keydown', (e) => {
   }
   draw();
 })();
+  
+function renderCreations() {
+  return `
+    <div class="image-row creations-grid">
+      ${creations.map(item => `
+        <figure class="image-card"
+          onclick="openLightbox(
+            '${item.image}',
+            '${item.title}',
+            '${item.description}'
+          )">
 
+          <img src="${item.image}" alt="${item.title}">
+          <span>${item.title}</span>
+
+        </figure>
+      `).join('')}
+    </div>
+  `;
+}
+  
 // ─── PAGES DATA ──────────────────────────────────────────────────────────────
 function updateBackgroundGradient() {
   if (!backgroundSettings.rainbowTop) {
@@ -2569,64 +2617,22 @@ function showCreationsTab(tab) {
   
   if (tab === 'map_images') {
     area.innerHTML = `
-      <button class="back-button" onclick="load('creations')">← Back to Creations</button>
-      
-      <div class="section-header">Flatline City</div>
-      <div class="image-row creations-grid">
-        <figure class="image-card" style="cursor: pointer;" onclick="openLightbox('https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC3.png', 'FC3.png', 'Flatline City Creation 3')">
-          <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC3.png" alt="Creation FC3">
-          <span>FC3.png</span>
-        </figure>
-        <figure class="image-card" style="cursor: pointer;" onclick="openLightbox('https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC6.png', 'FC6.png', 'Flatline City Creation 6')">
-          <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC6.png" alt="Creation FC6">
-          <span>FC6.png</span>
-        </figure>
-        <figure class="image-card" style="cursor: pointer;" onclick="openLightbox('https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC9.png', 'FC9.png', 'Flatline City Creation 9')">
-          <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC9.png" alt="Creation FC9">
-          <span>FC9.png</span>
-        </figure>
-        <figure class="image-card" style="cursor: pointer;" onclick="openLightbox('https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC11.png', 'FC11.png', 'Flatline City Creation 11')">
-          <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC11.png" alt="Creation FC11">
-          <span>FC11.png</span>
-        </figure>
-      </div>
-      
-      <div class="section-header">Snow Road Sili</div>
-     <div class="image-row creations-grid">
-<figure class="image-card" style="cursor: pointer;" onclick="openLightbox('https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/SR1.png', 'SR1.png', 'Snow Road Creation 1')">
-  <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/SR1.png" alt="Creation SR1">
-  <span>SR1.png</span>
-</figure>
-<figure class="image-card" style="cursor: pointer;" onclick="openLightbox('https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/SR2.png', 'SR2.png', 'Snow Road Creation 2')">
-  <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/SR2.png" alt="Creation SR2">
-  <span>SR2.png</span>
-</figure>
-<figure class="image-card" style="cursor: pointer;" onclick="openLightbox('https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/SR3.png', 'SR3.png', 'Snow Road Creation 3')">
-  <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/SR3.png" alt="Creation SR3">
-  <span>SR3.png</span>
-</figure>
-<figure class="image-card" style="cursor: pointer;" onclick="openLightbox('https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/SR4.png', 'SR4.png', 'Snow Road Creation 4')">
-  <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/SR4.png" alt="Creation SR4">
-  <span>SR4.png</span>
-</figure>
+  <button class="back-button" onclick="load('creations')">
+    ← Back to Creations
+  </button>
 
-<figure class="image-card" style="cursor: pointer;" onclick="openLightbox('https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/SR5.png', 'SR5.png', 'Snow Road Creation 5')">
-  <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/SR5.png" alt="Creation SR5">
-  <span>SR5.png</span>
-</figure>
+  <div class="section-header">Flatline City</div>
+  ${renderImageGallery(flatlineCityImages)}
 
-<figure class="image-card" style="cursor: pointer;" onclick="openLightbox('https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/SR6.png', 'SR6.png', 'Snow Road Creation 6')">
-  <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/SR6.png" alt="Creation SR6">
-  <span>SR6.png</span>
-</figure>
-      </div>
-      
-      <div class="section-header">K-City</div>
-      <div class="wip-container"><p>Work in Progress</p></div>
-      
-      <div class="section-header">Spring Sili</div>
-      <div class="wip-container"><p>Work in Progress</p></div>
-    `;
+  <div class="section-header">Snow Road Sili</div>
+  ${renderImageGallery(snowRoadImages)}
+
+  <div class="section-header">K-City</div>
+  <div class="wip-container"><p>Work in Progress</p></div>
+
+  <div class="section-header">Spring Sili</div>
+  <div class="wip-container"><p>Work in Progress</p></div>
+`;
   } else if (tab === 'code') {
     area.innerHTML = `
       <button class="back-button" onclick="load('creations')">← Back to Creations</button>
