@@ -1549,9 +1549,6 @@ function enterSite() {
     ensureAudioContext();
     const audio = document.getElementById('bgMusic');
     audio.play().catch(e => console.warn("Audio start blocked:", e));
-    if (backgroundSettings.useVideo) {
-      setVideoBackground('https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/FlatlineLoop.mp4');
-    }
   }
 }
 
@@ -2159,11 +2156,11 @@ const pages = {
         <p class="lead">Welcome to GN-Neon (Goober Network). Take a look at these cats.</p>
         <div class="image-row">
           <figure class="image-card">
-            <img loading="lazy" src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/sili2.jpg" alt="Cat image">
+            <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/sili2.jpg" alt="Cat image">
             <span>sili2.jpg</span>
           </figure>
           <figure class="image-card">
-            <img loading="lazy" src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/sili3.jpg" alt="Cat image">
+            <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/sili3.jpg" alt="Cat image">
             <span>sili3.jpg</span>
           </figure>
         </div>
@@ -2511,15 +2508,15 @@ function showCreationsTab(tab) {
       <button class="back-button" onclick="load('creations')">← Back to Creations</button>
       <div class="image-row creations-grid">
         <figure class="image-card" style="cursor: pointer;" onclick="openLightbox('https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC3.png', 'FC3.png', 'Temporary description for FC3.png. This is one of the creations in the gallery.')">
-          <img loading="lazy" src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC3.png" alt="Creation FC3">
+          <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC3.png" alt="Creation FC3">
           <span>FC3.png</span>
         </figure>
         <figure class="image-card" style="cursor: pointer;" onclick="openLightbox('https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC6.png', 'FC6.png', 'Temporary description for FC6.png. This is one of the creations in the gallery.')">
-          <img loading="lazy" src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC6.png" alt="Creation FC6">
+          <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC6.png" alt="Creation FC6">
           <span>FC6.png</span>
         </figure>
         <figure class="image-card" style="cursor: pointer;" onclick="openLightbox('https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC9.png', 'FC9.png', 'Temporary description for FC9.png. This is one of the creations in the gallery.')">
-          <img loading="lazy" src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC9.png" alt="Creation FC9">
+          <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC9.png" alt="Creation FC9">
           <span>FC9.png</span>
         </figure>
       </div>
@@ -2549,15 +2546,15 @@ function showCreationsTab(tab) {
       <div class="section-header">Flatline City</div>
       <div class="image-row creations-grid">
         <figure class="image-card" style="cursor: pointer;" onclick="openLightbox('https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC3.png', 'FC3.png', 'Flatline City Creation 3')">
-          <img loading="lazy" src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC3.png" alt="Creation FC3">
+          <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC3.png" alt="Creation FC3">
           <span>FC3.png</span>
         </figure>
         <figure class="image-card" style="cursor: pointer;" onclick="openLightbox('https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC6.png', 'FC6.png', 'Flatline City Creation 6')">
-          <img loading="lazy" src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC6.png" alt="Creation FC6">
+          <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC6.png" alt="Creation FC6">
           <span>FC6.png</span>
         </figure>
         <figure class="image-card" style="cursor: pointer;" onclick="openLightbox('https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC9.png', 'FC9.png', 'Flatline City Creation 9')">
-          <img loading="lazy" src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC9.png" alt="Creation FC9">
+          <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC9.png" alt="Creation FC9">
           <span>FC9.png</span>
         </figure>
       </div>
@@ -2654,17 +2651,8 @@ function setVideoBackground(videoUrl) {
 
 applySavedColors();
 load("home");
+setVideoBackground('https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/FlatlineLoop.mp4');
 initMusic();
-// Start background video if enabled
-if (backgroundSettings.useVideo) {
-  setVideoBackground('https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/FlatlineLoop.mp4');
-} else {
-  // If video is disabled, immediately show the click-to-enter prompt
-  const splash = document.getElementById('splashOverlay');
-  splash.classList.add('ready');
-  document.getElementById('splashText').innerText = "!!!WARNING MUSIC WILL PLAY!!!";
-  document.getElementById('splashSubtext').innerText = "CLICK TO ENTER";
-}
 </script>
 </body>
 </html>
