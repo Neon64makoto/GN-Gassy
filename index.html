@@ -1530,7 +1530,31 @@ const songColors = [
 
 let songColorEnabled = false;
 
-const creations = [
+const FCImages = [
+  {
+    image: 'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC3.png',
+    title: 'FC3.png',
+    description: 'Temporary description for FC3.png.'
+  },
+
+  {
+    image: 'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC6.png',
+    title: 'FC6.png',
+    description: 'Temporary description for FC6.png.'
+  },
+
+  {
+    image: 'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC9.png',
+    title: 'FC9.png',
+    description: 'Temporary description for FC9.png.'
+  },
+  {
+    image: 'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC11.png',
+    title: 'FC11.png',
+    description: 'Temporary description for FC11.png.'
+  }
+];
+const SRImages = [
   {
     image: 'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/SR1.png',
     title: 'SR1.png',
@@ -2567,9 +2591,10 @@ function showCreationsTab(tab) {
     ← Back to Creations
   </button>
 
-  <div class="section-header">Map Images</div>
-  ${renderCreations()}
-
+  <div class="section-header">Flatline City</div>
+  ${renderFCImages()}
+  <div class="section-header">Snow Road</div>
+  ${renderSRImages()}
   <div class="section-header">K-City</div>
   <div class="wip-container"><p>Work in Progress</p></div>
 
