@@ -1911,7 +1911,7 @@ document.addEventListener('keydown', (e) => {
 function renderFCImages() {
   return `
     <div class="image-row creations-grid">
-      ${creations.map(item => `
+      ${FCImages.map(item => `
         <figure class="image-card"
           onclick="openLightbox(
             '${item.image}',
@@ -1930,7 +1930,7 @@ function renderFCImages() {
 function renderSRImages() {
   return `
     <div class="image-row creations-grid">
-      ${creations.map(item => `
+      ${SRImages.map(item => `
         <figure class="image-card"
           onclick="openLightbox(
             '${item.image}',
