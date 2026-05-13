@@ -1588,6 +1588,45 @@ const SRImages = [
     description: 'Temporary description for S63.png.'
   }
 ];
+const SSImages = [
+  {
+    image: 'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/SS1.png',
+    title: 'SS1.png',
+    description: 'Temporary description for SS1.png.'
+  },
+
+  {
+    image: 'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/SS2.png',
+    title: 'SS2.png',
+    description: 'Temporary description for SS2.png.'
+  },
+
+  {
+    image: 'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/SS3.png',
+    title: 'SS3.png',
+    description: 'Temporary description for SS3.png.'
+  },
+  {
+    image: 'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/SS4.png',
+    title: 'SS4.png',
+    description: 'Temporary description for SS4.png.'
+  },
+  {
+    image: 'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/SR5.png',
+    title: 'SR5.png',
+    description: 'Temporary description for SS5.png.'
+  },
+  {
+    image: 'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/SR6.png',
+    title: 'SR6.png',
+    description: 'Temporary description for SS6.png.'
+  },
+  {
+    image: 'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/SR7.png',
+    title: 'SR7.png',
+    description: 'Temporary description for SS7.png.'
+  }
+];
 // ─── SPLASH LOGIC ────────────────────────────────────────────────────────────
 function enablePerformanceMode(event) {
   event.stopPropagation();
@@ -1943,6 +1982,44 @@ function renderFCImages() {
   `;
 }
 function renderSRImages() {
+  return `
+    <div class="image-row creations-grid">
+      ${SRImages.map(item => `
+        <figure class="image-card"
+          onclick="openLightbox(
+            '${item.image}',
+            '${item.title}',
+            '${item.description}'
+          )">
+
+          <img src="${item.image}" alt="${item.title}">
+          <span>${item.title}</span>
+
+        </figure>
+      `).join('')}
+    </div>
+  `;
+}
+function renderKCImages() {
+  return `
+    <div class="image-row creations-grid">
+      ${SRImages.map(item => `
+        <figure class="image-card"
+          onclick="openLightbox(
+            '${item.image}',
+            '${item.title}',
+            '${item.description}'
+          )">
+
+          <img src="${item.image}" alt="${item.title}">
+          <span>${item.title}</span>
+
+        </figure>
+      `).join('')}
+    </div>
+  `;
+}
+function renderSSImages() {
   return `
     <div class="image-row creations-grid">
       ${SRImages.map(item => `
@@ -2634,7 +2711,7 @@ function showCreationsTab(tab) {
   <div class="wip-container"><p>Work in Progress</p></div>
 
   <div class="section-header">Spring Sili</div>
-  <div class="wip-container"><p>Work in Progress</p></div>
+  ${renderSSImages()}
 `;
   } else if (tab === 'code') {
     area.innerHTML = `
