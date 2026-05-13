@@ -1907,8 +1907,8 @@ document.addEventListener('keydown', (e) => {
   }
   draw();
 })();
-  
-function renderCreations() {
+
+function renderFCImages() {
   return `
     <div class="image-row creations-grid">
       ${creations.map(item => `
@@ -1927,6 +1927,26 @@ function renderCreations() {
     </div>
   `;
 }
+function renderSRImages() {
+  return `
+    <div class="image-row creations-grid">
+      ${creations.map(item => `
+        <figure class="image-card"
+          onclick="openLightbox(
+            '${item.image}',
+            '${item.title}',
+            '${item.description}'
+          )">
+
+          <img src="${item.image}" alt="${item.title}">
+          <span>${item.title}</span>
+
+        </figure>
+      `).join('')}
+    </div>
+  `;
+}
+
   
 // ─── PAGES DATA ──────────────────────────────────────────────────────────────
 function updateBackgroundGradient() {
