@@ -1249,7 +1249,7 @@
   </style>
 </head>
 <body class="video-bg">
-  <audio id="bgMusic" style="display:none;" crossorigin="anonymous"></audio>
+  <audio id="bgMusic" style="display:none;" crossorigin="anonymous" preload="none"></audio>
 
   <!-- Click to Enter Splash -->
   <div id="splashOverlay" onclick="enterSite()">
@@ -1340,6 +1340,13 @@
   <div class="version-tag" id="vTag">v0.90</div>
 
 <script>
+// PERFORMANCE / CDN FIXES:
+// - Large media assets now load from raw.githubusercontent instead of jsDelivr.
+// - Images use native lazy loading.
+// - Audio only loads the active song first.
+// - Background video loads after the page becomes interactive.
+// - Embedded iframes now lazy load.
+
 // ─── STATE ───────────────────────────────────────────────────────────────────
 let currentIndex = 0;
 let isMuted = false;
@@ -1457,27 +1464,27 @@ updateClock();
 
 // ─── PLAYLIST ────────────────────────────────────────────────────────────────
 const playlist = [
-  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Super%20Mario%20RPG.mp3',
-  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Neon%20Cobra.mp3',
-  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Disco%20Pervert.mp3',
-  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/They%20Live!.mp3',
-  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/One%20Night%20In%20Tokyo.mp3',
-  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/A%20Kind%20Of%20Deutsch.mp3',
-  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Military%20Fashion%20Show.mp3',
-  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Hotline%20-%20Original%20Mix.mp3',
-  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Strange%20Timez%20(feat.%20Robert%20Smith).mp3',
-  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Not%20Like%20Us.mp3',
-  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Notion.mp3',
-  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Write%20This%20Down.mp3',
-  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Temporary%20Love%20(feat.%20CG5).mp3',
-  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Falling%20Down.mp3',
-  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Why%20Cant%20This%20Be%20Easy.mp3',
-  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/But%20Can%20You%20Do%20This.mp3',
-  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Philly%20Nice%20(B-Side).mp3',
-  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Pain_is_just_freddy_fazbear.mp3',
-  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/dq%20blizzard.mp3',
-  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/MC%20Chris%20Is%20Dead.mp3',
-  'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Music/Super%20Mario%20RPG%20Waltz%20of%20the%20Forest%20(4K).mp3'
+  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Super%20Mario%20RPG.mp3',
+  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Neon%20Cobra.mp3',
+  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Disco%20Pervert.mp3',
+  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/They%20Live!.mp3',
+  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/One%20Night%20In%20Tokyo.mp3',
+  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/A%20Kind%20Of%20Deutsch.mp3',
+  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Military%20Fashion%20Show.mp3',
+  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Hotline%20-%20Original%20Mix.mp3',
+  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Strange%20Timez%20(feat.%20Robert%20Smith).mp3',
+  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Not%20Like%20Us.mp3',
+  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Notion.mp3',
+  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Write%20This%20Down.mp3',
+  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Temporary%20Love%20(feat.%20CG5).mp3',
+  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Falling%20Down.mp3',
+  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Why%20Cant%20This%20Be%20Easy.mp3',
+  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/But%20Can%20You%20Do%20This.mp3',
+  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Philly%20Nice%20(B-Side).mp3',
+  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Pain_is_just_freddy_fazbear.mp3',
+  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/dq%20blizzard.mp3',
+  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/MC%20Chris%20Is%20Dead.mp3',
+  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Super%20Mario%20RPG%20Waltz%20of%20the%20Forest%20(4K).mp3'
 ];
 
 const trackMeta = [
@@ -1532,97 +1539,97 @@ let songColorEnabled = false;
 
 const FCImages = [
   {
-    image: 'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC3.png',
+    image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/FC3.png',
     title: 'FC3.png',
     description: 'Temporary description for FC3.png.'
   },
 
   {
-    image: 'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC6.png',
+    image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/FC6.png',
     title: 'FC6.png',
     description: 'Temporary description for FC6.png.'
   },
 
   {
-    image: 'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC9.png',
+    image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/FC9.png',
     title: 'FC9.png',
     description: 'Temporary description for FC9.png.'
   },
   {
-    image: 'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/FC11.png',
+    image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/FC11.png',
     title: 'FC11.png',
     description: 'Temporary description for FC11.png.'
   }
 ];
 const SRImages = [
   {
-    image: 'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/SR1.png',
+    image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SR1.png',
     title: 'SR1.png',
     description: 'Temporary description for SR1.png.'
   },
 
   {
-    image: 'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/SR2.png',
+    image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SR2.png',
     title: 'SR2.png',
     description: 'Temporary description for SR2.png.'
   },
 
   {
-    image: 'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/SR3.png',
+    image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SR3.png',
     title: 'SR3.png',
     description: 'Temporary description for SR3.png.'
   },
   {
-    image: 'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/SR4.png',
+    image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SR4.png',
     title: 'SR4.png',
     description: 'Temporary description for SR4.png.'
   },
   {
-    image: 'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/SR5.png',
+    image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SR5.png',
     title: 'SR5.png',
     description: 'Temporary description for SR5.png.'
   },
   {
-    image: 'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/SR6.png',
+    image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SR6.png',
     title: 'SR6.png',
     description: 'Temporary description for S63.png.'
   }
 ];
 const SSImages = [
   {
-    image: 'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/SS1.png',
+    image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SS1.png',
     title: 'SS1.png',
     description: 'Temporary description for SS1.png.'
   },
 
   {
-    image: 'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/SS2.png',
+    image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SS2.png',
     title: 'SS2.png',
     description: 'Temporary description for SS2.png.'
   },
 
   {
-    image: 'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/SS3.png',
+    image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SS3.png',
     title: 'SS3.png',
     description: 'Temporary description for SS3.png.'
   },
   {
-    image: 'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/SS4.png',
+    image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SS4.png',
     title: 'SS4.png',
     description: 'Temporary description for SS4.png.'
   },
   {
-    image: 'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/SS5.png',
+    image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SS5.png',
     title: 'SS5.png',
     description: 'Temporary description for SS5.png.'
   },
   {
-    image: 'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/SS6.png',
+    image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SS6.png',
     title: 'SS6.png',
     description: 'Temporary description for SS6.png.'
   },
   {
-    image: 'https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/SS7.png',
+    image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SS7.png',
     title: 'SS7.png',
     description: 'Temporary description for SS7.png.'
   }
@@ -1686,7 +1693,17 @@ function initMusic() {
   const savedMute = localStorage.getItem('gn_neon_mute');
 
   if (savedTrack !== null) currentTrack = parseInt(savedTrack);
+
+  // Only load the currently selected track initially
+  audio.preload = 'metadata';
   audio.src = playlist[currentTrack];
+
+  // Lazy preload nearby songs after site has already loaded
+  setTimeout(() => {
+    const nextTrack = new Audio();
+    nextTrack.preload = 'metadata';
+    nextTrack.src = playlist[(currentTrack + 1) % playlist.length];
+  }, 4000);
   
   if (savedVolume !== null) {
     audio.volume = parseFloat(savedVolume);
@@ -1973,7 +1990,7 @@ function renderFCImages() {
             '${item.description}'
           )">
 
-          <img src="${item.image}" alt="${item.title}">
+          <img src="${item.image}" alt="${item.title}" loading="lazy" decoding="async">
           <span>${item.title}</span>
 
         </figure>
@@ -1992,7 +2009,7 @@ function renderSRImages() {
             '${item.description}'
           )">
 
-          <img src="${item.image}" alt="${item.title}">
+          <img src="${item.image}" alt="${item.title}" loading="lazy" decoding="async">
           <span>${item.title}</span>
 
         </figure>
@@ -2011,7 +2028,7 @@ function renderKCImages() {
             '${item.description}'
           )">
 
-          <img src="${item.image}" alt="${item.title}">
+          <img src="${item.image}" alt="${item.title}" loading="lazy" decoding="async">
           <span>${item.title}</span>
 
         </figure>
@@ -2030,7 +2047,7 @@ function renderSSImages() {
             '${item.description}'
           )">
 
-          <img src="${item.image}" alt="${item.title}">
+          <img src="${item.image}" alt="${item.title}" loading="lazy" decoding="async">
           <span>${item.title}</span>
 
         </figure>
@@ -2340,11 +2357,11 @@ const pages = {
         <p class="lead">Welcome to GN-Neon (Goober Network). Take a look at these cats.</p>
         <div class="image-row">
           <figure class="image-card">
-            <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/sili2.jpg" alt="Cat image">
+            <img src="https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/sili2.jpg" alt="Cat image">
             <span>sili2.jpg</span>
           </figure>
           <figure class="image-card">
-            <img src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/sili3.jpg" alt="Cat image">
+            <img src="https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/sili3.jpg" alt="Cat image">
             <span>sili3.jpg</span>
           </figure>
         </div>
@@ -2581,7 +2598,7 @@ function showEmulators() {
 function navigateTo(emulator) {
   const content = document.getElementById('gamesContent');
   if (emulator === 'nes') {
-    content.innerHTML = `<button class="back-button" onclick="showEmulators()">← Back to Emulators</button><div style="width: 100%; max-width: 900px; margin: 2rem auto;"><h2 style="padding: 0 0 1rem 0;">NES Emulator</h2><div style="width:100%;height:500px;max-width:100%; background: #000; border-radius: 10px; overflow: hidden; border: 1px solid #333;"><div id="game"></div></div><script>window.EJS_player='#game';window.EJS_core='nes';window.EJS_gameName='cpu_dummy_reads';window.EJS_color='#0044ff';window.EJS_startOnLoaded=true;window.EJS_pathtodata='https://cdn.jsdelivr.net/gh/EmulatorJS/EmulatorJS@latest/data/';window.EJS_url='https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Roms/cpu_dummy_reads.nes';<\/script><script src="https://cdn.jsdelivr.net/gh/EmulatorJS/EmulatorJS@latest/data/loader.js"><\/script></div>`;
+    content.innerHTML = `<button class="back-button" onclick="showEmulators()">← Back to Emulators</button><div style="width: 100%; max-width: 900px; margin: 2rem auto;"><h2 style="padding: 0 0 1rem 0;">NES Emulator</h2><div style="width:100%;height:500px;max-width:100%; background: #000; border-radius: 10px; overflow: hidden; border: 1px solid #333;"><div id="game"></div></div><script>window.EJS_player='#game';window.EJS_core='nes';window.EJS_gameName='cpu_dummy_reads';window.EJS_color='#0044ff';window.EJS_startOnLoaded=true;window.EJS_pathtodata='https://cdn.jsdelivr.net/gh/EmulatorJS/EmulatorJS@latest/data/';window.EJS_url='https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Roms/cpu_dummy_reads.nes';<\/script><script src="https://cdn.jsdelivr.net/gh/EmulatorJS/EmulatorJS@latest/data/loader.js"><\/script></div>`;
   } else {
     content.innerHTML = `<div class="wip-container"><h2>${emulator.toUpperCase()} Emulator</h2><p>Work in Progress</p><p style="color: #888; margin-top: 1rem;">This section is currently under development.</p><button class="back-button" onclick="showEmulators()">← Back to Emulators</button></div>`;
   }
@@ -2667,7 +2684,7 @@ function clearCanvas() { paintingCanvas.getContext('2d').clearRect(0,0,800,500);
 function showEmbed(url) {
   const area = document.getElementById('embedArea');
   area.style.display = 'block';
-  area.innerHTML = `<iframe src="${url}"></iframe>`;
+  area.innerHTML = `<iframe src="${url}" loading="lazy"></iframe>`;
 }
 function showCreation(type) {
   const area = document.getElementById('creationArea'), creationsMenu = document.getElementById('creationsMenu');
@@ -2719,11 +2736,11 @@ function showCreationsTab(tab) {
       
       <div class="section-header">Python</div>
       <div class="image-row creations-grid">
-        <figure class="image-card" style="cursor: pointer;" onclick="openCodeViewer('https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/main.py', 'main.py')">
+        <figure class="image-card" style="cursor: pointer;" onclick="openCodeViewer('https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/main.py', 'main.py')">
           <div style="height: 150px; background: #222; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-size: 2rem; color: #ffd43b; font-weight: bold;">Python</div>
           <span>main.py</span>
         </figure>
-        <figure class="image-card" style="cursor: pointer;" onclick="openCodeViewer('https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Creations/gamble.py', 'gamble.py')">
+        <figure class="image-card" style="cursor: pointer;" onclick="openCodeViewer('https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/gamble.py', 'gamble.py')">
           <div style="height: 150px; background: #222; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-size: 2rem; color: #ffd43b; font-weight: bold;">Python</div>
           <span>gamble.py</span>
         </figure>
@@ -2731,7 +2748,7 @@ function showCreationsTab(tab) {
       
       <div class="section-header">HTML</div>
       <div class="image-row creations-grid">
-        <figure class="image-card" style="cursor: pointer;" onclick="openCodeViewer('https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/index.html', 'GN Neon Index HTML')">
+        <figure class="image-card" style="cursor: pointer;" onclick="openCodeViewer('https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/index.html', 'GN Neon Index HTML')">
           <div style="height: 150px; background: #222; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-size: 2rem; color: #ffd43b; font-weight: bold;">HTML</div>
           <span>GN Neon Index HTML</span>
         </figure>
@@ -2784,7 +2801,21 @@ function closeCodeViewer() {
 // ─── BOOT ─────────────────────────────────────────────────────────────────────
 function setVideoBackground(videoUrl) {
   const video = document.createElement('video');
-  video.id = 'videoBg'; video.autoplay = true; video.loop = true; video.muted = true; video.src = videoUrl;
+  video.id = 'videoBg';
+  video.autoplay = true;
+  video.loop = true;
+  video.muted = true;
+  video.preload = 'metadata';
+  video.playsInline = true;
+
+  // Delay full video loading slightly so UI + first song load first
+  requestIdleCallback ? requestIdleCallback(() => {
+    video.src = videoUrl;
+    video.load();
+  }) : setTimeout(() => {
+    video.src = videoUrl;
+    video.load();
+  }, 1000);
   if (!backgroundSettings.useVideo) {
     video.style.opacity = '0';
     video.style.visibility = 'hidden';
