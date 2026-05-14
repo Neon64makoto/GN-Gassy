@@ -264,6 +264,39 @@
       transform: translate(-50%, -50%);
     }
 
+    .logo-connector.ui-hidden {
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-100%, -100%);
+    }
+
+    input[type="color"] {
+      width: 52px;
+      height: 52px;
+      padding: 4px;
+      border-radius: 10px;
+      border: 2px solid var(--main-color);
+      background: #111;
+      cursor: pointer;
+      overflow: hidden;
+      box-shadow: 0 0 12px rgba(0,0,0,0.4);
+    }
+
+    input[type="color"]::-webkit-color-swatch-wrapper {
+      padding: 0;
+    }
+
+    input[type="color"]::-webkit-color-swatch {
+      border: none;
+      border-radius: 6px;
+    }
+
+    input[type="color"]::-moz-color-swatch {
+      border: none;
+      border-radius: 6px;
+    }
+
+
         /* ─── LEFT PANEL (NAV) ──────────────────────────────────────── */
     .left-panel {
       position: fixed;
@@ -1809,9 +1842,12 @@ function toggleVisualizerMode() {
     logo.classList.add('ui-hidden');
     tag.classList.add('ui-hidden');
     btn.innerText = "Exit Mode";
-    clock.classList.add('ui-hidden');
     if (keepClockInViz) {
       clock.classList.add('viz-persistent');
+      clock.classList.remove('ui-hidden');
+    } else {
+      clock.classList.remove('viz-persistent');
+      clock.classList.add('ui-hidden');
     }
     document.addEventListener('keydown', exitVizOnEsc);
   } else {
