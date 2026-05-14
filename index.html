@@ -1847,6 +1847,7 @@ function toggleVisualizerMode() {
       clock.classList.remove('ui-hidden');
     } else {
       clock.classList.remove('viz-persistent');
+      clock.classList.add('topbar-active');
       clock.classList.add('ui-hidden');
     }
     document.addEventListener('keydown', exitVizOnEsc);
@@ -1861,6 +1862,7 @@ function toggleVisualizerMode() {
     left.classList.remove('hover-reveal');
     clock.classList.remove('ui-hidden');
     clock.classList.remove('viz-persistent');
+    clock.classList.remove('topbar-active');
     document.removeEventListener('keydown', exitVizOnEsc);
   }
 }
@@ -1903,6 +1905,8 @@ document.addEventListener('keydown', (e) => {
     if (isVisualizerMode) { 
       topbar.classList.add('hover-reveal');
       leftPanel.classList.add('hover-reveal');
+      logoConnector.classList.add('visible');
+      logoConnector.classList.remove('ui-hidden');
     }
     clearTimeout(hideTimer); 
   };
@@ -1916,6 +1920,7 @@ document.addEventListener('keydown', (e) => {
       if (isVisualizerMode) { 
         topbar.classList.remove('hover-reveal');
         leftPanel.classList.remove('hover-reveal');
+        logoConnector.classList.add('ui-hidden');
       }
     }
   };
