@@ -1862,7 +1862,11 @@ function toggleVisualizerMode() {
     left.classList.remove('hover-reveal');
     clock.classList.remove('ui-hidden');
     clock.classList.remove('viz-persistent');
-    clock.classList.remove('topbar-active');
+
+    // Keep the clock lowered after exiting visualizer mode
+    // because the top panel is visible again.
+    clock.classList.add('topbar-active');
+
     document.removeEventListener('keydown', exitVizOnEsc);
   }
 }
