@@ -1,3 +1,5 @@
+(() => {
+
 if (window.dinoGameCleanup) {
   window.dinoGameCleanup();
 }
@@ -291,3 +293,5 @@ window.dinoGameCleanup = function() {
     handleClick
   );
 };
+
+})();
