@@ -1,3 +1,7 @@
+if (window.dinoGameCleanup) {
+  window.dinoGameCleanup();
+}
+
 const frame = document.getElementById("webGameFrame");
 
 frame.innerHTML = `
@@ -7,18 +11,27 @@ frame.innerHTML = `
 const canvas = document.getElementById("dinoGameCanvas");
 const ctx = canvas.getContext("2d");
 
-canvas.width = 900;
-canvas.height = 400;
+function resizeCanvas() {
+  canvas.width = frame.clientWidth;
+  canvas.height = frame.clientHeight;
+}
+
+resizeCanvas();
+
+window.addEventListener("resize", resizeCanvas);
+
+function getGroundY() {
+  return canvas.height - 80;
+}
 
 let score = 0;
 let speed = 6;
 let gameOver = false;
-
-const groundY = 320;
+let animationFrame;
 
 const player = {
   x: 80,
-  y: groundY,
+  y: getGroundY(),
   w: 40,
   h: 40,
   vy: 0,
@@ -32,14 +45,16 @@ function spawnObstacle() {
 
   obstacles.push({
     x: canvas.width + 50,
-    y: groundY + (40 - height),
+    y: getGroundY() + (40 - height),
     w: 25,
     h: height
   });
 }
 
-setInterval(() => {
-  if (!gameOver) spawnObstacle();
+const obstacleInterval = setInterval(() => {
+  if (!gameOver) {
+    spawnObstacle();
+  }
 }, 1400);
 
 function jump() {
@@ -48,32 +63,42 @@ function jump() {
     player.jumping = true;
   }
 
-  if (gameOver) restartGame();
+  if (gameOver) {
+    restartGame();
+  }
 }
 
 function restartGame() {
   score = 0;
   speed = 6;
-  obstacles.length = 0;
   gameOver = false;
 
-  player.y = groundY;
+  obstacles.length = 0;
+
+  player.y = getGroundY();
   player.vy = 0;
   player.jumping = false;
 }
 
-document.addEventListener("keydown", e => {
+function handleKey(e) {
   if (
     e.code === "Space" ||
     e.code === "ArrowUp" ||
     e.code === "ArrowRight"
   ) {
+    e.preventDefault();
     jump();
   }
-});
+}
 
-canvas.addEventListener("mousedown", jump);
-canvas.addEventListener("touchstart", jump);
+function handleClick() {
+  jump();
+}
+
+window.addEventListener("keydown", handleKey);
+
+canvas.addEventListener("mousedown", handleClick);
+canvas.addEventListener("touchstart", handleClick);
 
 function rectsCollide(a, b) {
   return (
@@ -90,8 +115,8 @@ function update() {
   player.vy += 0.7;
   player.y += player.vy;
 
-  if (player.y >= groundY) {
-    player.y = groundY;
+  if (player.y >= getGroundY()) {
+    player.y = getGroundY();
     player.vy = 0;
     player.jumping = false;
   }
@@ -129,14 +154,24 @@ function drawPlayer() {
 
   ctx.fillStyle = "#000";
 
-  ctx.fillRect(player.x + 25, player.y + 8, 6, 6);
+  ctx.fillRect(
+    player.x + 25,
+    player.y + 8,
+    6,
+    6
+  );
 }
 
 function drawObstacles() {
   ctx.fillStyle = "#ff3366";
 
   obstacles.forEach(obs => {
-    ctx.fillRect(obs.x, obs.y, obs.w, obs.h);
+    ctx.fillRect(
+      obs.x,
+      obs.y,
+      obs.w,
+      obs.h
+    );
   });
 }
 
@@ -145,8 +180,14 @@ function drawGround() {
   ctx.lineWidth = 3;
 
   ctx.beginPath();
-  ctx.moveTo(0, groundY + 40);
-  ctx.lineTo(canvas.width, groundY + 40);
+
+  ctx.moveTo(0, getGroundY() + 40);
+
+  ctx.lineTo(
+    canvas.width,
+    getGroundY() + 40
+  );
+
   ctx.stroke();
 }
 
@@ -154,7 +195,11 @@ function drawScore() {
   ctx.fillStyle = "#fff";
   ctx.font = "24px Arial";
 
-  ctx.fillText("Score: " + score, 20, 40);
+  ctx.fillText(
+    "Score: " + score,
+    20,
+    40
+  );
 
   ctx.fillStyle = "#888";
   ctx.font = "16px Arial";
@@ -175,7 +220,7 @@ function drawGameOver() {
   ctx.fillText(
     "GAME OVER",
     canvas.width / 2 - 170,
-    160
+    canvas.height / 2 - 20
   );
 
   ctx.fillStyle = "#fff";
@@ -184,19 +229,25 @@ function drawGameOver() {
   ctx.fillText(
     "Press Space / Arrow / Click",
     canvas.width / 2 - 165,
-    220
+    canvas.height / 2 + 40
   );
 
   ctx.fillText(
     "to Restart",
     canvas.width / 2 - 55,
-    255
+    canvas.height / 2 + 75
   );
 }
 
 function render() {
   ctx.fillStyle = "#050505";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.fillRect(
+    0,
+    0,
+    canvas.width,
+    canvas.height
+  );
 
   drawGround();
   drawPlayer();
@@ -209,7 +260,34 @@ function loop() {
   update();
   render();
 
-  requestAnimationFrame(loop);
+  animationFrame =
+    requestAnimationFrame(loop);
 }
 
 loop();
+
+window.dinoGameCleanup = function() {
+  cancelAnimationFrame(animationFrame);
+
+  clearInterval(obstacleInterval);
+
+  window.removeEventListener(
+    "resize",
+    resizeCanvas
+  );
+
+  window.removeEventListener(
+    "keydown",
+    handleKey
+  );
+
+  canvas.removeEventListener(
+    "mousedown",
+    handleClick
+  );
+
+  canvas.removeEventListener(
+    "touchstart",
+    handleClick
+  );
+};
