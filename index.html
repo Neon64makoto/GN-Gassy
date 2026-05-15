@@ -2662,37 +2662,54 @@ function updateWebGame() {
   const frame =
     document.getElementById("webGameFrame");
 
-  // cleanup previous game if it exists
+  // cleanup previous game safely
   if (window.dinoGameCleanup) {
     window.dinoGameCleanup();
     window.dinoGameCleanup = null;
   }
 
+  // fully clear frame
   frame.innerHTML = "";
 
+  // remove old game scripts
   document.querySelectorAll(
     ".webGameScript"
   ).forEach(script => script.remove());
 
-  // make sure index never goes out of range
-  if (currentIndex >= webGames.length) {
-    currentIndex = 0;
+  // reset game globals
+  if (window.animationFrame) {
+    cancelAnimationFrame(window.animationFrame);
   }
 
+  // force fresh script load
   const script =
     document.createElement("script");
 
-  script.className = "webGameScript";
+  script.className =
+    "webGameScript";
 
-  // prevent browser cache issues
   script.src =
     webGames[currentIndex] +
     "?v=" +
     Date.now();
 
-  // append AFTER everything is prepared
+  script.onload = () => {
+    console.log(
+      "Game loaded:",
+      webGames[currentIndex]
+    );
+  };
+
+  script.onerror = () => {
+    console.error(
+      "Failed to load game:",
+      webGames[currentIndex]
+    );
+  };
+
   document.body.appendChild(script);
 
+  // update side panels
   document.getElementById(
     "gameTitle"
   ).textContent =
