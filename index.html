@@ -2659,35 +2659,26 @@ function updateGame() {
 
 function updateWebGame() {
 
-  if (window.dinoGameCleanup) {
-    window.dinoGameCleanup();
-    window.dinoGameCleanup = null;
-  }
-
   const frame =
     document.getElementById("webGameFrame");
 
-  frame.innerHTML =
-    '<div id="gameMount"></div>';
+  frame.innerHTML = "";
 
-  const oldScript =
-    document.getElementById("webGameScript");
-
-  if (oldScript) {
-    oldScript.remove();
-  }
+  document.querySelectorAll(
+    ".webGameScript"
+  ).forEach(script => script.remove());
 
   const script =
     document.createElement("script");
 
-  script.id = "webGameScript";
+   script.className = "webGameScript";
 
   script.src =
     webgames[currentIndex] +
     "?v=" +
     Date.now();
 
-  document.body.appendChild(script);
+   script.className = "webGameScript";
 
   document.getElementById(
     "gameTitle"
