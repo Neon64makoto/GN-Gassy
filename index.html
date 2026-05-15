@@ -21,7 +21,6 @@
       --panel-size: 140px;
       --bg-gradient-top: #000000;
       --bg-gradient-bottom: #000000;
-      --custom-bg: none;
     }
 
     * {
@@ -37,9 +36,8 @@
     }
 
     body {
-      background: var(--custom-bg), linear-gradient(to bottom, var(--bg-gradient-top, #000), var(--bg-gradient-bottom, #000)) no-repeat fixed;
+      background: linear-gradient(to bottom, var(--bg-gradient-top, #000), var(--bg-gradient-bottom, #000)) no-repeat fixed;
       background-size: cover;
-      background-position: center;
       color: var(--text);
       font-family: Arial, sans-serif;
       transition: opacity 0.5s ease;
@@ -993,30 +991,6 @@
     .bot-msg { align-self: flex-start; background: #222; color: var(--music-text); }
     .chat-input-row { display: flex; padding: 0.5rem; background: #111; border-top: 1px solid #333; }
     #chatInput { flex: 1; margin: 0; }
-
-    
-    /* Canvas Styling Enhancements */
-    .canvas-tools { display:flex; flex-wrap:wrap; justify-content:center; gap:1rem; margin-top:1rem; padding:1rem; background:#111; border-radius:12px; border:1px solid var(--border); }
-    .canvas-tool-group { display:flex; align-items:center; gap:0.5rem; }
-
-    /* Cipher UI Fix */
-    .cipher-container { display:flex; flex-direction:column; gap:1.5rem; max-width:800px; margin:0 auto; }
-    .cipher-group { background:#111; padding:1.5rem; border-radius:12px; border:1px solid var(--border); }
-    .cipher-controls { display:flex; gap:1rem; align-items:center; margin-bottom:1rem; }
-
-    /* Dictionary Tool */
-    .dict-container { max-width:800px; margin:0 auto; }
-    .dict-results { margin-top:1.5rem; background:#111; padding:1.5rem; border-radius:12px; border:1px solid var(--border); }
-    .dict-entry { margin-bottom:1.5rem; }
-    .dict-pos { font-style:italic; color:var(--main-color); margin-bottom:0.5rem; }
-
-    .settings-card {
-      background: linear-gradient(180deg, rgba(0,0,0,1), var(--panel-color));
-      border:1px solid var(--border);
-      border-radius:14px;
-      padding:1.5rem;
-      margin-bottom:1.5rem;
-    }
 
     /* ─── RESPONSIVE ──────────────────────────────────────────────────── */
     @media (max-width: 1200px) {
@@ -2905,7 +2879,6 @@ applySavedColors();
 load("home");
 setVideoBackground('https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/FlatlineLoop.mp4');
 initMusic();
-const savedCustomBg = localStorage.getItem('gn_neon_custom_bg'); if(savedCustomBg){document.documentElement.style.setProperty('--custom-bg', `url('${savedCustomBg}')`);} 
 </script>
 </body>
 </html>
