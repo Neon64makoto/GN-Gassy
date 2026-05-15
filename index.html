@@ -38,8 +38,8 @@
 
     body {
       background: var(--custom-bg), linear-gradient(to bottom, var(--bg-gradient-top, #000), var(--bg-gradient-bottom, #000)) no-repeat fixed;
-      background-position: center;
       background-size: cover;
+      background-position: center;
       color: var(--text);
       font-family: Arial, sans-serif;
       transition: opacity 0.5s ease;
@@ -994,15 +994,15 @@
     .chat-input-row { display: flex; padding: 0.5rem; background: #111; border-top: 1px solid #333; }
     #chatInput { flex: 1; margin: 0; }
 
-
-    /* Canvas Styling */
+    
+    /* Canvas Styling Enhancements */
     .canvas-tools { display:flex; flex-wrap:wrap; justify-content:center; gap:1rem; margin-top:1rem; padding:1rem; background:#111; border-radius:12px; border:1px solid var(--border); }
     .canvas-tool-group { display:flex; align-items:center; gap:0.5rem; }
 
     /* Cipher UI Fix */
     .cipher-container { display:flex; flex-direction:column; gap:1.5rem; max-width:800px; margin:0 auto; }
     .cipher-group { background:#111; padding:1.5rem; border-radius:12px; border:1px solid var(--border); }
-    .cipher-controls { display:flex; gap:1rem; align-items:center; margin-bottom:1rem; flex-wrap:wrap; }
+    .cipher-controls { display:flex; gap:1rem; align-items:center; margin-bottom:1rem; }
 
     /* Dictionary Tool */
     .dict-container { max-width:800px; margin:0 auto; }
@@ -1011,10 +1011,11 @@
     .dict-pos { font-style:italic; color:var(--main-color); margin-bottom:0.5rem; }
 
     .settings-card {
-      background: rgba(255,255,255,0.05);
-      padding: 1rem;
-      border-radius: 12px;
-      border: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(0,0,0,1), var(--panel-color));
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:1.5rem;
+      margin-bottom:1.5rem;
     }
 
     /* ─── RESPONSIVE ──────────────────────────────────────────────────── */
@@ -1409,8 +1410,6 @@
 let currentIndex = 0;
 let isMuted = false;
 let currentTrack = 0;
-let clockSettings = { showSeconds: true, is24h: false, size: 3, color: '#0000ff' };
-let customBackgroundEnabled = false;
 let isLooping = false;
 let seekDragging = false;
 let isVisualizerMode = false;
@@ -2463,7 +2462,6 @@ const pages = {
         <button class="under-construction"><span>AI Chatbot</span></button>
         <button onclick="showTool('canvas')">Painting Canvas</button>
         <button onclick="showTool('ciphers')">Ciphers</button>
-        <button onclick="showTool('dict')">Dictionary</button>
       </div>
       <div id="toolArea"></div>
     </section>
@@ -2495,144 +2493,9 @@ const pages = {
     <section class="panel about-panel">
       <h2>About</h2>
       <p class="section-copy">This is GN-Neon. The GN stands for Goober Network. I made this site to bypass lightspeed filter. Why? Because I can.<br /><br />I (Neon64) made this site to provide games, tools, and unblocked content for everyone.</p>
-    
-        <div class="settings-card">
-          <h3>Clock Settings</h3>
-          <div style="display:flex; flex-direction:column; gap:0.75rem;">
-            <label><input type="checkbox" id="clockShowSeconds" onchange="updateClockSettings()" checked> Show Seconds</label>
-            <label><input type="checkbox" id="clock24h" onchange="updateClockSettings()"> 24-Hour Format</label>
-            <label>Clock Size:
-              <input type="range" id="clockSize" min="1" max="5" step="0.1" value="3" oninput="updateClockSettings()">
-            </label>
-            <label>Clock Color:
-              <input type="color" id="clockColor" value="#0000ff" oninput="updateClockSettings()">
-            </label>
-          </div>
-        </div>
-
-        <div class="settings-card">
-          <h3>Custom Background</h3>
-          <div style="display:flex; flex-direction:column; gap:0.75rem;">
-            <label><input type="checkbox" id="bgToggle" onchange="toggleCustomBackground()"> Enable Custom Background</label>
-            <input type="text" id="customBgUrl" placeholder="Image URL (https://...)">
-            <input type="file" id="customBgUpload" accept="image/*" onchange="uploadCustomBg(event)">
-            <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
-              <button onclick="applyCustomBg()">Apply Background</button>
-              <button onclick="clearCustomBg()" style="background:#333;">Clear Background</button>
-            </div>
-          </div>
-        </div>
-
-      </div>
     </section>
   `
 };
-
-
-function updateClockSettings() {
-  const showSecondsEl = document.getElementById('clockShowSeconds');
-  const is24hEl = document.getElementById('clock24h');
-  const sizeEl = document.getElementById('clockSize');
-  const colorEl = document.getElementById('clockColor');
-
-  if (showSecondsEl) clockSettings.showSeconds = showSecondsEl.checked;
-  if (is24hEl) clockSettings.is24h = is24hEl.checked;
-  if (sizeEl) clockSettings.size = sizeEl.value;
-  if (colorEl) clockSettings.color = colorEl.value;
-
-  const clockEl = document.getElementById('digitalClock');
-  if (clockEl) {
-    clockEl.style.fontSize = `${clockSettings.size}rem`;
-    clockEl.style.color = clockSettings.color;
-    clockEl.style.borderColor = clockSettings.color;
-    clockEl.style.textShadow = `0 0 15px ${clockSettings.color}`;
-  }
-
-  localStorage.setItem('gn_neon_clock', JSON.stringify(clockSettings));
-  updateClock();
-}
-
-function applyCustomBg() {
-  const input = document.getElementById('customBgUrl');
-  if (!input || !input.value.trim()) return;
-  document.documentElement.style.setProperty('--custom-bg', `url("${input.value.trim()}")`);
-  localStorage.setItem('gn_neon_custom_bg', input.value.trim());
-  customBackgroundEnabled = true;
-  localStorage.setItem('gn_neon_custom_bg_enabled', 'true');
-}
-
-function clearCustomBg() {
-  document.documentElement.style.setProperty('--custom-bg', 'none');
-  localStorage.removeItem('gn_neon_custom_bg');
-  const input = document.getElementById('customBgUrl');
-  if (input) input.value = '';
-}
-
-function toggleCustomBackground() {
-  const toggle = document.getElementById('bgToggle');
-  customBackgroundEnabled = toggle ? toggle.checked : customBackgroundEnabled;
-  localStorage.setItem('gn_neon_custom_bg_enabled', customBackgroundEnabled);
-
-  const savedBg = localStorage.getItem('gn_neon_custom_bg');
-  if (customBackgroundEnabled && savedBg) {
-    document.documentElement.style.setProperty('--custom-bg', `url("${savedBg}")`);
-  } else {
-    document.documentElement.style.setProperty('--custom-bg', 'none');
-  }
-}
-
-function uploadCustomBg(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    const dataUrl = e.target.result;
-    document.documentElement.style.setProperty('--custom-bg', `url("${dataUrl}")`);
-    localStorage.setItem('gn_neon_custom_bg', dataUrl);
-    customBackgroundEnabled = true;
-    const toggle = document.getElementById('bgToggle');
-    if (toggle) toggle.checked = true;
-  };
-  reader.readAsDataURL(file);
-}
-
-async function lookupDictionary() {
-  const input = document.getElementById('dictWord');
-  const results = document.getElementById('dictResults');
-  if (!input || !results) return;
-  const word = input.value.trim();
-  if (!word) return;
-
-  results.innerHTML = '<p>Searching...</p>';
-
-  try {
-    const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`);
-    const data = await response.json();
-
-    if (!Array.isArray(data)) {
-      results.innerHTML = '<p>No definition found.</p>';
-      return;
-    }
-
-    results.innerHTML = data.map(entry => `
-      <div class="dict-entry">
-        <h3>${entry.word}</h3>
-        ${(entry.meanings || []).map(meaning => `
-          <div style="margin-bottom:1rem;">
-            <div class="dict-pos">${meaning.partOfSpeech}</div>
-            <ul>
-              ${(meaning.definitions || []).slice(0,3).map(def => `<li>${def.definition}</li>`).join('')}
-            </ul>
-          </div>
-        `).join('')}
-      </div>
-    `).join('');
-  } catch (err) {
-    results.innerHTML = '<p>Dictionary lookup failed.</p>';
-  }
-}
-
 
 function getColorBrightness(hexColor) {
   const hex = hexColor.replace('#', '');
@@ -2662,37 +2525,6 @@ function load(page) {
     toggleVisualizerMode();
   }
   const main = document.getElementById('mainContent');
-  if (page === 'settings') {
-    setTimeout(() => {
-      const savedClock = JSON.parse(localStorage.getItem('gn_neon_clock') || '{}');
-      clockSettings = { ...clockSettings, ...savedClock };
-
-      const map = {
-        clockShowSeconds: clockSettings.showSeconds,
-        clock24h: clockSettings.is24h,
-        clockSize: clockSettings.size,
-        clockColor: clockSettings.color
-      };
-
-      Object.entries(map).forEach(([id,val]) => {
-        const el = document.getElementById(id);
-        if (el) {
-          if (el.type === 'checkbox') el.checked = val;
-          else el.value = val;
-        }
-      });
-
-      const savedBg = localStorage.getItem('gn_neon_custom_bg');
-      const bgEnabled = localStorage.getItem('gn_neon_custom_bg_enabled') === 'true';
-
-      const bgInput = document.getElementById('customBgUrl');
-      const bgToggle = document.getElementById('bgToggle');
-
-      if (bgInput && savedBg && !savedBg.startsWith('data:')) bgInput.value = savedBg;
-      if (bgToggle) bgToggle.checked = bgEnabled;
-    }, 0);
-  }
-
   if (page !== 'home' && page !== 'games') {
     main.classList.add('wide-shell');
   } else {
@@ -3073,6 +2905,7 @@ applySavedColors();
 load("home");
 setVideoBackground('https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/FlatlineLoop.mp4');
 initMusic();
+const savedCustomBg = localStorage.getItem('gn_neon_custom_bg'); if(savedCustomBg){document.documentElement.style.setProperty('--custom-bg', `url('${savedCustomBg}')`);} 
 </script>
 </body>
 </html>
