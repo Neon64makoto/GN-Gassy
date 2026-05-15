@@ -2698,8 +2698,15 @@ function updateWebGame() {
   
 function nextGame() { currentIndex = (currentIndex + 1) % games.length; updateGame(); }
 function prevGame() { currentIndex = (currentIndex - 1 + games.length) % games.length; updateGame(); }
-function nextWebGame() { currentIndex = (currentIndex + 1) % games.length; updateWebGame(); }
-function prevWebGame() { currentIndex = (currentIndex - 1 + games.length) % games.length; updateWebGame(); }
+function nextWebGame() { 
+  currentIndex = (currentIndex + 1) % webgames.length; 
+  updateWebGame(); 
+}
+
+function prevWebGame() { 
+  currentIndex = (currentIndex - 1 + webgames.length) % webgames.length; 
+  updateWebGame(); 
+}
 
 function showCipher(type) {
   const area = document.getElementById("cipherArea");
