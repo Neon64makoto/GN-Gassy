@@ -1,3 +1,9 @@
+const frame = document.getElementById("webGameFrame");
+
+frame.innerHTML = `
+  <canvas id="gameCanvas"></canvas>
+`;
+
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
