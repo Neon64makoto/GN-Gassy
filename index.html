@@ -2658,38 +2658,49 @@ function updateGame() {
 }
 
 function updateWebGame() {
+
   if (window.dinoGameCleanup) {
-  window.dinoGameCleanup();
-}
-  
-  const frame = document.getElementById("webGameFrame");
+    window.dinoGameCleanup();
+    window.dinoGameCleanup = null;
+  }
+
+  const frame =
+    document.getElementById("webGameFrame");
 
   frame.innerHTML = "";
 
-  const oldScript = document.getElementById("webGameScript");
-  if (oldScript) oldScript.remove();
+  document.querySelectorAll(
+    ".webGameScript"
+  ).forEach(script => script.remove());
 
-  const script = document.createElement("script");
+  const script =
+    document.createElement("script");
 
-  script.id = "webGameScript";
+  script.className = "webGameScript";
 
   script.src =
-    webGames[currentIndex] +
+    webgames[currentIndex] +
     "?v=" +
     Date.now();
 
-  document.body.appendChild(script);
+  frame.appendChild(script);
 
-  document.getElementById("gameTitle").textContent =
+  document.getElementById(
+    "gameTitle"
+  ).textContent =
     webTitles[currentIndex];
 
-  document.getElementById("gameControls").textContent =
+  document.getElementById(
+    "gameControls"
+  ).textContent =
     webControls[currentIndex];
 
-  document.getElementById("gameNotes").textContent =
+  document.getElementById(
+    "gameNotes"
+  ).textContent =
     webNotes[currentIndex];
 }
-
+  
 function nextGame() { currentIndex = (currentIndex + 1) % games.length; updateGame(); }
 function prevGame() { currentIndex = (currentIndex - 1 + games.length) % games.length; updateGame(); }
 function nextWebGame() { currentIndex = (currentIndex + 1) % games.length; updateWebGame(); }
