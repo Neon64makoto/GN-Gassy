@@ -500,6 +500,7 @@
 
     /* ─── STYLIZED VOLUME SLIDER ─────────────────────────────────────── */
     #volumeSlider {
+      -webkit-appearance: none;
       width: 250px;
       height: 6px;
       background: #222;
@@ -1244,90 +1245,6 @@
   <audio id="bgMusic" crossorigin="anonymous"></audio>
 
   <script>
-    const pages = {
-      home: `
-        <div class="home-grid">
-          <div class="panel hero-panel">
-            <h2>Welcome to GN-Neon</h2>
-            <p class="lead">A central hub for tools, games, and creative experiments.</p>
-            <div class="image-row">
-              <div class="image-card" onclick="load('creations')">
-                <img src="https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/FC3.png" alt="Featured Creation">
-                <span>Featured Creations</span>
-              </div>
-              <div class="image-card" onclick="load('games')">
-                <img src="https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SR1.png" alt="Featured Game">
-                <span>Latest Games</span>
-              </div>
-            </div>
-          </div>
-          <div class="panel patch-panel">
-            <h3>Recent Updates</h3>
-            <div class="version-chip">v1.2.4 <span style="opacity:0.5">|</span> May 2024</div>
-            <ul class="patch-list">
-              <li>Added HTML IDE Tool</li>
-              <li>Improved Audio Visualizer</li>
-              <li>New Music Tracks</li>
-              <li>UI/UX Refinements</li>
-            </ul>
-          </div>
-        </div>
-      `,
-      tools: `
-        <div class="panel calc-panel">
-          <h2>Utilities & Tools</h2>
-          <div id="toolsMenu" class="button-row">
-            <button onclick="showTool('calc')">Calculators</button>
-            <button onclick="showTool('ide')">HTML IDE</button>
-            <button onclick="showTool('chat')">AI Chatbot</button>
-            <button onclick="showTool('canvas')">Painting Canvas</button>
-            <button onclick="showTool('ciphers')">Ciphers</button>
-          </div>
-          <div id="toolArea"></div>
-        </div>
-      `,
-      games: `
-        <div class="panel games-panel">
-          <h2>Games</h2>
-          <div class="games-menu">
-            <button onclick="showScratchGames()">Scratch Games</button>
-            <button onclick="showWebGames()">Web Games</button>
-            <button onclick="showTool('guess')">Number Guess</button>
-          </div>
-          <div id="gamesContent"></div>
-        </div>
-      `,
-      creations: `
-        <div class="panel about-panel">
-          <h2>Creations</h2>
-          <h3>Featured Works</h3>
-          <div class="image-row" id="creationsGrid"></div>
-        </div>
-      `,
-      about: `
-        <div class="panel about-panel">
-          <h2>About GN-Neon</h2>
-          <p class="section-copy">GN-Neon is a personal project dedicated to creating a versatile web environment. It combines functional tools with entertainment and creative showcases.</p>
-          <h3>Credits</h3>
-          <p>Developed by Neon64makoto. Special thanks to the open-source community for various libraries and assets.</p>
-        </div>
-      `,
-      settings: `
-        <div class="panel about-panel">
-          <h2>Settings</h2>
-          <div class="button-row">
-            <button onclick="toggleRainbow('main')">Toggle Rainbow Theme</button>
-            <button onclick="toggleVideoBg()">Toggle Video Background</button>
-          </div>
-          <div style="margin-top: 2rem;">
-            <h3>Theme Color</h3>
-            <input type="color" id="mainColorPicker" oninput="updateMainColor(this.value)">
-          </div>
-        </div>
-      `
-    };
-
-    let currentTrack = 0, isLooping = false, isMuted = false, seekDragging = false, isVisualizerMode = false, isPlaylistOpen = false;
     const playlist = [
       'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/SMRPG%20Rawest%20Forrest.mp3',
       'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Neon%20Cobra.mp3',
@@ -1376,185 +1293,136 @@
       { title: 'SMRPG Waltz of The Forest', artist: 'Psyguy' }
     ];
 
-    // ─── CLOCK LOGIC ─────────────────────────────────────────────────────────────
-    let clockSettings = { showSeconds: true, is24h: false, size: 3, color: '#0000ff' };
-    
-    function updateClock() {
-      const now = new Date();
-      let h = now.getHours(), m = now.getMinutes(), s = now.getSeconds();
-      const ampm = h >= 12 ? 'PM' : 'AM';
-      if (!clockSettings.is24h) { h = h % 12 || 12; }
-      
-      let timeStr = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
-      if (clockSettings.showSeconds) { timeStr += `:${s.toString().padStart(2, '0')}`; }
-      
-      document.getElementById('clockTime').innerText = timeStr;
-      document.getElementById('clockAmPm').innerText = clockSettings.is24h ? '' : ampm;
-      document.getElementById('clockAmPm').style.display = clockSettings.is24h ? 'none' : 'block';
-    }
-    setInterval(updateClock, 1000);
+    const songColors = [
+      '#ff0000', '#ff00ff', '#8400ff', '#00ff00', '#0000ff', '#ff0000', '#ff8800', '#8400ff', '#00ccff', '#ff0000', '#ff4800', '#ffe100', '#0000ff', '#0084ff', '#00ccff', '#ffff00', '#ea00ff', '#ff7300', '#ffffff', '#00ff00', '#ff0000'
+    ];
 
-    function updateClockSettings() {
-      const showSec = document.getElementById('clockShowSeconds');
-      const is24 = document.getElementById('clock24h');
-      const size = document.getElementById('clockSize');
-      const color = document.getElementById('clockColor');
-      
-      if (showSec) clockSettings.showSeconds = showSec.checked;
-      if (is24) clockSettings.is24h = is24.checked;
-      if (size) {
-        clockSettings.size = size.value;
-        document.getElementById('digitalClock').style.fontSize = `${size.value}rem`;
-      }
-      if (color) {
-        clockSettings.color = color.value;
-        document.getElementById('digitalClock').style.color = color.value;
-        document.getElementById('digitalClock').style.textShadow = `0 0 15px ${color.value}`;
-        document.getElementById('digitalClock').style.borderColor = color.value;
-      }
-      localStorage.setItem('gn_neon_clock', JSON.stringify(clockSettings));
-      updateClock();
-    }
-
-    // ─── PLAYLIST LOGIC ──────────────────────────────────────────────────────────
-    function togglePlaylist() {
-      isPlaylistOpen = !isPlaylistOpen;
-      const panel = document.getElementById('playlistPanel');
-      panel.classList.toggle('visible', isPlaylistOpen);
-      if (isPlaylistOpen) renderPlaylist();
-    }
-
-    function renderPlaylist() {
-      const grid = document.getElementById('playlistGrid');
-      grid.innerHTML = trackMeta.map((track, i) => `
-        <div class="playlist-item ${currentTrack === i ? 'active' : ''}" onclick="playTrack(${i})">
-          <div class="title">${track.title}</div>
-          <div class="artist">${track.artist}</div>
-        </div>
-      `).join('');
-    }
-
-    function playTrack(i) {
-      currentTrack = i;
-      const a = document.getElementById('bgMusic');
-      a.src = playlist[currentTrack];
-      updateTrackDisplay();
-      a.play();
-      if (isPlaylistOpen) renderPlaylist();
-    }
-
-    // ─── CANVAS ENHANCEMENTS ─────────────────────────────────────────────────────
-    let isDrawing = false, lastX = 0, lastY = 0;
-    function initCanvas() {
-      const canvas = document.getElementById('paintingCanvas');
-      if (!canvas) return;
-      const ctx = canvas.getContext('2d');
-      canvas.addEventListener('mousedown', (e) => { isDrawing = true; [lastX, lastY] = [e.offsetX, e.offsetY]; });
-      canvas.addEventListener('mousemove', draw);
-      canvas.addEventListener('mouseup', () => isDrawing = false);
-      canvas.addEventListener('mouseout', () => isDrawing = false);
-    }
-
-    function draw(e) {
-      if (!isDrawing) return;
-      const canvas = document.getElementById('paintingCanvas');
-      const ctx = canvas.getContext('2d');
-      const color = document.getElementById('brushColor').value;
-      const size = document.getElementById('brushSize').value;
-      const shape = document.getElementById('brushShape').value;
-
-      ctx.strokeStyle = color;
-      ctx.fillStyle = color;
-      ctx.lineWidth = size;
-      ctx.lineCap = shape === 'round' ? 'round' : 'square';
-      ctx.lineJoin = shape === 'round' ? 'round' : 'miter';
-
-      ctx.beginPath();
-      ctx.moveTo(lastX, lastY);
-      ctx.lineTo(e.offsetX, e.offsetY);
-      ctx.stroke();
-      [lastX, lastY] = [e.offsetX, e.offsetY];
-    }
-
-    function setEraser() { document.getElementById('brushColor').value = '#ffffff'; }
-    function clearCanvas() { 
-      const canvas = document.getElementById('paintingCanvas');
-      const ctx = canvas.getContext('2d');
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }
-    function downloadCanvas() {
-      const canvas = document.getElementById('paintingCanvas');
-      const link = document.createElement('a');
-      link.download = 'neon-art.png';
-      link.href = canvas.toDataURL();
-      link.click();
-    }
-
-    // ─── DICTIONARY LOGIC ────────────────────────────────────────────────────────
-    async function searchDict() {
-      const word = document.getElementById('dictInput').value;
-      const results = document.getElementById('dictResults');
-      if (!word) return;
-      
-      results.style.display = 'block';
-      results.innerHTML = 'Searching...';
-      
-      try {
-        const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
-        const data = await response.json();
-        
-        if (data.title === "No Definitions Found") {
-          results.innerHTML = 'No results found.';
-          return;
-        }
-
-        results.innerHTML = data[0].meanings.map(m => `
-          <div class="dict-entry">
-            <div class="dict-pos">${m.partOfSpeech}</div>
-            <ul style="padding-left:1.5rem;">
-              ${m.definitions.slice(0, 3).map(d => `<li>${d.definition}</li>`).join('')}
+    const pages = {
+      home: `
+        <div class="home-grid">
+          <div class="panel hero-panel">
+            <h2>Welcome to GN-Neon</h2>
+            <p class="lead">A central hub for tools, games, and creative experiments.</p>
+            <div class="image-row">
+              <div class="image-card" onclick="load('creations')">
+                <img src="https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/FC3.png" alt="Featured Creation">
+                <span>Featured Creations</span>
+              </div>
+              <div class="image-card" onclick="load('games')">
+                <img src="https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SR1.png" alt="Featured Game">
+                <span>Latest Games</span>
+              </div>
+            </div>
+          </div>
+          <div class="panel patch-panel">
+            <h3>Recent Updates</h3>
+            <div class="version-chip">v1.2.4 <span style="opacity:0.5">|</span> May 2024</div>
+            <ul class="patch-list">
+              <li>Added HTML IDE Tool</li>
+              <li>Improved Audio Visualizer</li>
+              <li>New Music Tracks</li>
+              <li>UI/UX Refinements</li>
             </ul>
           </div>
-        `).join('');
-      } catch (e) {
-        results.innerHTML = 'Error fetching definition.';
-      }
-    }
+        </div>
+      `,
+      tools: `
+        <div class="panel calc-panel">
+          <h2>Utilities & Tools</h2>
+          <div id="toolsMenu" class="button-row">
+            <button onclick="showTool('calc')">Calculators</button>
+            <button onclick="showTool('ide')">HTML IDE</button>
+            <button onclick="showTool('canvas')">Painting Canvas</button>
+            <button onclick="showTool('ciphers')">Ciphers</button>
+            <button onclick="showTool('dict')">Dictionary</button>
+          </div>
+          <div id="toolArea"></div>
+        </div>
+      `,
+      games: `
+        <div class="panel games-panel">
+          <h2>Games</h2>
+          <div class="games-menu">
+            <button onclick="showScratchGames()">Scratch Games</button>
+            <button onclick="showWebGames()">Web Games</button>
+          </div>
+          <div id="gamesContent"></div>
+        </div>
+      `,
+      creations: `
+        <div class="panel about-panel">
+          <h2>Creations</h2>
+          <h3>Featured Works</h3>
+          <div class="image-row creations-grid" id="creationsGrid">
+            ${[
+              {image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/FC3.png', title: 'FC3.png'},
+              {image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/FC6.png', title: 'FC6.png'},
+              {image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/FC9.png', title: 'FC9.png'},
+              {image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/FC11.png', title: 'FC11.png'},
+              {image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SR1.png', title: 'SR1.png'},
+              {image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SR2.png', title: 'SR2.png'},
+              {image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SR3.png', title: 'SR3.png'},
+              {image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SR4.png', title: 'SR4.png'},
+              {image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SR5.png', title: 'SR5.png'},
+              {image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SR6.png', title: 'SR6.png'},
+              {image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SS1.png', title: 'SS1.png'},
+              {image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SS2.png', title: 'SS2.png'},
+              {image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SS3.png', title: 'SS3.png'},
+              {image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SS4.png', title: 'SS4.png'},
+              {image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SS5.png', title: 'SS5.png'},
+              {image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SS6.png', title: 'SS6.png'},
+              {image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SS7.png', title: 'SS7.png'}
+            ].map(item => `
+              <div class="image-card">
+                <img src="${item.image}" alt="${item.title}" loading="lazy">
+                <span>${item.title}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `,
+      about: `
+        <div class="panel about-panel">
+          <h2>About GN-Neon</h2>
+          <p class="section-copy">GN-Neon is a personal project dedicated to creating a versatile web environment. It combines functional tools with entertainment and creative showcases.</p>
+          <h3>Credits</h3>
+          <p>Developed by Neon64makoto. Special thanks to the open-source community for various libraries and assets.</p>
+        </div>
+      `,
+      settings: `
+        <div class="panel about-panel">
+          <h2>Settings</h2>
+          <div style="margin-top: 2rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+            <div>
+              <h3>Clock Settings</h3>
+              <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                <label><input type="checkbox" id="clockShowSeconds" onchange="updateClockSettings()" checked> Show Seconds</label>
+                <label><input type="checkbox" id="clock24h" onchange="updateClockSettings()"> 24-Hour Format</label>
+                <label>Clock Size: <input type="range" id="clockSize" min="1" max="5" step="0.1" value="3" oninput="updateClockSettings()"></label>
+                <label>Clock Color: <input type="color" id="clockColor" value="#0000ff" oninput="updateClockSettings()"></label>
+              </div>
+            </div>
+            <div>
+              <h3>Custom Background</h3>
+              <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                <input type="text" id="customBgUrl" placeholder="Image URL (e.g. https://...)" style="width: 100%;">
+                <button onclick="applyCustomBg()">Apply Background</button>
+                <button onclick="clearCustomBg()" style="background: #333;">Clear Background</button>
+              </div>
+            </div>
+            <div>
+              <h3>Theme Color</h3>
+              <input type="color" id="mainColorPicker" value="#0000ff" oninput="updateMainColor(this.value)">
+              <button onclick="toggleRainbowTheme()">Toggle Rainbow Theme</button>
+            </div>
+          </div>
+        </div>
+      `
+    };
 
-    // ─── CIPHER LOGIC ────────────────────────────────────────────────────────────
-    function runCaesar() {
-      const text = document.getElementById('caesarInput').value;
-      const shift = parseInt(document.getElementById('caesarShift').value);
-      document.getElementById('caesarOutput').innerText = text.replace(/[a-z]/gi, (c) => {
-        const start = c <= 'Z' ? 65 : 97;
-        return String.fromCharCode(((c.charCodeAt(0) - start + shift) % 26 + 26) % 26 + start);
-      });
-    }
-
-    function runAtbash() {
-      const text = document.getElementById('atbashInput').value;
-      const abc = "abcdefghijklmnopqrstuvwxyz";
-      const zyx = "zyxwvutsrqponmlkjihgfedcba";
-      document.getElementById('atbashOutput').innerText = text.replace(/[a-z]/gi, (c) => {
-        const isUpper = c === c.toUpperCase();
-        const idx = abc.indexOf(c.toLowerCase());
-        if (idx === -1) return c;
-        const res = zyx[idx];
-        return isUpper ? res.toUpperCase() : res;
-      });
-    }
-
-    // ─── BACKGROUND LOGIC ────────────────────────────────────────────────────────
-    function applyCustomBg() {
-      const url = document.getElementById('customBgUrl').value;
-      if (!url) return;
-      document.documentElement.style.setProperty('--custom-bg', `url('${url}')`);
-      localStorage.setItem('gn_neon_custom_bg', url);
-    }
-    function clearCustomBg() {
-      document.documentElement.style.setProperty('--custom-bg', 'none');
-      localStorage.removeItem('gn_neon_custom_bg');
-    }
+    let currentTrack = 0, isLooping = false, isMuted = false, seekDragging = false, isVisualizerMode = false, isPlaylistOpen = false;
+    let clockSettings = { showSeconds: true, is24h: false, size: 3, color: '#0000ff' };
+    let rainbowThemeActive = false;
 
     // ─── CORE LOGIC ──────────────────────────────────────────────────────────────
     function load(page) {
@@ -1563,19 +1431,20 @@
       else { main.classList.remove('wide-shell'); }
       document.getElementById("content").innerHTML = pages[page];
       
-      // Initialize components after load
       if (page === 'settings') {
-        const savedClock = localStorage.getItem('gn_neon_clock');
-        if (savedClock) {
-          clockSettings = JSON.parse(savedClock);
-          document.getElementById('clockShowSeconds').checked = clockSettings.showSeconds;
-          document.getElementById('clock24h').checked = clockSettings.is24h;
-          document.getElementById('clockSize').value = clockSettings.size;
-          document.getElementById('clockColor').value = clockSettings.color;
-          updateClockSettings();
-        }
+        const showSec = document.getElementById('clockShowSeconds');
+        const is24 = document.getElementById('clock24h');
+        const size = document.getElementById('clockSize');
+        const color = document.getElementById('clockColor');
+        if (showSec) showSec.checked = clockSettings.showSeconds;
+        if (is24) is24.checked = clockSettings.is24h;
+        if (size) size.value = clockSettings.size;
+        if (color) color.value = clockSettings.color;
         const savedBg = localStorage.getItem('gn_neon_custom_bg');
-        if (savedBg) document.getElementById('customBgUrl').value = savedBg;
+        if (savedBg) {
+            const bgInput = document.getElementById('customBgUrl');
+            if (bgInput) bgInput.value = savedBg;
+        }
       }
       
       const navButtons = document.querySelectorAll('.left-panel .nav button');
@@ -1595,29 +1464,80 @@
       if (side === 'top') document.getElementById('topbar').classList.add('visible');
     }
 
-    // Close UI on click outside
     window.onclick = (e) => {
       if (!e.target.closest('.left-panel') && !e.target.closest('.trigger-zone-left')) 
         document.getElementById('leftPanel').classList.remove('visible');
-      if (!e.target.closest('.topbar') && !e.target.closest('.trigger-zone-top') && !e.target.closest('#playlistPanel')) 
+      if (!e.target.closest('.topbar') && !e.target.closest('.trigger-zone-top') && !e.target.closest('#playlistPanel') && !e.target.closest('#playlistToggle')) 
         document.getElementById('topbar').classList.remove('visible');
     };
 
-    // Initialize
-    window.onload = () => {
-      load('home');
-      updateClock();
-      const savedBg = localStorage.getItem('gn_neon_custom_bg');
-      if (savedBg) document.documentElement.style.setProperty('--custom-bg', `url('${savedBg}')`);
-    };
+    // ─── CLOCK LOGIC ─────────────────────────────────────────────────────────────
+    function updateClock() {
+      const now = new Date();
+      let h = now.getHours(), m = now.getMinutes(), s = now.getSeconds();
+      const ampm = h >= 12 ? 'PM' : 'AM';
+      if (!clockSettings.is24h) { h = h % 12 || 12; }
+      let timeStr = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
+      if (clockSettings.showSeconds) { timeStr += `:${s.toString().padStart(2, '0')}`; }
+      const timeEl = document.getElementById('clockTime');
+      const ampmEl = document.getElementById('clockAmPm');
+      if (timeEl) timeEl.innerText = timeStr;
+      if (ampmEl) {
+        ampmEl.innerText = clockSettings.is24h ? '' : ampm;
+        ampmEl.style.display = clockSettings.is24h ? 'none' : 'block';
+      }
+    }
+    setInterval(updateClock, 1000);
 
-    // Reuse existing music functions with small tweaks
+    function updateClockSettings() {
+      clockSettings.showSeconds = document.getElementById('clockShowSeconds').checked;
+      clockSettings.is24h = document.getElementById('clock24h').checked;
+      clockSettings.size = document.getElementById('clockSize').value;
+      clockSettings.color = document.getElementById('clockColor').value;
+      const clockEl = document.getElementById('digitalClock');
+      clockEl.style.fontSize = `${clockSettings.size}rem`;
+      clockEl.style.color = clockSettings.color;
+      clockEl.style.textShadow = `0 0 15px ${clockSettings.color}`;
+      clockEl.style.borderColor = clockSettings.color;
+      localStorage.setItem('gn_neon_clock', JSON.stringify(clockSettings));
+      updateClock();
+    }
+
+    // ─── PLAYLIST LOGIC ──────────────────────────────────────────────────────────
+    function togglePlaylist() {
+      isPlaylistOpen = !isPlaylistOpen;
+      const panel = document.getElementById('playlistPanel');
+      panel.classList.toggle('visible', isPlaylistOpen);
+      if (isPlaylistOpen) {
+        const grid = document.getElementById('playlistGrid');
+        grid.innerHTML = trackMeta.map((track, i) => `
+          <div class="playlist-item ${currentTrack === i ? 'active' : ''}" onclick="playTrack(${i})">
+            <div class="title">${track.title}</div>
+            <div class="artist">${track.artist}</div>
+          </div>
+        `).join('');
+      }
+    }
+
+    function playTrack(i) {
+      currentTrack = i;
+      const a = document.getElementById('bgMusic');
+      a.src = playlist[currentTrack];
+      updateTrackDisplay();
+      a.play();
+      if (isPlaylistOpen) togglePlaylist();
+    }
+
     function updateTrackDisplay() {
       const meta = trackMeta[currentTrack];
       document.getElementById('mcTitle').innerText = meta.title;
       document.getElementById('mcArtist').innerText = meta.artist;
       document.getElementById('mcPlayPause').innerText = '▮▮';
+      const color = songColors[currentTrack];
+      document.documentElement.style.setProperty('--main-color', color);
+      document.documentElement.style.setProperty('--panel-color', color + '40');
     }
+
     function musicPlayPause() {
       const a = document.getElementById('bgMusic');
       if (a.paused) { a.play(); document.getElementById('mcPlayPause').innerText = '▮▮'; }
@@ -1627,28 +1547,149 @@
     function musicPrev() { currentTrack = (currentTrack - 1 + playlist.length) % playlist.length; playTrack(currentTrack); }
     function musicToggleLoop() { isLooping = !isLooping; document.getElementById('mcLoop').classList.toggle('active-loop', isLooping); }
     function setVolume(v) { document.getElementById('bgMusic').volume = v/100; document.getElementById('volumeInput').value = v; }
+    function setVolumeFromInput(v) { setVolume(v); }
     function toggleMute() { const a = document.getElementById('bgMusic'); a.muted = !a.muted; document.getElementById('muteBtn').innerText = a.muted ? 'Unmute' : 'Mute'; }
     function musicSeek(v) { const a = document.getElementById('bgMusic'); a.currentTime = (v/100) * a.duration; }
-    document.getElementById('bgMusic').ontimeupdate = () => {
-      const a = document.getElementById('bgMusic');
-      const seek = document.getElementById('seekBar');
-      seek.value = (a.currentTime / a.duration) * 100;
-      document.getElementById('mcCurrent').innerText = fmtTime(a.currentTime);
-      document.getElementById('mcDuration').innerText = fmtTime(a.duration);
-    };
-    function fmtTime(s) { const m = Math.floor(s/60), sec = Math.floor(s%60); return `${m}:${sec.toString().padStart(2,'0')}`; }
-    
-    // Auto-enter
-    document.getElementById('splashOverlay').onclick = () => {
-      document.getElementById('splashOverlay').classList.add('fade-out');
-      document.getElementById('bgMusic').src = playlist[currentTrack];
-      updateTrackDisplay();
-    };
 
-  </script>
-</body>
-</html>
+    // ─── CANVAS ENHANCEMENTS ─────────────────────────────────────────────────────
+    let isDrawing = false, lastX = 0, lastY = 0;
+    function initCanvas() {
+      const canvas = document.getElementById('paintingCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      canvas.addEventListener('mousedown', (e) => { isDrawing = true; [lastX, lastY] = [e.offsetX, e.offsetY]; });
+      canvas.addEventListener('mousemove', (e) => {
+        if (!isDrawing) return;
+        ctx.strokeStyle = document.getElementById('brushColor').value;
+        ctx.lineWidth = document.getElementById('brushSize').value;
+        ctx.lineCap = document.getElementById('brushShape').value;
+        ctx.beginPath(); ctx.moveTo(lastX, lastY); ctx.lineTo(e.offsetX, e.offsetY); ctx.stroke();
+        [lastX, lastY] = [e.offsetX, e.offsetY];
+      });
+      canvas.addEventListener('mouseup', () => isDrawing = false);
+    }
+    function setEraser() { document.getElementById('brushColor').value = '#ffffff'; }
+    function clearCanvas() { const c = document.getElementById('paintingCanvas'); c.getContext('2d').clearRect(0, 0, c.width, c.height); }
+    function downloadCanvas() { const link = document.createElement('a'); link.download = 'neon-art.png'; link.href = document.getElementById('paintingCanvas').toDataURL(); link.click(); }
 
+    // ─── DICTIONARY LOGIC ────────────────────────────────────────────────────────
+    async function searchDict() {
+      const word = document.getElementById('dictInput').value;
+      const res = document.getElementById('dictResults');
+      if (!word) return;
+      res.style.display = 'block'; res.innerHTML = 'Searching...';
+      try {
+        const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
+        const data = await response.json();
+        if (data.title === "No Definitions Found") { res.innerHTML = 'No results found.'; return; }
+        res.innerHTML = data[0].meanings.map(m => `
+          <div class="dict-entry">
+            <div class="dict-pos">${m.partOfSpeech}</div>
+            <ul style="padding-left:1.5rem;">${m.definitions.slice(0, 3).map(d => `<li>${d.definition}</li>`).join('')}</ul>
+          </div>
+        `).join('');
+      } catch (e) { res.innerHTML = 'Error fetching definition.'; }
+    }
+
+    // ─── CIPHER LOGIC ────────────────────────────────────────────────────────────
+    function runCaesar() {
+      const text = document.getElementById('caesarInput').value, shift = parseInt(document.getElementById('caesarShift').value);
+      document.getElementById('caesarOutput').innerText = text.replace(/[a-z]/gi, (c) => {
+        const start = c <= 'Z' ? 65 : 97; return String.fromCharCode(((c.charCodeAt(0) - start + shift) % 26 + 26) % 26 + start);
+      });
+    }
+    function runAtbash() {
+      const text = document.getElementById('atbashInput').value, abc = "abcdefghijklmnopqrstuvwxyz", zyx = "zyxwvutsrqponmlkjihgfedcba";
+      document.getElementById('atbashOutput').innerText = text.replace(/[a-z]/gi, (c) => {
+        const isUpper = c === c.toUpperCase(), idx = abc.indexOf(c.toLowerCase());
+        if (idx === -1) return c; const res = zyx[idx]; return isUpper ? res.toUpperCase() : res;
+      });
+    }
+
+    // ─── BACKGROUND LOGIC ────────────────────────────────────────────────────────
+    function applyCustomBg() {
+      const url = document.getElementById('customBgUrl').value;
+      if (!url) return;
+      document.documentElement.style.setProperty('--custom-bg', `url('${url}')`);
+      localStorage.setItem('gn_neon_custom_bg', url);
+    }
+    function clearCustomBg() { document.documentElement.style.setProperty('--custom-bg', 'none'); localStorage.removeItem('gn_neon_custom_bg'); }
+    function toggleVideoBg() { const v = document.getElementById('videoBg'); v.style.display = v.style.display === 'none' ? 'block' : 'none'; }
+    function updateMainColor(val) { document.documentElement.style.setProperty('--main-color', val); document.documentElement.style.setProperty('--panel-color', val + '40'); }
+    function toggleRainbowTheme() { rainbowThemeActive = !rainbowThemeActive; if (rainbowThemeActive) requestAnimationFrame(rainbowLoop); }
+    function rainbowLoop() {
+      if (!rainbowThemeActive) return;
+      const hue = (Date.now() / 20) % 360;
+      const color = `hsl(${hue}, 100%, 50%)`;
+      updateMainColor(color);
+      requestAnimationFrame(rainbowLoop);
+    }
+
+    // ─── UTILS ───────────────────────────────────────────────────────────────────
+    function showTool(type) {
+      const area = document.getElementById("toolArea"), menu = document.getElementById("toolsMenu");
+      menu.style.display = 'none';
+      if (type === 'calc') {
+        area.innerHTML = `<button class="back-button" onclick="load('tools')">← Back</button><h3>Calculators</h3><div class="games-menu"><button onclick="showCalc('simple')">Simple</button><button onclick="showCalc('volume')">Volume</button><button onclick="showCalc('graph')">Graph</button></div><div id="calcArea"></div>`;
+      } else if (type === 'ide') {
+        area.innerHTML = `<button class="back-button" onclick="load('tools')">← Back</button><h3>HTML IDE</h3><div id="ideContainer"><textarea id="ideInput" oninput="runIDE()"></textarea><iframe id="ideOutput"></iframe></div>`;
+      } else if (type === 'canvas') {
+        area.innerHTML = `<button class="back-button" onclick="load('tools')">← Back</button><h3>Canvas</h3><canvas id="paintingCanvas" width="800" height="500"></canvas><div class="canvas-tools"><input type="color" id="brushColor" value="#0000ff"><input type="range" id="brushSize" min="1" max="50" value="5"><select id="brushShape"><option value="round">Round</option><option value="square">Square</option></select><button onclick="setEraser()">Eraser</button><button onclick="clearCanvas()">Clear</button><button onclick="downloadCanvas()">Save</button></div>`;
+        initCanvas();
+      } else if (type === 'ciphers') {
+        area.innerHTML = `<button class="back-button" onclick="load('tools')">← Back</button><div class="cipher-container"><h3>Ciphers</h3><div class="cipher-group"><h4>Caesar</h4><input id="caesarInput"><input id="caesarShift" type="number" value="3"><button onclick="runCaesar()">Go</button><p id="caesarOutput"></p></div><div class="cipher-group"><h4>Atbash</h4><input id="atbashInput"><button onclick="runAtbash()">Go</button><p id="atbashOutput"></p></div></div>`;
+      } else if (type === 'dict') {
+        area.innerHTML = `<button class="back-button" onclick="load('tools')">← Back</button><div class="dict-container"><h3>Dictionary</h3><input id="dictInput"><button onclick="searchDict()">Search</button><div id="dictResults" class="dict-results"></div></div>`;
+      }
+    }
+
+    function showCalc(type) {
+      const c = document.getElementById("calcArea");
+      if (type === "simple") { c.innerHTML = `<input id="simpleInput"><button onclick="calcSimple()">=</button><p id="simpleOut"></p>`; }
+      else if (type === "volume") { c.innerHTML = `Cube: <input id="cubeSide"><button onclick="volCube()">Go</button><p id="cubeOut"></p>`; }
+      else if (type === "graph") {
+        c.innerHTML = `<div class="graph-layout"><div class="graph-inputs">y=<input id="eq1" value="x*x"><button onclick="drawGraph()">Graph</button></div><div class="graph-display"><canvas id="grid" width="400" height="400"></canvas></div></div>`;
+        drawGraph();
+      }
+    }
+
+    function calcSimple() { try { document.getElementById("simpleOut").innerText = eval(document.getElementById("simpleInput").value); } catch { } }
+    function volCube() { const v = parseFloat(document.getElementById('cubeSide').value); document.getElementById('cubeOut').innerText = v ** 3; }
+    function drawGraph() {
+      const canvas = document.getElementById("grid"); if (!canvas) return; const ctx = canvas.getContext("2d"); ctx.fillStyle = "black"; ctx.fillRect(0, 0, 400, 400);
+      ctx.strokeStyle = "white"; ctx.beginPath(); ctx.moveTo(200, 0); ctx.lineTo(200, 400); ctx.moveTo(0, 200); ctx.lineTo(400, 200); ctx.stroke();
+      const expr = document.getElementById('eq1').value; ctx.strokeStyle = "cyan"; ctx.beginPath();
+      for (let px = 0; px <= 400; px++) {
+        const x = (px - 200) / 20; let y; try { y = eval(expr.replace(/x/g, "(" + x + ")")); } catch { continue; }
+        const py = 200 - (y * 20); if (px === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+    }
+    function runIDE() { const output = document.getElementById('ideOutput').contentDocument; output.open(); output.write(document.getElementById('ideInput').value); output.close(); }
+
+    function showScratchGames() { document.getElementById('gamesContent').innerHTML = `<p>Scratch games list...</p>`; }
+    function showWebGames() { document.getElementById('gamesContent').innerHTML = `<p>Web games list...</p>`; }
+    function enablePerformanceMode(e) { e.stopPropagation(); document.getElementById('splashOverlay').classList.add('fade-out'); document.getElementById('videoBg').style.display = 'none'; }
+
+    // Init
+    window.onload = () => {
+      load('home');
+      const savedClock = localStorage.getItem('gn_neon_clock'); if (savedClock) { clockSettings = JSON.parse(savedClock); updateClockSettings(); }
+      const savedBg = localStorage.getItem('gn_neon_custom_bg'); if (savedBg) document.documentElement.style.setProperty('--custom-bg', `url('${savedBg}')`);
+      document.getElementById('splashOverlay').onclick = () => {
+        document.getElementById('splashOverlay').classList.add('fade-out');
+        const a = document.getElementById('bgMusic'); a.src = playlist[currentTrack]; updateTrackDisplay(); a.play();
+      };
+      const bgMusic = document.getElementById('bgMusic');
+      bgMusic.ontimeupdate = () => {
+        const seek = document.getElementById('seekBar');
+        if (seek) seek.value = (bgMusic.currentTime / bgMusic.duration) * 100;
+        document.getElementById('mcCurrent').innerText = fmtTime(bgMusic.currentTime);
+        document.getElementById('mcDuration').innerText = fmtTime(bgMusic.duration);
+      };
+      bgMusic.onended = () => { if (isLooping) { bgMusic.currentTime = 0; bgMusic.play(); } else { musicNext(); } };
+    };
+    function fmtTime(s) { if (isNaN(s)) return "0:00"; const m = Math.floor(s/60), sec = Math.floor(s%60); return `${m}:${sec.toString().padStart(2,'0')}`; }
   </script>
 </body>
 </html>
