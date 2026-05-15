@@ -2632,7 +2632,7 @@ function showScratchGames() {
 function showWebGames() {
   const content = document.getElementById('gamesContent'), gamesMenu = document.querySelector('.games-menu'); if (gamesMenu) gamesMenu.style.display = 'none';
   content.innerHTML = `<button class="back-button" onclick="load('games')">← Back to Games Menu</button><div class="games-layout"><div class="sideBox"><h3>Controls</h3><div id="gameControls"></div></div><div class="centerBox"><div id="webGameFrame"></div><h3 id="gameTitle"></h3><div class="button-row" style="justify-content:center; margin-top:1rem;"><button onclick="prevGame()">◀</button><button onclick="nextGame()">▶</button></div></div><div class="sideBox"><h3>Notes / Credits</h3><div id="gameNotes"></div></div></div>`;
-  currentIndex = 0; updateWebGame();
+  updateWebGame();
 }
 
 function showEmulators() {
