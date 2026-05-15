@@ -2662,22 +2662,35 @@ function updateWebGame() {
   const frame =
     document.getElementById("webGameFrame");
 
+  // cleanup previous game if it exists
+  if (window.dinoGameCleanup) {
+    window.dinoGameCleanup();
+    window.dinoGameCleanup = null;
+  }
+
   frame.innerHTML = "";
 
   document.querySelectorAll(
     ".webGameScript"
   ).forEach(script => script.remove());
 
+  // make sure index never goes out of range
+  if (currentIndex >= webgames.length) {
+    currentIndex = 0;
+  }
+
   const script =
     document.createElement("script");
 
   script.className = "webGameScript";
 
+  // prevent browser cache issues
   script.src =
     webgames[currentIndex] +
     "?v=" +
     Date.now();
 
+  // append AFTER everything is prepared
   document.body.appendChild(script);
 
   document.getElementById(
@@ -2698,14 +2711,22 @@ function updateWebGame() {
   
 function nextGame() { currentIndex = (currentIndex + 1) % games.length; updateGame(); }
 function prevGame() { currentIndex = (currentIndex - 1 + games.length) % games.length; updateGame(); }
-function nextWebGame() { 
-  currentIndex = (currentIndex + 1) % webgames.length; 
-  updateWebGame(); 
+function nextWebGame() {
+
+  currentIndex =
+    (currentIndex + 1) %
+    webgames.length;
+
+  updateWebGame();
 }
 
-function prevWebGame() { 
-  currentIndex = (currentIndex - 1 + webgames.length) % webgames.length; 
-  updateWebGame(); 
+function prevWebGame() {
+
+  currentIndex =
+    (currentIndex - 1 + webgames.length) %
+    webgames.length;
+
+  updateWebGame();
 }
 
 function showCipher(type) {
