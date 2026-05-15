@@ -38,8 +38,8 @@
 
     body {
       background: var(--custom-bg), linear-gradient(to bottom, var(--bg-gradient-top, #000), var(--bg-gradient-bottom, #000)) no-repeat fixed;
-      background-size: cover;
       background-position: center;
+      background-size: cover;
       color: var(--text);
       font-family: Arial, sans-serif;
       transition: opacity 0.5s ease;
@@ -446,7 +446,7 @@
       gap: 0.2rem;
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.5), inset 0 0 10px var(--panel-color);
       transform: translateY(0);
-      transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+      transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.35s;
       pointer-events: none;
       user-select: none;
     }
@@ -985,11 +985,7 @@
     #ideContainer { display: flex; flex-direction: row; gap: 1rem; height: 400px; }
     #ideInput { flex: 1; height: 100%; background: #111; color: #0f0; font-family: monospace; margin: 0; }
     #ideOutput { flex: 1; height: 100%; background: white; border-radius: 8px; border: none; }
-    
-    #paintingCanvas { background: white; border-radius: 8px; display: block; margin: 0 auto; cursor: crosshair; }
-    .canvas-tools { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-top: 1rem; padding: 1rem; background: #111; border-radius: 12px; border: 1px solid var(--border); }
-    .canvas-tool-group { display: flex; align-items: center; gap: 0.5rem; }
-
+    #paintingCanvas { background: white; border-radius: 8px; display: block; margin: 0 auto; }
     #chatContainer { height: 400px; background: #0a0a0a; border: 1px solid #333; border-radius: 8px; display: flex; flex-direction: column; overflow: hidden; }
     #chatLog { flex: 1; overflow-y: auto; padding: 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
     .chat-msg { padding: 0.5rem 0.8rem; border-radius: 8px; max-width: 80%; }
@@ -998,55 +994,28 @@
     .chat-input-row { display: flex; padding: 0.5rem; background: #111; border-top: 1px solid #333; }
     #chatInput { flex: 1; margin: 0; }
 
-    /* Playlist Panel */
-    #playlistPanel {
-      position: fixed;
-      top: var(--panel-size);
-      left: var(--panel-size);
-      right: 0;
-      bottom: 0;
-      background: rgba(10, 10, 10, 0.95);
-      backdrop-filter: blur(20px);
-      z-index: 605;
-      transform: translateY(-100%);
-      transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
-      padding: 2rem;
-      overflow-y: auto;
-      border-top: 1px solid var(--main-color);
-    }
-    #playlistPanel.visible { transform: translateY(0); }
-    .playlist-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; }
-    .playlist-item {
-      background: #151515;
-      border: 1px solid #333;
-      padding: 1rem;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.2s;
-      display: flex;
-      flex-direction: column;
-      gap: 0.25rem;
-    }
-    .playlist-item:hover { border-color: var(--main-color); background: #1a1a1a; }
-    .playlist-item.active { border-color: var(--main-color); background: var(--panel-color); }
-    .playlist-item .title { font-weight: bold; }
-    .playlist-item .artist { font-size: 0.85rem; color: var(--muted); }
 
-    /* Graph Layout Update */
-    .graph-layout { display: flex; gap: 2rem; align-items: flex-start; }
-    .graph-inputs { flex: 0 0 300px; }
-    .graph-display { flex: 1; display: flex; flex-direction: column; align-items: center; }
+    /* Canvas Styling */
+    .canvas-tools { display:flex; flex-wrap:wrap; justify-content:center; gap:1rem; margin-top:1rem; padding:1rem; background:#111; border-radius:12px; border:1px solid var(--border); }
+    .canvas-tool-group { display:flex; align-items:center; gap:0.5rem; }
 
     /* Cipher UI Fix */
-    .cipher-container { display: flex; flex-direction: column; gap: 1.5rem; max-width: 800px; margin: 0 auto; }
-    .cipher-group { background: #111; padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border); }
-    .cipher-controls { display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem; }
+    .cipher-container { display:flex; flex-direction:column; gap:1.5rem; max-width:800px; margin:0 auto; }
+    .cipher-group { background:#111; padding:1.5rem; border-radius:12px; border:1px solid var(--border); }
+    .cipher-controls { display:flex; gap:1rem; align-items:center; margin-bottom:1rem; flex-wrap:wrap; }
 
     /* Dictionary Tool */
-    .dict-container { max-width: 800px; margin: 0 auto; }
-    .dict-results { margin-top: 1.5rem; background: #111; padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border); }
-    .dict-entry { margin-bottom: 1.5rem; }
-    .dict-pos { font-style: italic; color: var(--main-color); margin-bottom: 0.5rem; }
+    .dict-container { max-width:800px; margin:0 auto; }
+    .dict-results { margin-top:1.5rem; background:#111; padding:1.5rem; border-radius:12px; border:1px solid var(--border); }
+    .dict-entry { margin-bottom:1.5rem; }
+    .dict-pos { font-style:italic; color:var(--main-color); margin-bottom:0.5rem; }
+
+    .settings-card {
+      background: rgba(255,255,255,0.05);
+      padding: 1rem;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
 
     /* ─── RESPONSIVE ──────────────────────────────────────────────────── */
     @media (max-width: 1200px) {
@@ -1162,534 +1131,1948 @@
       input {
         margin: 0.4rem;
         font-size: 1rem;
-        padding: 0.6rem 0.8rem;
+        padding: 0.6rem 0.6rem;
       }
+
+      #digitalClock {
+        font-size: 2rem;
+        top: 1rem;
+        right: 1rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      html,
+      body {
+        font-size: 12px;
+      }
+
+      .page-shell {
+        padding: 2rem 0.75rem 5rem;
+      }
+
+      .site-title {
+        font-size: 1.5rem;
+        margin: 0.4rem 0 0.8rem;
+      }
+
+      .hero-panel,
+      .patch-panel,
+      .calc-panel,
+      .games-panel,
+      .about-panel {
+        padding: 1rem;
+      }
+
+      .hero-panel h2,
+      .patch-panel h3,
+      .calc-panel h2,
+      .games-panel h2,
+      .about-panel h2 {
+        font-size: 1.3rem;
+      }
+
+      .button-row {
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+      }
+
+      button {
+        margin: 0.3rem;
+        font-size: 0.9rem;
+        padding: 0.5rem 0.6rem;
+      }
+
+      input {
+        margin: 0.3rem;
+        font-size: 0.9rem;
+        padding: 0.5rem 0.5rem;
+      }
+
+      .sideBox {
+        padding: 0.75rem;
+        font-size: 0.85rem;
+      }
+
+      #scratchFrame {
+        height: 40vh;
+      }
+
+      #webGameFrame {
+        height: 40vh;
+      }
+
+      .games-layout {
+        gap: 0.5rem;
+      }
+    }
+
+    /* Lightbox Styles */
+    #lightboxOverlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(10px);
+      z-index: 3000;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      padding: 20px;
+      cursor: pointer;
+    }
+    #lightboxOverlay.visible {
+      display: flex;
+    }
+    #lightboxImg {
+      max-width: 95%;
+      max-height: 80vh;
+      object-fit: contain;
+      border: 2px solid var(--main-color);
+      border-radius: 8px;
+      box-shadow: 0 0 30px var(--main-color);
+    }
+    .lightbox-details {
+      width: 95%;
+      max-width: 1200px;
+      margin-top: 20px;
+      padding: 20px;
+      background: rgba(17, 17, 17, 0.9);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      text-align: center;
+      cursor: default;
+    }
+    .creations-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    }
+    @media (max-width: 768px) {
+      .creations-grid {
+        grid-template-columns: 1fr !important;
+      }
+    }
+  /* Code Viewer Styles */
+    #codeViewerOverlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(15px);
+      z-index: 3000;
+      display: none;
+      flex-direction: column;
+      padding: 2rem;
+    }
+    #codeViewerOverlay.visible {
+      display: flex;
+    }
+    .code-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid var(--main-color);
+      padding-bottom: 0.5rem;
+    }
+    .code-content {
+      flex: 1;
+      background: #0a0a0a;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      overflow: auto;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 1rem;
+      line-height: 1.5;
+      color: #0f0;
+      white-space: pre-wrap;
+    }
+    .close-code-btn {
+      background: #440000;
+      border: 1px solid #ff0000;
+      padding: 0.5rem 1rem;
+      font-size: 0.9rem;
+    }
+    
+    .section-header {
+      border-left: 4px solid var(--main-color);
+      padding-left: 1rem;
+      margin: 2rem 0 1rem;
+      color: var(--main-color);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-weight: bold;
     }
   </style>
 </head>
 <body class="video-bg">
-  <video id="videoBg" autoplay loop muted playsinline></video>
-  <div class="content-overlay">
-    <div id="splashOverlay">
-      <div id="splashText">GN-NEON</div>
-      <div id="splashSubtext">Click anywhere to enter</div>
-      <button id="performanceModeBtn" onclick="enablePerformanceMode(event)">Performance Mode</button>
-    </div>
+  <audio id="bgMusic" style="display:none;" crossorigin="anonymous" preload="none"></audio>
 
-    <div class="logo-connector" id="logoConnector">
-      <span>GN-NEON</span>
-    </div>
-
-    <div class="left-panel" id="leftPanel">
-      <div class="nav">
-        <button onclick="load('home')">Home</button>
-        <button onclick="load('tools')">Tools</button>
-        <button onclick="load('games')">Games</button>
-        <button onclick="load('creations')">Creations</button>
-        <button onclick="load('about')">About</button>
-        <button onclick="load('settings')">Settings</button>
-      </div>
-    </div>
-
-    <div class="topbar" id="topbar">
-      <div class="topbar-right">
-        <button id="playlistToggle" onclick="togglePlaylist()">Playlist</button>
-        <button id="muteBtn" onclick="toggleMute()">Mute</button>
-        <input type="range" id="volumeSlider" min="0" max="100" value="50" oninput="setVolume(this.value)">
-        <input type="number" id="volumeInput" min="0" max="100" value="50" onchange="setVolumeFromInput(this.value)">
-      </div>
-      <div class="music-controls">
-        <div class="music-info">
-          <div class="music-title" id="mcTitle">Track Title</div>
-          <div class="music-artist" id="mcArtist">Artist Name</div>
-        </div>
-        <div class="music-btn-row">
-          <button class="music-btn" onclick="musicPrev()">⏮</button>
-          <button class="music-btn" id="mcPlayPause" onclick="musicPlayPause()">▶</button>
-          <button class="music-btn" onclick="musicNext()">⏭</button>
-          <button class="music-btn" id="mcLoop" onclick="musicToggleLoop()">🔁</button>
-        </div>
-        <div class="music-seek-row">
-          <span class="music-time" id="mcCurrent">0:00</span>
-          <input type="range" id="seekBar" min="0" max="100" value="0" oninput="musicSeek(this.value)">
-          <span class="music-time" id="mcDuration">0:00</span>
-        </div>
-      </div>
-    </div>
-
-    <div id="playlistPanel">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-        <h2>Select Songs</h2>
-        <button onclick="togglePlaylist()">Close</button>
-      </div>
-      <div class="playlist-grid" id="playlistGrid"></div>
-    </div>
-
-    <div id="digitalClock">
-      <span class="clock-time" id="clockTime">00:00:00</span>
-      <span class="clock-ampm" id="clockAmPm">AM</span>
-    </div>
-
-    <div class="trigger-zone-left" onmouseenter="revealUI('left')"></div>
-    <div class="trigger-zone-top" onmouseenter="revealUI('top')"></div>
-
-    <div class="page-shell" id="mainContent">
-      <h1 class="site-title">GN-NEON</h1>
-      <div id="content"></div>
-    </div>
-
-    <div class="version-tag" id="vTag">v1.2.4</div>
-    <canvas id="visualizerCanvas"></canvas>
+  <!-- Click to Enter Splash -->
+  <div id="splashOverlay" onclick="enterSite()">
+    <div id="splashText">LOADING...</div>
+    <div id="splashSubtext">Please wait for the assets to load</div>
+    <button id="performanceModeBtn" onclick="enablePerformanceMode(event)">⚡ Performance Mode</button>
   </div>
 
-  <audio id="bgMusic" crossorigin="anonymous"></audio>
+  <!-- Hover trigger zones -->
+  <div class="trigger-zone-left"></div>
+  <div class="trigger-zone-top"></div>
 
-  <script>
-    const playlist = [
-      'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/SMRPG%20Rawest%20Forrest.mp3',
-      'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Neon%20Cobra.mp3',
-      'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Disco%20Pervert.mp3',
-      'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/They%20Live!.mp3',
-      'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/One%20Night%20In%20Tokyo.mp3',
-      'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/A%20Kind%20Of%20Deutsch.mp3',
-      'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Military%20Fashion%20Show.mp3',
-      'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Hotline%20-%20Original%20Mix.mp3',
-      'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Strange%20Timez%20(feat.%20Robert%20Smith).mp3',
-      'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Not%20Like%20Us.mp3',
-      'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Notion.mp3',
-      'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Write%20This%20Down.mp3',
-      'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Temporary%20Love%20(feat.%20CG5).mp3',
-      'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Falling%20Down.mp3',
-      'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Why%20Cant%20This%20Be%20Easy.mp3',
-      'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/But%20Can%20You%20Do%20This.mp3',
-      'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Philly%20Nice%20(B-Side).mp3',
-      'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Pain_is_just_freddy_fazbear.mp3',
-      'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/dq%20blizzard.mp3',
-      'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/MC%20Chris%20Is%20Dead.mp3',
-      'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Super%20Mario%20RPG%20Waltz%20of%20the%20Forest%20(4K).mp3'
-    ];
+  <!-- Logo connector piece (diagonal) -->
+  <div class="logo-connector" id="logoConnector">
+    <span style="font-size: 32px;">GN<br>NEON</span>
+  </div>
 
-    const trackMeta = [
-      { title: 'SMRPG Rawest Forrest', artist: 'Martin Hagwell' },
-      { title: 'Neon Cobra', artist: 'Shockwave-Sound' },
-      { title: 'Disco Pervert', artist: 'Nightstop' },
-      { title: 'They Live!', artist: 'Evil Nine' },
-      { title: 'One Night In Tokyo', artist: 'Beast in Black' },
-      { title: 'A Kind of Deutsch', artist: 'And One' },
-      { title: 'Military Fashion Show', artist: 'And One' },
-      { title: 'Hotline', artist: 'Jasper Byrne' },
-      { title: 'Strange Timez', artist: 'Gorillaz' },
-      { title: 'Not Like Us', artist: 'Kendrick Lamar' },
-      { title: 'Notion', artist: 'The Rare Occasions' },
-      { title: 'Write This Down', artist: 'SoulChef' },
-      { title: 'Temporary Love', artist: 'The Living Tombstone' },
-      { title: 'Falling Down', artist: 'Space Cowboy' },
-      { title: 'Why Cant This be Easy', artist: 'Red Vox' },
-      { title: 'But Can You Do This', artist: 'Lolnein' },
-      { title: 'Philly Nice (B-Side)', artist: 'Rozebud' },
-      { title: 'FNAF 1 (trust)', artist: 'Silva Gunner' },
-      { title: 'DQ Blizzard', artist: 'MC Chris' },
-      { title: 'MC Chris is Dead', artist: 'MC Chris' },
-      { title: 'SMRPG Waltz of The Forest', artist: 'Psyguy' }
-    ];
+  <!-- Left panel (nav) -->
+  <div class="left-panel" id="leftPanel">
+    <nav class="nav" aria-label="Primary">
+      <button onclick="load('home')">Home</button>
+      <button onclick="load('tools')">Tools</button>
+      <button onclick="load('games')">Games</button>
+      <button onclick="load('creations')">Creations</button>
+      <button onclick="load('about')">About</button>
+      <button onclick="toggleVisualizerMode()" id="vizModeBtn" style="border: 1px solid var(--main-color); background: var(--panel-color);">Visualizer</button>
+      <button onclick="load('settings')" style="margin-top: auto;">Settings</button>
+    </nav>
+  </div>
 
-    const songColors = [
-      '#ff0000', '#ff00ff', '#8400ff', '#00ff00', '#0000ff', '#ff0000', '#ff8800', '#8400ff', '#00ccff', '#ff0000', '#ff4800', '#ffe100', '#0000ff', '#0084ff', '#00ccff', '#ffff00', '#ea00ff', '#ff7300', '#ffffff', '#00ff00', '#ff0000'
-    ];
+  <!-- Top panel (music) -->
+  <div class="topbar" id="topbar">
+    <div class="topbar-row1"></div>
+    <div class="music-controls">
+      <div class="music-info">
+        <span class="music-title" id="mcTitle">Super Mario RPG</span>
+        <span class="music-artist" id="mcArtist">Yoko Shimomura</span>
+      </div>
+      <div class="music-btn-row">
+        <button class="music-btn" onclick="musicPrev()" title="Previous">&#9664;&#9664;</button>
+        <button class="music-btn" id="mcPlayPause" onclick="musicPlayPause()" title="Play/Pause">&#9646;&#9646;</button>
+        <button class="music-btn" onclick="musicNext()" title="Next">&#9654;&#9654;</button>
+        <button class="music-btn" id="mcLoop" onclick="musicToggleLoop()" title="Loop">&#8635;</button>
+      </div>
+      <div class="music-seek-row">
+        <span class="music-time" id="mcCurrent">0:00</span>
+        <input type="range" id="seekBar" min="0" max="100" value="0" oninput="musicSeek(this.value)">
+        <span class="music-time" id="mcDuration">0:00</span>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <input type="number" id="volumeInput" min="0" max="100" value="50" oninput="setVolumeFromInput(this.value)">
+      <input type="range" id="volumeSlider" min="0" max="100" value="50" oninput="setVolume(this.value)">
+      <button id="muteBtn" onclick="toggleMute()">Mute</button>
+    </div>
+  </div>
 
-    const pages = {
-      home: `
-        <div class="home-grid">
-          <div class="panel hero-panel">
-            <h2>Welcome to GN-Neon</h2>
-            <p class="lead">A central hub for tools, games, and creative experiments.</p>
-            <div class="image-row">
-              <div class="image-card" onclick="load('creations')">
-                <img src="https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/FC3.png" alt="Featured Creation">
-                <span>Featured Creations</span>
-              </div>
-              <div class="image-card" onclick="load('games')">
-                <img src="https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SR1.png" alt="Featured Game">
-                <span>Latest Games</span>
-              </div>
+  <!-- Digital Clock -->
+  <div id="digitalClock">
+    <span class="clock-time" id="clockTime">12:00</span>
+    <span class="clock-ampm" id="clockAmPm">PM</span>
+  </div>
+
+
+  <!-- Lightbox Overlay -->
+  <div id="lightboxOverlay" onclick="closeLightbox()">
+    <img id="lightboxImg" src="" alt="Full Screen Creation">
+    <div class="lightbox-details" onclick="event.stopPropagation()">
+      <h3 id="lightboxTitle" style="margin-top: 0; color: var(--main-color);"></h3>
+      <p id="lightboxDesc" style="color: var(--muted); line-height: 1.6;"></p>
+    </div>
+  </div>
+  <!-- Code Viewer Overlay -->
+  <div id="codeViewerOverlay">
+    <div class="code-header">
+      <h3 id="codeViewerTitle" style="margin: 0; color: var(--main-color);">Code Viewer</h3>
+      <button class="close-code-btn" onclick="closeCodeViewer()">Close</button>
+    </div>
+    <div class="code-content" id="codeViewerContent">Loading code...</div>
+  </div>
+
+  <main class="page-shell" id="mainContent">
+    <h1 class="site-title">GN-Neon</h1>
+    <div id="content">Loading...</div>
+  </main>
+
+  <canvas id="visualizerCanvas"></canvas>
+  <div class="version-tag" id="vTag">v0.90</div>
+
+<script>
+// PERFORMANCE / CDN FIXES:
+// - Large media assets now load from raw.githubusercontent instead of jsDelivr.
+// - Images use native lazy loading.
+// - Audio only loads the active song first.
+// - Background video loads after the page becomes interactive.
+// - Embedded iframes now lazy load.
+
+// ─── STATE ───────────────────────────────────────────────────────────────────
+let currentIndex = 0;
+let isMuted = false;
+let currentTrack = 0;
+let clockSettings = { showSeconds: true, is24h: false, size: 3, color: '#0000ff' };
+let customBackgroundEnabled = false;
+let isLooping = false;
+let seekDragging = false;
+let isVisualizerMode = false;
+let keepClockInViz = false;
+
+const DEFAULT_COLORS = {
+  '--main-color': '#0000ff',
+  '--panel-color': 'rgba(0, 50, 255, 0.25)',
+  '--music-text': '#0000ff',
+  '--menu-text': '#0000ff'
+};
+
+let rainbowStates = {
+  '--main-color': { active: false, speed: 5 },
+  '--music-text': { active: false, speed: 5 },
+  '--menu-text': { active: false, speed: 5 },
+  '--panel-color': { active: false, speed: 5 }
+};
+
+function applySongColor(trackIndex) {
+  if (!songColorEnabled) return;
+  const color = songColors[trackIndex] || '#0000ff';
+  document.documentElement.style.setProperty('--main-color', color);
+  document.documentElement.style.setProperty('--music-text', color);
+  document.documentElement.style.setProperty('--menu-text', color);
+  const rgb = parseInt(color.slice(1), 16);
+  const r = (rgb >> 16) & 255;
+  const g = (rgb >> 8) & 255;
+  const b = rgb & 255;
+  document.documentElement.style.setProperty('--panel-color', `rgba(${r}, ${g}, ${b}, 0.25)`);
+}
+
+function toggleSongColor() {
+  songColorEnabled = !songColorEnabled;
+  localStorage.setItem('gn_neon_song_color', songColorEnabled.toString());
+  if (songColorEnabled) {
+    applySongColor(currentTrack);
+  } else {
+    const saved = localStorage.getItem('gn_neon_colors');
+    const colors = saved ? JSON.parse(saved) : { ...DEFAULT_COLORS };
+    document.documentElement.style.setProperty('--main-color', colors['--main-color']);
+    document.documentElement.style.setProperty('--music-text', colors['--music-text']);
+    document.documentElement.style.setProperty('--menu-text', colors['--menu-text']);
+    document.documentElement.style.setProperty('--panel-color', colors['--panel-color']);
+  }
+  const buttons = document.querySelectorAll(`button[onclick="toggleSongColor()"]`);
+  buttons.forEach(btn => {
+    btn.style.background = songColorEnabled ? 'var(--main-color)' : '#333';
+    const mainColorValue = getComputedStyle(document.documentElement).getPropertyValue('--main-color').trim();
+    const brightness = getColorBrightness(mainColorValue);
+    btn.style.color = songColorEnabled ? (brightness > 128 ? '#000' : '#fff') : '#888';
+    btn.style.borderColor = songColorEnabled ? 'var(--main-color)' : '#555';
+    btn.textContent = songColorEnabled ? 'Enabled' : 'Disabled';
+  });
+}
+
+let backgroundSettings = {
+  useVideo: true,
+  gradientTop: '#000000',
+  gradientBottom: '#000000',
+  rainbowTop: false,
+  rainbowBottom: false,
+  rainbowTopSpeed: 5,
+  rainbowBottomSpeed: 5
+};
+
+function updateRainbow() {
+  const time = Date.now() / 1000;
+  for (const [key, state] of Object.entries(rainbowStates)) {
+    if (state.active) {
+      const hue = (time * state.speed * 10) % 360;
+      if (key === '--panel-color') {
+        document.documentElement.style.setProperty(key, `hsla(${hue}, 100%, 50%, 0.15)`);
+      } else {
+        document.documentElement.style.setProperty(key, `hsl(${hue}, 100%, 50%)`);
+      }
+    }
+  }
+  if (backgroundSettings.rainbowTop) {
+    const hueTop = (time * backgroundSettings.rainbowTopSpeed * 10) % 360;
+    const color = `hsl(${hueTop}, 100%, 50%)`;
+    document.documentElement.style.setProperty('--bg-gradient-top', color);
+    document.body.style.setProperty('--bg-gradient-top', color);
+  }
+  if (backgroundSettings.rainbowBottom) {
+    const hueBottom = (time * backgroundSettings.rainbowBottomSpeed * 10) % 360;
+    const color = `hsl(${hueBottom}, 100%, 50%)`;
+    document.documentElement.style.setProperty('--bg-gradient-bottom', color);
+    document.body.style.setProperty('--bg-gradient-bottom', color);
+  }
+  requestAnimationFrame(updateRainbow);
+}
+updateRainbow();
+
+// ─── CLOCK LOGIC (7-Segment, 12h, No Seconds) ──────────────────────────────────
+function updateClock() {
+  const now = new Date();
+  let h = now.getHours();
+  const m = String(now.getMinutes()).padStart(2, '0');
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  
+  h = h % 12;
+  h = h ? h : 12;
+  const hStr = String(h).padStart(2, '0');
+  
+  document.getElementById('clockTime').innerText = `${hStr}:${m}`;
+  document.getElementById('clockAmPm').innerText = ampm;
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// ─── PLAYLIST ────────────────────────────────────────────────────────────────
+const playlist = [
+  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Super%20Mario%20RPG.mp3',
+  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Neon%20Cobra.mp3',
+  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Disco%20Pervert.mp3',
+  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/They%20Live!.mp3',
+  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/One%20Night%20In%20Tokyo.mp3',
+  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/A%20Kind%20Of%20Deutsch.mp3',
+  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Military%20Fashion%20Show.mp3',
+  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Hotline%20-%20Original%20Mix.mp3',
+  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Strange%20Timez%20(feat.%20Robert%20Smith).mp3',
+  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Not%20Like%20Us.mp3',
+  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Notion.mp3',
+  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Write%20This%20Down.mp3',
+  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Temporary%20Love%20(feat.%20CG5).mp3',
+  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Falling%20Down.mp3',
+  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Why%20Cant%20This%20Be%20Easy.mp3',
+  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/But%20Can%20You%20Do%20This.mp3',
+  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Philly%20Nice%20(B-Side).mp3',
+  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Pain_is_just_freddy_fazbear.mp3',
+  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/dq%20blizzard.mp3',
+  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/MC%20Chris%20Is%20Dead.mp3',
+  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Super%20Mario%20RPG%20Waltz%20of%20the%20Forest%20(4K).mp3'
+];
+
+const trackMeta = [
+  { title: 'SMRPG Rawest Forrest', artist: 'Martin Hagwell' },
+  { title: 'Neon Cobra', artist: 'Shockwave-Sound' },
+  { title: 'Disco Pervert', artist: 'Nightstop' },
+  { title: 'They Live!', artist: 'Evil Nine' },
+  { title: 'One Night In Tokyo', artist: 'Beast in Black' },
+  { title: 'A Kind of Deutsch', artist: 'And One' },
+  { title: 'Military Fashion Show', artist: 'And One' },
+  { title: 'Hotline', artist: 'Jasper Byrne' },
+  { title: 'Strange Timez', artist: 'Gorillaz' },
+  { title: 'Not Like Us', artist: 'Kendrick Lamar' },
+  { title: 'Notion', artist: 'The Rare Occasions' },
+  { title: 'Write This Down', artist: 'SoulChef' },
+  { title: 'Temporary Love', artist: 'The Living Tombstone' },
+  { title: 'Falling Down', artist: 'Space Cowboy' },
+  { title: 'Why Cant This be Easy', artist: 'Red Vox' },
+  { title: 'But Can You Do This', artist: 'Lolnein' },
+  { title: 'Philly Nice (B-Side)', artist: 'Rozebud' },
+  { title: 'FNAF 1 (trust)', artist: 'Silva Gunner' },
+  { title: 'DQ Blizzard', artist: 'MC Chris' },
+  { title: 'MC Chris is Dead', artist: 'MC Chris' },
+  { title: 'SMRPG Waltz of The Forest', artist: 'Psyguy' }
+];
+
+const songColors = [
+  '#ff0000',    //SMPRG
+  '#ff00ff',    //Neon Cobra
+  '#8400ff',    //Disco
+  '#00ff00',    //They live
+  '#0000ff',    //One night
+  '#ff0000',    //A kind of german
+  '#ff8800',    //Fashion show
+  '#8400ff',    //hotline
+  '#00ccff',    //Strange
+  '#ff0000',    //Not like us
+  '#ff4800',    //Notion
+  '#ffe100',    //Write this down
+  '#0000ff',    //Temp love
+  '#0084ff',    //Falling
+  '#00ccff',    //Why cant this be easy
+  '#ffff00',    //But can you do
+  '#ea00ff',    //Philly
+  '#ff7300',    //Fnaf trus
+  '#ffffff',    //DQ
+  '#00ff00',    //Mc is dead
+  '#ff0000'     //SMRPG 2
+];
+
+let songColorEnabled = false;
+
+const FCImages = [
+  {
+    image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/FC3.png',
+    title: 'FC3.png',
+    description: 'Temporary description for FC3.png.'
+  },
+
+  {
+    image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/FC6.png',
+    title: 'FC6.png',
+    description: 'Temporary description for FC6.png.'
+  },
+
+  {
+    image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/FC9.png',
+    title: 'FC9.png',
+    description: 'Temporary description for FC9.png.'
+  },
+  {
+    image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/FC11.png',
+    title: 'FC11.png',
+    description: 'Temporary description for FC11.png.'
+  }
+];
+const SRImages = [
+  {
+    image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SR1.png',
+    title: 'SR1.png',
+    description: 'Temporary description for SR1.png.'
+  },
+
+  {
+    image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SR2.png',
+    title: 'SR2.png',
+    description: 'Temporary description for SR2.png.'
+  },
+
+  {
+    image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SR3.png',
+    title: 'SR3.png',
+    description: 'Temporary description for SR3.png.'
+  },
+  {
+    image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SR4.png',
+    title: 'SR4.png',
+    description: 'Temporary description for SR4.png.'
+  },
+  {
+    image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SR5.png',
+    title: 'SR5.png',
+    description: 'Temporary description for SR5.png.'
+  },
+  {
+    image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SR6.png',
+    title: 'SR6.png',
+    description: 'Temporary description for S63.png.'
+  }
+];
+const SSImages = [
+  {
+    image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SS1.png',
+    title: 'SS1.png',
+    description: 'Temporary description for SS1.png.'
+  },
+
+  {
+    image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SS2.png',
+    title: 'SS2.png',
+    description: 'Temporary description for SS2.png.'
+  },
+
+  {
+    image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SS3.png',
+    title: 'SS3.png',
+    description: 'Temporary description for SS3.png.'
+  },
+  {
+    image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SS4.png',
+    title: 'SS4.png',
+    description: 'Temporary description for SS4.png.'
+  },
+  {
+    image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SS5.png',
+    title: 'SS5.png',
+    description: 'Temporary description for SS5.png.'
+  },
+  {
+    image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SS6.png',
+    title: 'SS6.png',
+    description: 'Temporary description for SS6.png.'
+  },
+  {
+    image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SS7.png',
+    title: 'SS7.png',
+    description: 'Temporary description for SS7.png.'
+  }
+];
+// ─── SPLASH LOGIC ────────────────────────────────────────────────────────────
+function enablePerformanceMode(event) {
+  event.stopPropagation();
+  for (const key in rainbowStates) {
+    rainbowStates[key].active = false;
+  }
+  backgroundSettings.useVideo = false;
+  localStorage.setItem('gn_neon_rainbow', JSON.stringify(rainbowStates));
+  localStorage.setItem('gn_neon_bg_settings', JSON.stringify(backgroundSettings));
+  const videoBg = document.getElementById('videoBg');
+  if (videoBg) {
+    videoBg.style.opacity = '0';
+    videoBg.style.visibility = 'hidden';
+  }
+  const overlay = document.getElementById('splashOverlay');
+  overlay.classList.add('fade-out');
+  ensureAudioContext();
+  const audio = document.getElementById('bgMusic');
+  audio.play().catch(e => console.warn("Audio start blocked:", e));
+}
+
+function enterSite() {
+  const overlay = document.getElementById('splashOverlay');
+  if (overlay.classList.contains('ready')) {
+    overlay.classList.add('fade-out');
+    ensureAudioContext();
+    const audio = document.getElementById('bgMusic');
+    audio.play().catch(e => console.warn("Audio start blocked:", e));
+  }
+}
+
+// ─── AUDIO ENGINE ────────────────────────────────────────────────────────────
+let audioCtx = null, analyser = null, sourceNode = null, audioContextReady = false;
+
+function ensureAudioContext() {
+  if (audioContextReady) { if (audioCtx.state === 'suspended') audioCtx.resume(); return; }
+  const audio = document.getElementById('bgMusic');
+  try {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    analyser = audioCtx.createAnalyser();
+    analyser.fftSize = 512;
+    analyser.smoothingTimeConstant = 0.8;
+    sourceNode = audioCtx.createMediaElementSource(audio);
+    sourceNode.connect(analyser);
+    analyser.connect(audioCtx.destination);
+    audioContextReady = true;
+  } catch (e) { console.warn(e); }
+}
+
+function initMusic() {
+  const audio = document.getElementById('bgMusic');
+  
+  // Load saved music state
+  const savedTrack = localStorage.getItem('gn_neon_track');
+  const savedTime = localStorage.getItem('gn_neon_time');
+  const savedVolume = localStorage.getItem('gn_neon_volume');
+  const savedMute = localStorage.getItem('gn_neon_mute');
+
+  if (savedTrack !== null) currentTrack = parseInt(savedTrack);
+
+  // Only load the currently selected track initially
+  audio.preload = 'metadata';
+  audio.src = playlist[currentTrack];
+
+  // Lazy preload nearby songs after site has already loaded
+  setTimeout(() => {
+    const nextTrack = new Audio();
+    nextTrack.preload = 'metadata';
+    nextTrack.src = playlist[(currentTrack + 1) % playlist.length];
+  }, 4000);
+  
+  if (savedVolume !== null) {
+    audio.volume = parseFloat(savedVolume);
+    document.getElementById('volumeSlider').value = audio.volume * 100;
+    document.getElementById('volumeInput').value = Math.round(audio.volume * 100);
+  } else {
+    audio.volume = 0.5;
+  }
+
+  if (savedMute === 'true') {
+    isMuted = true;
+    audio.muted = true;
+    document.getElementById('muteBtn').innerText = 'Unmute';
+  }
+
+  if (savedTime !== null) {
+    audio.addEventListener('loadedmetadata', () => {
+      audio.currentTime = parseFloat(savedTime);
+    }, { once: true });
+  }
+
+  audio.addEventListener('ended', () => isLooping ? (audio.currentTime = 0, audio.play()) : musicNext());
+  audio.addEventListener('timeupdate', () => {
+    if (!seekDragging) {
+      const seekBar = document.getElementById('seekBar');
+      seekBar.value = (audio.currentTime / audio.duration) * 100;
+      seekBar.style.background = `linear-gradient(to right, var(--main-color) ${seekBar.value}%, #333 ${seekBar.value}%)`;
+      document.getElementById('mcCurrent').innerText = fmtTime(audio.currentTime);
+      localStorage.setItem('gn_neon_time', audio.currentTime);
+    }
+  });
+  audio.addEventListener('durationchange', () => {
+    document.getElementById('mcDuration').innerText = fmtTime(audio.duration);
+  });
+  updateTrackDisplay();
+}
+
+function updateTrackDisplay() {
+  const meta = trackMeta[currentTrack];
+  document.getElementById('mcTitle').innerText = meta.title;
+  document.getElementById('mcArtist').innerText = meta.artist;
+  document.getElementById('mcPlayPause').innerText = '▮▮';
+  localStorage.setItem('gn_neon_track', currentTrack);
+  applySongColor(currentTrack);
+}
+
+function fmtTime(s) { const m = Math.floor(s/60), sec = Math.floor(s%60); return `${m}:${sec.toString().padStart(2,'0')}`; }
+
+function musicPlayPause() { 
+  const a = document.getElementById('bgMusic'); 
+  ensureAudioContext(); 
+  if (a.paused) {
+    a.play();
+    document.getElementById('mcPlayPause').innerText = '▮▮';
+  } else {
+    a.pause();
+    document.getElementById('mcPlayPause').innerText = '▶';
+  }
+}
+function musicNext() { currentTrack = (currentTrack + 1) % playlist.length; const a = document.getElementById('bgMusic'); a.src = playlist[currentTrack]; updateTrackDisplay(); applySongColor(currentTrack); a.play(); }
+function musicPrev() { const a = document.getElementById('bgMusic'); if(a.currentTime > 3) a.currentTime = 0; else currentTrack = (currentTrack - 1 + playlist.length) % playlist.length; a.src = playlist[currentTrack]; updateTrackDisplay(); applySongColor(currentTrack); a.play(); }
+function musicToggleLoop() { isLooping = !isLooping; document.getElementById('mcLoop').classList.toggle('active-loop', isLooping); }
+function musicSeek(v) { const a = document.getElementById('bgMusic'); seekDragging = true; a.currentTime = (v/100)*a.duration; setTimeout(()=>seekDragging=false, 200); }
+function setVolume(v) {
+  const audio = document.getElementById('bgMusic');
+  audio.volume = v / 100;
+  document.getElementById('volumeInput').value = v;
+  document.getElementById('volumeSlider').value = v;
+  if (v > 0) { isMuted = false; document.getElementById('muteBtn').innerText = "Mute"; }
+  localStorage.setItem('gn_neon_volume', audio.volume);
+  localStorage.setItem('gn_neon_mute', isMuted);
+}
+function setVolumeFromInput(v) {
+  let val = parseInt(v);
+  if (isNaN(val)) val = 0;
+  if (val > 100) val = 100;
+  if (val < 0) val = 0;
+  setVolume(val);
+}
+function toggleMute() { 
+  isMuted = !isMuted; 
+  const b = document.getElementById('muteBtn'); 
+  b.innerText = isMuted ? 'Unmute' : 'Mute'; 
+  document.querySelectorAll('audio').forEach(a => a.muted = isMuted);
+  localStorage.setItem('gn_neon_mute', isMuted);
+}
+
+// ─── VISUALIZER MODE ──────────────────────────────────────────────────────────
+function toggleVisualizerMode() {
+  isVisualizerMode = !isVisualizerMode;
+  const main = document.getElementById('mainContent');
+  const top = document.getElementById('topbar');
+  const left = document.getElementById('leftPanel');
+  const logo = document.getElementById('logoConnector');
+  const tag = document.getElementById('vTag');
+  const btn = document.getElementById('vizModeBtn');
+  const clock = document.getElementById('digitalClock');
+
+  if (isVisualizerMode) {
+    main.classList.add('ui-hidden');
+    top.classList.add('ui-hidden');
+    left.classList.add('ui-hidden');
+    logo.classList.add('ui-hidden');
+    tag.classList.add('ui-hidden');
+    btn.innerText = "Exit Mode";
+    if (keepClockInViz) {
+      clock.classList.add('viz-persistent');
+      clock.classList.remove('ui-hidden');
+    } else {
+      clock.classList.remove('viz-persistent');
+      clock.classList.add('topbar-active');
+      clock.classList.add('ui-hidden');
+    }
+    document.addEventListener('keydown', exitVizOnEsc);
+  } else {
+    main.classList.remove('ui-hidden');
+    top.classList.remove('ui-hidden');
+    left.classList.remove('ui-hidden');
+    logo.classList.remove('ui-hidden');
+    tag.classList.remove('ui-hidden');
+    btn.innerText = "Visualizer";
+    top.classList.remove('hover-reveal');
+    left.classList.remove('hover-reveal');
+    clock.classList.remove('ui-hidden');
+    clock.classList.remove('viz-persistent');
+
+    // Keep the clock lowered after exiting visualizer mode
+    // because the top panel is visible again.
+    clock.classList.add('topbar-active');
+
+    document.removeEventListener('keydown', exitVizOnEsc);
+  }
+}
+function exitVizOnEsc(e) { if(e.key === 'Escape') toggleVisualizerMode(); }
+
+// ─── KEYBOARD SHORTCUTS ──────────────────────────────────────────────────────
+document.addEventListener('keydown', (e) => {
+  if (e.ctrlKey) {
+    if (e.key === 'ArrowLeft') { e.preventDefault(); musicPrev(); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); musicNext(); }
+    if (e.key === 'ArrowUp') { 
+      e.preventDefault(); 
+      const v = Math.min(100, Math.round(document.getElementById('bgMusic').volume * 100) + 5);
+      setVolume(v);
+    }
+    if (e.key === 'ArrowDown') { 
+      e.preventDefault(); 
+      const v = Math.max(0, Math.round(document.getElementById('bgMusic').volume * 100) - 5);
+      setVolume(v);
+    }
+  }
+});
+
+// ─── UNIFIED PANEL HOVER REVEAL ───────────────────────────────────────────────
+(function() {
+  const topbar = document.getElementById('topbar');
+  const leftPanel = document.getElementById('leftPanel');
+  const logoConnector = document.getElementById('logoConnector');
+  const clock = document.getElementById('digitalClock');
+  const triggerLeft = document.querySelector('.trigger-zone-left');
+  const triggerTop = document.querySelector('.trigger-zone-top');
+  
+  let hideTimer = null;
+
+  const showBoth = () => { 
+    topbar.classList.add('visible'); 
+    leftPanel.classList.add('visible');
+    logoConnector.classList.add('visible');
+    clock.classList.add('topbar-active');
+    if (isVisualizerMode) { 
+      topbar.classList.add('hover-reveal');
+      leftPanel.classList.add('hover-reveal');
+      logoConnector.classList.add('visible');
+      logoConnector.classList.remove('ui-hidden');
+    }
+    clearTimeout(hideTimer); 
+  };
+  
+  const hideBoth = () => { 
+    if(!topbar.matches(':hover') && !leftPanel.matches(':hover') && !logoConnector.matches(':hover')) {
+      topbar.classList.remove('visible'); 
+      leftPanel.classList.remove('visible');
+      logoConnector.classList.remove('visible');
+      clock.classList.remove('topbar-active');
+      if (isVisualizerMode) { 
+        topbar.classList.remove('hover-reveal');
+        leftPanel.classList.remove('hover-reveal');
+        logoConnector.classList.add('ui-hidden');
+      }
+    }
+  };
+
+  triggerLeft.addEventListener('mouseenter', showBoth);
+  triggerTop.addEventListener('mouseenter', showBoth);
+  topbar.addEventListener('mouseenter', showBoth);
+  leftPanel.addEventListener('mouseenter', showBoth);
+  logoConnector.addEventListener('mouseenter', showBoth);
+  
+  document.addEventListener('mousemove', (e) => {
+    if (e.clientX < 8 || e.clientY < 8) { 
+      showBoth(); 
+    } 
+    else { 
+      if(!topbar.matches(':hover') && !leftPanel.matches(':hover') && !logoConnector.matches(':hover')) { 
+        clearTimeout(hideTimer); 
+        hideTimer = setTimeout(hideBoth, 300); 
+      } 
+    }
+  });
+  
+  topbar.addEventListener('mouseenter', () => clearTimeout(hideTimer));
+  leftPanel.addEventListener('mouseenter', () => clearTimeout(hideTimer));
+  logoConnector.addEventListener('mouseenter', () => clearTimeout(hideTimer));
+  topbar.addEventListener('mouseleave', () => { hideTimer = setTimeout(hideBoth, 500); });
+  leftPanel.addEventListener('mouseleave', () => { hideTimer = setTimeout(hideBoth, 500); });
+  logoConnector.addEventListener('mouseleave', () => { hideTimer = setTimeout(hideBoth, 500); });
+  
+  hideTimer = setTimeout(hideBoth, 1500);
+})();
+
+// ─── VISUALIZER ──────────────────────────────────────────────────────────────
+(function() {
+  const canvas = document.getElementById('visualizerCanvas');
+  const ctx = canvas.getContext('2d');
+  let W, H;
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  function getRGBFromVariable(varName) {
+    const val = getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+    if (val.startsWith('#')) {
+      const r = parseInt(val.slice(1, 3), 16), g = parseInt(val.slice(3, 5), 16), b = parseInt(val.slice(5, 7), 16);
+      return [r, g, b];
+    } else if (val.startsWith('rgb')) {
+      const match = val.match(/\d+/g);
+      return [parseInt(match[0]), parseInt(match[1]), parseInt(match[2])];
+    }
+    return [0, 0, 255];
+  }
+
+  function draw() {
+    requestAnimationFrame(draw);
+    ctx.clearRect(0, 0, W, H);
+    if (!audioContextReady || !analyser) { drawIdle(ctx, W, H); return; }
+    const data = new Uint8Array(analyser.frequencyBinCount);
+    analyser.getByteFrequencyData(data);
+    const barCount = 80, gap = 4, barW = (W - gap * (barCount - 1)) / barCount;
+    const [r, g, b] = getRGBFromVariable('--main-color');
+    const isRainbow = rainbowStates['--main-color'].active;
+    const time = Date.now() / 1000;
+    
+    for (let i = 0; i < barCount; i++) {
+      const val = data[i * 2] || 0;
+      const h = (val / 255) * (H * 0.4);
+      const opacity = 0.3 + (val / 255) * 0.7;
+      
+      let color;
+      if (isRainbow) {
+        const hue = (time * rainbowStates['--main-color'].speed * 10 + (i * 2)) % 360;
+        color = `hsla(${hue}, 100%, 50%, ${opacity})`;
+      } else {
+        color = `rgba(${r}, ${g}, ${b}, ${opacity})`;
+      }
+      
+      ctx.fillStyle = color;
+      ctx.fillRect(i * (barW + gap), H - h, barW, h);
+      ctx.shadowBlur = 15; ctx.shadowColor = isRainbow ? color : `rgba(${r}, ${g}, ${b}, 0.8)`;
+    }
+    ctx.shadowBlur = 0;
+  }
+  
+  function drawIdle(ctx, W, H) {
+    const barCount = 120, gap = 2, barW = (W - gap * (barCount - 1)) / barCount;
+    const [r, g, b] = getRGBFromVariable('--main-color');
+    for (let i = 0; i < barCount; i++) {
+      ctx.fillStyle = `rgba(${r}, ${g}, ${b}, 0.2)`;
+      ctx.fillRect(i * (barW + gap), H - 2, barW, 2);
+    }
+  }
+  draw();
+})();
+
+function renderFCImages() {
+  return `
+    <div class="image-row creations-grid">
+      ${FCImages.map(item => `
+        <figure class="image-card"
+          onclick="openLightbox(
+            '${item.image}',
+            '${item.title}',
+            '${item.description}'
+          )">
+
+          <img src="${item.image}" alt="${item.title}" loading="lazy" decoding="async">
+          <span>${item.title}</span>
+
+        </figure>
+      `).join('')}
+    </div>
+  `;
+}
+function renderSRImages() {
+  return `
+    <div class="image-row creations-grid">
+      ${SRImages.map(item => `
+        <figure class="image-card"
+          onclick="openLightbox(
+            '${item.image}',
+            '${item.title}',
+            '${item.description}'
+          )">
+
+          <img src="${item.image}" alt="${item.title}" loading="lazy" decoding="async">
+          <span>${item.title}</span>
+
+        </figure>
+      `).join('')}
+    </div>
+  `;
+}
+function renderKCImages() {
+  return `
+    <div class="image-row creations-grid">
+      ${KCImages.map(item => `
+        <figure class="image-card"
+          onclick="openLightbox(
+            '${item.image}',
+            '${item.title}',
+            '${item.description}'
+          )">
+
+          <img src="${item.image}" alt="${item.title}" loading="lazy" decoding="async">
+          <span>${item.title}</span>
+
+        </figure>
+      `).join('')}
+    </div>
+  `;
+}
+function renderSSImages() {
+  return `
+    <div class="image-row creations-grid">
+      ${SSImages.map(item => `
+        <figure class="image-card"
+          onclick="openLightbox(
+            '${item.image}',
+            '${item.title}',
+            '${item.description}'
+          )">
+
+          <img src="${item.image}" alt="${item.title}" loading="lazy" decoding="async">
+          <span>${item.title}</span>
+
+        </figure>
+      `).join('')}
+    </div>
+  `;
+}
+
+  
+// ─── PAGES DATA ──────────────────────────────────────────────────────────────
+function updateBackgroundGradient() {
+  if (!backgroundSettings.rainbowTop) {
+    document.documentElement.style.setProperty('--bg-gradient-top', backgroundSettings.gradientTop);
+    document.body.style.setProperty('--bg-gradient-top', backgroundSettings.gradientTop);
+  }
+  if (!backgroundSettings.rainbowBottom) {
+    document.documentElement.style.setProperty('--bg-gradient-bottom', backgroundSettings.gradientBottom);
+    document.body.style.setProperty('--bg-gradient-bottom', backgroundSettings.gradientBottom);
+  }
+}
+
+function toggleBackgroundVideo() {
+  backgroundSettings.useVideo = !backgroundSettings.useVideo;
+  const videoBg = document.getElementById('videoBg');
+  if (videoBg) {
+    videoBg.style.opacity = backgroundSettings.useVideo ? '1' : '0';
+    videoBg.style.visibility = backgroundSettings.useVideo ? 'visible' : 'hidden';
+  }
+  const buttons = document.querySelectorAll(`button[onclick="toggleBackgroundVideo()"]`);
+  buttons.forEach(btn => {
+    btn.style.background = backgroundSettings.useVideo ? 'var(--main-color)' : '#333';
+    const mainColorValue = getComputedStyle(document.documentElement).getPropertyValue('--main-color').trim();
+    const brightness = getColorBrightness(mainColorValue);
+    btn.style.color = backgroundSettings.useVideo ? (brightness > 128 ? '#000' : '#fff') : '#888';
+    btn.style.borderColor = backgroundSettings.useVideo ? 'var(--main-color)' : '#555';
+    btn.textContent = backgroundSettings.useVideo ? 'Enabled' : 'Disabled';
+  });
+  localStorage.setItem('gn_neon_bg_settings', JSON.stringify(backgroundSettings));
+}
+
+function updateBackgroundColor(position, val) {
+  if (position === 'top') {
+    backgroundSettings.gradientTop = val;
+    backgroundSettings.rainbowTop = false;
+  } else {
+    backgroundSettings.gradientBottom = val;
+    backgroundSettings.rainbowBottom = false;
+  }
+  updateBackgroundGradient();
+  localStorage.setItem('gn_neon_bg_settings', JSON.stringify(backgroundSettings));
+}
+
+function toggleBackgroundRainbow(position) {
+  if (position === 'top') {
+    backgroundSettings.rainbowTop = !backgroundSettings.rainbowTop;
+  } else {
+    backgroundSettings.rainbowBottom = !backgroundSettings.rainbowBottom;
+  }
+  const isActive = position === 'top' ? backgroundSettings.rainbowTop : backgroundSettings.rainbowBottom;
+  const buttons = document.querySelectorAll(`button[onclick="toggleBackgroundRainbow('${position}')"]`);
+  buttons.forEach(btn => {
+    btn.style.background = isActive ? 'var(--main-color)' : '#333';
+    const mainColorValue = getComputedStyle(document.documentElement).getPropertyValue('--main-color').trim();
+    const brightness = getColorBrightness(mainColorValue);
+    btn.style.color = isActive ? (brightness > 128 ? '#000' : '#fff') : '#888';
+    btn.style.borderColor = isActive ? 'var(--main-color)' : '#555';
+  });
+  localStorage.setItem('gn_neon_bg_settings', JSON.stringify(backgroundSettings));
+}
+
+function updateBackgroundRainbowSpeed(position, speed) {
+  if (position === 'top') {
+    backgroundSettings.rainbowTopSpeed = parseFloat(speed);
+  } else {
+    backgroundSettings.rainbowBottomSpeed = parseFloat(speed);
+  }
+  localStorage.setItem('gn_neon_bg_settings', JSON.stringify(backgroundSettings));
+}
+
+function updateSettingsButtonAppearances() {
+  const mainColorValue = getComputedStyle(document.documentElement).getPropertyValue('--main-color').trim();
+  const brightness = getColorBrightness(mainColorValue);
+  const textColor = brightness > 128 ? '#000' : '#fff';
+  document.documentElement.style.setProperty('--button-text-color', textColor);
+  document.querySelectorAll(`button[onclick="toggleKeepClock()"]`).forEach(btn => {
+    btn.style.background = keepClockInViz ? 'var(--main-color)' : '#333';
+    btn.style.color = keepClockInViz ? textColor : '#888';
+    btn.style.borderColor = keepClockInViz ? 'var(--main-color)' : '#555';
+    btn.textContent = keepClockInViz ? 'Enabled' : 'Disabled';
+  });
+  document.querySelectorAll(`button[onclick="toggleBackgroundVideo()"]`).forEach(btn => {
+    btn.style.background = backgroundSettings.useVideo ? 'var(--main-color)' : '#333';
+    btn.style.color = backgroundSettings.useVideo ? textColor : '#888';
+    btn.style.borderColor = backgroundSettings.useVideo ? 'var(--main-color)' : '#555';
+    btn.textContent = backgroundSettings.useVideo ? 'Enabled' : 'Disabled';
+  });
+  document.querySelectorAll(`button[onclick="toggleSongColor()"]`).forEach(btn => {
+    btn.style.background = songColorEnabled ? 'var(--main-color)' : '#333';
+    btn.style.color = songColorEnabled ? textColor : '#888';
+    btn.style.borderColor = songColorEnabled ? 'var(--main-color)' : '#555';
+    btn.textContent = songColorEnabled ? 'Enabled' : 'Disabled';
+  });
+  document.querySelectorAll(`button[onclick="toggleBackgroundRainbow('top')"]`).forEach(btn => {
+    btn.style.background = backgroundSettings.rainbowTop ? 'var(--main-color)' : '#333';
+    btn.style.color = backgroundSettings.rainbowTop ? textColor : '#888';
+    btn.style.borderColor = backgroundSettings.rainbowTop ? 'var(--main-color)' : '#555';
+  });
+  document.querySelectorAll(`button[onclick="toggleBackgroundRainbow('bottom')"]`).forEach(btn => {
+    btn.style.background = backgroundSettings.rainbowBottom ? 'var(--main-color)' : '#333';
+    btn.style.color = backgroundSettings.rainbowBottom ? textColor : '#888';
+    btn.style.borderColor = backgroundSettings.rainbowBottom ? 'var(--main-color)' : '#555';
+  });
+  Object.entries(rainbowStates).forEach(([key, state]) => {
+    document.querySelectorAll(`button[onclick="toggleRainbow('${key}')"]`).forEach(btn => {
+      btn.style.background = state.active ? 'var(--main-color)' : '#333';
+      btn.style.color = state.active ? textColor : '#888';
+      btn.style.borderColor = state.active ? 'var(--main-color)' : '#555';
+    });
+  });
+}
+
+function applySavedColors() {
+  const saved = localStorage.getItem('gn_neon_colors');
+  if (saved) {
+    const colors = JSON.parse(saved);
+    for (const [key, val] of Object.entries(colors)) {
+      document.documentElement.style.setProperty(key, val);
+    }
+  }
+  const savedRainbow = localStorage.getItem('gn_neon_rainbow');
+  if (savedRainbow) {
+    rainbowStates = JSON.parse(savedRainbow);
+  }
+  const savedClockSetting = localStorage.getItem('gn_neon_keep_clock');
+  if (savedClockSetting !== null) {
+    keepClockInViz = savedClockSetting === 'true';
+  }
+  const savedBgSettings = localStorage.getItem('gn_neon_bg_settings');
+  if (savedBgSettings) {
+    backgroundSettings = JSON.parse(savedBgSettings);
+    updateBackgroundGradient();
+  }
+  const savedSongColor = localStorage.getItem('gn_neon_song_color');
+  if (savedSongColor !== null) {
+    songColorEnabled = savedSongColor === 'true';
+    if (songColorEnabled) {
+      applySongColor(currentTrack);
+    }
+  }
+  updateSettingsButtonAppearances();
+}
+
+function updateColor(key, val) {
+  if (rainbowStates[key]) rainbowStates[key].active = false;
+  document.documentElement.style.setProperty(key, val);
+  const saved = localStorage.getItem('gn_neon_colors');
+  const colors = saved ? JSON.parse(saved) : { ...DEFAULT_COLORS };
+  colors[key] = val;
+  localStorage.setItem('gn_neon_colors', JSON.stringify(colors));
+  saveRainbow();
+}
+
+function toggleRainbow(key) {
+  rainbowStates[key].active = !rainbowStates[key].active;
+  saveRainbow();
+  const buttons = document.querySelectorAll(`button[onclick="toggleRainbow('${key}')"]`);
+  buttons.forEach(btn => {
+    btn.style.background = rainbowStates[key].active ? 'var(--main-color)' : '#333';
+    const mainColorValue = getComputedStyle(document.documentElement).getPropertyValue('--main-color').trim();
+    const brightness = getColorBrightness(mainColorValue);
+    btn.style.color = rainbowStates[key].active ? (brightness > 128 ? '#000' : '#fff') : '#888';
+    btn.style.borderColor = rainbowStates[key].active ? 'var(--main-color)' : '#555';
+  });
+}
+
+function updateRainbowSpeed(key, speed) {
+  rainbowStates[key].speed = parseFloat(speed);
+  saveRainbow();
+}
+
+function saveRainbow() {
+  localStorage.setItem('gn_neon_rainbow', JSON.stringify(rainbowStates));
+}
+function toggleKeepClock() {
+  keepClockInViz = !keepClockInViz;
+  localStorage.setItem('gn_neon_keep_clock', keepClockInViz);
+  const buttons = document.querySelectorAll(`button[onclick="toggleKeepClock()"]`);
+  buttons.forEach(btn => {
+    btn.style.background = keepClockInViz ? 'var(--main-color)' : '#333';
+    const mainColorValue = getComputedStyle(document.documentElement).getPropertyValue('--main-color').trim();
+    const brightness = getColorBrightness(mainColorValue);
+    btn.style.color = keepClockInViz ? (brightness > 128 ? '#000' : '#fff') : '#888';
+    btn.style.borderColor = keepClockInViz ? 'var(--main-color)' : '#555';
+    btn.textContent = keepClockInViz ? 'Enabled' : 'Disabled';
+  });
+}
+
+function resetColors() {
+  for (const [key, val] of Object.entries(DEFAULT_COLORS)) {
+    document.documentElement.style.setProperty(key, val);
+  }
+  for (const key in rainbowStates) rainbowStates[key].active = false;
+  
+  backgroundSettings = {
+    useVideo: true,
+    gradientTop: '#000000',
+    gradientBottom: '#000000',
+    rainbowTop: false,
+    rainbowBottom: false,
+    rainbowTopSpeed: 5,
+    rainbowBottomSpeed: 5
+  };
+  updateBackgroundGradient();
+  const videoBg = document.getElementById('videoBg');
+  if (videoBg) {
+    videoBg.style.opacity = '1';
+    videoBg.style.visibility = 'visible';
+  }
+  
+  localStorage.removeItem('gn_neon_colors');
+  localStorage.removeItem('gn_neon_rainbow');
+  localStorage.removeItem('gn_neon_bg_settings');
+  load('settings');
+}
+
+const pages = {
+  settings: `
+    <section class="panel">
+      <h2>Settings</h2>
+      <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem;">
+        <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px;">
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <span>KEEP CLOCK IN VISUALIZER MODE</span>
+            <button onclick="toggleKeepClock()" style="margin:0; padding: 0.3rem 0.6rem; font-size: 0.8rem; background: ${keepClockInViz ? 'var(--main-color)' : '#333'}; border: 1px solid ${keepClockInViz ? 'var(--main-color)' : '#555'}; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.boxShadow='0 0 8px ' + (${keepClockInViz} ? 'var(--main-color)' : 'rgba(255,255,255,0.1)')" onmouseout="this.style.boxShadow='none'">${keepClockInViz ? 'Enabled' : 'Disabled'}</button>
+          </div>
+        </div>
+        <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px;">
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <span>USE VIDEO BACKGROUND</span>
+            <button onclick="toggleBackgroundVideo()" style="margin:0; padding: 0.3rem 0.6rem; font-size: 0.8rem; background: ${backgroundSettings.useVideo ? 'var(--main-color)' : '#333'}; border: 1px solid ${backgroundSettings.useVideo ? 'var(--main-color)' : '#555'}; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.boxShadow='0 0 8px ' + (${backgroundSettings.useVideo} ? 'var(--main-color)' : 'rgba(255,255,255,0.1)')" onmouseout="this.style.boxShadow='none'">${backgroundSettings.useVideo ? 'Enabled' : 'Disabled'}</button>
+          </div>
+        </div>
+        <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px;">
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <span>SONG COLOR CHANGING</span>
+            <button onclick="toggleSongColor()" style="margin:0; padding: 0.3rem 0.6rem; font-size: 0.8rem; background: ${songColorEnabled ? 'var(--main-color)' : '#333'}; border: 1px solid ${songColorEnabled ? 'var(--main-color)' : '#555'}; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.boxShadow='0 0 8px ' + (${songColorEnabled} ? 'var(--main-color)' : 'rgba(255,255,255,0.1)')" onmouseout="this.style.boxShadow='none'">${songColorEnabled ? 'Enabled' : 'Disabled'}</button>
+          </div>
+        </div>
+        <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+            <span>GRADIENT TOP COLOR</span>
+            <div style="display: flex; gap: 0.5rem; align-items: center;">
+              <input type="color" value="${backgroundSettings.gradientTop}" onchange="updateBackgroundColor('top', this.value)">
+              <button onclick="toggleBackgroundRainbow('top')" style="margin:0; padding: 0.3rem 0.6rem; font-size: 0.8rem; background: ${backgroundSettings.rainbowTop ? 'var(--main-color)' : '#333'}; border: 1px solid ${backgroundSettings.rainbowTop ? 'var(--main-color)' : '#555'}; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.boxShadow='0 0 8px ' + (${backgroundSettings.rainbowTop} ? 'var(--main-color)' : 'rgba(255,255,255,0.1)')" onmouseout="this.style.boxShadow='none'">Rainbow</button>
             </div>
           </div>
-          <div class="panel patch-panel">
-            <h3>Recent Updates</h3>
-            <div class="version-chip">v1.2.4 <span style="opacity:0.5">|</span> May 2024</div>
-            <ul class="patch-list">
-              <li>Added HTML IDE Tool</li>
-              <li>Improved Audio Visualizer</li>
-              <li>New Music Tracks</li>
-              <li>UI/UX Refinements</li>
+          ${backgroundSettings.rainbowTop ? `
+            <div style="display: flex; align-items: center; gap: 1rem;">
+              <span style="font-size: 0.8rem; opacity: 0.7;">Speed</span>
+              <input type="range" min="1" max="20" value="${backgroundSettings.rainbowTopSpeed}" oninput="updateBackgroundRainbowSpeed('top', this.value)" style="flex: 1;">
+            </div>
+          ` : ''}
+        </div>
+        <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+            <span>GRADIENT BOTTOM COLOR</span>
+            <div style="display: flex; gap: 0.5rem; align-items: center;">
+              <input type="color" value="${backgroundSettings.gradientBottom}" onchange="updateBackgroundColor('bottom', this.value)">
+              <button onclick="toggleBackgroundRainbow('bottom')" style="margin:0; padding: 0.3rem 0.6rem; font-size: 0.8rem; background: ${backgroundSettings.rainbowBottom ? 'var(--main-color)' : '#333'}; border: 1px solid ${backgroundSettings.rainbowBottom ? 'var(--main-color)' : '#555'}; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.boxShadow='0 0 8px ' + (${backgroundSettings.rainbowBottom} ? 'var(--main-color)' : 'rgba(255,255,255,0.1)')" onmouseout="this.style.boxShadow='none'">Rainbow</button>
+            </div>
+          </div>
+          ${backgroundSettings.rainbowBottom ? `
+            <div style="display: flex; align-items: center; gap: 1rem;">
+              <span style="font-size: 0.8rem; opacity: 0.7;">Speed</span>
+              <input type="range" min="1" max="20" value="${backgroundSettings.rainbowBottomSpeed}" oninput="updateBackgroundRainbowSpeed('bottom', this.value)" style="flex: 1;">
+            </div>
+          ` : ''}
+        </div>
+        ${Object.entries(rainbowStates).map(([key, state]) => `
+          <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+              <span>${key.replace('--', '').replace('-', ' ').toUpperCase()}</span>
+              <div style="display: flex; gap: 0.5rem; align-items: center;">
+                ${key === '--panel-color' ? 
+                  `<input type="text" value="${getComputedStyle(document.documentElement).getPropertyValue(key).trim()}" onchange="updateColor('${key}', this.value)" style="width: 120px; background: #000; border: 1px solid #333; color: #fff; padding: 4px; font-size: 0.8rem;">` :
+                  `<input type="color" value="${getComputedStyle(document.documentElement).getPropertyValue(key).trim()}" onchange="updateColor('${key}', this.value)">`
+                }
+                <button onclick="toggleRainbow('${key}')" style="margin:0; padding: 0.3rem 0.6rem; font-size: 0.8rem; background: ${state.active ? 'var(--main-color)' : '#333'}; border: 1px solid ${state.active ? 'var(--main-color)' : '#555'}; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.boxShadow='0 0 8px ' + (${state.active} ? 'var(--main-color)' : 'rgba(255,255,255,0.1)')" onmouseout="this.style.boxShadow='none'">Rainbow</button>
+              </div>
+            </div>
+            ${state.active ? `
+              <div style="display: flex; align-items: center; gap: 1rem;">
+                <span style="font-size: 0.8rem; opacity: 0.7;">Speed</span>
+                <input type="range" min="1" max="20" value="${state.speed}" oninput="updateRainbowSpeed('${key}', this.value)" style="flex: 1;">
+              </div>
+            ` : ''}
+          </div>
+        `).join('')}
+        <button onclick="resetColors()" style="background: #440000; border: 1px solid #ff0000; margin-top: 1rem;">Reset to Defaults</button>
+      </div>
+    </section>
+  `,
+  home: `
+    <section class="home-grid">
+      <article class="panel hero-panel">
+        <h2>Home</h2>
+        <p class="lead">Welcome to GN-Neon (Goober Network). Take a look at these cats.</p>
+        <div class="image-row">
+          <figure class="image-card">
+            <img src="https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/sili2.jpg" alt="Cat image">
+            <span>sili2.jpg</span>
+          </figure>
+          <figure class="image-card">
+            <img src="https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/sili3.jpg" alt="Cat image">
+            <span>sili3.jpg</span>
+          </figure>
+        </div>
+      </article>
+
+      <aside class="panel patch-panel">
+        <div class="version-chip">Latest overhaul · v0.90</div>
+        <h3>Patch Notes</h3>
+        <ul class="patch-list">
+          <li>Fixed a few bugs.</li>
+          <li>Added more music, <strong>with more to come</strong>.</li>
+          <li>Finally added creations section <strong>Map Images and Code</strong>.</li>
+          <li>Added music changes colors option <strong>in settings</strong>.</li>
+          <li>Added <strong>"""Block Blast"""</strong> in games.</li>
+          <li>Added settings buttons for more control and more <strong>rainbow options</strong>.</li>
+          <li>Added music controls: <strong>Use CTRL+Arrow keys to go back, skip and go up or down 5% in volume</strong>.</li>
+        </ul>
+      </aside>
+    </section>
+  `,
+  tools: `
+    <section class="panel games-panel">
+      <h2>Tools</h2>
+      <div class="games-menu" id="toolsMenu">
+        <button onclick="showTool('calc')">Calculators</button>
+        <button onclick="showTool('ide')">HTML IDE</button>
+        <button class="under-construction"><span>AI Chatbot</span></button>
+        <button onclick="showTool('canvas')">Painting Canvas</button>
+        <button onclick="showTool('ciphers')">Ciphers</button>
+        <button onclick="showTool('dict')">Dictionary</button>
+      </div>
+      <div id="toolArea"></div>
+    </section>
+  `,
+  games: `
+    <section class="panel games-panel">
+      <h2>Games</h2>
+      <div class="games-menu" id="gamesMenu">
+        <button onclick="showScratchGames()">Scratch Games</button>
+        <button onclick="showWebGames()">Normal Games (WIP)</button>
+        <button class="under-construction"><span>Emulators</span></button>
+        <button class="under-construction"><span>Number Guessing Game</span></button>
+      </div>
+      <div id="gamesContent"></div>
+    </section>
+  `,
+  creations: `
+    <section class="panel games-panel">
+      <h2>Creations</h2>
+      <div class="games-menu" id="creationsMenu">
+        <button onclick="showCreationsTab('map_images')">Map Images</button>
+        <button onclick="showCreationsTab('code')">Code</button>
+        <button class="under-construction"><span>Map Videos</span></button>
+      </div>
+      <div id="creationArea"></div>
+    </section>
+  `,
+  about: `
+    <section class="panel about-panel">
+      <h2>About</h2>
+      <p class="section-copy">This is GN-Neon. The GN stands for Goober Network. I made this site to bypass lightspeed filter. Why? Because I can.<br /><br />I (Neon64) made this site to provide games, tools, and unblocked content for everyone.</p>
+    
+        <div class="settings-card">
+          <h3>Clock Settings</h3>
+          <div style="display:flex; flex-direction:column; gap:0.75rem;">
+            <label><input type="checkbox" id="clockShowSeconds" onchange="updateClockSettings()" checked> Show Seconds</label>
+            <label><input type="checkbox" id="clock24h" onchange="updateClockSettings()"> 24-Hour Format</label>
+            <label>Clock Size:
+              <input type="range" id="clockSize" min="1" max="5" step="0.1" value="3" oninput="updateClockSettings()">
+            </label>
+            <label>Clock Color:
+              <input type="color" id="clockColor" value="#0000ff" oninput="updateClockSettings()">
+            </label>
+          </div>
+        </div>
+
+        <div class="settings-card">
+          <h3>Custom Background</h3>
+          <div style="display:flex; flex-direction:column; gap:0.75rem;">
+            <label><input type="checkbox" id="bgToggle" onchange="toggleCustomBackground()"> Enable Custom Background</label>
+            <input type="text" id="customBgUrl" placeholder="Image URL (https://...)">
+            <input type="file" id="customBgUpload" accept="image/*" onchange="uploadCustomBg(event)">
+            <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+              <button onclick="applyCustomBg()">Apply Background</button>
+              <button onclick="clearCustomBg()" style="background:#333;">Clear Background</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  `
+};
+
+
+function updateClockSettings() {
+  const showSecondsEl = document.getElementById('clockShowSeconds');
+  const is24hEl = document.getElementById('clock24h');
+  const sizeEl = document.getElementById('clockSize');
+  const colorEl = document.getElementById('clockColor');
+
+  if (showSecondsEl) clockSettings.showSeconds = showSecondsEl.checked;
+  if (is24hEl) clockSettings.is24h = is24hEl.checked;
+  if (sizeEl) clockSettings.size = sizeEl.value;
+  if (colorEl) clockSettings.color = colorEl.value;
+
+  const clockEl = document.getElementById('digitalClock');
+  if (clockEl) {
+    clockEl.style.fontSize = `${clockSettings.size}rem`;
+    clockEl.style.color = clockSettings.color;
+    clockEl.style.borderColor = clockSettings.color;
+    clockEl.style.textShadow = `0 0 15px ${clockSettings.color}`;
+  }
+
+  localStorage.setItem('gn_neon_clock', JSON.stringify(clockSettings));
+  updateClock();
+}
+
+function applyCustomBg() {
+  const input = document.getElementById('customBgUrl');
+  if (!input || !input.value.trim()) return;
+  document.documentElement.style.setProperty('--custom-bg', `url("${input.value.trim()}")`);
+  localStorage.setItem('gn_neon_custom_bg', input.value.trim());
+  customBackgroundEnabled = true;
+  localStorage.setItem('gn_neon_custom_bg_enabled', 'true');
+}
+
+function clearCustomBg() {
+  document.documentElement.style.setProperty('--custom-bg', 'none');
+  localStorage.removeItem('gn_neon_custom_bg');
+  const input = document.getElementById('customBgUrl');
+  if (input) input.value = '';
+}
+
+function toggleCustomBackground() {
+  const toggle = document.getElementById('bgToggle');
+  customBackgroundEnabled = toggle ? toggle.checked : customBackgroundEnabled;
+  localStorage.setItem('gn_neon_custom_bg_enabled', customBackgroundEnabled);
+
+  const savedBg = localStorage.getItem('gn_neon_custom_bg');
+  if (customBackgroundEnabled && savedBg) {
+    document.documentElement.style.setProperty('--custom-bg', `url("${savedBg}")`);
+  } else {
+    document.documentElement.style.setProperty('--custom-bg', 'none');
+  }
+}
+
+function uploadCustomBg(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const dataUrl = e.target.result;
+    document.documentElement.style.setProperty('--custom-bg', `url("${dataUrl}")`);
+    localStorage.setItem('gn_neon_custom_bg', dataUrl);
+    customBackgroundEnabled = true;
+    const toggle = document.getElementById('bgToggle');
+    if (toggle) toggle.checked = true;
+  };
+  reader.readAsDataURL(file);
+}
+
+async function lookupDictionary() {
+  const input = document.getElementById('dictWord');
+  const results = document.getElementById('dictResults');
+  if (!input || !results) return;
+  const word = input.value.trim();
+  if (!word) return;
+
+  results.innerHTML = '<p>Searching...</p>';
+
+  try {
+    const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`);
+    const data = await response.json();
+
+    if (!Array.isArray(data)) {
+      results.innerHTML = '<p>No definition found.</p>';
+      return;
+    }
+
+    results.innerHTML = data.map(entry => `
+      <div class="dict-entry">
+        <h3>${entry.word}</h3>
+        ${(entry.meanings || []).map(meaning => `
+          <div style="margin-bottom:1rem;">
+            <div class="dict-pos">${meaning.partOfSpeech}</div>
+            <ul>
+              ${(meaning.definitions || []).slice(0,3).map(def => `<li>${def.definition}</li>`).join('')}
             </ul>
           </div>
-        </div>
-      `,
-      tools: `
-        <div class="panel calc-panel">
-          <h2>Utilities & Tools</h2>
-          <div id="toolsMenu" class="button-row">
-            <button onclick="showTool('calc')">Calculators</button>
-            <button onclick="showTool('ide')">HTML IDE</button>
-            <button onclick="showTool('canvas')">Painting Canvas</button>
-            <button onclick="showTool('ciphers')">Ciphers</button>
-            <button onclick="showTool('dict')">Dictionary</button>
-          </div>
-          <div id="toolArea"></div>
-        </div>
-      `,
-      games: `
-        <div class="panel games-panel">
-          <h2>Games</h2>
-          <div class="games-menu">
-            <button onclick="showScratchGames()">Scratch Games</button>
-            <button onclick="showWebGames()">Web Games</button>
-          </div>
-          <div id="gamesContent"></div>
-        </div>
-      `,
-      creations: `
-        <div class="panel about-panel">
-          <h2>Creations</h2>
-          <h3>Featured Works</h3>
-          <div class="image-row creations-grid" id="creationsGrid">
-            ${[
-              {image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/FC3.png', title: 'FC3.png'},
-              {image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/FC6.png', title: 'FC6.png'},
-              {image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/FC9.png', title: 'FC9.png'},
-              {image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/FC11.png', title: 'FC11.png'},
-              {image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SR1.png', title: 'SR1.png'},
-              {image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SR2.png', title: 'SR2.png'},
-              {image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SR3.png', title: 'SR3.png'},
-              {image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SR4.png', title: 'SR4.png'},
-              {image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SR5.png', title: 'SR5.png'},
-              {image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SR6.png', title: 'SR6.png'},
-              {image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SS1.png', title: 'SS1.png'},
-              {image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SS2.png', title: 'SS2.png'},
-              {image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SS3.png', title: 'SS3.png'},
-              {image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SS4.png', title: 'SS4.png'},
-              {image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SS5.png', title: 'SS5.png'},
-              {image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SS6.png', title: 'SS6.png'},
-              {image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SS7.png', title: 'SS7.png'}
-            ].map(item => `
-              <div class="image-card">
-                <img src="${item.image}" alt="${item.title}" loading="lazy">
-                <span>${item.title}</span>
-              </div>
-            `).join('')}
-          </div>
-        </div>
-      `,
-      about: `
-        <div class="panel about-panel">
-          <h2>About GN-Neon</h2>
-          <p class="section-copy">GN-Neon is a personal project dedicated to creating a versatile web environment. It combines functional tools with entertainment and creative showcases.</p>
-          <h3>Credits</h3>
-          <p>Developed by Neon64makoto. Special thanks to the open-source community for various libraries and assets.</p>
-        </div>
-      `,
-      settings: `
-        <div class="panel about-panel">
-          <h2>Settings</h2>
-          <div style="margin-top: 2rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
-            <div>
-              <h3>Clock Settings</h3>
-              <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                <label><input type="checkbox" id="clockShowSeconds" onchange="updateClockSettings()" checked> Show Seconds</label>
-                <label><input type="checkbox" id="clock24h" onchange="updateClockSettings()"> 24-Hour Format</label>
-                <label>Clock Size: <input type="range" id="clockSize" min="1" max="5" step="0.1" value="3" oninput="updateClockSettings()"></label>
-                <label>Clock Color: <input type="color" id="clockColor" value="#0000ff" oninput="updateClockSettings()"></label>
-              </div>
-            </div>
-            <div>
-              <h3>Custom Background</h3>
-              <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                <input type="text" id="customBgUrl" placeholder="Image URL (e.g. https://...)" style="width: 100%;">
-                <button onclick="applyCustomBg()">Apply Background</button>
-                <button onclick="clearCustomBg()" style="background: #333;">Clear Background</button>
-              </div>
-            </div>
-            <div>
-              <h3>Theme Color</h3>
-              <input type="color" id="mainColorPicker" value="#0000ff" oninput="updateMainColor(this.value)">
-              <button onclick="toggleRainbowTheme()">Toggle Rainbow Theme</button>
-            </div>
-          </div>
-        </div>
-      `
-    };
+        `).join('')}
+      </div>
+    `).join('');
+  } catch (err) {
+    results.innerHTML = '<p>Dictionary lookup failed.</p>';
+  }
+}
 
-    let currentTrack = 0, isLooping = false, isMuted = false, seekDragging = false, isVisualizerMode = false, isPlaylistOpen = false;
-    let clockSettings = { showSeconds: true, is24h: false, size: 3, color: '#0000ff' };
-    let rainbowThemeActive = false;
 
-    // ─── CORE LOGIC ──────────────────────────────────────────────────────────────
-    function load(page) {
-      const main = document.getElementById('mainContent');
-      if (page !== 'home' && page !== 'games') { main.classList.add('wide-shell'); } 
-      else { main.classList.remove('wide-shell'); }
-      document.getElementById("content").innerHTML = pages[page];
-      
-      if (page === 'settings') {
-        const showSec = document.getElementById('clockShowSeconds');
-        const is24 = document.getElementById('clock24h');
-        const size = document.getElementById('clockSize');
-        const color = document.getElementById('clockColor');
-        if (showSec) showSec.checked = clockSettings.showSeconds;
-        if (is24) is24.checked = clockSettings.is24h;
-        if (size) size.value = clockSettings.size;
-        if (color) color.value = clockSettings.color;
-        const savedBg = localStorage.getItem('gn_neon_custom_bg');
-        if (savedBg) {
-            const bgInput = document.getElementById('customBgUrl');
-            if (bgInput) bgInput.value = savedBg;
+function getColorBrightness(hexColor) {
+  const hex = hexColor.replace('#', '');
+  const r = parseInt(hex.slice(0, 2), 16);
+  const g = parseInt(hex.slice(2, 4), 16);
+  const b = parseInt(hex.slice(4, 6), 16);
+  return (r * 299 + g * 587 + b * 114) / 1000;
+}
+
+function updateNavButtonTextColor() {
+  const mainColorValue = getComputedStyle(document.documentElement).getPropertyValue('--main-color').trim();
+  const brightness = getColorBrightness(mainColorValue);
+  const textColor = brightness > 128 ? '#000' : '#fff';
+  document.documentElement.style.setProperty('--button-text-color', textColor);
+  const navButtons = document.querySelectorAll('.left-panel .nav button');
+  navButtons.forEach(btn => {
+    if (btn.style.background === 'var(--main-color)' || btn.style.background.includes('rgb')) {
+      btn.style.color = textColor;
+    }
+  });
+}
+
+setInterval(updateNavButtonTextColor, 1000);
+
+function load(page) {
+  if (isVisualizerMode) {
+    toggleVisualizerMode();
+  }
+  const main = document.getElementById('mainContent');
+  if (page === 'settings') {
+    setTimeout(() => {
+      const savedClock = JSON.parse(localStorage.getItem('gn_neon_clock') || '{}');
+      clockSettings = { ...clockSettings, ...savedClock };
+
+      const map = {
+        clockShowSeconds: clockSettings.showSeconds,
+        clock24h: clockSettings.is24h,
+        clockSize: clockSettings.size,
+        clockColor: clockSettings.color
+      };
+
+      Object.entries(map).forEach(([id,val]) => {
+        const el = document.getElementById(id);
+        if (el) {
+          if (el.type === 'checkbox') el.checked = val;
+          else el.value = val;
         }
+      });
+
+      const savedBg = localStorage.getItem('gn_neon_custom_bg');
+      const bgEnabled = localStorage.getItem('gn_neon_custom_bg_enabled') === 'true';
+
+      const bgInput = document.getElementById('customBgUrl');
+      const bgToggle = document.getElementById('bgToggle');
+
+      if (bgInput && savedBg && !savedBg.startsWith('data:')) bgInput.value = savedBg;
+      if (bgToggle) bgToggle.checked = bgEnabled;
+    }, 0);
+  }
+
+  if (page !== 'home' && page !== 'games') {
+    main.classList.add('wide-shell');
+  } else {
+    main.classList.remove('wide-shell');
+  }
+  document.getElementById("content").innerHTML = pages[page];
+  if (page === 'settings') {
+    setTimeout(() => updateSettingsButtonAppearances(), 50);
+  }
+  const navButtons = document.querySelectorAll('.left-panel .nav button');
+  navButtons.forEach(btn => {
+    btn.style.background = 'transparent';
+    btn.style.color = 'var(--menu-text)';
+    btn.style.borderColor = 'var(--panel-color)';
+  });
+  const pageButtonMap = {
+    'home': 0,
+    'tools': 1,
+    'games': 2,
+    'creations': 3,
+    'about': 4
+  };
+  const buttonIndex = pageButtonMap[page];
+  if (buttonIndex !== undefined && navButtons[buttonIndex]) {
+    navButtons[buttonIndex].style.background = 'var(--main-color)';
+    const mainColorValue = getComputedStyle(document.documentElement).getPropertyValue('--main-color').trim();
+    const brightness = getColorBrightness(mainColorValue);
+    const textColor = brightness > 128 ? '#000' : '#fff';
+    navButtons[buttonIndex].style.color = textColor;
+    document.documentElement.style.setProperty('--button-text-color', textColor);
+    navButtons[buttonIndex].style.borderColor = 'var(--main-color)';
+  }
+  if (page === 'games') {
+    setTimeout(() => {
+      const gamesMenu = document.querySelector('.games-menu');
+      if (gamesMenu) gamesMenu.style.display = 'block';
+    }, 0);
+  }
+}
+
+function enterRun(e, fn) {
+  if (e.key === "Enter") fn();
+}
+
+function showTool(type) {
+  const area = document.getElementById("toolArea"), toolsMenu = document.getElementById("toolsMenu");
+  if (toolsMenu) toolsMenu.style.display = 'none';
+  if (type === 'calc') {
+    area.innerHTML = `<button class="back-button" onclick="load('tools')">← Back to Tools</button><h3>Calculators</h3><div class="games-menu"><button onclick="showCalc('simple')">Simple</button><button onclick="showCalc('volume')">Volume</button><button onclick="showCalc('graph')">Graph</button></div><div id="calcArea"></div>`;
+  } else if (type === 'ide') {
+    area.innerHTML = `<button class="back-button" onclick="load('tools')">← Back to Tools</button><h3>HTML IDE</h3><div id="ideContainer"><textarea id="ideInput" placeholder="Write HTML/CSS/JS here..." oninput="runIDE()"></textarea><iframe id="ideOutput"></iframe></div>`;
+  } else if (type === 'chat') {
+    area.innerHTML = `<button class="back-button" onclick="load('tools')">← Back to Tools</button><h3>AI Chatbot</h3><div id="chatContainer"><div id="chatLog"></div><div class="chat-input-row"><input id="chatInput" placeholder="Ask something..." onkeydown="if(event.key==='Enter')sendChat()"><button onclick="sendChat()">Send</button></div></div>`;
+  } else if (type === 'canvas') {
+    area.innerHTML = `<button class="back-button" onclick="load('tools')">← Back to Tools</button><h3>Painting Canvas</h3><canvas id="paintingCanvas" width="800" height="500"></canvas><div style="text-align:center; margin-top:1rem;"><input type="color" id="brushColor" value="#0000ff"><input type="range" id="brushSize" min="1" max="50" value="5"><button onclick="clearCanvas()">Clear</button></div>`;
+    initCanvas();
+  } else if (type === 'ciphers') {
+    area.innerHTML = `<button class="back-button" onclick="load('tools')">← Back to Tools</button><h3>Ciphers</h3><div class="games-menu"><button onclick="showCipher('caesar')">Caesar</button><button onclick="showCipher('atbash')">Atbash</button></div><div id="cipherArea"></div>`;
+  } else if (type === 'guess') {
+    area.innerHTML = `<button class="back-button" onclick="load('games')">← Back to Games</button><h3>Number Guessing</h3><p>Guess a number between 1 and 100:</p><input id="guessInput" type="number"><button onclick="checkGuess()">Guess</button><p id="guessMsg"></p>`;
+    window.secretNum = Math.floor(Math.random() * 100) + 1;
+  }
+}
+
+function showCalc(type) {
+  const c = document.getElementById("calcArea");
+  if (type === "simple") {
+    c.innerHTML = `<h3>Simple Calculator</h3><input id="simpleInput" placeholder="2+2*3" onkeydown="enterRun(event, calcSimple)"><button onclick="calcSimple()">Calc</button><p id="simpleOut"></p>`;
+  } else if (type === "volume") {
+    c.innerHTML = `<h3>Volume Calculator</h3>Cube (Side): <input id="cubeSide" onkeydown="enterRun(event, volCube)"><button onclick="volCube()">Calc</button><p id="cubeOut"></p>Sphere (Radius): <input id="sphereR" onkeydown="enterRun(event, volSphere)"><button onclick="volSphere()">Calc</button><p id="sphereOut"></p>Rectangular Prism (L, W, H): <input id="recL" placeholder="Length" onkeydown="enterRun(event, volRect)"><input id="recW" placeholder="Width" onkeydown="enterRun(event, volRect)"><input id="recH" placeholder="Height" onkeydown="enterRun(event, volRect)"><button onclick="volRect()">Calc</button><p id="rectOut"></p>Cylinder (R, H): <input id="cylR" placeholder="Radius" onkeydown="enterRun(event, volCyl)"><input id="cylH" placeholder="Height" onkeydown="enterRun(event, volCyl)"><button onclick="volCyl()">Calc</button><p id="cylOut"></p>Pyramid (Base, Height): <input id="pyrB" placeholder="Base Area" onkeydown="enterRun(event, volPyr)"><input id="pyrH" placeholder="Height" onkeydown="enterRun(event, volPyr)"><button onclick="volPyr()">Calc</button><p id="pyrOut"></p>`;
+  } else if (type === "graph") {
+    c.innerHTML = `<h3>Graph Calculator</h3>X: <input id="xmin" value="-10"> to <input id="xmax" value="10"><br>Y: <input id="ymin" value="-10"> to <input id="ymax" value="10"><br><br>y=<input id="eq1" onkeydown="enterRun(event, drawGraph)"><br>y=<input id="eq2" onkeydown="enterRun(event, drawGraph)"><br>y=<input id="eq3" onkeydown="enterRun(event, drawGraph)"><br>y=<input id="eq4" onkeydown="enterRun(event, drawGraph)"><br>y=<input id="eq5" onkeydown="enterRun(event, drawGraph)"><br><br><button onclick="drawGraph()">Graph</button><br><br><div class="canvas-wrap"><canvas id="grid" width="400" height="400"></canvas><div id="axesLabels"></div></div>`;
+  }
+}
+
+function calcSimple() { const i = document.getElementById("simpleInput"), o = document.getElementById("simpleOut"); try { o.innerText = eval(i.value); } catch { o.innerText = "Error"; } }
+function volCube() { const v = parseFloat(cubeSide.value); cubeOut.innerText = !isNaN(v) ? v ** 3 : "Invalid"; }
+function volSphere() { const v = parseFloat(sphereR.value); sphereOut.innerText = !isNaN(v) ? (4 / 3) * Math.PI * v ** 3 : "Invalid"; }
+function volRect() { const l = parseFloat(recL.value), w = parseFloat(recW.value), h = parseFloat(recH.value); rectOut.innerText = !isNaN(l) && !isNaN(w) && !isNaN(h) ? l * w * h : "Invalid"; }
+function volCyl() { const r = parseFloat(cylR.value), h = parseFloat(cylH.value); cylOut.innerText = !isNaN(r) && !isNaN(h) ? Math.PI * r * r * h : "Invalid"; }
+function volPyr() { const b = parseFloat(pyrB.value), h = parseFloat(pyrH.value); pyrOut.innerText = !isNaN(b) && !isNaN(h) ? (b * h) / 3 : "Invalid"; }
+
+function drawGraph() {
+  const canvas = document.getElementById("grid"); if (!canvas) return;
+  const ctx = canvas.getContext("2d"); ctx.fillStyle = "black"; ctx.fillRect(0, 0, 400, 400);
+  const xminVal = parseFloat(xmin.value), xmaxVal = parseFloat(xmax.value), yminVal = parseFloat(ymin.value), ymaxVal = parseFloat(ymax.value), width = 400, height = 400;
+  ctx.strokeStyle = "#333"; ctx.lineWidth = 1;
+  for (let i = 0; i <= 10; i++) { const x = i * (width / 10), y = i * (height / 10); ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, height); ctx.stroke(); ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(width, y); ctx.stroke(); }
+  ctx.strokeStyle = "white"; ctx.lineWidth = 2;
+  const xZero = (-xminVal / (xmaxVal - xminVal)) * width, yZero = (ymaxVal / (ymaxVal - yminVal)) * height;
+  ctx.beginPath(); ctx.moveTo(xZero, 0); ctx.lineTo(xZero, height); ctx.stroke(); ctx.beginPath(); ctx.moveTo(0, yZero); ctx.lineTo(width, yZero); ctx.stroke();
+  ctx.fillStyle = "white"; ctx.font = "10px Arial";
+  for (let i = 0; i <= 10; i++) { const xVal = xminVal + (i / 10) * (xmaxVal - xminVal), yVal = yminVal + (i / 10) * (ymaxVal - yminVal), px = i * (width / 10), py = height - i * (height / 10); ctx.fillText(xVal.toFixed(1), px, yZero + 10); ctx.fillText(yVal.toFixed(1), xZero + 5, py); }
+  const eqs = [eq1.value, eq2.value, eq3.value, eq4.value, eq5.value], colors = ["red", "cyan", "lime", "yellow", "orange"];
+  let resultsHTML = "<h3>Results</h3>"; const functions = [];
+  eqs.forEach((expr, i) => {
+    if (!expr) return; expr = expr.replace(/(\d)x/g, "$1*x");
+    let fn; try { fn = (x) => eval(expr.replace(/x/g, "(" + x + ")")); functions.push({ fn, color: colors[i], expr }); } catch { return; }
+    ctx.strokeStyle = colors[i]; ctx.lineWidth = 2; ctx.beginPath();
+    let first = true;
+    for (let px = 0; px <= width; px++) { const x = xminVal + (px / width) * (xmaxVal - xminVal); let y; try { y = fn(x); } catch { continue; } const py = ((ymaxVal - y) / (ymaxVal - yminVal)) * height; if (py >= 0 && py <= height) { if (first) { ctx.moveTo(px, py); first = false; } else { ctx.lineTo(px, py); } } }
+    ctx.stroke();
+    try { const y0 = fn(0); resultsHTML += `<p style="color:${colors[i]}">y=${expr} → y(0) = ${y0.toFixed(2)}</p>`; } catch {}
+  });
+  for (let i = 0; i < functions.length; i++) {
+    for (let j = i + 1; j < functions.length; j++) {
+      for (let x = xminVal; x <= xmaxVal; x += 0.1) {
+        let y1, y2; try { y1 = functions[i].fn(x); y2 = functions[j].fn(x); } catch { continue; }
+        if (Math.abs(y1 - y2) < 0.1) { resultsHTML += `<p>Intersection ≈ (${x.toFixed(2)}, ${y1.toFixed(2)})</p>`; break; }
       }
+    }
+  }
+  let existing = document.getElementById("graphResults"); if (!existing) { const div = document.createElement("div"); div.id = "graphResults"; canvas.parentElement.appendChild(div); existing = div; } existing.innerHTML = resultsHTML;
+}
+
+const games = ["https://turbowarp.org/1109852074/embed?addons=stuck,pause,fullscreen,fps=60&hqpen", "https://turbowarp.org/10128407/embed?addons=pause,fullscreen", "https://turbowarp.org/1143765424/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/1075310827/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/941803602/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/973637218/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/883776962/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/898492644/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/916303075/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/978483855/embed?addons=pause,fullscreen&fps=60", "https://turbowarp.org/959847748/embed?addons=pause,fullscreen&fps=60"];
+const titles = ["Block Blast (Not Made By Me)", "Paper Minecraft (Not Made By Me)", "Sisyphean Escalator", "Gambling but Mid", "Laser Dodge", "Goober Dodger", "Neon's Hostile Road", "Mid Cookie Clicker", "Asteroid Assault", "Reel 'Em In", "Cats Hate Rats"];
+const controls = [`Click and drag blocks to match 3 or more of the same color.\n\nClear the board to advance to the next level.\n\nUse strategy to plan your moves!`, `Modding Guide: ▶️ https://youtu.be/PexNsUvqD5w\n[1 to 9] - Select Item    [Click] - Place or Mine\n[WASD] - Move / Jump  [E] - Open/Close Inventory\n[E+hover] - Open / Close Chest, Crafting Table, Door\n[Space] - Drop single tile from a stack while dragging.\n[F] - Eat food       [N] - Label a sign or chest\n[Q] - Drop item      [P] - Pause / Unpause\n[T] - Talk / Command    [O] - Save your game\n[M] - Music / Sounds   [Shift] - Sprint`, `Type the letters shown fast enough or fall.\n\nNot case sensitive.`, `::At BlackJack::\nUse arrow keys to bet:\n\nLeft and Right set the bet to 0 and max\n\nUp and down will change the bet by 10, or if holding "." will change it by 500\n1\nEnter to place bet, and after will be the hit button.\n\nSpace to stand.\n\n::At Slots::\nS to Spin\n\nSame betting controls.`, `Use the mouse to dodge the lasers that get faster with time!\n\nPress the left mouse button to become invincible for three seconds with a 10 second cool down so use it wisely!`, `Use the mouse to dodge the goobers, and don't stay in the border too long.\n\nThat's really about it.`, `ASD to move.\nW for a 3-second long power-up of invincibility.\nSpace to Start/Restart on the game-over screen.\n\n1 and 2 control the arcade scan filter.\n3 and 4 control the arcade cabinet overlay.\n5 and 6 control the arcade music (on/off)\n\n(60 fps Is highly recommended)`, `It's Cookie Clicker, but worse.\n\nUse your mouse.`, `Left mouse button to fire a weak auxiliary laser that overheats quickly.\n\nSpace for Main powerful laser.\n\nW for a backup shield that lasts 10 seconds, but has limited uses.\n\nUse your mouse to aim the laser.`, `Use Left Mouse Button to fire the harpoon and try to get the fish, and buy upgrades.\n \nBeware of the explosive mine, it takes $50 dollars to repair the harpoon and the explosion might scare a few good fish away.\n\n\nThis is still a work in progress and I plan on adding more things like power ups, multipliers, and maybe a high score system.\n\nF to show debug menu \nG to hide debug menu`, `goober.\n\nUse mouse 1 to hit the rats.\nuse F to turn off the yarn.\nUse G to turn them back on.\n`];
+const notes = [`Block Blast is a puzzle game where you match blocks.\n\nIt's not made by me, but it's a fun game to play!`, `*** Credits ***\nAll the graphics are taken from the Minecraft wiki page and have not been created by me. I have rescaled them and broken them up to make the game work, but that is it at present.\n\nORIGNAL PROJECT MADE BY GRIFFPATCH ON SCRATCH, NOT ME:\n\nCheck him out he does great stuf, https://scratch.mit.edu/users/griffpatch/`, `The game is based on this video by the way:\n\nhttps://youtu.be/2Gby1XQ4Z2M?feature=shared`, `Don't gamble in real life, also this technically is not correct, and if you do it quick enough you can easily break most of this.\n\nThe special codes are:\n\nL E O\n\nN F S M W\n`, `Not much to add, I could have done a better job with the randomization of everything, but I am not gonna be working on this any further.`, `<b>!!!VOLUME WARNING!!!</b>\n\nI made this game to be difficult and stressful on purpose.\n\nIf you don't like loud noises or flashing lights, I would recommend not playing this game.`, `This is a game I made in a day, so don't expect too much.\n\nAlso, the hitbox for the asteroids is a bit wonky.`, `This game is unfinished and buggy.\n\nI am not going to work on it anymore.`, `I made this game as a joke.\n\nIt's not very good.`, `This game is still in development.\n\nI plan on adding more features soon.`, `This game is a work in progress.\n\nI plan on adding more content soon.`];
+const webgames = ["https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@e5c5b7bfb0151445a947ec8493779c29de5644dc/index.html?t="];
+const webTitles = ["Test WebGame 1"];
+const webControls = ["Test control info for web game."];
+const webNotes = ["Test notes for web game."];
+  
+function showScratchGames() {
+  const content = document.getElementById('gamesContent'), gamesMenu = document.querySelector('.games-menu'); if (gamesMenu) gamesMenu.style.display = 'none';
+  content.innerHTML = `<button class="back-button" onclick="load('games')">← Back to Games Menu</button><div class="games-layout"><div class="sideBox"><h3>Controls</h3><div id="gameControls"></div></div><div class="centerBox"><iframe id="scratchFrame" allowfullscreen title="GN-Neon Scratch game viewer"></iframe><h3 id="gameTitle"></h3><div class="button-row" style="justify-content:center; margin-top:1rem;"><button onclick="prevGame()">◀</button><button onclick="nextGame()">▶</button></div></div><div class="sideBox"><h3>Notes / Credits</h3><div id="gameNotes"></div></div></div>`;
+  currentIndex = 0; updateGame();
+}
+
+function showWebGames() {
+  const content = document.getElementById('gamesContent'), gamesMenu = document.querySelector('.games-menu'); if (gamesMenu) gamesMenu.style.display = 'none';
+  content.innerHTML = `<button class="back-button" onclick="load('games')">← Back to Games Menu</button><div class="games-layout"><div class="sideBox"><h3>Controls</h3><div id="gameControls"></div></div><div class="centerBox"><iframe id="webGameFrame" allowfullscreen title="GN-Neon Web game viewer"></iframe><h3 id="gameTitle"></h3><div class="button-row" style="justify-content:center; margin-top:1rem;"><button onclick="prevGame()">◀</button><button onclick="nextGame()">▶</button></div></div><div class="sideBox"><h3>Notes / Credits</h3><div id="gameNotes"></div></div></div>`;
+  currentIndex = 0; updateWebGame();
+}
+
+function showEmulators() {
+  const content = document.getElementById('gamesContent'), gamesMenu = document.querySelector('.games-menu'); if (gamesMenu) gamesMenu.style.display = 'none';
+  content.innerHTML = `<button class="back-button" onclick="load('games')">← Back to Emulators</button><div class="games-menu" style="max-width: 400px; margin: 2rem auto;"><h3>Select Emulator</h3><button onclick="navigateTo('nes')">NES</button><button onclick="navigateTo('snes')">SNES</button><button onclick="navigateTo('genesis')">Genesis</button></div>`;
+}
+
+function navigateTo(emulator) {
+  const content = document.getElementById('gamesContent');
+  if (emulator === 'nes') {
+    content.innerHTML = `<button class="back-button" onclick="showEmulators()">← Back to Emulators</button><div style="width: 100%; max-width: 900px; margin: 2rem auto;"><h2 style="padding: 0 0 1rem 0;">NES Emulator</h2><div style="width:100%;height:500px;max-width:100%; background: #000; border-radius: 10px; overflow: hidden; border: 1px solid #333;"><div id="game"></div></div><script>window.EJS_player='#game';window.EJS_core='nes';window.EJS_gameName='cpu_dummy_reads';window.EJS_color='#0044ff';window.EJS_startOnLoaded=true;window.EJS_pathtodata='https://cdn.jsdelivr.net/gh/EmulatorJS/EmulatorJS@latest/data/';window.EJS_url='https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Roms/cpu_dummy_reads.nes';<\/script><script src="https://cdn.jsdelivr.net/gh/EmulatorJS/EmulatorJS@latest/data/loader.js"><\/script></div>`;
+  } else {
+    content.innerHTML = `<div class="wip-container"><h2>${emulator.toUpperCase()} Emulator</h2><p>Work in Progress</p><p style="color: #888; margin-top: 1rem;">This section is currently under development.</p><button class="back-button" onclick="showEmulators()">← Back to Emulators</button></div>`;
+  }
+}
+
+function updateGame() {
+  const f = document.getElementById("scratchFrame"); if (!f) return;
+  f.src = games[currentIndex]; 
+  document.getElementById("gameTitle").innerText = titles[currentIndex];
+  document.getElementById("gameControls").innerHTML = controls[currentIndex] || "";
+  document.getElementById("gameNotes").innerHTML = notes[currentIndex] || "";
+}
+
+function updateWebGame() {
+  const iframe = document.getElementById('webGameFrame');
+  if (!iframe) return;
+  iframe.src = webGames[currentIndex];
+  document.getElementById('gameTitle').innerText = webTitles[currentIndex];
+  document.getElementById('gameControls').innerHTML = webControls[currentIndex] || "";
+  document.getElementById('gameNotes').innerHTML = webNotes[currentIndex] || "";
+}
+
+function nextGame() { currentIndex = (currentIndex + 1) % games.length; updateGame(); }
+function prevGame() { currentIndex = (currentIndex - 1 + games.length) % games.length; updateGame(); }
+function nextWebGame() { currentIndex = (currentIndex + 1) % games.length; updateWebGame(); }
+function prevWebGame() { currentIndex = (currentIndex - 1 + games.length) % games.length; updateWebGame(); }
+
+function showCipher(type) {
+  const area = document.getElementById("cipherArea");
+  area.innerHTML = `<h3>${type.toUpperCase()}</h3><textarea id="cipherIn" placeholder="Enter text..."></textarea><div><button onclick="runCipher('${type}', 'encode')">Encode</button><button onclick="runCipher('${type}', 'decode')">Decode</button></div><pre id="cipherOut"></pre>`;
+}
+function runCipher(type, mode) {
+  const input = document.getElementById('cipherIn').value;
+  let out = "";
+  if (type === 'caesar') {
+    const shift = mode === 'encode' ? 3 : -3;
+    out = input.replace(/[a-z]/gi, c => {
+      const code = c.charCodeAt(0);
+      const isUpper = code >= 65 && code <= 90;
+      const base = isUpper ? 65 : 97;
+      let shifted = (code - base + shift) % 26;
+      if (shifted < 0) shifted += 26;
+      return String.fromCharCode(base + shifted);
+    });
+  } else if (type === 'atbash') {
+    out = input.replace(/[a-z]/gi, c => String.fromCharCode((c <= "Z" ? 155 : 219) - c.charCodeAt(0)));
+  }
+  document.getElementById('cipherOut').innerText = out;
+}
+function runIDE() {
+  const out = document.getElementById('ideOutput').contentWindow.document;
+  out.open(); out.write(document.getElementById('ideInput').value); out.close();
+}
+function sendChat() {
+  const log = document.getElementById('chatLog'), inp = document.getElementById('chatInput');
+  if(!inp.value)return;
+  log.innerHTML += `<div class="chat-msg user-msg">${inp.value}</div>`;
+  const userVal = inp.value; inp.value='';
+  setTimeout(()=> {
+    log.innerHTML += `<div class="chat-msg bot-msg">AI demo response to: "${userVal}"</div>`;
+    log.scrollTop = log.scrollHeight;
+  }, 600);
+}
+
+function initCanvas() {
+  const cvs = document.getElementById('paintingCanvas'), ctx = cvs.getContext('2d');
+  let painting = false;
+  cvs.onmousedown = (e) => { painting = true; ctx.beginPath(); ctx.moveTo(e.clientX - cvs.getBoundingClientRect().left, e.clientY - cvs.getBoundingClientRect().top); };
+  cvs.onmouseup = () => { painting = false; ctx.beginPath(); };
+  cvs.onmousemove = (e) => {
+    if(!painting) return;
+    ctx.lineWidth = document.getElementById('brushSize').value;
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = document.getElementById('brushColor').value;
+    const rect = cvs.getBoundingClientRect();
+    ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+  };
+}
+function clearCanvas() { paintingCanvas.getContext('2d').clearRect(0,0,800,500); }
+function showEmbed(url) {
+  const area = document.getElementById('embedArea');
+  area.style.display = 'block';
+  area.innerHTML = `<iframe src="${url}" loading="lazy"></iframe>`;
+}
+function showCreation(type) {
+  const area = document.getElementById('creationArea'), creationsMenu = document.getElementById('creationsMenu');
+  if (creationsMenu) creationsMenu.style.display = 'none';
+  area.innerHTML = `<button class="back-button" onclick="load('creations')">← Back to Creations</button><h3>${type.toUpperCase()}</h3><div id="embedArea"></div>`;
+}
+
+function checkGuess() {
+  const v = parseInt(document.getElementById('guessInput').value);
+  const msg = document.getElementById('guessMsg');
+  if(v === window.secretNum) msg.innerText = "Correct!";
+  else msg.innerText = v < window.secretNum ? "Too low!" : "Too high!";
+}
+
+function openLightbox(src, title, desc) {
+  document.getElementById('lightboxImg').src = src;
+  document.getElementById('lightboxTitle').innerText = title;
+  document.getElementById('lightboxDesc').innerText = desc;
+  document.getElementById('lightboxOverlay').classList.add('visible');
+}
+
+function closeLightbox() {
+  document.getElementById('lightboxOverlay').classList.remove('visible');
+}
+function showCreationsTab(tab) {
+  const area = document.getElementById('creationArea');
+  const menu = document.getElementById('creationsMenu');
+  if (menu) menu.style.display = 'none';
+  
+  if (tab === 'map_images') {
+    area.innerHTML = `
+  <button class="back-button" onclick="load('creations')">
+    ← Back to Creations
+  </button>
+
+  <div class="section-header">Flatline City</div>
+  ${renderFCImages()}
+  <div class="section-header">Snow Road</div>
+  ${renderSRImages()}
+  <div class="section-header">K-City</div>
+  <div class="wip-container"><p>Work in Progress</p></div>
+
+  <div class="section-header">Spring Sili</div>
+  ${renderSSImages()}
+`;
+  } else if (tab === 'code') {
+    area.innerHTML = `
+      <button class="back-button" onclick="load('creations')">← Back to Creations</button>
       
-      const navButtons = document.querySelectorAll('.left-panel .nav button');
-      navButtons.forEach(btn => {
-        btn.style.background = 'transparent';
-        btn.style.color = 'var(--menu-text)';
-      });
-      const pageIdx = { 'home':0, 'tools':1, 'games':2, 'creations':3, 'about':4, 'settings':5 }[page];
-      if (navButtons[pageIdx]) {
-        navButtons[pageIdx].style.background = 'var(--main-color)';
-        navButtons[pageIdx].style.color = '#fff';
-      }
-    }
+      <div class="section-header">Python</div>
+      <div class="image-row creations-grid">
+        <figure class="image-card" style="cursor: pointer;" onclick="openCodeViewer('https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/main.py', 'main.py')">
+          <div style="height: 150px; background: #222; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-size: 2rem; color: #ffd43b; font-weight: bold;">Python</div>
+          <span>main.py</span>
+        </figure>
+        <figure class="image-card" style="cursor: pointer;" onclick="openCodeViewer('https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/gamble.py', 'gamble.py')">
+          <div style="height: 150px; background: #222; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-size: 2rem; color: #ffd43b; font-weight: bold;">Python</div>
+          <span>gamble.py</span>
+        </figure>
+      </div>
+      
+      <div class="section-header">HTML</div>
+      <div class="image-row creations-grid">
+        <figure class="image-card" style="cursor: pointer;" onclick="openCodeViewer('https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/index.html', 'GN Neon Index HTML')">
+          <div style="height: 150px; background: #222; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-size: 2rem; color: #ffd43b; font-weight: bold;">HTML</div>
+          <span>GN Neon Index HTML</span>
+        </figure>
+      </div>
+      
+      <div class="section-header">JS</div>
+      <div class="wip-container"><p>Work in Progress</p></div>
+      
+      <div class="section-header">CSS</div>
+      <div class="wip-container"><p>Work in Progress</p></div>
+      
+      <div class="section-header">C#</div>
+      <div class="wip-container"><p>Work in Progress</p></div>
+    `;
+  }
+}
 
-    function revealUI(side) {
-      if (side === 'left') document.getElementById('leftPanel').classList.add('visible');
-      if (side === 'top') document.getElementById('topbar').classList.add('visible');
-    }
+function openLightbox(src, title, desc) {
+  document.getElementById('lightboxImg').src = src;
+  document.getElementById('lightboxTitle').innerText = title;
+  document.getElementById('lightboxDesc').innerText = desc;
+  document.getElementById('lightboxOverlay').classList.add('visible');
+}
 
-    window.onclick = (e) => {
-      if (!e.target.closest('.left-panel') && !e.target.closest('.trigger-zone-left')) 
-        document.getElementById('leftPanel').classList.remove('visible');
-      if (!e.target.closest('.topbar') && !e.target.closest('.trigger-zone-top') && !e.target.closest('#playlistPanel') && !e.target.closest('#playlistToggle')) 
-        document.getElementById('topbar').classList.remove('visible');
-    };
+function closeLightbox() {
+  document.getElementById('lightboxOverlay').classList.remove('visible');
+}
 
-    // ─── CLOCK LOGIC ─────────────────────────────────────────────────────────────
-    function updateClock() {
-      const now = new Date();
-      let h = now.getHours(), m = now.getMinutes(), s = now.getSeconds();
-      const ampm = h >= 12 ? 'PM' : 'AM';
-      if (!clockSettings.is24h) { h = h % 12 || 12; }
-      let timeStr = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
-      if (clockSettings.showSeconds) { timeStr += `:${s.toString().padStart(2, '0')}`; }
-      const timeEl = document.getElementById('clockTime');
-      const ampmEl = document.getElementById('clockAmPm');
-      if (timeEl) timeEl.innerText = timeStr;
-      if (ampmEl) {
-        ampmEl.innerText = clockSettings.is24h ? '' : ampm;
-        ampmEl.style.display = clockSettings.is24h ? 'none' : 'block';
-      }
-    }
-    setInterval(updateClock, 1000);
+function openCodeViewer(url, title) {
+  const overlay = document.getElementById('codeViewerOverlay');
+  const content = document.getElementById('codeViewerContent');
+  document.getElementById('codeViewerTitle').innerText = title;
+  overlay.classList.add('visible');
+  content.innerText = "Loading code...";
+  
+  fetch(url)
+    .then(response => response.text())
+    .then(text => {
+      content.innerText = text;
+    })
+    .catch(err => {
+      content.innerText = "Error loading code: " + err;
+    });
+}
 
-    function updateClockSettings() {
-      clockSettings.showSeconds = document.getElementById('clockShowSeconds').checked;
-      clockSettings.is24h = document.getElementById('clock24h').checked;
-      clockSettings.size = document.getElementById('clockSize').value;
-      clockSettings.color = document.getElementById('clockColor').value;
-      const clockEl = document.getElementById('digitalClock');
-      clockEl.style.fontSize = `${clockSettings.size}rem`;
-      clockEl.style.color = clockSettings.color;
-      clockEl.style.textShadow = `0 0 15px ${clockSettings.color}`;
-      clockEl.style.borderColor = clockSettings.color;
-      localStorage.setItem('gn_neon_clock', JSON.stringify(clockSettings));
-      updateClock();
-    }
+function closeCodeViewer() {
+  document.getElementById('codeViewerOverlay').classList.remove('visible');
+}
 
-    // ─── PLAYLIST LOGIC ──────────────────────────────────────────────────────────
-    function togglePlaylist() {
-      isPlaylistOpen = !isPlaylistOpen;
-      const panel = document.getElementById('playlistPanel');
-      panel.classList.toggle('visible', isPlaylistOpen);
-      if (isPlaylistOpen) {
-        const grid = document.getElementById('playlistGrid');
-        grid.innerHTML = trackMeta.map((track, i) => `
-          <div class="playlist-item ${currentTrack === i ? 'active' : ''}" onclick="playTrack(${i})">
-            <div class="title">${track.title}</div>
-            <div class="artist">${track.artist}</div>
-          </div>
-        `).join('');
-      }
-    }
+// ─── BOOT ─────────────────────────────────────────────────────────────────────
+function setVideoBackground(videoUrl) {
+  const video = document.createElement('video');
+  video.id = 'videoBg';
+  video.autoplay = true;
+  video.loop = true;
+  video.muted = true;
+  video.preload = 'metadata';
+  video.playsInline = true;
 
-    function playTrack(i) {
-      currentTrack = i;
-      const a = document.getElementById('bgMusic');
-      a.src = playlist[currentTrack];
-      updateTrackDisplay();
-      a.play();
-      if (isPlaylistOpen) togglePlaylist();
-    }
+  // Delay full video loading slightly so UI + first song load first
+  requestIdleCallback ? requestIdleCallback(() => {
+    video.src = videoUrl;
+    video.load();
+  }) : setTimeout(() => {
+    video.src = videoUrl;
+    video.load();
+  }, 1000);
+  if (!backgroundSettings.useVideo) {
+    video.style.opacity = '0';
+    video.style.visibility = 'hidden';
+  }
+  video.addEventListener('canplay', () => {
+    const splash = document.getElementById('splashOverlay');
+    splash.classList.add('ready');
+    document.getElementById('splashText').innerText = "!!!WARNING MUSIC WILL PLAY!!!";
+    document.getElementById('splashSubtext').innerText = "CLICK TO ENTER";
+  });
+  document.body.insertBefore(video, document.body.firstChild);
+  document.body.classList.add('video-bg');
+}
 
-    function updateTrackDisplay() {
-      const meta = trackMeta[currentTrack];
-      document.getElementById('mcTitle').innerText = meta.title;
-      document.getElementById('mcArtist').innerText = meta.artist;
-      document.getElementById('mcPlayPause').innerText = '▮▮';
-      const color = songColors[currentTrack];
-      document.documentElement.style.setProperty('--main-color', color);
-      document.documentElement.style.setProperty('--panel-color', color + '40');
-    }
-
-    function musicPlayPause() {
-      const a = document.getElementById('bgMusic');
-      if (a.paused) { a.play(); document.getElementById('mcPlayPause').innerText = '▮▮'; }
-      else { a.pause(); document.getElementById('mcPlayPause').innerText = '▶'; }
-    }
-    function musicNext() { currentTrack = (currentTrack + 1) % playlist.length; playTrack(currentTrack); }
-    function musicPrev() { currentTrack = (currentTrack - 1 + playlist.length) % playlist.length; playTrack(currentTrack); }
-    function musicToggleLoop() { isLooping = !isLooping; document.getElementById('mcLoop').classList.toggle('active-loop', isLooping); }
-    function setVolume(v) { document.getElementById('bgMusic').volume = v/100; document.getElementById('volumeInput').value = v; }
-    function setVolumeFromInput(v) { setVolume(v); }
-    function toggleMute() { const a = document.getElementById('bgMusic'); a.muted = !a.muted; document.getElementById('muteBtn').innerText = a.muted ? 'Unmute' : 'Mute'; }
-    function musicSeek(v) { const a = document.getElementById('bgMusic'); a.currentTime = (v/100) * a.duration; }
-
-    // ─── CANVAS ENHANCEMENTS ─────────────────────────────────────────────────────
-    let isDrawing = false, lastX = 0, lastY = 0;
-    function initCanvas() {
-      const canvas = document.getElementById('paintingCanvas');
-      if (!canvas) return;
-      const ctx = canvas.getContext('2d');
-      canvas.addEventListener('mousedown', (e) => { isDrawing = true; [lastX, lastY] = [e.offsetX, e.offsetY]; });
-      canvas.addEventListener('mousemove', (e) => {
-        if (!isDrawing) return;
-        ctx.strokeStyle = document.getElementById('brushColor').value;
-        ctx.lineWidth = document.getElementById('brushSize').value;
-        ctx.lineCap = document.getElementById('brushShape').value;
-        ctx.beginPath(); ctx.moveTo(lastX, lastY); ctx.lineTo(e.offsetX, e.offsetY); ctx.stroke();
-        [lastX, lastY] = [e.offsetX, e.offsetY];
-      });
-      canvas.addEventListener('mouseup', () => isDrawing = false);
-    }
-    function setEraser() { document.getElementById('brushColor').value = '#ffffff'; }
-    function clearCanvas() { const c = document.getElementById('paintingCanvas'); c.getContext('2d').clearRect(0, 0, c.width, c.height); }
-    function downloadCanvas() { const link = document.createElement('a'); link.download = 'neon-art.png'; link.href = document.getElementById('paintingCanvas').toDataURL(); link.click(); }
-
-    // ─── DICTIONARY LOGIC ────────────────────────────────────────────────────────
-    async function searchDict() {
-      const word = document.getElementById('dictInput').value;
-      const res = document.getElementById('dictResults');
-      if (!word) return;
-      res.style.display = 'block'; res.innerHTML = 'Searching...';
-      try {
-        const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
-        const data = await response.json();
-        if (data.title === "No Definitions Found") { res.innerHTML = 'No results found.'; return; }
-        res.innerHTML = data[0].meanings.map(m => `
-          <div class="dict-entry">
-            <div class="dict-pos">${m.partOfSpeech}</div>
-            <ul style="padding-left:1.5rem;">${m.definitions.slice(0, 3).map(d => `<li>${d.definition}</li>`).join('')}</ul>
-          </div>
-        `).join('');
-      } catch (e) { res.innerHTML = 'Error fetching definition.'; }
-    }
-
-    // ─── CIPHER LOGIC ────────────────────────────────────────────────────────────
-    function runCaesar() {
-      const text = document.getElementById('caesarInput').value, shift = parseInt(document.getElementById('caesarShift').value);
-      document.getElementById('caesarOutput').innerText = text.replace(/[a-z]/gi, (c) => {
-        const start = c <= 'Z' ? 65 : 97; return String.fromCharCode(((c.charCodeAt(0) - start + shift) % 26 + 26) % 26 + start);
-      });
-    }
-    function runAtbash() {
-      const text = document.getElementById('atbashInput').value, abc = "abcdefghijklmnopqrstuvwxyz", zyx = "zyxwvutsrqponmlkjihgfedcba";
-      document.getElementById('atbashOutput').innerText = text.replace(/[a-z]/gi, (c) => {
-        const isUpper = c === c.toUpperCase(), idx = abc.indexOf(c.toLowerCase());
-        if (idx === -1) return c; const res = zyx[idx]; return isUpper ? res.toUpperCase() : res;
-      });
-    }
-
-    // ─── BACKGROUND LOGIC ────────────────────────────────────────────────────────
-    function applyCustomBg() {
-      const url = document.getElementById('customBgUrl').value;
-      if (!url) return;
-      document.documentElement.style.setProperty('--custom-bg', `url('${url}')`);
-      localStorage.setItem('gn_neon_custom_bg', url);
-    }
-    function clearCustomBg() { document.documentElement.style.setProperty('--custom-bg', 'none'); localStorage.removeItem('gn_neon_custom_bg'); }
-    function toggleVideoBg() { const v = document.getElementById('videoBg'); v.style.display = v.style.display === 'none' ? 'block' : 'none'; }
-    function updateMainColor(val) { document.documentElement.style.setProperty('--main-color', val); document.documentElement.style.setProperty('--panel-color', val + '40'); }
-    function toggleRainbowTheme() { rainbowThemeActive = !rainbowThemeActive; if (rainbowThemeActive) requestAnimationFrame(rainbowLoop); }
-    function rainbowLoop() {
-      if (!rainbowThemeActive) return;
-      const hue = (Date.now() / 20) % 360;
-      const color = `hsl(${hue}, 100%, 50%)`;
-      updateMainColor(color);
-      requestAnimationFrame(rainbowLoop);
-    }
-
-    // ─── UTILS ───────────────────────────────────────────────────────────────────
-    function showTool(type) {
-      const area = document.getElementById("toolArea"), menu = document.getElementById("toolsMenu");
-      menu.style.display = 'none';
-      if (type === 'calc') {
-        area.innerHTML = `<button class="back-button" onclick="load('tools')">← Back</button><h3>Calculators</h3><div class="games-menu"><button onclick="showCalc('simple')">Simple</button><button onclick="showCalc('volume')">Volume</button><button onclick="showCalc('graph')">Graph</button></div><div id="calcArea"></div>`;
-      } else if (type === 'ide') {
-        area.innerHTML = `<button class="back-button" onclick="load('tools')">← Back</button><h3>HTML IDE</h3><div id="ideContainer"><textarea id="ideInput" oninput="runIDE()"></textarea><iframe id="ideOutput"></iframe></div>`;
-      } else if (type === 'canvas') {
-        area.innerHTML = `<button class="back-button" onclick="load('tools')">← Back</button><h3>Canvas</h3><canvas id="paintingCanvas" width="800" height="500"></canvas><div class="canvas-tools"><input type="color" id="brushColor" value="#0000ff"><input type="range" id="brushSize" min="1" max="50" value="5"><select id="brushShape"><option value="round">Round</option><option value="square">Square</option></select><button onclick="setEraser()">Eraser</button><button onclick="clearCanvas()">Clear</button><button onclick="downloadCanvas()">Save</button></div>`;
-        initCanvas();
-      } else if (type === 'ciphers') {
-        area.innerHTML = `<button class="back-button" onclick="load('tools')">← Back</button><div class="cipher-container"><h3>Ciphers</h3><div class="cipher-group"><h4>Caesar</h4><input id="caesarInput"><input id="caesarShift" type="number" value="3"><button onclick="runCaesar()">Go</button><p id="caesarOutput"></p></div><div class="cipher-group"><h4>Atbash</h4><input id="atbashInput"><button onclick="runAtbash()">Go</button><p id="atbashOutput"></p></div></div>`;
-      } else if (type === 'dict') {
-        area.innerHTML = `<button class="back-button" onclick="load('tools')">← Back</button><div class="dict-container"><h3>Dictionary</h3><input id="dictInput"><button onclick="searchDict()">Search</button><div id="dictResults" class="dict-results"></div></div>`;
-      }
-    }
-
-    function showCalc(type) {
-      const c = document.getElementById("calcArea");
-      if (type === "simple") { c.innerHTML = `<input id="simpleInput"><button onclick="calcSimple()">=</button><p id="simpleOut"></p>`; }
-      else if (type === "volume") { c.innerHTML = `Cube: <input id="cubeSide"><button onclick="volCube()">Go</button><p id="cubeOut"></p>`; }
-      else if (type === "graph") {
-        c.innerHTML = `<div class="graph-layout"><div class="graph-inputs">y=<input id="eq1" value="x*x"><button onclick="drawGraph()">Graph</button></div><div class="graph-display"><canvas id="grid" width="400" height="400"></canvas></div></div>`;
-        drawGraph();
-      }
-    }
-
-    function calcSimple() { try { document.getElementById("simpleOut").innerText = eval(document.getElementById("simpleInput").value); } catch { } }
-    function volCube() { const v = parseFloat(document.getElementById('cubeSide').value); document.getElementById('cubeOut').innerText = v ** 3; }
-    function drawGraph() {
-      const canvas = document.getElementById("grid"); if (!canvas) return; const ctx = canvas.getContext("2d"); ctx.fillStyle = "black"; ctx.fillRect(0, 0, 400, 400);
-      ctx.strokeStyle = "white"; ctx.beginPath(); ctx.moveTo(200, 0); ctx.lineTo(200, 400); ctx.moveTo(0, 200); ctx.lineTo(400, 200); ctx.stroke();
-      const expr = document.getElementById('eq1').value; ctx.strokeStyle = "cyan"; ctx.beginPath();
-      for (let px = 0; px <= 400; px++) {
-        const x = (px - 200) / 20; let y; try { y = eval(expr.replace(/x/g, "(" + x + ")")); } catch { continue; }
-        const py = 200 - (y * 20); if (px === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
-      }
-      ctx.stroke();
-    }
-    function runIDE() { const output = document.getElementById('ideOutput').contentDocument; output.open(); output.write(document.getElementById('ideInput').value); output.close(); }
-
-    function showScratchGames() { document.getElementById('gamesContent').innerHTML = `<p>Scratch games list...</p>`; }
-    function showWebGames() { document.getElementById('gamesContent').innerHTML = `<p>Web games list...</p>`; }
-    function enablePerformanceMode(e) { e.stopPropagation(); document.getElementById('splashOverlay').classList.add('fade-out'); document.getElementById('videoBg').style.display = 'none'; }
-
-    // Init
-    window.onload = () => {
-      load('home');
-      const savedClock = localStorage.getItem('gn_neon_clock'); if (savedClock) { clockSettings = JSON.parse(savedClock); updateClockSettings(); }
-      const savedBg = localStorage.getItem('gn_neon_custom_bg'); if (savedBg) document.documentElement.style.setProperty('--custom-bg', `url('${savedBg}')`);
-      document.getElementById('splashOverlay').onclick = () => {
-        document.getElementById('splashOverlay').classList.add('fade-out');
-        const a = document.getElementById('bgMusic'); a.src = playlist[currentTrack]; updateTrackDisplay(); a.play();
-      };
-      const bgMusic = document.getElementById('bgMusic');
-      bgMusic.ontimeupdate = () => {
-        const seek = document.getElementById('seekBar');
-        if (seek) seek.value = (bgMusic.currentTime / bgMusic.duration) * 100;
-        document.getElementById('mcCurrent').innerText = fmtTime(bgMusic.currentTime);
-        document.getElementById('mcDuration').innerText = fmtTime(bgMusic.duration);
-      };
-      bgMusic.onended = () => { if (isLooping) { bgMusic.currentTime = 0; bgMusic.play(); } else { musicNext(); } };
-    };
-    function fmtTime(s) { if (isNaN(s)) return "0:00"; const m = Math.floor(s/60), sec = Math.floor(s%60); return `${m}:${sec.toString().padStart(2,'0')}`; }
-  </script>
+applySavedColors();
+load("home");
+setVideoBackground('https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/FlatlineLoop.mp4');
+initMusic();
+</script>
 </body>
 </html>
