@@ -2667,23 +2667,27 @@ function updateWebGame() {
   const frame =
     document.getElementById("webGameFrame");
 
-  frame.innerHTML = "";
+  frame.innerHTML =
+    '<div id="gameMount"></div>';
 
-  document.querySelectorAll(
-    ".webGameScript"
-  ).forEach(script => script.remove());
+  const oldScript =
+    document.getElementById("webGameScript");
+
+  if (oldScript) {
+    oldScript.remove();
+  }
 
   const script =
     document.createElement("script");
 
-  script.className = "webGameScript";
+  script.id = "webGameScript";
 
   script.src =
     webgames[currentIndex] +
     "?v=" +
     Date.now();
 
-  frame.appendChild(script);
+  document.body.appendChild(script);
 
   document.getElementById(
     "gameTitle"
