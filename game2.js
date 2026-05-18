@@ -1,7 +1,7 @@
 (() => {
 
-if (window.numberGuessCleanup) {
-  window.numberGuessCleanup();
+if (window.currentGameCleanup) {
+  window.currentGameCleanup();
 }
 
 const frame = document.getElementById("webGameFrame");
@@ -467,7 +467,7 @@ difficultyToggle.addEventListener(
 
 resetGame();
 
-window.numberGuessCleanup = function() {
+window.currentGameCleanup = function() {
 
   guessSubmit.removeEventListener(
     "click",
