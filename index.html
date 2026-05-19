@@ -82,32 +82,8 @@
       font-size: 1rem;
       pointer-events: none;
     }
-
-    #visitCounter {
-
-  margin-top: 18px;
-
-  text-align: center;
-
-  color: #66ccff;
-
-  font-size: 15px;
-
-  padding: 10px;
-
-  border:
-    1px solid #00aaff;
-
-  border-radius: 10px;
-
-  background:
-    rgba(0,0,0,0.25);
-
-  box-shadow:
-    0 0 12px rgba(0,170,255,0.2);
-}
-
-    #performanceModeBtn {
+    
+   #performanceModeBtn {
       margin-top: 2rem;
       padding: 0.75rem 1.5rem;
       font-size: 0.9rem;
@@ -1312,8 +1288,6 @@
   <div id="splashOverlay" onclick="enterSite()">
     <div id="splashText">LOADING...</div>
     <div id="splashSubtext">Please wait for the assets to load</div>
-    <div id="visitCounter">Visits: Loading...</div>
-
     <button id="performanceModeBtn" onclick="enablePerformanceMode(event)">⚡ Performance Mode</button>
   </div>
 
@@ -1723,45 +1697,6 @@ function enterSite() {
     audio.play().catch(e => console.warn("Audio start blocked:", e));
   }
 }
-
-
-// ─── GLOBAL VISIT COUNTER ─────────────────────────────────────────────
-async function updateVisitCounter() {
-  const counter = document.getElementById('visitCounter');
-
-  if (counter) {
-    counter.innerText = "Loading visits...";
-  }
-
-  try {
-    // Create namespace if it does not exist
-    await fetch("https://api.countapi.xyz/create?namespace=gn-neon&key=global-visits&value=0");
-
-    // Increment counter
-    const response = await fetch("https://api.countapi.xyz/hit/gn-neon/global-visits");
-
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`);
-    }
-
-    const data = await response.json();
-
-    if (counter) {
-      counter.innerText = `Global Visits: ${data.value}`;
-    }
-
-  } catch (err) {
-    console.error("Visit counter failed:", err);
-
-    if (counter) {
-      counter.innerText = "Visits unavailable";
-    }
-  }
-}
-
-// Wait until page is fully loaded
-window.addEventListener('load', updateVisitCounter);
-
 
 // ─── AUDIO ENGINE ────────────────────────────────────────────────────────────
 let audioCtx = null, analyser = null, sourceNode = null, audioContextReady = false;
@@ -2475,9 +2410,6 @@ const pages = {
             <span>sili3.jpg</span>
           </figure>
         </div>
-        <div id="visitCounter">
-          Visits: Loading...
-        </div>
       </article>
     
       <aside class="panel patch-panel">
@@ -2538,37 +2470,6 @@ const pages = {
     </section>
   `
 };
-
-function loadVisitCounter() {
-
-  const visitCounter =
-    document.getElementById(
-      "visitCounter"
-    );
-
-  if (!visitCounter) {
-    return;
-  }
-
-  fetch(
-    "https://api.countapi.xyz/hit/GN_Neon/visits"
-  )
-  .then(response => response.json())
-  .then(data => {
-
-    visitCounter.textContent =
-      `Visits: ${data.value}`;
-
-  })
-  .catch(error => {
-
-    console.error(error);
-
-    visitCounter.textContent =
-      "Counter failed to load";
-
-  });
-}
   
 function getColorBrightness(hexColor) {
   const hex = hexColor.replace('#', '');
