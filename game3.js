@@ -54,32 +54,32 @@ frame.innerHTML = `
 
     <button
       class="difficultyButton"
-      data-speed="2"
-      data-spawn="90"
+      data-speed="6"
+      data-spawn="45"
     >
       Easy
     </button>
 
     <button
       class="difficultyButton"
-      data-speed="3"
-      data-spawn="65"
+      data-speed="8"
+      data-spawn="25"
     >
       Normal
     </button>
 
     <button
       class="difficultyButton"
-      data-speed="4"
-      data-spawn="45"
+      data-speed="12"
+      data-spawn="15"
     >
       Hard
     </button>
 
     <button
       class="difficultyButton"
-      data-speed="5"
-      data-spawn="28"
+      data-speed="17"
+      data-spawn="5"
     >
       Impossible
     </button>
@@ -384,7 +384,7 @@ const player = {
   width: 26,
   height: 26,
 
-  speed: 5
+  speed: 8
 };
 
 function resizeCanvas() {
