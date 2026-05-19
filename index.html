@@ -1727,17 +1727,24 @@ function enterSite() {
 
 // ─── GLOBAL VISIT COUNTER ─────────────────────────────────────────────
 async function updateVisitCounter() {
-  const namespace = "gn-neon";
-  const key = "global-visits";
+  const counter = document.getElementById('visitCounter');
+
+  if (counter) {
+    counter.innerText = "Loading visits...";
+  }
 
   try {
-    const response = await fetch(
-      `https://api.countapi.xyz/hit/${namespace}/${key}`
-    );
+    // Create namespace if it does not exist
+    await fetch("https://api.countapi.xyz/create?namespace=gn-neon&key=global-visits&value=0");
+
+    // Increment counter
+    const response = await fetch("https://api.countapi.xyz/hit/gn-neon/global-visits");
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
 
     const data = await response.json();
-
-    const counter = document.getElementById('visitCounter');
 
     if (counter) {
       counter.innerText = `Global Visits: ${data.value}`;
@@ -1746,15 +1753,14 @@ async function updateVisitCounter() {
   } catch (err) {
     console.error("Visit counter failed:", err);
 
-    const counter = document.getElementById('visitCounter');
-
     if (counter) {
-      counter.innerText = "Global Visits: Offline";
+      counter.innerText = "Visits unavailable";
     }
   }
 }
 
-updateVisitCounter();
+// Wait until page is fully loaded
+window.addEventListener('load', updateVisitCounter);
 
 
 // ─── AUDIO ENGINE ────────────────────────────────────────────────────────────
