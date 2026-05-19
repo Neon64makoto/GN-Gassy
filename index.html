@@ -1413,28 +1413,6 @@ let seekDragging = false;
 let isVisualizerMode = false;
 let keepClockInViz = false;
 
-  const visitCounter =
-  document.getElementById(
-    "visitCounter"
-  );
-
-fetch(
-  "https://api.countapi.xyz/hit/GN_Neon/visits"
-)
-.then(response => response.json())
-.then(data => {
-
-  visitCounter.textContent =
-    `Visits: ${data.value}`;
-
-})
-.catch(() => {
-
-  visitCounter.textContent =
-    "Visits unavailable";
-
-});
-
 const DEFAULT_COLORS = {
   '--main-color': '#0000ff',
   '--panel-color': 'rgba(0, 50, 255, 0.25)',
@@ -2461,6 +2439,41 @@ const pages = {
         </div>
       </article>
 
+        <script>
+
+window.addEventListener(
+  "load",
+  () => {
+
+    const visitCounter =
+      document.getElementById(
+        "visitCounter"
+      );
+
+    fetch(
+      "https://api.countapi.xyz/hit/GN_Neon/visits"
+    )
+    .then(response => response.json())
+    .then(data => {
+
+      visitCounter.textContent =
+        `Visits: ${data.value}`;
+
+    })
+    .catch(error => {
+
+      console.error(error);
+
+      visitCounter.textContent =
+        "Counter failed to load";
+
+    });
+
+  }
+);
+
+</script>
+    
       <aside class="panel patch-panel">
         <div class="version-chip">Latest overhaul · v0.90</div>
         <h3>Patch Notes</h3>
