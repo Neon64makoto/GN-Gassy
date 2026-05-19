@@ -247,9 +247,9 @@ style.textContent = `
 
   border-radius: 10px;
 
-  padding: 10px;
+  padding: 5px;
 
-  font-size: 14px;
+  font-size: 17px;
 
   cursor: pointer;
 
@@ -323,7 +323,7 @@ style.textContent = `
 
   text-align: center;
 
-  font-size: 22px;
+  font-size: 17px;
 
   margin-bottom: 8px;
 
@@ -364,12 +364,12 @@ style.textContent = `
 
 #customSection {
 
-  margin-top: 6px;
+  margin-top: -10px;
 
   display: flex;
   flex-direction: column;
 
-  gap: 8px;
+  gap: 0px;
 }
 
 #customSection input {
