@@ -83,6 +83,30 @@
       pointer-events: none;
     }
 
+    #visitCounter {
+
+  margin-top: 18px;
+
+  text-align: center;
+
+  color: #66ccff;
+
+  font-size: 15px;
+
+  padding: 10px;
+
+  border:
+    1px solid #00aaff;
+
+  border-radius: 10px;
+
+  background:
+    rgba(0,0,0,0.25);
+
+  box-shadow:
+    0 0 12px rgba(0,170,255,0.2);
+}
+
     #performanceModeBtn {
       margin-top: 2rem;
       padding: 0.75rem 1.5rem;
@@ -1389,6 +1413,28 @@ let seekDragging = false;
 let isVisualizerMode = false;
 let keepClockInViz = false;
 
+  const visitCounter =
+  document.getElementById(
+    "visitCounter"
+  );
+
+fetch(
+  "https://api.countapi.xyz/hit/GN_Neon/visits"
+)
+.then(response => response.json())
+.then(data => {
+
+  visitCounter.textContent =
+    `Visits: ${data.value}`;
+
+})
+.catch(() => {
+
+  visitCounter.textContent =
+    "Visits unavailable";
+
+});
+
 const DEFAULT_COLORS = {
   '--main-color': '#0000ff',
   '--panel-color': 'rgba(0, 50, 255, 0.25)',
@@ -2409,6 +2455,9 @@ const pages = {
             <img src="https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/sili3.jpg" alt="Cat image">
             <span>sili3.jpg</span>
           </figure>
+        </div>
+        <div id="visitCounter">
+          Visits: Loading...
         </div>
       </article>
 
