@@ -3029,19 +3029,11 @@ function updateBassBorder(){
 
   // Determine what color should be used
 
-let color;
-
-if (settings.useSongColors && currentSongColor) {
-
-  // whatever variable your song color system stores
-  color = currentSongColor;
-
-} else {
-
-  color = getComputedStyle(document.documentElement)
-    .getPropertyValue("--main-color")
-    .trim();
-}
+const color = getComputedStyle(
+  document.documentElement
+)
+.getPropertyValue("--main-color")
+.trim();
 
 
 // Convert to RGB
