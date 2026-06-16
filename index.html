@@ -2973,35 +2973,51 @@ load("home");
 setVideoBackground('https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/FlatlineLoop.mp4');
 initMusic();
 
-// ─── BASS PEAK BORDER VISUALIZER ─────────────────────────────────────────
+// ─── IMPACT BORDER VISUALIZER ─────────────────────────────
 
 let borderFlash = 0;
+let lastEnergy = 0;
 
 function updateBassBorder() {
+  if (!audioContextReady || !analyser) {
+    requestAnimationFrame(updateBassBorder);
+    return;
+  }
+
   const data = new Uint8Array(analyser.frequencyBinCount);
   analyser.getByteFrequencyData(data);
 
-  let total = 0;
+  // Measure overall spectrum energy
+  let energy = 0;
 
   for (let i = 0; i < data.length; i++) {
-    total += data[i];
+    energy += data[i];
   }
 
-  const averageEnergy = total / data.length;
+  energy /= data.length;
 
-  const target = averageEnergy / 255;
+  // How much did energy increase this frame?
+  const spike = energy - lastEnergy;
 
-  if (target > borderFlash) {
-    borderFlash = target;
+  lastEnergy = energy;
+
+  // Big spectrum-wide hit detected
+  if (spike > 12) {
+    borderFlash = Math.min(1, spike / 40);
   }
 
-  borderFlash *= 0.92;
+  // Decay
+  borderFlash *= 0.93;
 
-  document.getElementById('bassBorder').style.opacity =
-    Math.min(1, borderFlash);
+  const border = document.getElementById('bassBorder');
+
+  // Uses existing CSS variable color automatically
+  border.style.opacity = borderFlash;
 
   requestAnimationFrame(updateBassBorder);
 }
+
+updateBassBorder();
 
 </script>
 </body>
