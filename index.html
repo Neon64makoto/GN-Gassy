@@ -3001,7 +3001,7 @@ function updateBassBorder(){
     const delta = data[i] - previous;
 
     // Count spikes
-    if(delta > 4){
+    if(delta > 8){
 
       // louder frequencies contribute more
       spikeScore += delta * (data[i]/255);
@@ -3016,7 +3016,7 @@ function updateBassBorder(){
 
   // Smooth decay
   borderFlash = Math.max(
-    borderFlash * 0.90,
+    borderFlash * 0.25,
     spikeScore
   );
 
