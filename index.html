@@ -1279,6 +1279,22 @@
       letter-spacing: 2px;
       font-weight: bold;
     }
+  
+
+    /* ─── BASS REACTIVE BORDER ────────────────────────────────────────────── */
+    #bassBorder {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 5;
+      opacity: 0;
+      transition: opacity 0.08s linear;
+      box-shadow:
+        inset 0 0 40px rgba(var(--bass-rgb, 0,0,255), 0.8),
+        inset 0 0 80px rgba(var(--bass-rgb, 0,0,255), 0.6),
+        inset 0 0 120px rgba(var(--bass-rgb, 0,0,255), 0.4);
+    }
+
   </style>
 </head>
 <body class="video-bg">
@@ -1370,6 +1386,7 @@
   </main>
 
   <canvas id="visualizerCanvas"></canvas>
+  <div id="bassBorder"></div>
   <div class="version-tag" id="vTag">v0.94</div>
 
 <script>
@@ -2955,6 +2972,53 @@ applySavedColors();
 load("home");
 setVideoBackground('https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/FlatlineLoop.mp4');
 initMusic();
+
+// ─── BASS BORDER VISUALIZER ──────────────────────────────────────────────
+function updateBassBorder() {
+  const border = document.getElementById('bassBorder');
+  if (!border) return requestAnimationFrame(updateBassBorder);
+
+  if (!audioContextReady || !analyser) {
+    border.style.opacity = '0';
+    return requestAnimationFrame(updateBassBorder);
+  }
+
+  const data = new Uint8Array(analyser.frequencyBinCount);
+  analyser.getByteFrequencyData(data);
+
+  let bass = 0;
+  const bassBins = Math.min(20, data.length);
+
+  for (let i = 0; i < bassBins; i++) bass += data[i];
+  bass /= bassBins;
+
+  const threshold = 128;
+
+  if (bass < threshold) {
+    border.style.opacity = '0';
+  } else {
+    const intensity = Math.min(1, (bass - threshold) / (255 - threshold));
+
+    const color = getComputedStyle(document.documentElement)
+      .getPropertyValue('--main-color')
+      .trim();
+
+    let r = 0, g = 0, b = 255;
+
+    if (color.startsWith('#')) {
+      r = parseInt(color.slice(1,3),16);
+      g = parseInt(color.slice(3,5),16);
+      b = parseInt(color.slice(5,7),16);
+    }
+
+    border.style.setProperty('--bass-rgb', `${r}, ${g}, ${b}`);
+    border.style.opacity = (intensity * 0.9).toString();
+  }
+
+  requestAnimationFrame(updateBassBorder);
+}
+updateBassBorder();
+
 </script>
 </body>
 </html>
