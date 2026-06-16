@@ -2978,39 +2978,30 @@ initMusic();
 let borderFlash = 0;
 
 function updateBassBorder() {
-  if (!audioContextReady || !analyser) {
-    requestAnimationFrame(updateBassBorder);
-    return;
-  }
-
   const data = new Uint8Array(analyser.frequencyBinCount);
   analyser.getByteFrequencyData(data);
 
-  // Use first few bins only
-  let bassPeak = 0;
+  let total = 0;
 
-  for (let i = 0; i < 6; i++) {
-    bassPeak = Math.max(bassPeak, data[i]);
+  for (let i = 0; i < data.length; i++) {
+    total += data[i];
   }
 
-  // Direct mapping
-  const target = bassPeak / 255;
+  const averageEnergy = total / data.length;
 
-  // Fast rise
+  const target = averageEnergy / 255;
+
   if (target > borderFlash) {
     borderFlash = target;
   }
 
-  // Slight smoothing
-  borderFlash *= 0.95;
+  borderFlash *= 0.92;
 
   document.getElementById('bassBorder').style.opacity =
     Math.min(1, borderFlash);
 
   requestAnimationFrame(updateBassBorder);
 }
-
-updateBassBorder();
 
 </script>
 </body>
