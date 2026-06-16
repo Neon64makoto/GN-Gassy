@@ -2992,7 +2992,7 @@ function updateBassBorder() {
   for (let i = 0; i < bassBins; i++) bass += data[i];
   bass /= bassBins;
 
-  const threshold = 128;
+  const threshold = 200;
 
   if (bass < threshold) {
     border.style.opacity = '0';
