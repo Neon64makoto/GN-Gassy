@@ -3001,7 +3001,7 @@ function updateBassBorder(){
     const delta = data[i] - previous;
 
     // Count spikes
-    if(delta > 8){
+    if(delta > 12){
 
       // louder frequencies contribute more
       spikeScore += delta * (data[i]/255);
