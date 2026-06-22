@@ -21,6 +21,7 @@
       --panel-size: 140px;
       --bg-gradient-top: #000000;
       --bg-gradient-bottom: #000000;
+      --ui-scale: clamp(0.72, calc(100vw / 1920), 1);
     }
 
     * {
@@ -991,6 +992,29 @@
     .bot-msg { align-self: flex-start; background: #222; color: var(--music-text); }
     .chat-input-row { display: flex; padding: 0.5rem; background: #111; border-top: 1px solid #333; }
     #chatInput { flex: 1; margin: 0; }
+
+
+    /* ─── GLOBAL DESKTOP->CHROMEBOOK SCALING ───────────────────────────── */
+    html {
+      font-size: calc(16px * var(--ui-scale));
+    }
+
+    .page-shell {
+      max-width: min(calc(1200px * (0.85 + var(--ui-scale) * 0.15)), 95vw);
+    }
+
+    #digitalClock {
+      font-size: calc(3rem * var(--ui-scale));
+    }
+
+    .site-title {
+      font-size: calc(3rem * var(--ui-scale));
+    }
+
+    .image-card img {
+      max-width: 100%;
+      height: auto;
+    }
 
     /* ─── RESPONSIVE ──────────────────────────────────────────────────── */
     @media (max-width: 1200px) {
@@ -2533,7 +2557,7 @@ const pages = {
       <h2>About:</h2>
       <p class="section-copy">This is GN-Neon. The GN stands for Goober Network. I made this site to bypass lightspeed filter. Why? Because I can.<br /><br />I (Neon64) made this site to let users get past school filters and actually do fun things.</p>
       <h2>Things you should know:</h2>
-      <p class="section-copy">Please use the settings to customize your experience, I personally recomend turning song color changing on. If you are experiencing lag, rainbow effects and background video take the most performance, turn them off or use the performance mode button when starting up to reduce lag. I <strong>HEAVILY</strong> recommend viewing this site using fullscreen or at 90%, especially if you are on a Chromebook.</p>
+      <p class="section-copy">Please use the settings to customize your experience, I personally recomend turning song color changing on. If you are experiencing lag rainbow effects and background video take the most performance, turn them off or use the performance mode button when starting up.</p>
       <h2>Controls:</h2>
       <p class="section-copy">Use CTRL + Arrow Key Right and Left to go forward and back, use CTRL + Arrow Key Up and Down to change the volume by 5%, all of the music controls can be held.</p>
     </section>
