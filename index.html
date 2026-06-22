@@ -14,7 +14,7 @@
       --text: #fff;
       --muted: #b3b3b3;
       --main-color: #0000ff;
-      --panel-color: rgba(0, 50, 255, 0.25);
+      --panel-color: rgba(0, 50, 255, 0.50);
       --music-text: #0000ff;
       --menu-text: #0000ff;
       --shadow: 0 14px 32px rgba(0, 0, 0, 0.32);
@@ -1408,7 +1408,7 @@ let keepClockInViz = false;
 
 const DEFAULT_COLORS = {
   '--main-color': '#0000ff',
-  '--panel-color': 'rgba(0, 50, 255, 0.25)',
+  '--panel-color': 'rgba(0, 50, 255, 0.50)',
   '--music-text': '#0000ff',
   '--menu-text': '#0000ff'
 };
@@ -1430,7 +1430,7 @@ function applySongColor(trackIndex) {
   const r = (rgb >> 16) & 255;
   const g = (rgb >> 8) & 255;
   const b = rgb & 255;
-  document.documentElement.style.setProperty('--panel-color', `rgba(${r}, ${g}, ${b}, 0.25)`);
+  document.documentElement.style.setProperty('--panel-color', `rgba(${r}, ${g}, ${b}, 0.50)`);
 }
 
 function toggleSongColor() {
