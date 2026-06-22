@@ -1387,7 +1387,7 @@
 
   <canvas id="visualizerCanvas"></canvas>
   <div id="bassBorder"></div>
-  <div class="version-tag" id="vTag">v0.94</div>
+  <div class="version-tag" id="vTag">v0.96</div>
 
 <script>
 // PERFORMANCE / CDN FIXES:
@@ -1608,7 +1608,7 @@ const songColors = [
   '#fc2003',    //land of flame
   '#0356fc',    //loyal thot
   '#07fc03',    //FREAK
-  '#e303fc',    //My strange life
+  '#fcb232',    //My strange life
   '#00ccff',    //Strange
   '#ff0000',    //Not like us
   '#ff4800',    //Notion
@@ -2478,17 +2478,15 @@ const pages = {
       </article>
     
       <aside class="panel patch-panel">
-        <div class="version-chip">Latest overhaul · v0.94</div>
+        <div class="version-chip">Latest overhaul · v0.96</div>
         <h3>Patch Notes</h3>
         <ul class="patch-list">
+          <li>Changed the About section with <strong>actual helpful info</strong>.</li>
+          <li>Added more music, <strong>with more to come</strong>.</li>
           <li>Started work on a link to the <strong>best unblocked games site.</strong></li>
           <li>Added a new webgames section, the new games are <strong>A Dino Game, A Number Guessing Game, and An Asteroid Dodging Game</strong></li>
-          <li>Fixed a few bugs.</li>
-          <li>Added more music, <strong>with more to come</strong>.</li>
           <li>Finally added creations section <strong>Map Images and Code</strong>.</li>
-          <li>Added music changes colors option <strong>in settings</strong>.</li>
           <li>Added <strong>"""Block Blast"""</strong> in games.</li>
-          <li>Added music controls: <strong>Use CTRL+Arrow keys to go back, skip and go up or down 5% in volume</strong>.</li>
         </ul>
       </aside>
     </section>
@@ -2532,8 +2530,12 @@ const pages = {
   `,
   about: `
     <section class="panel about-panel">
-      <h2>About</h2>
-      <p class="section-copy">This is GN-Neon. The GN stands for Goober Network. I made this site to bypass lightspeed filter. Why? Because I can.<br /><br />I (Neon64) made this site to provide games, tools, and unblocked content for everyone.</p>
+      <h2>About:</h2>
+      <p class="section-copy">This is GN-Neon. The GN stands for Goober Network. I made this site to bypass lightspeed filter. Why? Because I can.<br /><br />I (Neon64) made this site to let users get past school filters and actually do fun things.</p>
+      <h2>Things you should know:</h2>
+      <p class="section-copy">Please use the settings to customize your experience, I personally recomend turning song color changing on. If you are experiencing lag rainbow effects and background video take the most performance, turn them off or use the performance mode button when starting up.</p>
+      <h2>Controls:</h2>
+      <p class="section-copy">Use CTRL + Arrow Key Right and Left to go forward and back, use CTRL + Arrow Key Up and Down to change the volume by 5%, all of the music controls can be held.</p>
     </section>
   `
 };
