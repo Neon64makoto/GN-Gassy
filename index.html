@@ -1852,14 +1852,15 @@ function updateTrackDisplay() {
 
 function fmtTime(s) { const m = Math.floor(s/60), sec = Math.floor(s%60); return `${m}:${sec.toString().padStart(2,'0')}`; }
 
+let songState = 1;
+
 function musicPlayPause() { 
-  let songState = 0;
   const a = document.getElementById('bgMusic'); 
   ensureAudioContext(); 
   if (a.paused) {
     a.play();
     document.getElementById('mcPlayPause').innerText = '▮▮';
-    songState = 0
+    songState = 1
     console.log(songState)
   } else {
     a.pause();
