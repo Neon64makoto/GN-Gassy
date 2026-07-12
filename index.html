@@ -1965,6 +1965,10 @@ document.addEventListener('keydown', (e) => {
 document.addEventListener('keydown', (e) => {
   if (e.shiftKey) {
     if (e.key === ' ') {
+        if (event.repeat) {
+        return; 
+      }
+      event.preventDefault(); 
       musicPlayPause(); 
       }
     }
