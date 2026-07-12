@@ -1863,8 +1863,6 @@ function musicPlayPause() {
 }
 function musicNext() { currentTrack = (currentTrack + 1) % playlist.length; const a = document.getElementById('bgMusic'); a.src = playlist[currentTrack]; updateTrackDisplay(); applySongColor(currentTrack); a.play(); }
 function musicPrev() { const a = document.getElementById('bgMusic'); if(a.currentTime > 3) a.currentTime = 0; else currentTrack = (currentTrack - 1 + playlist.length) % playlist.length; a.src = playlist[currentTrack]; updateTrackDisplay(); applySongColor(currentTrack); a.play(); }
-function musicPause() { const a = document.getElementById('bgMusic'); a.src = playlist[currentTrack]; updateTrackDisplay(); a.pause(); }
-function musicPlay() { const a = document.getElementById('bgMusic'); a.src = playlist[currentTrack]; updateTrackDisplay(); a.play(); }
 function musicToggleLoop() { isLooping = !isLooping; document.getElementById('mcLoop').classList.toggle('active-loop', isLooping); }
 function musicSeek(v) { const a = document.getElementById('bgMusic'); seekDragging = true; a.currentTime = (v/100)*a.duration; setTimeout(()=>seekDragging=false, 200); }
 function setVolume(v) {
@@ -1959,14 +1957,7 @@ document.addEventListener('keydown', (e) => {
 document.addEventListener('keydown', (e) => {
   if (e.shiftKey) {
     if (e.key === ' ') {
-      if (bgMusic.paused) {
-          { e.preventDefault(); musicPlay(); };
-          console.log("Tried to play");
-        }
-        else {
-          { e.preventDefault(); musicPause(); };
-          console.log("Tried to pause");
-        }
+      musicPlayPause(); 
       }
     }
   }
