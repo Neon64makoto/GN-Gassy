@@ -1786,6 +1786,7 @@ function initMusic() {
   
   // Load saved music state
   const savedTrack = localStorage.getItem('gn_neon_track');
+  const savedState = localStorage.getItem('gn_neon_song_state');
   const savedTime = localStorage.getItem('gn_neon_time');
   const savedVolume = localStorage.getItem('gn_neon_volume');
   const savedMute = localStorage.getItem('gn_neon_mute');
@@ -1844,6 +1845,7 @@ function updateTrackDisplay() {
   document.getElementById('mcTitle').innerText = meta.title;
   document.getElementById('mcArtist').innerText = meta.artist;
   document.getElementById('mcPlayPause').innerText = '▮▮';
+  localStorage.setItem('gn_neon_song_state', songState);
   localStorage.setItem('gn_neon_track', currentTrack);
   applySongColor(currentTrack);
 }
@@ -1851,14 +1853,19 @@ function updateTrackDisplay() {
 function fmtTime(s) { const m = Math.floor(s/60), sec = Math.floor(s%60); return `${m}:${sec.toString().padStart(2,'0')}`; }
 
 function musicPlayPause() { 
+  let songState = 0;
   const a = document.getElementById('bgMusic'); 
   ensureAudioContext(); 
   if (a.paused) {
     a.play();
     document.getElementById('mcPlayPause').innerText = '▮▮';
+    songState = 0
+    console.log(songState)
   } else {
     a.pause();
     document.getElementById('mcPlayPause').innerText = '▶';
+    songState = 0
+    console.log(songState)
   }
 }
 function musicNext() { currentTrack = (currentTrack + 1) % playlist.length; const a = document.getElementById('bgMusic'); a.src = playlist[currentTrack]; updateTrackDisplay(); applySongColor(currentTrack); a.play(); }
