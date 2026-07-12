@@ -1961,9 +1961,11 @@ document.addEventListener('keydown', (e) => {
     if (e.key === 'Space') {
       if (audio.paused) {
           { e.preventDefault(); musicPlay(); };
+          console.log("Tried to play");
         }
         else {
           { e.preventDefault(); musicPause(); };
+          console.log("Tried to pause");
         }
       }
     }
