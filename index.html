@@ -1757,16 +1757,17 @@ function enablePerformanceMode(event) {
 function enterSite() {
   const overlay = document.getElementById('splashOverlay');
   const songState = Number(localStorage.getItem('gn_neon_song_state') ?? 1);
+  const audio = document.getElementById('bgMusic');
+
   if (overlay.classList.contains('ready')) {
     overlay.classList.add('fade-out');
     ensureAudioContext();
-    const audio = document.getElementById('bgMusic');
-    audio.play().catch(e => console.warn("Audio start blocked:", e));
-  }
-  if (songState === 1) {
+
+    if (songState === 1) {
       audio.play().catch(e => console.warn("Audio start blocked:", e));
-  } else {
+    } else {
       audio.pause();
+    }
   }
 }
 
