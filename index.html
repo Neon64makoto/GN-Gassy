@@ -2093,7 +2093,7 @@ document.addEventListener('keydown', (e) => {
     
     for (let i = 0; i < barCount; i++) {
       const val = data[i * 2] || 0;
-      const h = (val / 255) * (H * 0.4);
+      const h = (val / 200) * (H * 0.4);
       const opacity = 0.3 + (val / 255) * 0.7;
       
       let color;
