@@ -1758,6 +1758,7 @@ function enterSite() {
   const overlay = document.getElementById('splashOverlay');
   const songState = Number(localStorage.getItem('gn_neon_song_state') ?? 1);
   const audio = document.getElementById('bgMusic');
+  const playPause = document.getElementById('mcPlayPause');
 
   if (overlay.classList.contains('ready')) {
     overlay.classList.add('fade-out');
@@ -1765,8 +1766,10 @@ function enterSite() {
 
     if (songState === 1) {
       audio.play().catch(e => console.warn("Audio start blocked:", e));
+      playPause.innerText = '▮▮';
     } else {
       audio.pause();
+      playPause.innerText = '▶';
     }
   }
 }
