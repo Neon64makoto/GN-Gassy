@@ -45,6 +45,15 @@
       min-height: 100vh;
     }
 
+    /* Graph style to move it */
+    .graphWrap {
+      display: flex;
+      padding: 125px;
+    }
+    .graphControls {
+      width: 75%;
+    }
+
     /* Splash / Loading Overlay */
     #splashOverlay {
       position: fixed;
@@ -2673,7 +2682,7 @@ function showCalc(type) {
   } else if (type === "volume") {
     c.innerHTML = `<h3>Volume Calculator</h3>Cube (Side): <input id="cubeSide" onkeydown="enterRun(event, volCube)"><button onclick="volCube()">Calc</button><p id="cubeOut"></p>Sphere (Radius): <input id="sphereR" onkeydown="enterRun(event, volSphere)"><button onclick="volSphere()">Calc</button><p id="sphereOut"></p>Rectangular Prism (L, W, H): <input id="recL" placeholder="Length" onkeydown="enterRun(event, volRect)"><input id="recW" placeholder="Width" onkeydown="enterRun(event, volRect)"><input id="recH" placeholder="Height" onkeydown="enterRun(event, volRect)"><button onclick="volRect()">Calc</button><p id="rectOut"></p>Cylinder (R, H): <input id="cylR" placeholder="Radius" onkeydown="enterRun(event, volCyl)"><input id="cylH" placeholder="Height" onkeydown="enterRun(event, volCyl)"><button onclick="volCyl()">Calc</button><p id="cylOut"></p>Pyramid (Base, Height): <input id="pyrB" placeholder="Base Area" onkeydown="enterRun(event, volPyr)"><input id="pyrH" placeholder="Height" onkeydown="enterRun(event, volPyr)"><button onclick="volPyr()">Calc</button><p id="pyrOut"></p>`;
   } else if (type === "graph") {
-    c.innerHTML = `<h3>Graph Calculator</h3>X: <input id="xmin" value="-10"> to <input id="xmax" value="10"><br>Y: <input id="ymin" value="-10"> to <input id="ymax" value="10"><br><br>y=<input id="eq1" onkeydown="enterRun(event, drawGraph)"><br>y=<input id="eq2" onkeydown="enterRun(event, drawGraph)"><br>y=<input id="eq3" onkeydown="enterRun(event, drawGraph)"><br>y=<input id="eq4" onkeydown="enterRun(event, drawGraph)"><br>y=<input id="eq5" onkeydown="enterRun(event, drawGraph)"><br><br><button onclick="drawGraph()">Graph</button><br><br><div class="canvas-wrap"><canvas id="grid" width="400" height="400"></canvas><div id="axesLabels"></div></div>`;
+    c.innerHTML = `<div class="graphWrap"><div class="graphControls"><h3>Graph Calculator</h3>X: <input id="xmin" value="-10"> to <input id="xmax" value="10"><br>Y: <input id="ymin" value="-10"> to <input id="ymax" value="10"><br><br>y=<input id="eq1" onkeydown="enterRun(event, drawGraph)"><br>y=<input id="eq2" onkeydown="enterRun(event, drawGraph)"><br>y=<input id="eq3" onkeydown="enterRun(event, drawGraph)"><br>y=<input id="eq4" onkeydown="enterRun(event, drawGraph)"><br>y=<input id="eq5" onkeydown="enterRun(event, drawGraph)"><br><br><button onclick="drawGraph()">Graph</button><br><br></div><div class="graphCalc"><div class="canvas-wrap"><canvas id="grid" width="400" height="400"></canvas><div id="axesLabels"></div></div></div></div>`;
   }
 }
 
