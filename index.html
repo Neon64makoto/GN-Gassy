@@ -54,6 +54,11 @@
       width: 75%;
     }
 
+    .cipherAreaAlign {
+      display: flex;
+      gap: 1rem;
+    }
+
     /* Splash / Loading Overlay */
     #splashOverlay {
       position: fixed;
@@ -2859,10 +2864,10 @@ function prevWebGame() {
 
 function showCipher(type) {
   const area = document.getElementById("cipherArea");
-  area.innerHTML = `<h3>${type.toUpperCase()}</h3><textarea id="cipherIn" placeholder="Enter text..."></textarea><div><button onclick="runCipher('${type}', 'encode')">Encode</button><button onclick="runCipher('${type}', 'decode')">Decode</button></div><pre id="cipherOut"></pre>`;
+  area.innerHTML = `<h3>${type.toUpperCase()}</h3><div class="cipherAreaAlign"><div class="cipherTextAreaDiv"><textarea id="cipherIn" placeholder="Enter text..."></textarea></div><div class="cipherButtonsDiv"><button onclick="runCipher('${type}', 'encode')">Encode</button><button onclick="runCipher('${type}', 'decode')">Decode</button></div></div><div class="cipherOutputDiv"><pre id="cipherOut"></pre></div>`;
 }
 function runCipher(type, mode) {
-  const input = document.getElementById('cipherIn').value;
+  const input = document.getElementById('cipherIn').value; 
   let out = "";
   if (type === 'caesar') {
     const shift = mode === 'encode' ? 3 : -3;
