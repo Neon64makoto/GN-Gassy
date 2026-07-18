@@ -726,6 +726,11 @@
       padding: 0 2rem 2rem 2rem;
       text-align: center;
     }
+    
+    .not-games-menu {
+      padding: 0 2rem 2rem 2rem;
+      text-align: center;
+    }
 
     #gamesContent {
       width: 100%;
@@ -880,6 +885,14 @@
     .games-menu button {
       display: block;
       width: 40%;
+      margin: 0.5rem auto;
+      font-size: 1rem;
+      padding: 0.75rem 1rem;
+    }
+
+    .not-games-menu button {
+      display: block;
+      width: 100%;
       margin: 0.5rem auto;
       font-size: 1rem;
       padding: 0.75rem 1rem;
@@ -1402,7 +1415,7 @@
 
   <canvas id="visualizerCanvas"></canvas>
   <div id="bassBorder"></div>
-  <div class="version-tag" id="vTag">v0.97</div>
+  <div class="version-tag" id="vTag">v0.98</div>
 
 <script>
 // PERFORMANCE / CDN FIXES:
@@ -2523,9 +2536,10 @@ const pages = {
       </article>
     
       <aside class="panel patch-panel">
-        <div class="version-chip">Latest overhaul · v0.97</div>
+        <div class="version-chip">Latest overhaul · v0.98</div>
         <h3>Patch Notes</h3>
         <ul class="patch-list">
+          <li>Changed the About section to be <strong>Info</strong>, with even more information added.</li>
           <li>Added new <strong>pause shortcut, hold shift and press space to pause</strong>.</li>
           <li>Changed the info section with <strong>actual helpful info</strong>.</li>
           <li>Added more music, <strong>with more to come</strong>.</li>
@@ -3226,8 +3240,8 @@ const page = {
   soggy: `
     <section class="panel games-panel">
   <h2>SOG Encoder</h2>
-
-  <div class="games-menu">
+<div class="cipherAreaAlign">
+  <div class="not-games-menu">
     <button onclick="sog()">Encode</button>
     <button onclick="unsog()">Decode</button>
     <button onclick="clear_text()">Clear</button>
@@ -3238,13 +3252,13 @@ const page = {
       id="to_sog"
       rows="10"
       style="width:100%; resize:vertical;"
-      placeholder="Enter text to encode or SOG text to decode..."
-    ></textarea>
+      placeholder="Enter text to encode or SOG text to decode..."></textarea>
 
     <p style="margin-top:10px;">
       <strong>Encode</strong> converts normal text into SOG and copies it to your clipboard.<br>
       <strong>Decode</strong> converts SOG back into readable text.
     </p>
+  </div>
   </div>
 </section>
   `
