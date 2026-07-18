@@ -735,7 +735,7 @@
     .patch-panel h3,
     .calc-panel h2,
     .games-panel h2,
-    .about-panel h2 {
+    .info-panel h2 {
       margin-top: 0;
       font-size: 2rem;
     }
@@ -823,19 +823,19 @@
 
     .calc-panel,
     .games-panel,
-    .about-panel {
+    .info-panel {
       padding: 2rem;
     }
 
     .calc-panel h2,
     .games-panel h2,
-    .about-panel h2 {
+    .info-panel h2 {
       font-size: 2rem;
     }
 
     .calc-panel h3,
     .games-panel h3,
-    .about-panel h3 {
+    .info-panel h3 {
       font-size: 1.5rem;
     }
 
@@ -1070,7 +1070,7 @@
       .patch-panel,
       .calc-panel,
       .games-panel,
-      .about-panel {
+      .info-panel {
         padding: 1.5rem;
       }
 
@@ -1090,7 +1090,7 @@
       .patch-panel h3,
       .calc-panel h2,
       .games-panel h2,
-      .about-panel h2 {
+      .info-panel h2 {
         font-size: 1.5rem;
       }
 
@@ -1150,7 +1150,7 @@
       .patch-panel,
       .calc-panel,
       .games-panel,
-      .about-panel {
+      .info-panel {
         padding: 1rem;
       }
 
@@ -1158,7 +1158,7 @@
       .patch-panel h3,
       .calc-panel h2,
       .games-panel h2,
-      .about-panel h2 {
+      .info-panel h2 {
         font-size: 1.3rem;
       }
 
@@ -1338,7 +1338,7 @@
       <button onclick="load('tools')">Tools</button>
       <button onclick="load('games')">Games</button>
       <button onclick="load('creations')">Creations</button>
-      <button onclick="load('about')">About</button>
+      <button onclick="load('info')">Info</button>
       <button onclick="toggleVisualizerMode()" id="vizModeBtn" style="border: 1px solid var(--main-color); background: var(--panel-color);">Visualizer</button>
       <button onclick="load('settings')" style="margin-top: auto;">Settings</button>
     </nav>
@@ -2529,7 +2529,7 @@ const pages = {
         <h3>Patch Notes</h3>
         <ul class="patch-list">
           <li>Added new <strong>pause shortcut, hold shift and press space to pause</strong>.</li>
-          <li>Changed the About section with <strong>actual helpful info</strong>.</li>
+          <li>Changed the info section with <strong>actual helpful info</strong>.</li>
           <li>Added more music, <strong>with more to come</strong>.</li>
           <li>Started work on a link to the <strong>best unblocked games site.</strong></li>
           <li>Added a new webgames section, the new games are <strong>A Dino Game, A Number Guessing Game, and An Asteroid Dodging Game</strong></li>
@@ -2576,14 +2576,48 @@ const pages = {
       <div id="creationArea"></div>
     </section>
   `,
-  about: `
-    <section class="panel about-panel">
-      <h2>About:</h2>
+  info: `
+    <section class="panel info-panel">
+      <h2>About The Site:</h2>
       <p class="section-copy">This is GN-Neon. The GN stands for Goober Network. I made this site to bypass lightspeed filter. Why? Because I can.<br /><br />I (Neon64) made this site to let users get past school filters and actually do fun things.</p>
       <h2>Things you should know:</h2>
       <p class="section-copy">Please use the settings to customize your experience, I personally recomend turning song color changing on. If you are experiencing lag, rainbow effects and background video take the most performance, turn them off or use the performance mode button when starting up to reduce lag. I <strong>HEAVILY</strong> recommend viewing this site using fullscreen or at 90%, especially if you are on a Chromebook.</p>
       <h2>Controls:</h2>
       <p class="section-copy">Use CTRL + Arrow Key Right and Left to go forward and back, use CTRL + Arrow Key Up and Down to change the volume by 5%, all of the music controls can be held. You can also now hold Shift and press the Space bar to pause and unpause the music, it cant be held to make it easier to use.</p>
+    </section>
+<br />
+    <section class="panel info-panel">
+      <h2>Shortcuts:</h2>
+      <p class="section-copy">Here are some useful shortcuts for chromebooks, most of these work on any browser of course.<br /></p>
+      <ul>
+         <li>CTRL + T to open a new tab.</li>
+         <li>CTRL + W to close the current tab.</li>
+         <li>CTRL + Shift + T to reopen the last closed tab.</li>
+         <li>CTRL + Shift + W to close all tabs.</li>
+         <li>CTRL + Tab to switch between tabs.</li>
+         <li>ALT + Tab to switch between windows.</li>
+         <li>CTRL + C to copy selected text.</li>
+         <li>CTRL + V to paste copied text.</li>
+         <li>CTRL + X to cut selected text.</li>
+         <li>CTRL + Z to undo the last action.</li>
+         <br />
+         <li>CTRL + Shift + Alt + R to POWERWASH your chromebook, this will reset it to factory settings and delete all data, use with caution.</li>
+         <li>Refresh Key + Power Button to enter recovery mode, you can try to enter DEV mode here too, but first: its inaccessable on usual school devices, and second: if you really did get to DEV mode, it would play a VERY loud beep, so be cautious.</li>
+      </ul>
+      <h2>General Info About The School:</h2>
+      <p class="section-copy">They <strong>love</strong> GOONINGGGGGGGGG</p>
+      <h2>Links To Nerdy Stuff:</h2>
+      <p class="section-copy">Heres a few links that can lead to exploits or interesting discoveries:
+        <ul>
+          <li>chrome://serviceworker-internals/        <===== copy this and paste it in the address bar to go to it.</li>
+          <li>chrome://indexeddb-internals/       <===== copy this and paste it in the address bar to go to it.</li>
+          <li>chrome://flags/       <===== copy this and paste it in the address bar to go to it.</li>
+          <li>chrome://chrome-urls/       <===== copy this and paste it in the address bar to go to it.</li>
+          <li><a href="https://github.com/p00p4nts/lightspeed-filter-agent-sourcecode" target="_blank">Lightspeed Filter Agent Source Code</a></li>
+          <li><a href="https://github.com/Blobby-Boi/ExtPrint3r" target="_blank">ExtPrint3r</a>(GitHub exploit for lightspeed filter, is patched but may still work.)</li>
+          <li><a href="https://github.com/mrmrs/html/blob/master/index.html" target="_blank">HTML Cheatsheet</a></li>
+        </ul>
+        </p>
     </section>
   `
 };
@@ -2636,7 +2670,7 @@ function load(page) {
     'tools': 1,
     'games': 2,
     'creations': 3,
-    'about': 4
+    'info': 4
   };
   const buttonIndex = pageButtonMap[page];
   if (buttonIndex !== undefined && navButtons[buttonIndex]) {
