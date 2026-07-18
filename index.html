@@ -3219,16 +3219,34 @@ document.documentElement.style.setProperty(
 updateBassBorder();
 
 </script>
+<script src="https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Extra/main.js"></script>
 <script>
+  
 const page = {
   soggy: `
     <section class="panel games-panel">
-      <h2>Soggy</h2>
-      <div class="games-menu" id="toolsMenu">
-        <button onclick="showTool('ciphers')">Ciphers</button>
-      </div>
-      <div id="toolArea"></div>
-    </section>
+  <h2>SOG Encoder</h2>
+
+  <div class="games-menu">
+    <button onclick="sog()">Encode</button>
+    <button onclick="unsog()">Decode</button>
+    <button onclick="clear_text()">Clear</button>
+  </div>
+
+  <div class="tool-content">
+    <textarea
+      id="to_sog"
+      rows="10"
+      style="width:100%; resize:vertical;"
+      placeholder="Enter text to encode or SOG text to decode..."
+    ></textarea>
+
+    <p style="margin-top:10px;">
+      <strong>Encode</strong> converts normal text into SOG and copies it to your clipboard.<br>
+      <strong>Decode</strong> converts SOG back into readable text.
+    </p>
+  </div>
+</section>
   `
 };
 const sequence = "soggy";
