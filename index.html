@@ -1763,9 +1763,6 @@ function enablePerformanceMode(event) {
   }
   const overlay = document.getElementById('splashOverlay');
   overlay.classList.add('fade-out');
-  ensureAudioContext();
-  const audio = document.getElementById('bgMusic');
-  audio.play().catch(e => console.warn("Audio start blocked:", e));
 }
 
 function enterSite() {
@@ -1787,6 +1784,7 @@ function enterSite() {
     }
   }
 }
+
 
 // ─── AUDIO ENGINE ────────────────────────────────────────────────────────────
 let audioCtx = null, analyser = null, sourceNode = null, audioContextReady = false;
@@ -2588,7 +2586,7 @@ const pages = {
 <br />
     <section class="panel info-panel">
       <h2>Shortcuts:</h2>
-      <p class="section-copy">Here are some useful shortcuts for chromebooks, most of these work on any browser of course.<br /></p>
+      <p class="section-copy">Here are some useful shortcuts for chromebooks, most of these work on any browser of course:<br /></p>
       <ul>
          <li>CTRL + T to open a new tab.</li>
          <li>CTRL + W to close the current tab.</li>
@@ -2600,11 +2598,17 @@ const pages = {
          <li>CTRL + V to paste copied text.</li>
          <li>CTRL + X to cut selected text.</li>
          <li>CTRL + Z to undo the last action.</li>
+         <li>Slide 3 fingers on the trackpad left or right to switch between tabs.</li>
+         <li>Slide 4 fingers on the trackpad left or right to switch between desktops.</li>
+         <li>CTRL + Click to open a link in a new tab.</li>
+         <li>Shift + Click to open a link in a new window.</li>
          <br />
+         <p><strong>These ones could get you into trouble, use them wisely, and for the love of everything, don't say you got them from this website:</strong></p>
          <li>CTRL + Shift + Alt + R to POWERWASH your chromebook, this will reset it to factory settings and delete all data, use with caution.</li>
          <li>Refresh Key + Power Button to enter recovery mode, you can try to enter DEV mode here too, but first: its inaccessable on usual school devices, and second: if you really did get to DEV mode, it would play a VERY loud beep, so be cautious.</li>
       </ul>
       <h2>General Info About The School:</h2>
+      <p>Okay now here is where it gets more or less skeptical, as I am not a sysadmin. Look, as far as I can tell,  right now as I write this, the school is <strong>*NOT*</strong> spying on you 24/7, I've looked up plenty of things that the school should have flagged me for as setting up exploits and literally cheating. Not once have they seen that, BUT, they CAN see whatever you do *if* they look directly, OR you do something directly flagged, like looking for a porn site, or searching for keywords that would get firewalled; This also includes curse words. Do not send anything with a swear in an email, that is immediately flagged, and they will absolutely see it. They would have stopped me long ago if they were keeping an eye on your history, clearly the I.T. does not get paid enough to. So, long story short, the school is not directly spying on you ever, it's only when they have a proper reason to do so, like if you have a past or they already know you are up to something.</p>
       <p class="section-copy">They <strong>love</strong> GOONINGGGGGGGGG</p>
       <h2>Links To Nerdy Stuff:</h2>
       <p class="section-copy">Heres a few links that can lead to exploits or interesting discoveries:
@@ -2618,6 +2622,15 @@ const pages = {
           <li><a href="https://github.com/mrmrs/html/blob/master/index.html" target="_blank">HTML Cheatsheet</a></li>
         </ul>
         </p>
+    </section>
+  `,
+  soggy: `
+    <section class="panel games-panel">
+      <h2>Soggy</h2>
+      <div class="games-menu" id="toolsMenu">
+        <button onclick="showTool('ciphers')">Ciphers</button>
+      </div>
+      <div id="toolArea"></div>
     </section>
   `
 };
@@ -3205,6 +3218,56 @@ document.documentElement.style.setProperty(
 
 updateBassBorder();
 
+</script>
+<script>
+const page = {
+  soggy: `
+    <section class="panel games-panel">
+      <h2>Soggy</h2>
+      <div class="games-menu" id="toolsMenu">
+        <button onclick="showTool('ciphers')">Ciphers</button>
+      </div>
+      <div id="toolArea"></div>
+    </section>
+  `
+};
+const sequence = "soggy";
+let progress = 0;
+let timeout;
+
+document.addEventListener("keydown", (e) => {
+
+    if (e.key.toLowerCase() === sequence[progress]) {
+
+        progress++;
+
+        clearTimeout(timeout);
+
+        if (progress === sequence.length) {
+            console.log("Sogged!");
+            loadsecret(page.soggy);
+            progress = 0;
+            return;
+        }
+
+        timeout = setTimeout(() => {
+            progress = 0;
+        }, 3000);
+
+    } else {
+        clearTimeout(timeout);
+        progress = 0;
+    }
+
+});
+
+function loadsecret(html) {
+  if (isVisualizerMode) {
+    toggleVisualizerMode();
+  }
+
+  document.getElementById("content").innerHTML = html;
+}
 </script>
 </body>
 </html>
