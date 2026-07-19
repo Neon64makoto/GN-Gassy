@@ -226,7 +226,7 @@
       padding: 0.75rem 0.75rem;
       color: var(--text);
       background: #0c0c0c;
-      border: 1px solid var(--border-strong);
+      border: 5px solid var(--border-strong);
       border-radius: 4px;
     }
 
@@ -691,7 +691,7 @@
 
     .panel {
       background: linear-gradient(180deg, rgba(0, 0, 0, 1), var(--panel-color));
-      border: 1px solid var(--border);
+      border: 3px solid var(--main-color);
       border-radius: 14px;
       box-shadow: var(--shadow);
       backdrop-filter: blur(5px);
@@ -708,7 +708,7 @@
     .games-panel,
     .web-game-panel {
       background: linear-gradient(180deg, rgba(0, 0, 0, 1), var(--panel-color));
-      border: 1px solid var(--border);
+      border: 3px solid var(--main-color);
       border-radius: 14px;
       box-shadow: var(--shadow);
       backdrop-filter: blur(5px);
@@ -716,6 +716,20 @@
       width: 90vw;
       margin-left: calc(50% - 45vw);
     }
+
+    .not-games-panel, .web-game-panel {
+    background: linear-gradient(180deg, rgba(0, 0, 0, 1), var(--panel-color));
+    border: 3px solid var(--main-color);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(5px);
+    padding: 10px;
+    width: 75vw;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
 
     .games-panel h2 {
       padding: 2rem 2rem 1rem 2rem;
@@ -760,10 +774,9 @@
 
     .image-card {
   background: var(--panel-alt);
-  border: 1px solid var(--border);
+  border: 1px solid var(--main-color);
   border-radius: 12px;
   overflow: hidden;
-  cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -773,7 +786,7 @@
 }
 
 .image-card img {
-  width: 100%;
+  width: 230px;
   aspect-ratio: 1 / 1;
   object-fit: cover;
   display: block;
@@ -973,7 +986,7 @@
       margin-top: 1rem;
       padding: 1rem;
       background: #0e0e0e;
-      border: 1px solid var(--border);
+      border: 1px solid var(--main-color);
       border-radius: 10px;
       text-align: left;
       font-size: 1.05rem;
@@ -1242,7 +1255,7 @@
       margin-top: 20px;
       padding: 20px;
       background: rgba(17, 17, 17, 0.9);
-      border: 1px solid var(--border);
+      border: 1px solid var(--main-color);
       border-radius: 8px;
       text-align: center;
       cursor: default;
@@ -1281,7 +1294,7 @@
     .code-content {
       flex: 1;
       background: #0a0a0a;
-      border: 1px solid var(--border);
+      border: 1px solid var(--main-color);
       border-radius: 8px;
       padding: 1.5rem;
       overflow: auto;
@@ -1351,7 +1364,7 @@
       <button onclick="load('tools')">Tools</button>
       <button onclick="load('games')">Games</button>
       <button onclick="load('creations')">Creations</button>
-      <button onclick="load('info')">Info</button>
+      <button onclick="load('info')">❗Info❗</button>
       <button onclick="toggleVisualizerMode()" id="vizModeBtn" style="border: 1px solid var(--main-color); background: var(--panel-color);">Visualizer</button>
       <button onclick="load('settings')" style="margin-top: auto;">Settings</button>
     </nav>
@@ -1415,7 +1428,7 @@
 
   <canvas id="visualizerCanvas"></canvas>
   <div id="bassBorder"></div>
-  <div class="version-tag" id="vTag">v0.98</div>
+  <div class="version-tag" id="vTag">v0.99</div>
 
 <script>
 // PERFORMANCE / CDN FIXES:
@@ -2523,6 +2536,7 @@ const pages = {
       <article class="panel hero-panel">
         <h2>Home</h2>
         <p class="lead">Welcome to GN-Neon (Goober Network). Take a look at these cats.</p>
+        <p class="lead"><strong>Please</strong> check out <strong>"Info"</strong> on the left panel that will open if you move your mouse to the left side of the screen.</p>
         <div class="image-row">
           <figure class="image-card">
             <img src="https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/sili2.jpg" alt="Cat image">
@@ -2536,16 +2550,15 @@ const pages = {
       </article>
     
       <aside class="panel patch-panel">
-        <div class="version-chip">Latest overhaul · v0.98</div>
+        <div class="version-chip">Latest overhaul · v0.99</div>
         <h3>Patch Notes</h3>
         <ul class="patch-list">
+          <li>One more version <strong>before we hit v1.0</strong>, I will continue to work on this site, but I am really happy with how its turning out so far!</li>
+          <li>Made some changes to the <strong>style of the site</strong>.</li>
           <li>Changed the About section to be <strong>Info</strong>, with even more information added.</li>
           <li>Added new <strong>pause shortcut, hold shift and press space to pause</strong>.</li>
           <li>Added more music, <strong>with more to come</strong>.</li>
-          <li>Started work on a link to the <strong>best unblocked games site.</strong></li>
-          <li>Added a new webgames section, the new games are <strong>A Dino Game, A Number Guessing Game, and An Asteroid Dodging Game</strong></li>
-          <li>Finally added creations section <strong>Map Images and Code</strong>.</li>
-          <li>Added <strong>"""Block Blast"""</strong> in games.</li>
+          <li>Still working on a link to the <strong>best unblocked games site.</strong></li>
         </ul>
       </aside>
     </section>
@@ -2590,14 +2603,11 @@ const pages = {
   info: `
     <section class="panel info-panel">
       <h2>About The Site:</h2>
-      <p class="section-copy">This is GN-Neon. The GN stands for Goober Network. I made this site to bypass lightspeed filter. Why? Because I can.<br /><br />I (Neon64) made this site to let users get past school filters and actually do fun things.</p>
+      <p class="section-copy">This is GN-Neon. The GN stands for Goober Network. I made this site to bypass lightspeed filter. Why? Because I can.</p>
       <h2>Things you should know:</h2>
       <p class="section-copy">Please use the settings to customize your experience, I personally recomend turning song color changing on. If you are experiencing lag, rainbow effects and background video take the most performance, turn them off or use the performance mode button when starting up to reduce lag. I <strong>HEAVILY</strong> recommend viewing this site using fullscreen or at 90%, especially if you are on a Chromebook.</p>
       <h2>Controls:</h2>
-      <p class="section-copy">Use CTRL + Arrow Key Right and Left to go forward and back, use CTRL + Arrow Key Up and Down to change the volume by 5%, all of the music controls can be held. You can also now hold Shift and press the Space bar to pause and unpause the music, it cant be held to make it easier to use.</p>
-    </section>
-<br />
-    <section class="panel info-panel">
+      <p class="section-copy">Use CTRL + Arrow Key Right and Left to go forward and back a song, use CTRL + Arrow Key Up and Down to change the volume by 5%. You can also now hold Shift and press the Space bar to pause and unpause the music.</p>
       <h2>Shortcuts:</h2>
       <p class="section-copy">Here are some useful shortcuts for chromebooks, most of these work on any browser of course:<br /></p>
       <ul>
@@ -2635,15 +2645,6 @@ const pages = {
           <li><a href="https://github.com/mrmrs/html/blob/master/index.html" target="_blank">HTML Cheatsheet</a></li>
         </ul>
         </p>
-    </section>
-  `,
-  soggy: `
-    <section class="panel games-panel">
-      <h2>Soggy</h2>
-      <div class="games-menu" id="toolsMenu">
-        <button onclick="showTool('ciphers')">Ciphers</button>
-      </div>
-      <div id="toolArea"></div>
     </section>
   `
 };
@@ -3234,15 +3235,14 @@ updateBassBorder();
 </script>
 <script src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Extra/main.js"></script>
 <script>
-  
 const page = {
   soggy: `
-    <section class="panel games-panel">
+    <section class="panel not-games-panel">
   <h2>SOG Encoder</h2>
 <div class="cipherAreaAlign">
   <div class="not-games-menu">
-    <button onclick="sog()">Encode</button>
-    <button onclick="unsog()">Decode</button>
+    <button id="wetButton" onclick="sog()">Encode</button>
+    <button id="dryButton" onclick="unsog()">Decode</button>
     <button onclick="clear_text()">Clear</button>
   </div>
 
@@ -3258,6 +3258,14 @@ const page = {
       <strong>Decode</strong> converts SOG back into readable text.
     </p>
   </div>
+  <figure id="dryCat" class="image-card">
+  <img src="https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/dry.jpg" alt="Dry Cat image">
+            <span>Dry</span>
+  </figure>
+  <figure id="wetCat" class="image-card">
+  <img src="https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/wet.jpg" alt="Sog Cat image">
+            <span>Sog</span>
+  </figure>          
   </div>
 </section>
   `
@@ -3298,6 +3306,25 @@ function loadsecret(html) {
   }
 
   document.getElementById("content").innerHTML = html;
+
+  const buttonWet = document.getElementById('wetButton');
+  const buttonDry = document.getElementById('dryButton');
+  const wetImage = document.getElementById('wetCat');
+  const dryImage = document.getElementById('dryCat');
+
+  buttonWet.addEventListener('click', () => {
+      wetImage.style.boxShadow = '0 0 250px var(--main-color)';
+      setTimeout(() => {
+          wetImage.style.boxShadow = '';
+      }, 1500);
+      });
+
+  buttonDry.addEventListener('click', () => {
+      dryImage.style.boxShadow = '0 0 250px var(--main-color)';
+      setTimeout(() => {
+          dryImage.style.boxShadow = '';
+      }, 1000);
+      });
 }
 </script>
 </body>
