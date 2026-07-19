@@ -780,7 +780,22 @@
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+    .image-card-creations {
+  background: var(--panel-alt);
+  border: 1px solid var(--main-color);
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+
 .image-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0 15px var(--main-color);
+}
+
+.image-card-creations:hover {
   transform: translateY(-4px);
   box-shadow: 0 0 15px var(--main-color);
 }
@@ -792,7 +807,22 @@
   display: block;
 }
 
+.image-card-creations img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  display: block;
+}
+
 .image-card span {
+  display: block;
+  padding: 0.75rem;
+  color: var(--muted);
+  font-size: 0.95rem;
+  text-align: center;
+}
+
+.image-card-creations span {
   display: block;
   padding: 0.75rem;
   color: var(--muted);
@@ -2164,7 +2194,7 @@ function renderFCImages() {
   return `
     <div class="image-row creations-grid">
       ${FCImages.map(item => `
-        <figure class="image-card"
+        <figure class="image-card-creations"
           onclick="openLightbox(
             '${item.image}',
             '${item.title}',
@@ -2183,7 +2213,7 @@ function renderSRImages() {
   return `
     <div class="image-row creations-grid">
       ${SRImages.map(item => `
-        <figure class="image-card"
+        <figure class="image-card-creations"
           onclick="openLightbox(
             '${item.image}',
             '${item.title}',
@@ -2202,7 +2232,7 @@ function renderKCImages() {
   return `
     <div class="image-row creations-grid">
       ${KCImages.map(item => `
-        <figure class="image-card"
+        <figure class="image-card-creations"
           onclick="openLightbox(
             '${item.image}',
             '${item.title}',
@@ -2221,7 +2251,7 @@ function renderSSImages() {
   return `
     <div class="image-row creations-grid">
       ${SSImages.map(item => `
-        <figure class="image-card"
+        <figure class="image-card-creations"
           onclick="openLightbox(
             '${item.image}',
             '${item.title}',
