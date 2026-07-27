@@ -59,6 +59,47 @@
       gap: 1rem;
     }
 
+    .confettiCanvas {
+	    position: fixed;   /* Positions the canvas relative to the viewport */
+	    top: 0;            /* Aligns canvas to the top edge */
+	    left: 0;           /* Aligns canvas to the left edge */
+	    width: 100vw;      /* Optional: Forces full viewport width */
+	    height: 100vh;     /* Optional: Forces full viewport height */
+	    z-index: 99999;    /* Places the canvas on top of other layers */
+	    pointer-events: none; /* Crucial: Allows clicks to pass through to elements below */
+	  }
+
+    .specialText {
+      cursor: pointer;
+      transition: color 0.2s ease, text-shadow 0.2s ease;
+      background: linear-gradient(
+        90deg,
+        red,
+        orange,
+        yellow,
+        lime,
+        cyan,
+        blue,
+        violet,
+        red
+      );
+      background-size: 300% 100%;
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+      animation: rainbow 3s linear infinite;
+    }
+
+    @keyframes rainbow {
+      0% {
+        background-position: 0% 50%;
+      }
+      100% {
+        background-position: 300% 50%;
+      }
+    }
+
     /* Splash / Loading Overlay */
     #splashOverlay {
       position: fixed;
@@ -94,6 +135,12 @@
     #splashSubtext {
       margin-top: 1rem;
       color: var(--music-text);
+      font-size: 1rem;
+      pointer-events: none;
+    }
+    #splashWarntext {
+      margin-top: 1rem;
+      color: yellow;
       font-size: 1rem;
       pointer-events: none;
     }
@@ -1375,8 +1422,11 @@
   <div id="splashOverlay" onclick="enterSite()">
     <div id="splashText">LOADING...</div>
     <div id="splashSubtext">Please wait for the assets to load</div>
+    <div id="splashWarntext">WARNING: AUDIO COULD PLAY; CHECK DEVICE VOLUME FIRST</div>
     <button id="performanceModeBtn" onclick="enablePerformanceMode(event)">⚡ Performance Mode</button>
   </div>
+
+  <canvas class="confettiCanvas" id="confettiCanvas"></canvas>
 
   <!-- Hover trigger zones -->
   <div class="trigger-zone-left"></div>
@@ -1458,7 +1508,7 @@
 
   <canvas id="visualizerCanvas"></canvas>
   <div id="bassBorder"></div>
-  <div class="version-tag" id="vTag">v0.99</div>
+  <div class="version-tag" id="vTag">v1.0</div>
 
 <script>
 // PERFORMANCE / CDN FIXES:
@@ -1476,6 +1526,8 @@ let isLooping = false;
 let seekDragging = false;
 let isVisualizerMode = false;
 let keepClockInViz = false;
+let explicitContentEnabled = true;
+let  = 0;
 
 const DEFAULT_COLORS = {
   '--main-color': '#0000ff',
@@ -1585,43 +1637,43 @@ updateClock();
 
 // ─── PLAYLIST ────────────────────────────────────────────────────────────────
 const playlist = [
-  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Super%20Mario%20RPG.mp3',
-  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Neon%20Cobra.mp3',
-  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Disco%20Pervert.mp3',
-  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/They%20Live!.mp3',
-  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/DanceParty.mp3', //NEW
-  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/One%20Night%20In%20Tokyo.mp3',
-  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/LevelClear.mp3', //NEW
-  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/A%20Kind%20Of%20Deutsch.mp3',
-  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Military%20Fashion%20Show.mp3',
-  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Hotline%20-%20Original%20Mix.mp3',
-  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/They%27llFindYou.mp3', //NEW
-  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/LANDOFFIRE.mp3', //NEW
-  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/GOODLOYALTHOTS.mp3', //NEW
-  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/FreaknikIsBack.mp3', //NEW
-  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/MyOrdinaryLife.mp3', //NEW
-  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Strange%20Timez%20(feat.%20Robert%20Smith).mp3',
-  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Not%20Like%20Us.mp3',
-  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Notion.mp3',
-  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Write%20This%20Down.mp3',
-  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Temporary%20Love%20(feat.%20CG5).mp3',
-  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Falling%20Down.mp3',
-  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/But%20Can%20You%20Do%20This.mp3',
-  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/TellMe.mp3', //NEW
-  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Why%20Cant%20This%20Be%20Easy.mp3',
-  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/BIGDICKRANDY.mp3', //NEW
-  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/BIGDICKRANDY2.mp3', //NEW
-  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/BIGDICKRANDY3.mp3', //NEW
-  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/BIGDICKRANDYHOMECOMING.mp3', //NEW
-  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/2FAST2FURIOUS.mp3', //NEW
-  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Pain_is_just_freddy_fazbear.mp3',
-  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/dq%20blizzard.mp3',
-  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/MC%20Chris%20Is%20Dead.mp3',
-  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/robitussin.mp3', //NEW
-  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/ToothpickspliffsRemix.mp3', //NEW
-  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Mcchrisownz.mp3', //NEW
-  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/BewareTheMushroomRoadSMRPG.mp3', //NEW
-  'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Super%20Mario%20RPG%20Waltz%20of%20the%20Forest%20(4K).mp3'
+  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Super%20Mario%20RPG.mp3', explicit: false },
+  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Neon%20Cobra.mp3', explicit: false },
+  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Disco%20Pervert.mp3', explicit: false },
+  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/They%20Live!.mp3', explicit: false },
+  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/DanceParty.mp3', explicit: false },
+  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/One%20Night%20In%20Tokyo.mp3', explicit: false },
+  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/LevelClear.mp3', explicit: true }, 
+  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/A%20Kind%20Of%20Deutsch.mp3', explicit: false },
+  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Military%20Fashion%20Show.mp3', explicit: true },
+  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Hotline%20-%20Original%20Mix.mp3', explicit: false },
+  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/They%27llFindYou.mp3', explicit: false }, 
+  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/LANDOFFIRE.mp3', explicit: true }, 
+  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/GOODLOYALTHOTS.mp3', explicit: true }, 
+  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/FreaknikIsBack.mp3', explicit: true }, 
+  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/MyOrdinaryLife.mp3', explicit: false }, 
+  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Strange%20Timez%20(feat.%20Robert%20Smith).mp3', explicit: false },
+  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Not%20Like%20Us.mp3', explicit: true },
+  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Notion.mp3', explicit: false },
+  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Write%20This%20Down.mp3', explicit: false },
+  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Temporary%20Love%20(feat.%20CG5).mp3', explicit: false },
+  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Falling%20Down.mp3', explicit: false },
+  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/But%20Can%20You%20Do%20This.mp3', explicit: false },
+  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/TellMe.mp3', explicit: false }, 
+  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Why%20Cant%20This%20Be%20Easy.mp3', explicit: false },
+  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/BIGDICKRANDY.mp3', explicit: true }, 
+  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/BIGDICKRANDY2.mp3', explicit: true }, 
+  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/BIGDICKRANDY3.mp3', explicit: true }, 
+  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/BIGDICKRANDYHOMECOMING.mp3', explicit: true }, 
+  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/2FAST2FURIOUS.mp3', explicit: true }, 
+  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Pain_is_just_freddy_fazbear.mp3', explicit: false },
+  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/dq%20blizzard.mp3', explicit: true },
+  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/MC%20Chris%20Is%20Dead.mp3', explicit: true },
+  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/robitussin.mp3', explicit: true }, 
+  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/ToothpickspliffsRemix.mp3', explicit: true }, 
+  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Mcchrisownz.mp3', explicit: true }, 
+  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/BewareTheMushroomRoadSMRPG.mp3', explicit: true },
+  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Super%20Mario%20RPG%20Waltz%20of%20the%20Forest%20(4K).mp3', explicit: false }
 ];
 
 const trackMeta = [
@@ -1828,7 +1880,7 @@ function enablePerformanceMode(event) {
 
 function enterSite() {
   const overlay = document.getElementById('splashOverlay');
-  const songState = Number(localStorage.getItem('gn_neon_song_state') ?? 1);
+  const songState = Number(localStorage.getItem('gn_neon_song_state') ?? 0);
   const audio = document.getElementById('bgMusic');
   const playPause = document.getElementById('mcPlayPause');
 
@@ -1877,15 +1929,19 @@ function initMusic() {
 
   if (savedTrack !== null) currentTrack = parseInt(savedTrack);
 
+  if (!explicitContentEnabled && playlist[currentTrack].explicit) {
+    findNextTrack();
+}
+
   // Only load the currently selected track initially
   audio.preload = 'metadata';
-  audio.src = playlist[currentTrack];
+  audio.src = playlist[currentTrack].url;
 
   // Lazy preload nearby songs after site has already loaded
   setTimeout(() => {
     const nextTrack = new Audio();
     nextTrack.preload = 'metadata';
-    nextTrack.src = playlist[(currentTrack + 1) % playlist.length];
+    nextTrack.src = playlist[(currentTrack + 1) % playlist.length].url;
   }, 4000);
   
   if (savedVolume !== null) {
@@ -1934,9 +1990,27 @@ function updateTrackDisplay() {
   applySongColor(currentTrack);
 }
 
+function findNextTrack() {
+    do {
+        currentTrack = (currentTrack + 1) % playlist.length;
+    } while (
+        !explicitContentEnabled &&
+        playlist[currentTrack].explicit
+    );
+}
+
+function findPreviousTrack() {
+  do {
+    currentTrack = (currentTrack - 1 + playlist.length) % playlist.length;
+  } while (
+    !explicitContentEnabled &&
+    playlist[currentTrack].explicit
+  );
+}
+
 function fmtTime(s) { const m = Math.floor(s/60), sec = Math.floor(s%60); return `${m}:${sec.toString().padStart(2,'0')}`; }
 
-let songState = Number(localStorage.getItem('gn_neon_song_state') ?? 1);
+let songState = Number(localStorage.getItem('gn_neon_song_state') ?? 0);
 
 function musicPlayPause() { 
   const a = document.getElementById('bgMusic'); 
@@ -1955,8 +2029,8 @@ function musicPlayPause() {
   localStorage.setItem('gn_neon_song_state', songState);
   console.log(songState);
 }
-function musicNext() { currentTrack = (currentTrack + 1) % playlist.length; const a = document.getElementById('bgMusic'); a.src = playlist[currentTrack]; updateTrackDisplay(); applySongColor(currentTrack); a.play(); }
-function musicPrev() { const a = document.getElementById('bgMusic'); if(a.currentTime > 3) a.currentTime = 0; else currentTrack = (currentTrack - 1 + playlist.length) % playlist.length; a.src = playlist[currentTrack]; updateTrackDisplay(); applySongColor(currentTrack); a.play(); }
+function musicNext() { findNextTrack(); const a = document.getElementById('bgMusic'); a.src = playlist[currentTrack].url; updateTrackDisplay(); applySongColor(currentTrack); a.play(); }
+function musicPrev() { const a = document.getElementById('bgMusic'); if(a.currentTime > 3) a.currentTime = 0; else findPreviousTrack(); a.src = playlist[currentTrack].url; updateTrackDisplay(); applySongColor(currentTrack); a.play(); }
 function musicToggleLoop() { isLooping = !isLooping; document.getElementById('mcLoop').classList.toggle('active-loop', isLooping); }
 function musicSeek(v) { const a = document.getElementById('bgMusic'); seekDragging = true; a.currentTime = (v/100)*a.duration; setTimeout(()=>seekDragging=false, 200); }
 function setVolume(v) {
@@ -2348,6 +2422,12 @@ function updateSettingsButtonAppearances() {
   const brightness = getColorBrightness(mainColorValue);
   const textColor = brightness > 128 ? '#000' : '#fff';
   document.documentElement.style.setProperty('--button-text-color', textColor);
+  document.querySelectorAll(`button[onclick="toggleExplicitContent()"]`).forEach(btn => {
+    btn.style.background = explicitContentEnabled ? 'var(--main-color)' : '#333';
+    btn.style.color = explicitContentEnabled ? textColor : '#888';
+    btn.style.borderColor = explicitContentEnabled ? 'var(--main-color)' : '#555';
+    btn.textContent = explicitContentEnabled ? 'Enabled' : 'Disabled';
+  });
   document.querySelectorAll(`button[onclick="toggleKeepClock()"]`).forEach(btn => {
     btn.style.background = keepClockInViz ? 'var(--main-color)' : '#333';
     btn.style.color = keepClockInViz ? textColor : '#888';
@@ -2396,6 +2476,10 @@ function applySavedColors() {
   const savedRainbow = localStorage.getItem('gn_neon_rainbow');
   if (savedRainbow) {
     rainbowStates = JSON.parse(savedRainbow);
+  }
+  const savedExplicitContent = localStorage.getItem('gn_neon_explicit_content');
+  if (savedExplicitContent !== null) {
+    explicitContentEnabled = savedExplicitContent === 'true';
   }
   const savedClockSetting = localStorage.getItem('gn_neon_keep_clock');
   if (savedClockSetting !== null) {
@@ -2447,6 +2531,22 @@ function updateRainbowSpeed(key, speed) {
 function saveRainbow() {
   localStorage.setItem('gn_neon_rainbow', JSON.stringify(rainbowStates));
 }
+
+function toggleExplicitContent() {
+  explicitContentEnabled = !explicitContentEnabled;
+  localStorage.setItem('gn_neon_explicit_content', explicitContentEnabled);
+  const buttons = document.querySelectorAll(`button[onclick="toggleExplicitContent()"]`);
+  buttons.forEach(btn => {
+    btn.style.background = explicitContentEnabled ? 'var(--main-color)' : '#333';
+    const mainColorValue = getComputedStyle(document.documentElement).getPropertyValue('--main-color').trim();
+    const brightness = getColorBrightness(mainColorValue);
+    btn.style.color = explicitContentEnabled ? (brightness > 128 ? '#000' : '#fff') : '#888';
+    btn.style.borderColor = explicitContentEnabled ? 'var(--main-color)' : '#555';
+    btn.textContent = explicitContentEnabled ? 'Enabled' : 'Disabled';
+    console.log(`Explicit content setting is now: ${explicitContentEnabled}`);
+  });
+}
+
 function toggleKeepClock() {
   keepClockInViz = !keepClockInViz;
   localStorage.setItem('gn_neon_keep_clock', keepClockInViz);
@@ -2486,6 +2586,13 @@ function resetColors() {
   localStorage.removeItem('gn_neon_colors');
   localStorage.removeItem('gn_neon_rainbow');
   localStorage.removeItem('gn_neon_bg_settings');
+  localStorage.removeItem('gn_neon_explicit_content');
+  localStorage.setItem('gn_neon_song_color' , 'false');
+
+  songColorEnabled = false;
+  keepClockInViz = false;
+  explicitContentEnabled = true;
+
   load('settings');
 }
 
@@ -2494,6 +2601,12 @@ const pages = {
     <section class="panel">
       <h2>Settings</h2>
       <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem;">
+        <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px;">
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <span>ALLOW EXPLICIT SONGS</span>
+            <button onclick="toggleExplicitContent()" style="margin:0; padding: 0.3rem 0.6rem; font-size: 0.8rem; background: ${explicitContentEnabled ? 'var(--main-color)' : '#333'}; border: 1px solid ${explicitContentEnabled ? 'var(--main-color)' : '#555'}; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.boxShadow='0 0 8px ' + (${explicitContentEnabled} ? 'var(--main-color)' : 'rgba(255,255,255,0.1)')" onmouseout="this.style.boxShadow='none'">${explicitContentEnabled ? 'Enabled' : 'Disabled'}</button>
+          </div>
+        </div>
         <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px;">
           <div style="display: flex; align-items: center; justify-content: space-between;">
             <span>KEEP CLOCK IN VISUALIZER MODE</span>
@@ -2585,15 +2698,14 @@ const pages = {
       </article>
     
       <aside class="panel patch-panel">
-        <div class="version-chip">Latest overhaul · v0.99</div>
+        <div class="version-chip">Latest overhaul · v1.0</div>
         <h3>Patch Notes</h3>
         <ul class="patch-list">
-          <li>One more version <strong>before we hit v1.0</strong>, I will continue to work on this site, but I am really happy with how its turning out so far!</li>
-          <li>Made some changes to the <strong>style of the site</strong>.</li>
+          <li class="specialText" onclick="burst(1500);"><strong>We have officially hit v1.0!</strong></li>
+          <li>Music no longer auto plays for the first time opening the site. The last state (playing or paused) is now saved.</li>
+          <li>Added new explicit content filtering, explicit songs are by default enabled, go to the settings to disable them.</li>
+          <li>Fixed the Reset to Defaults button not actually resetting properly.</li>
           <li>Changed the About section to be <strong>Info</strong>, with even more information added.</li>
-          <li>Added new <strong>pause shortcut, hold shift and press space to pause</strong>.</li>
-          <li>Added more music, <strong>with more to come</strong>.</li>
-          <li>Still working on a link to the <strong>best unblocked games site.</strong></li>
         </ul>
       </aside>
     </section>
@@ -2680,9 +2792,23 @@ const pages = {
           <li><a href="https://github.com/mrmrs/html/blob/master/index.html" target="_blank">HTML Cheatsheet</a></li>
         </ul>
         </p>
+      <p class="section-copy">Some <strong>REALLY</strong> good extensions to use:
+        <ul>
+          <p>Adblocking Extensions, you technically don't need them all, but you can have them all installed at the same time:</p>
+          <li><a href="https://chromewebstore.google.com/detail/ublock-origin-lite/ddkjiahejlhfcafbddmgiahcphecmpfh" target="_blank">uBlock Origin Lite</a></li>
+          <li><a href="https://chromewebstore.google.com/detail/pie-adblock-a-powerful-fr/jpkfgepcmmchgfbjblnodjhldacghenp" target="_blank">Pie Adblock</a></li>
+          <li><a href="https://chromewebstore.google.com/detail/adblock-plus-free-ad-bloc/cfhdojbkjhnklbpkdaibdccddilifddb" target="_blank">Adblock Plus</a></li>
+          <p>Exploiting things, page editing, tampering, all goats:</p>
+          <li><a href="https://chromewebstore.google.com/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo" target="_blank">Tampermonkey</a></li>
+          <li><a href="https://chromewebstore.google.com/detail/page-edit/clfiicjcpkcccglblehapeiipibnaenl" target="_blank">Page Edit</a> (Allows you to edit web pages like inspect element used to.)</li>
+          <li><a href="https://chromewebstore.google.com/detail/click-to-remove-element/jcgpghgjhhahcefnfpbncdmhhddedhnk" target="_blank">Click to Remove Element</a> (Allows you to remove elements from web pages like inspect element used to.)</li>
+          <p>Games:</p>
+          <li><a href="https://chromewebstore.google.com/detail/pacman-popup/iocghaljaochhkgajdilelogdkejkiil" target="_blank">Pacman Popup</a></li>
+          <li><a href="https://chromewebstore.google.com/detail/free-time-games/apdihfpnlkpbmpkehgdkcmknklmbilal" target="_blank">Free Time Games</a> (Has a variety of games available)</li>
+        </ul>
+      </p>
     </section>
-  `
-};
+  `};
   
 function getColorBrightness(hexColor) {
   const hex = hexColor.replace('#', '');
@@ -3155,7 +3281,8 @@ function setVideoBackground(videoUrl) {
   video.addEventListener('canplay', () => {
     const splash = document.getElementById('splashOverlay');
     splash.classList.add('ready');
-    document.getElementById('splashText').innerText = "!!!WARNING MUSIC WILL PLAY!!!";
+    document.getElementById('splashText').innerText = "WELCOME TO GN-NEON";
+    document.getElementById('splashWarntext').innerText = "WARNING: AUDIO COULD PLAY; CHECK DEVICE VOLUME FIRST";
     document.getElementById('splashSubtext').innerText = "CLICK TO ENTER";
   });
   document.body.insertBefore(video, document.body.firstChild);
@@ -3361,6 +3488,187 @@ function loadsecret(html) {
       }, 1000);
       });
 }
+</script>
+
+<script>
+
+const canvas = document.getElementById("confettiCanvas");
+const ctx = canvas.getContext("2d");
+
+function resize(){
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
+}
+window.addEventListener("resize", resize);
+resize();
+
+// Bright, saturated colors
+const colors = [
+    "#ff0033",
+    "#ff6600",
+    "#ffff00",
+    "#00ff55",
+    "#00ffff",
+    "#0088ff",
+    "#7a00ff",
+    "#ff00ff",
+    "#ff1493"
+];
+
+const gravity = 0.11;
+const drag = 0.997;
+
+const pieces = [];
+
+let isCooldown = false;
+
+class Confetti{
+
+    constructor(){
+
+        this.x = canvas.width/2;
+        this.y = canvas.height+10;
+
+        const angle = (-Math.PI/2)+(Math.random()-0.5)*1.4;
+        const speed = 10 + Math.random()*12;
+
+        this.vx = Math.cos(angle)*speed;
+        this.vy = Math.sin(angle)*speed;
+
+        this.z = (Math.random()-0.5)*200;
+        this.vz = (Math.random()-0.5)*6;
+
+        this.w = 8 + Math.random()*10;
+        this.h = 5 + Math.random()*7;
+
+        this.rx = Math.random()*360;
+        this.ry = Math.random()*360;
+        this.rz = Math.random()*360;
+
+        this.vrx = (Math.random()-0.5)*18;
+        this.vry = (Math.random()-0.5)*18;
+        this.vrz = (Math.random()-0.5)*18;
+
+        this.color = colors[Math.floor(Math.random()*colors.length)];
+
+        this.life = 0;
+        this.flashOffset = Math.random()*40;
+    }
+
+    update(){
+
+        this.life++;
+
+        this.vx *= drag;
+        this.vy *= drag;
+        this.vz *= drag;
+
+        this.vy += gravity;
+
+        this.x += this.vx;
+        this.y += this.vy;
+        this.z += this.vz;
+
+        this.rx += this.vrx;
+        this.ry += this.vry;
+        this.rz += this.vrz;
+
+    }
+
+    draw(){
+
+        const perspective = 700;
+        const scale = perspective/(perspective-this.z);
+
+        const width = this.w * scale * Math.abs(Math.cos(this.ry*Math.PI/180));
+        const height = this.h * scale * Math.abs(Math.cos(this.rx*Math.PI/180));
+
+        ctx.save();
+
+        ctx.translate(this.x,this.y);
+        ctx.rotate(this.rz*Math.PI/180);
+
+        // Reset bloom every piece
+        ctx.shadowBlur = 0;
+        ctx.shadowColor = "transparent";
+
+        let drawColor = this.color;
+
+        // Reflection amount
+        const reflection = Math.sin((this.life + this.flashOffset) * 0.45);
+
+        if(reflection > 0.7){
+
+            drawColor = "#ffffff";
+
+            // Bloom only while white
+            ctx.shadowColor = "#ffffff";
+            ctx.shadowBlur = 18;
+
+        }
+
+        ctx.globalAlpha = Math.min(scale,1);
+        ctx.fillStyle = drawColor;
+
+        ctx.fillRect(
+            -width/2,
+            -height/2,
+            width,
+            height
+        );
+
+        ctx.restore();
+
+    }
+
+}
+
+function burst(amount){
+
+    if (isCooldown) return;
+
+    isCooldown = true;
+
+    for(let i=0;i<amount;i++){
+        pieces.push(new Confetti());
+    }
+    
+    setTimeout(() => {
+     isCooldown = false;
+  }, 1000);
+
+}
+
+function animate(){
+
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    for(let i=pieces.length-1;i>=0;i--){
+
+        const p = pieces[i];
+
+        p.update();
+        p.draw();
+
+        if(
+            p.y > canvas.height+150 ||
+            p.x < -150 ||
+            p.x > canvas.width+150
+        ){
+            pieces.splice(i,1);
+        }
+
+    }
+
+    requestAnimationFrame(animate);
+
+}
+
+animate();
+
+// Click splash screen to start animation
+document.getElementById("splashOverlay").addEventListener("click", () => burst(1500));
+
 </script>
 </body>
 </html>
