@@ -745,6 +745,15 @@
       padding: 10px;
     }
 
+    #settingsPanel {
+      background: linear-gradient(180deg, rgba(0, 0, 0, 1), var(--panel-color));
+      border: 3px solid var(--main-color);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(5px);
+      padding: 75px;
+    }
+
     .home-grid {
       display: grid;
       grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.9fr);
@@ -2598,7 +2607,7 @@ function resetColors() {
 
 const pages = {
   settings: `
-    <section class="panel">
+    <section class="panel" id="settingsPanel">
       <h2>Settings</h2>
       <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem;">
         <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px;">
