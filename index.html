@@ -69,6 +69,11 @@
 	    pointer-events: none; /* Crucial: Allows clicks to pass through to elements below */
 	  }
 
+    .clickable {
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
     .specialText {
       cursor: pointer;
       transition: color 0.2s ease, text-shadow 0.2s ease;
@@ -141,7 +146,7 @@
     #splashWarntext {
       margin-top: 1rem;
       color: yellow;
-      font-size: 1rem;
+      font-size: 1.5rem;
       pointer-events: none;
     }
     
@@ -560,6 +565,7 @@
 
     /* ─── STYLIZED VOLUME SLIDER ─────────────────────────────────────── */
     #volumeSlider {
+      appearance: none;
       -webkit-appearance: none;
       width: 250px;
       height: 6px;
@@ -583,6 +589,7 @@
     }
 
     #volumeSlider::-webkit-slider-thumb {
+      appearance: none;
       -webkit-appearance: none;
       width: 14px;
       height: 14px;
@@ -1435,8 +1442,8 @@
   <!-- Click to Enter Splash -->
   <div id="splashOverlay" onclick="enterSite()">
     <div id="splashText">LOADING...</div>
-    <div id="splashSubtext">Please wait for the assets to load</div>
     <div id="splashWarntext">WARNING: AUDIO COULD PLAY; CHECK DEVICE VOLUME FIRST</div>
+    <div id="splashSubtext">Please wait for the assets to load</div>
     <button id="performanceModeBtn" onclick="enablePerformanceMode(event)">⚡ Performance Mode</button>
   </div>
 
@@ -1458,7 +1465,7 @@
       <button onclick="load('tools')">Tools</button>
       <button onclick="load('games')">Games</button>
       <button onclick="load('creations')">Creations</button>
-      <button onclick="load('info')">❗Info❗</button>
+      <button onclick="load('info')">❗<strong>Info</strong>❗</button>
       <button onclick="toggleVisualizerMode()" id="vizModeBtn" style="border: 1px solid var(--main-color); background: var(--panel-color);">Visualizer</button>
       <button onclick="load('settings')" style="margin-top: auto;">Settings</button>
     </nav>
@@ -2751,7 +2758,7 @@ const pages = {
           <li>Added new explicit content filtering, explicit songs are by default enabled, go to the settings to disable them.</li>
           <li>Fixed the Reset to Defaults button not actually resetting properly.</li>
           <li>Changed the About section to be <strong>Info</strong>, with even more information added.</li>
-          <li onclick="window.open('https://trello.com/b/TWbquA4v/website-stuff', '_blank')">To view the trello board for website development updates.</li>
+          <li class="clickable" onclick="window.open('https://trello.com/b/TWbquA4v/website-stuff', '_blank')">Click this to view the trello board for website development updates.</li>
         </ul>
       </aside>
     </section>
@@ -2800,7 +2807,7 @@ const pages = {
       <h2>Things you should know:</h2>
       <p class="section-copy">Please use the settings to customize your experience, I personally recomend turning song color changing on. If you are experiencing lag, rainbow effects and background video take the most performance, turn them off or use the performance mode button when starting up to reduce lag. I <strong>HEAVILY</strong> recommend viewing this site using fullscreen or at 90%, especially if you are on a Chromebook.</p>
       <h2>Controls:</h2>
-      <p class="section-copy">Use CTRL + Arrow Key Right and Left to go forward and back a song, use CTRL + Arrow Key Up and Down to change the volume by 5%. You can also now hold Shift and press the Space bar to pause and unpause the music.</p>
+      <p class="section-copy">You can use ESC to exit the visualizer mode. Use CTRL + Arrow Key Right and Left to go forward and back a song, use CTRL + Arrow Key Up and Down to change the volume by 5%. You can also now hold Shift and press the Space bar to pause and unpause the music.</p>
       <h2>Shortcuts:</h2>
       <p class="section-copy">Here are some useful shortcuts for chromebooks, most of these work on any browser of course:<br /></p>
       <ul>
@@ -3329,7 +3336,7 @@ function setVideoBackground(videoUrl) {
     splash.classList.add('ready');
     document.getElementById('splashText').innerText = "WELCOME TO GN-NEON";
     document.getElementById('splashWarntext').innerText = "WARNING: AUDIO COULD PLAY; CHECK DEVICE VOLUME FIRST";
-    document.getElementById('splashSubtext').innerText = "CLICK TO ENTER";
+    document.getElementById('splashSubtext').innerText = "CLICK ANYWHERE TO ENTER";
   });
   document.body.insertBefore(video, document.body.firstChild);
   document.body.classList.add('video-bg');
@@ -3715,9 +3722,6 @@ function animate(){
 }
 
 animate();
-
-// Click splash screen to start animation
-document.getElementById("splashOverlay").addEventListener("click", () => burst(1500));
 
 </script>
 </body>
