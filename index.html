@@ -271,7 +271,7 @@
       content: "Under Construction";
     }
 
-    input, textarea {
+    input:not(.slider), textarea {
       margin: 0.5rem;
       font-size: 1.1rem;
       padding: 0.75rem 0.75rem;
@@ -279,6 +279,14 @@
       background: #0c0c0c;
       border: 5px solid var(--border-strong);
       border-radius: 4px;
+    }
+
+    .slider {
+      font-size: 1.1rem;
+      color: var(--text);
+      background: #0c0c0c;
+      margin: 15px;
+      width: 300px;
     }
 
     input::placeholder {
@@ -567,13 +575,14 @@
       appearance: none;
       -webkit-appearance: none;
       width: 250px;
-      height: 6px;
+      height: 12px;
       background: #222;
       border-radius: 3px;
       outline: none;
       border: 1px solid #333;
       cursor: pointer;
       margin-left: 0.5rem;
+      padding: 0;
     }
     #volumeInput {
       width: 60px;
@@ -656,7 +665,8 @@
       color: var(--menu-text);
       cursor: pointer;
       transition: all 0.15s;
-      min-width: unset;
+      min-width: 70px;
+      min-height: 35px;
     }
 
     .music-btn:hover {
@@ -924,7 +934,7 @@
       margin: 1rem 0 0;
       padding-left: 1.5rem;
       line-height: 1.65;
-      font-size: 0.95rem;
+      font-size: 0.85rem;
     }
 
     .patch-list li + li {
@@ -1528,7 +1538,7 @@
 
   <canvas id="visualizerCanvas"></canvas>
   <div id="bassBorder"></div>
-  <div class="version-tag" id="vTag">v1.0</div>
+  <div class="version-tag" id="vTag">v1.1.0</div>
 
 <script>
 // PERFORMANCE / CDN FIXES:
@@ -2751,7 +2761,8 @@ const pages = {
       <aside class="panel patch-panel">
         <h3>Patch Notes</h3>
         <ul class="patch-list">
-          <li class="specialText" onclick="burst(1500);"><strong>We have officially hit v1.0!</strong></li>
+          <li class="specialText" onclick="burst(1500);"><strong>We have officially hit v1.0.0!</strong></li>
+          <li>Changed some visuals to make sliders and buttons more satisfying to use.</li>
           <li>You can now change the value of how much the volume is changed when using Ctrl + Up and Ctrl + Down in the settings.</li>
           <li>Music no longer auto plays for the first time opening the site. The last state (playing or paused) is now saved.</li>
           <li>Added new explicit content filtering, explicit songs are by default enabled, go to the settings to disable them.</li>
@@ -2944,7 +2955,7 @@ function showTool(type) {
   } else if (type === 'chat') {
     area.innerHTML = `<button class="back-button" onclick="load('tools')">← Back to Tools</button><h3>AI Chatbot</h3><div id="chatContainer"><div id="chatLog"></div><div class="chat-input-row"><input id="chatInput" placeholder="Ask something..." onkeydown="if(event.key==='Enter')sendChat()"><button onclick="sendChat()">Send</button></div></div>`;
   } else if (type === 'canvas') {
-    area.innerHTML = `<button class="back-button" onclick="load('tools')">← Back to Tools</button><h3>Painting Canvas</h3><canvas id="paintingCanvas" width="800" height="500"></canvas><div style="text-align:center; margin-top:1rem;"><input type="color" id="brushColor" value="#0000ff"><input type="range" id="brushSize" min="1" max="50" value="5"><button onclick="clearCanvas()">Clear</button></div>`;
+    area.innerHTML = `<button class="back-button" onclick="load('tools')">← Back to Tools</button><h3>Painting Canvas</h3><canvas id="paintingCanvas" width="800" height="500"></canvas><div style="text-align:center; margin-top:1rem;"><input type="color" id="brushColor" value="#0000ff"><input type="range" id="brushSize" class="slider" min="1" max="100" value="15"><button onclick="clearCanvas()">Clear</button></div>`;
     initCanvas();
   } else if (type === 'ciphers') {
     area.innerHTML = `<button class="back-button" onclick="load('tools')">← Back to Tools</button><h3>Ciphers</h3><div class="games-menu"><button onclick="showCipher('caesar')">Caesar</button><button onclick="showCipher('atbash')">Atbash</button></div><div id="cipherArea"></div>`;
