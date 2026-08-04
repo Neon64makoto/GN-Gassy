@@ -2790,7 +2790,7 @@ const pages = {
     <section class="panel games-panel">
       <h2>Games</h2>
       <div class="games-menu" id="gamesMenu">
-        <button class="under-construction"><span>Unblocked Games</span></button>
+        <button onclick="showUnblockedGames()">Unblocked Games</button>
         <button onclick="showScratchGames()">Scratch Games</button>
         <button onclick="showWebGames()">Normal Games (WIP)</button>
         <button class="under-construction"><span>Emulators</span></button>
@@ -3033,8 +3033,18 @@ function showScratchGames() {
 
 function showUnblockedGames() {
   const content = document.getElementById('gamesContent'), gamesMenu = document.querySelector('.games-menu'); if (gamesMenu) gamesMenu.style.display = 'none';
-  content.innerHTML = ``;
-  currentIndex = 0; updateGame();
+  content.innerHTML = `
+  <button class="back-button" onclick="load('games')">
+    ← Back to Games Menu
+  </button>
+  <div class="section-header">IDK GAME TYPE</div>
+   	  <figure class="image-card" style="cursor: pointer;" onclick="openCodeViewer('https://raw.githubusercontent.com/freebuisness/html/main/842.html', 'Plants VS Zombies')">
+          <div style="height: 150px; background: #222; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-size: 2rem; color: #ffd43b; font-weight: bold;">HTML</div>
+          <span>Plants VS Zombies</span>
+        </figure>
+      </div>
+  `;
+  currentIndex = 0;
 }
 
 function showWebGames() {
