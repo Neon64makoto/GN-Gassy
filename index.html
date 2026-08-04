@@ -1538,7 +1538,7 @@
 
   <canvas id="visualizerCanvas"></canvas>
   <div id="bassBorder"></div>
-  <div class="version-tag" id="vTag">v1.1.2</div>
+  <div class="version-tag" id="vTag">v1.1.3</div>
 
 <script>
 // PERFORMANCE / CDN FIXES:
@@ -2790,10 +2790,10 @@ const pages = {
     <section class="panel games-panel">
       <h2>Games</h2>
       <div class="games-menu" id="gamesMenu">
+        <button class="under-construction"><span>Unblocked Games</span></button>
         <button onclick="showScratchGames()">Scratch Games</button>
         <button onclick="showWebGames()">Normal Games (WIP)</button>
         <button class="under-construction"><span>Emulators</span></button>
-        <button class="under-construction"><span>Number Guessing Game</span></button>
         <button class="under-construction"><span>UNBLOCKED GAMES</span></button>
       </div>
       <div id="gamesContent"></div>
@@ -3028,6 +3028,12 @@ const webNotes = ["Hopefully it works.",  "Hopefully it works 2, electric boogal
 function showScratchGames() {
   const content = document.getElementById('gamesContent'), gamesMenu = document.querySelector('.games-menu'); if (gamesMenu) gamesMenu.style.display = 'none';
   content.innerHTML = `<button class="back-button" onclick="load('games')">← Back to Games Menu</button><div class="games-layout"><div class="sideBox"><h3>Controls</h3><div id="gameControls"></div></div><div class="centerBox"><iframe id="scratchFrame" allowfullscreen title="GN-Neon Scratch game viewer"></iframe><h3 id="gameTitle"></h3><div class="button-row" style="justify-content:center; margin-top:1rem;"><button onclick="prevGame()">◀</button><button onclick="nextGame()">▶</button></div></div><div class="sideBox"><h3>Notes / Credits</h3><div id="gameNotes"></div></div></div>`;
+  currentIndex = 0; updateGame();
+}
+
+function showUnblockedGames() {
+  const content = document.getElementById('gamesContent'), gamesMenu = document.querySelector('.games-menu'); if (gamesMenu) gamesMenu.style.display = 'none';
+  content.innerHTML = ``;
   currentIndex = 0; updateGame();
 }
 
