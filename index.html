@@ -1489,7 +1489,7 @@
         <span class="music-artist" id="mcArtist">Yoko Shimomura</span>
       </div>
       <div class="music-btn-row">
-		<button class="music-btn" onclick="musicShuffle()" title="Shuffle">⇄</button>
+		<button class="music-btn" id="mcShuffle" onclick="musicShuffle()" title="Shuffle">⇄</button>
         <button class="music-btn" onclick="musicPrev()" title="Previous">&#9664;&#9664;</button>
         <button class="music-btn" id="mcPlayPause" onclick="musicPlayPause()" title="Play/Pause">&#9646;&#9646;</button>
         <button class="music-btn" onclick="musicNext()" title="Next">&#9654;&#9654;</button>
@@ -1539,7 +1539,7 @@
 
   <canvas id="visualizerCanvas"></canvas>
   <div id="bassBorder"></div>
-  <div class="version-tag" id="vTag">v1.1.4</div>
+  <div class="version-tag" id="vTag">v1.1.5</div>
 
 <script>
 // PERFORMANCE / CDN FIXES:
@@ -2022,12 +2022,21 @@ function updateTrackDisplay() {
 }
 
 function findNextTrack() {
-    do {
-        currentTrack = (currentTrack + 1) % playlist.length;
-    } while (
-        !explicitContentEnabled &&
-        playlist[currentTrack].explicit
-    );
+    if (shuffle) {
+        do {
+            currentTrack = Math.floor(Math.random() * playlist.length);
+        } while (
+            !explicitContentEnabled &&
+            playlist[currentTrack].explicit
+        );
+    } else {
+        do {
+            currentTrack = (currentTrack + 1) % playlist.length;
+        } while (
+            !explicitContentEnabled &&
+            playlist[currentTrack].explicit
+        );
+    }
 }
 
 function findPreviousTrack() {
@@ -2060,8 +2069,20 @@ function musicPlayPause() {
   localStorage.setItem('gn_neon_song_state', songState);
   console.log(songState);
 }
+
+let shuffle = false;
+
 function musicShuffle() {
-	return;
+	
+	shuffle = !shuffle;
+	
+	 if (shuffle) {
+        console.log("Shuffle enabled");
+    } else {
+        console.log("Shuffle disabled");
+    }
+
+	document.getElementById('mcShuffle').classList.toggle('active-loop', isLooping); 
 }
 function musicNext() { findNextTrack(); const a = document.getElementById('bgMusic'); a.src = playlist[currentTrack].url; updateTrackDisplay(); applySongColor(currentTrack); a.play(); }
 function musicPrev() { const a = document.getElementById('bgMusic'); if(a.currentTime > 3) a.currentTime = 0; else findPreviousTrack(); a.src = playlist[currentTrack].url; updateTrackDisplay(); applySongColor(currentTrack); a.play(); }
