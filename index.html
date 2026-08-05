@@ -1538,7 +1538,7 @@
 
   <canvas id="visualizerCanvas"></canvas>
   <div id="bassBorder"></div>
-  <div class="version-tag" id="vTag">v1.1.3</div>
+  <div class="version-tag" id="vTag">v9.9.9 E</div>
 
 <script>
 // PERFORMANCE / CDN FIXES:
@@ -3038,10 +3038,12 @@ function showUnblockedGames() {
     ← Back to Games Menu
   </button>
   <div class="section-header">IDK GAME TYPE</div>
-   	  <figure class="image-card" style="cursor: pointer;" onclick="openCodeViewer('https://raw.githubusercontent.com/freebuisness/html/main/842.html', 'Plants VS Zombies')">
-          <div style="height: 150px; background: #222; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-size: 2rem; color: #ffd43b; font-weight: bold;">HTML</div>
-          <span>Plants VS Zombies</span>
-        </figure>
+        <button onclick="copyGitHubData('https://raw.githubusercontent.com/freebuisness/html/main/198.html')">
+          Slope Plus
+        </button>
+        <button onclick="copyGitHubData('https://raw.githubusercontent.com/freebuisness/html/main/842.html')">
+          Plants VS Zombies
+        </button>
       </div>
   `;
   currentIndex = 0;
@@ -3317,6 +3319,26 @@ function openLightbox(src, title, desc) {
 function closeLightbox() {
   document.getElementById('lightboxOverlay').classList.remove('visible');
 }
+
+async function copyGitHubData(url) {
+  try {
+    const response = await fetch(url);
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const textData = await response.text();
+
+    await navigator.clipboard.writeText(textData);
+    
+  } catch (error) {
+    console.error("Failed to fetch or copy data:", error);
+    alert("Error copying data. Check console for details.");
+  }
+}
+
+
 
 function openCodeViewer(url, title) {
   const overlay = document.getElementById('codeViewerOverlay');
