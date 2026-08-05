@@ -682,6 +682,12 @@
       color: #fff;
     }
 
+	  .music-btn.active-shuffle {
+      background: var(--panel-color);
+      border-color: var(--main-color);
+      color: #fff;
+    }
+
     .music-seek-row {
       display: flex;
       align-items: center;
@@ -1508,6 +1514,7 @@
         <span class="music-artist" id="mcArtist">Yoko Shimomura</span>
       </div>
       <div class="music-btn-row">
+		<button class="music-btn" id="mcShuffle" onclick="musicShuffle()" title="Shuffle">⇄</button>
         <button class="music-btn" onclick="musicPrev()" title="Previous">&#9664;&#9664;</button>
         <button class="music-btn" id="mcPlayPause" onclick="musicPlayPause()" title="Play/Pause">&#9646;&#9646;</button>
         <button class="music-btn" onclick="musicNext()" title="Next">&#9654;&#9654;</button>
@@ -1557,7 +1564,7 @@
 
   <canvas id="visualizerCanvas"></canvas>
   <div id="bassBorder"></div>
-  <div class="version-tag" id="vTag">v9.9.9 E</div>
+  <div class="version-tag" id="vTag">v1.2.7</div>
 
 <script>
 // PERFORMANCE / CDN FIXES:
@@ -2040,12 +2047,21 @@ function updateTrackDisplay() {
 }
 
 function findNextTrack() {
-    do {
-        currentTrack = (currentTrack + 1) % playlist.length;
-    } while (
-        !explicitContentEnabled &&
-        playlist[currentTrack].explicit
-    );
+    if (shuffle) {
+        do {
+            currentTrack = Math.floor(Math.random() * playlist.length);
+        } while (
+            !explicitContentEnabled &&
+            playlist[currentTrack].explicit
+        );
+    } else {
+        do {
+            currentTrack = (currentTrack + 1) % playlist.length;
+        } while (
+            !explicitContentEnabled &&
+            playlist[currentTrack].explicit
+        );
+    }
 }
 
 function findPreviousTrack() {
@@ -2077,6 +2093,21 @@ function musicPlayPause() {
     }
   localStorage.setItem('gn_neon_song_state', songState);
   console.log(songState);
+}
+
+let shuffle = false;
+
+function musicShuffle() {
+	
+	shuffle = !shuffle;
+	
+	 if (shuffle) {
+        console.log("Shuffle enabled");
+    } else {
+        console.log("Shuffle disabled");
+    }
+
+	document.getElementById('mcShuffle').classList.toggle('active-shuffle', shuffle); 
 }
 function musicNext() { findNextTrack(); const a = document.getElementById('bgMusic'); a.src = playlist[currentTrack].url; updateTrackDisplay(); applySongColor(currentTrack); a.play(); }
 function musicPrev() { const a = document.getElementById('bgMusic'); if(a.currentTime > 3) a.currentTime = 0; else findPreviousTrack(); a.src = playlist[currentTrack].url; updateTrackDisplay(); applySongColor(currentTrack); a.play(); }
@@ -2780,8 +2811,8 @@ const pages = {
       <aside class="panel patch-panel">
         <h3>Patch Notes</h3>
         <ul class="patch-list">
-          <li class="specialText" onclick="burst(1500);"><strong>We have officially hit v1.0.0!</strong></li>
-		  <li>Added Plants VS Zombies into the code section for now, will continue setting this up.</li>
+          <li class="specialText" onclick="burst(1000);"><strong>We have officially hit v1.0.0!</strong></li>
+		  <li>Added a shuffle button.</li>
           <li>Changed some visuals to make sliders and buttons more satisfying to use.</li>
           <li>You can now change the value of how much the volume is changed when using Ctrl + Up and Ctrl + Down in the settings.</li>
           <li>Music no longer auto plays for the first time opening the site. The last state (playing or paused) is now saved.</li>
