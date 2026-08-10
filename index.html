@@ -1588,7 +1588,7 @@ let isLooping = false;
 let seekDragging = false;
 let isVisualizerMode = false;
 let keepClockInViz = false;
-let hideClock = false;
+let hideClockToggle = false;
 let explicitContentEnabled = true;
 let  = 0;
 
@@ -2518,12 +2518,11 @@ function updateSettingsButtonAppearances() {
     btn.style.borderColor = explicitContentEnabled ? 'var(--main-color)' : '#555';
     btn.textContent = explicitContentEnabled ? 'Enabled' : 'Disabled';
   });
-  document.querySelectorAll(`button[onclick="toggleKeepClock()"]`).forEach(btn => {
+  document.querySelectorAll(`button[onclick="hideClock()"]`).forEach(btn => {
     btn.style.background = keepClockInViz ? 'var(--main-color)' : '#333';
     btn.style.color = keepClockInViz ? textColor : '#888';
     btn.style.borderColor = keepClockInViz ? 'var(--main-color)' : '#555';
     btn.textContent = keepClockInViz ? 'Enabled' : 'Disabled';
-  });
   });
   document.querySelectorAll(`button[onclick="toggleKeepClock()"]`).forEach(btn => {
     btn.style.background = hideClockToggle ? 'var(--main-color)' : '#333';
