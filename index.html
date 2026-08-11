@@ -2519,16 +2519,16 @@ function updateSettingsButtonAppearances() {
     btn.textContent = explicitContentEnabled ? 'Enabled' : 'Disabled';
   });
   document.querySelectorAll(`button[onclick="hideClock()"]`).forEach(btn => {
-    btn.style.background = keepClockInViz ? 'var(--main-color)' : '#333';
-    btn.style.color = keepClockInViz ? textColor : '#888';
-    btn.style.borderColor = keepClockInViz ? 'var(--main-color)' : '#555';
-    btn.textContent = keepClockInViz ? 'Enabled' : 'Disabled';
-  });
-  document.querySelectorAll(`button[onclick="toggleKeepClock()"]`).forEach(btn => {
     btn.style.background = hideClockToggle ? 'var(--main-color)' : '#333';
     btn.style.color = hideClockToggle ? textColor : '#888';
     btn.style.borderColor = hideClockToggle ? 'var(--main-color)' : '#555';
     btn.textContent = hideClockToggle ? 'Enabled' : 'Disabled';
+  });
+  document.querySelectorAll(`button[onclick="toggleKeepClock()"]`).forEach(btn => {
+	btn.style.background = keepClockInViz ? 'var(--main-color)' : '#333';
+    btn.style.color = keepClockInViz ? textColor : '#888';
+    btn.style.borderColor = keepClockInViz ? 'var(--main-color)' : '#555';
+    btn.textContent = keepClockInViz ? 'Enabled' : 'Disabled';
   });
   document.querySelectorAll(`button[onclick="toggleBackgroundVideo()"]`).forEach(btn => {
     btn.style.background = backgroundSettings.useVideo ? 'var(--main-color)' : '#333';
