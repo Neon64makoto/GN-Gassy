@@ -1480,7 +1480,7 @@
   <audio id="bgMusic" style="display:none;" crossorigin="anonymous" preload="none"></audio>
 
   <!-- Click to Enter Splash -->
-  <div id="splashOverlay" onclick="enterSite()">
+  <div id="splashOverlay" onclick="enterSite(), finalCheck()">
     <div id="splashText">LOADING...</div>
     <div id="splashWarntext">WARNING: AUDIO COULD PLAY; CHECK DEVICE VOLUME FIRST</div>
     <div id="splashSubtext">Please wait for the assets to load</div>
@@ -1588,7 +1588,7 @@ let isLooping = false;
 let seekDragging = false;
 let isVisualizerMode = false;
 let keepClockInViz = false;
-let hideClockToggle = false;
+var hideClockToggle = false;
 let explicitContentEnabled = true;
 let  = 0;
 
@@ -2587,7 +2587,7 @@ function applySavedColors() {
   }
   const savedClockHidden = localStorage.getItem('gn_neon_keep_hidden');
   if (savedClockHidden !== null) {
-  	hideClockToggle = savedClockHidden === 'false';
+  	hideClockToggle = savedClockHidden === 'true';
   }
   const savedClockSetting = localStorage.getItem('gn_neon_keep_clock');
   if (savedClockSetting !== null) {
@@ -2661,8 +2661,19 @@ function toggleExplicitContent() {
 }
 
 function hideClock() {
+  hideClockToggle = !hideClockToggle;
   localStorage.setItem('gn_neon_keep_hidden', hideClockToggle);
+  const buttons = document.querySelectorAll(`button[onclick="hideClock()"]`);
+  buttons.forEach(btn => {
+    btn.style.background = hideClockToggle ? 'var(--main-color)' : '#333';
+    const mainColorValue = getComputedStyle(document.documentElement).getPropertyValue('--main-color').trim();
+    const brightness = getColorBrightness(mainColorValue);
+    btn.style.color = hideClockToggle ? (brightness > 128 ? '#000' : '#fff') : '#888';
+    btn.style.borderColor = hideClockToggle ? 'var(--main-color)' : '#555';
+    btn.textContent = hideClockToggle ? 'Enabled' : 'Disabled';
+  });
   const element = document.getElementById('digitalClock');
+	
   if (element) {
     element.classList.toggle('is-invisible');
   }
@@ -2718,6 +2729,14 @@ function resetColors() {
   volumeStepUp = 5;
   volumeStepDown = 5;
 
+  const element = document.getElementById('digitalClock');
+
+	if (element.classList.contains('is-invisible')) {
+  		element.classList.remove("is-invisible");
+	} else {
+	  console.log('Class not found.');
+	}
+	
   load('settings');
 }
 
@@ -3608,6 +3627,14 @@ document.documentElement.style.setProperty(
 }
 
 updateBassBorder();
+
+function finalCheck() {
+    const element = document.getElementById('digitalClock');
+    
+	if (hideCLockToggle === 'true') {
+    element.classList.add("is-invisible");
+  }
+}
 
 </script>
 <script src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Extra/main.js"></script>
