@@ -271,6 +271,12 @@
       content: "Under Construction";
     }
 
+	/* Keeps the element's physical layout space but hides the content */
+	.is-invisible {
+		visibility: hidden;
+	}
+
+
     input:not(.slider), textarea {
       margin: 0.5rem;
       font-size: 1.1rem;
@@ -1474,7 +1480,7 @@
   <audio id="bgMusic" style="display:none;" crossorigin="anonymous" preload="none"></audio>
 
   <!-- Click to Enter Splash -->
-  <div id="splashOverlay" onclick="enterSite()">
+  <div id="splashOverlay" onclick="enterSite(), finalCheck()">
     <div id="splashText">LOADING...</div>
     <div id="splashWarntext">WARNING: AUDIO COULD PLAY; CHECK DEVICE VOLUME FIRST</div>
     <div id="splashSubtext">Please wait for the assets to load</div>
@@ -1564,7 +1570,7 @@
 
   <canvas id="visualizerCanvas"></canvas>
   <div id="bassBorder"></div>
-  <div class="version-tag" id="vTag">v1.2.13</div>
+  <div class="version-tag" id="vTag">v1.2.14</div>
 
 <script>
 // PERFORMANCE / CDN FIXES:
@@ -1582,6 +1588,7 @@ let isLooping = false;
 let seekDragging = false;
 let isVisualizerMode = false;
 let keepClockInViz = false;
+var hideClockToggle = false;
 let explicitContentEnabled = true;
 let  = 0;
 
@@ -1598,7 +1605,7 @@ let rainbowStates = {
   '--menu-text': { active: false, speed: 5 },
   '--panel-color': { active: false, speed: 5 }
 };
-
+	
 function applySongColor(trackIndex) {
   if (!songColorEnabled) return;
   const color = songColors[trackIndex] || '#0000ff';
@@ -2511,8 +2518,14 @@ function updateSettingsButtonAppearances() {
     btn.style.borderColor = explicitContentEnabled ? 'var(--main-color)' : '#555';
     btn.textContent = explicitContentEnabled ? 'Enabled' : 'Disabled';
   });
+  document.querySelectorAll(`button[onclick="hideClock()"]`).forEach(btn => {
+    btn.style.background = hideClockToggle ? 'var(--main-color)' : '#333';
+    btn.style.color = hideClockToggle ? textColor : '#888';
+    btn.style.borderColor = hideClockToggle ? 'var(--main-color)' : '#555';
+    btn.textContent = hideClockToggle ? 'Enabled' : 'Disabled';
+  });
   document.querySelectorAll(`button[onclick="toggleKeepClock()"]`).forEach(btn => {
-    btn.style.background = keepClockInViz ? 'var(--main-color)' : '#333';
+	btn.style.background = keepClockInViz ? 'var(--main-color)' : '#333';
     btn.style.color = keepClockInViz ? textColor : '#888';
     btn.style.borderColor = keepClockInViz ? 'var(--main-color)' : '#555';
     btn.textContent = keepClockInViz ? 'Enabled' : 'Disabled';
@@ -2571,6 +2584,10 @@ function applySavedColors() {
   const savedVolumeStepDown = localStorage.getItem('gn_neon_volume_step_down');
   if (savedVolumeStepDown !== null) {
     volumeStepDown = parseInt(savedVolumeStepDown) || 5;
+  }
+  const savedClockHidden = localStorage.getItem('gn_neon_keep_hidden');
+  if (savedClockHidden !== null) {
+  	hideClockToggle = savedClockHidden === 'true';
   }
   const savedClockSetting = localStorage.getItem('gn_neon_keep_clock');
   if (savedClockSetting !== null) {
@@ -2643,6 +2660,25 @@ function toggleExplicitContent() {
   });
 }
 
+function hideClock() {
+  hideClockToggle = !hideClockToggle;
+  localStorage.setItem('gn_neon_keep_hidden', hideClockToggle);
+  const buttons = document.querySelectorAll(`button[onclick="hideClock()"]`);
+  buttons.forEach(btn => {
+    btn.style.background = hideClockToggle ? 'var(--main-color)' : '#333';
+    const mainColorValue = getComputedStyle(document.documentElement).getPropertyValue('--main-color').trim();
+    const brightness = getColorBrightness(mainColorValue);
+    btn.style.color = hideClockToggle ? (brightness > 128 ? '#000' : '#fff') : '#888';
+    btn.style.borderColor = hideClockToggle ? 'var(--main-color)' : '#555';
+    btn.textContent = hideClockToggle ? 'Enabled' : 'Disabled';
+  });
+  const element = document.getElementById('digitalClock');
+	
+  if (element) {
+    element.classList.toggle('is-invisible');
+  }
+}
+
 function toggleKeepClock() {
   keepClockInViz = !keepClockInViz;
   localStorage.setItem('gn_neon_keep_clock', keepClockInViz);
@@ -2687,11 +2723,20 @@ function resetColors() {
   localStorage.setItem('gn_neon_volume_step_up', '5');
   localStorage.setItem('gn_neon_volume_step_down', '5');
   songColorEnabled = false;
+  hideClockToggle = false;
   keepClockInViz = false;
   explicitContentEnabled = true;
   volumeStepUp = 5;
   volumeStepDown = 5;
 
+  const element = document.getElementById('digitalClock');
+
+	if (element.classList.contains('is-invisible')) {
+  		element.classList.remove("is-invisible");
+	} else {
+	  console.log('Class not found.');
+	}
+	
   load('settings');
 }
 
@@ -2716,6 +2761,12 @@ const pages = {
           <div style="display: flex; align-items: center; justify-content: space-between;">
             <span>ALLOW EXPLICIT SONGS</span>
             <button onclick="toggleExplicitContent()" style="margin:0; padding: 0.3rem 0.6rem; font-size: 0.8rem; background: ${explicitContentEnabled ? 'var(--main-color)' : '#333'}; border: 1px solid ${explicitContentEnabled ? 'var(--main-color)' : '#555'}; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.boxShadow='0 0 8px ' + (${explicitContentEnabled} ? 'var(--main-color)' : 'rgba(255,255,255,0.1)')" onmouseout="this.style.boxShadow='none'">${explicitContentEnabled ? 'Enabled' : 'Disabled'}</button>
+          </div>
+        </div>
+		<div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px;">
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <span>HIDE CLOCK</span>
+            	<button onclick="hideClock()" style="margin:0; padding: 0.3rem 0.6rem; font-size: 0.8rem; background: ${hideClockToggle ? 'var(--main-color)' : '#333'}; border: 1px solid ${hideClockToggle ? 'var(--main-color)' : '#555'}; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.boxShadow='0 0 8px ' + (${hideClockToggle} ? 'var(--main-color)' : 'rgba(255,255,255,0.1)')" onmouseout="this.style.boxShadow='none'">${hideClockToggle ? 'Enabled' : 'Disabled'}</button>
           </div>
         </div>
         <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px;">
@@ -3577,6 +3628,14 @@ document.documentElement.style.setProperty(
 
 updateBassBorder();
 
+function finalCheck() {
+    const element = document.getElementById('digitalClock');
+    
+	if (hideCLockToggle === 'true') {
+    element.classList.add("is-invisible");
+  }
+}
+
 </script>
 <script src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Extra/main.js"></script>
 <script>
@@ -3853,6 +3912,13 @@ function animate(){
 
 animate();
 
+(function() {
+	const element = document.getElementById('digitalClock');
+    if (hideClockToggle === true) {
+		element.classList.add('is-invisible');
+  	}
+})();
+	
 </script>
 </body>
 </html>
