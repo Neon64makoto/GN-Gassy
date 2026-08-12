@@ -3912,6 +3912,13 @@ function animate(){
 
 animate();
 
+(function() {
+	const element = document.getElementById('digitalClock');
+    if (hideClockToggle === true) {
+		element.classList.add('is-invisible');
+  	}
+})();
+	
 </script>
 </body>
 </html>
