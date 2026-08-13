@@ -1570,7 +1570,7 @@
 
   <canvas id="visualizerCanvas"></canvas>
   <div id="bassBorder"></div>
-  <div class="version-tag" id="vTag">v1.2.15</div>
+  <div class="version-tag" id="vTag">v1.2.16</div>
 
 <script>
 // PERFORMANCE / CDN FIXES:
@@ -3024,7 +3024,9 @@ function load(page) {
     'tools': 1,
     'games': 2,
     'creations': 3,
-    'info': 4
+    'info': 4,
+	'visualizer': 5,
+	'settings': 6
   };
   const buttonIndex = pageButtonMap[page];
   if (buttonIndex !== undefined && navButtons[buttonIndex]) {
