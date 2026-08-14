@@ -1570,16 +1570,9 @@
 
   <canvas id="visualizerCanvas"></canvas>
   <div id="bassBorder"></div>
-  <div class="version-tag" id="vTag">v1.2.16</div>
+  <div class="version-tag" id="vTag">v1.2.17</div>
 
 <script>
-// PERFORMANCE / CDN FIXES:
-// - Large media assets now load from raw.githubusercontent instead of jsDelivr.
-// - Images use native lazy loading.
-// - Audio only loads the active song first.
-// - Background video loads after the page becomes interactive.
-// - Embedded iframes now lazy load.
-
 // ─── STATE ───────────────────────────────────────────────────────────────────
 let currentIndex = 0;
 let isMuted = false;
@@ -2183,10 +2176,6 @@ function toggleVisualizerMode() {
     clock.classList.remove('ui-hidden');
     clock.classList.remove('viz-persistent');
 
-    // Keep the clock lowered after exiting visualizer mode
-    // because the top panel is visible again.
-    clock.classList.add('topbar-active');
-
     document.removeEventListener('keydown', exitVizOnEsc);
   }
 }
@@ -2289,7 +2278,7 @@ document.addEventListener('keydown', (e) => {
   leftPanel.addEventListener('mouseleave', () => { hideTimer = setTimeout(hideBoth, 500); });
   logoConnector.addEventListener('mouseleave', () => { hideTimer = setTimeout(hideBoth, 500); });
   
-  hideTimer = setTimeout(hideBoth, 1500);
+  hideTimer = setTimeout(hideBoth, 1000);
 })();
 
 // ─── VISUALIZER ──────────────────────────────────────────────────────────────
