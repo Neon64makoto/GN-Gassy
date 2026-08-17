@@ -1142,7 +1142,7 @@
       border: 1px solid #333;
       border-radius: 6px;
       color: #fff;
-	  display: flex;
+	  margin: 0 auto;
     }
 
     /* ─── AUDIO VISUALIZER ────────────────────────────────────────────── */
@@ -1571,7 +1571,7 @@
 
   <canvas id="visualizerCanvas"></canvas>
   <div id="bassBorder"></div>
-  <div class="version-tag" id="vTag">v1.2.20</div>
+  <div class="version-tag" id="vTag">v1.2.21</div>
 
 <script>
 // ─── STATE ───────────────────────────────────────────────────────────────────
@@ -3046,7 +3046,7 @@ function showTool(type) {
   if (type === 'calc') {
     area.innerHTML = `<button class="back-button" onclick="load('tools')">← Back to Tools</button><h3>Calculators</h3><div class="games-menu"><button onclick="showCalc('simple')">Simple</button><button onclick="showCalc('volume')">Volume</button><button onclick="showCalc('graph')">Graph</button></div><div id="calcArea"></div>`;
   } else if (type === 'ide') {
-    area.innerHTML = `<button class="back-button" onclick="load('tools')">← Back to Tools</button><h3>HTML IDE</h3><div id="ideContainer"><textarea id="ideInput" placeholder="Write HTML/CSS/JS here..." oninput="runIDE()"></textarea><iframe id="ideOutput"></iframe></div>`;
+    area.innerHTML = `<button class="back-button" onclick="load('tools')">← Back to Tools</button><h3>HTML IDE</h3><div id="ideContainer"><textarea id="ideInput" placeholder="Write HTML/CSS/JS here..." oninput="runIDE()"></textarea><button onclick="runIDE()">Run</button><iframe id="ideOutput"></iframe></div>`;
   } else if (type === 'chat') {
     area.innerHTML = `<button class="back-button" onclick="load('tools')">← Back to Tools</button><h3>AI Chatbot</h3><div id="chatContainer"><div id="chatLog"></div><div class="chat-input-row"><input id="chatInput" placeholder="Ask something..." onkeydown="if(event.key==='Enter')sendChat()"><button onclick="sendChat()">Send</button></div></div>`;
   } else if (type === 'canvas') {
