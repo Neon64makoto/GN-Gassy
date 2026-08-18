@@ -1571,7 +1571,7 @@
 
   <canvas id="visualizerCanvas"></canvas>
   <div id="bassBorder"></div>
-  <div class="version-tag" id="vTag">v1.2.23</div>
+  <div class="version-tag" id="vTag">v2.2.23</div>
 
 <script>
 // ─── STATE ───────────────────────────────────────────────────────────────────
@@ -1694,43 +1694,43 @@ updateClock();
 
 // ─── PLAYLIST ────────────────────────────────────────────────────────────────
 const playlist = [
-  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Super%20Mario%20RPG.mp3', explicit: false },
-  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Neon%20Cobra.mp3', explicit: false },
-  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Disco%20Pervert.mp3', explicit: false },
-  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/They%20Live!.mp3', explicit: false },
-  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/DanceParty.mp3', explicit: false },
-  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/One%20Night%20In%20Tokyo.mp3', explicit: false },
-  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/LevelClear.mp3', explicit: true }, 
-  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/A%20Kind%20Of%20Deutsch.mp3', explicit: false },
-  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Military%20Fashion%20Show.mp3', explicit: true },
-  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Hotline%20-%20Original%20Mix.mp3', explicit: false },
-  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/They%27llFindYou.mp3', explicit: false }, 
-  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/LANDOFFIRE.mp3', explicit: true }, 
-  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/GOODLOYALTHOTS.mp3', explicit: true }, 
-  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/FreaknikIsBack.mp3', explicit: true }, 
-  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/MyOrdinaryLife.mp3', explicit: false }, 
-  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Strange%20Timez%20(feat.%20Robert%20Smith).mp3', explicit: false },
-  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Not%20Like%20Us.mp3', explicit: true },
-  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Notion.mp3', explicit: false },
-  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Write%20This%20Down.mp3', explicit: false },
-  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Temporary%20Love%20(feat.%20CG5).mp3', explicit: false },
-  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Falling%20Down.mp3', explicit: false },
-  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/But%20Can%20You%20Do%20This.mp3', explicit: false },
-  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/TellMe.mp3', explicit: false }, 
-  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Why%20Cant%20This%20Be%20Easy.mp3', explicit: false },
-  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/BIGDICKRANDY.mp3', explicit: true }, 
-  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/BIGDICKRANDY2.mp3', explicit: true }, 
-  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/BIGDICKRANDY3.mp3', explicit: true }, 
-  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/BIGDICKRANDYHOMECOMING.mp3', explicit: true }, 
-  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/2FAST2FURIOUS.mp3', explicit: true }, 
-  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Pain_is_just_freddy_fazbear.mp3', explicit: false },
-  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/dq%20blizzard.mp3', explicit: true },
-  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/MC%20Chris%20Is%20Dead.mp3', explicit: true },
-  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/robitussin.mp3', explicit: true }, 
-  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/ToothpickspliffsRemix.mp3', explicit: true }, 
-  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Mcchrisownz.mp3', explicit: true }, 
-  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/BewareTheMushroomRoadSMRPG.mp3', explicit: true },
-  { url: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Music/Super%20Mario%20RPG%20Waltz%20of%20the%20Forest%20(4K).mp3', explicit: false }
+  { url: '/Music/Super Mario RPG.mp3', explicit: false },
+  { url: '/Music/Neon Cobra.mp3', explicit: false },
+  { url: '/Music/Disco Pervert.mp3', explicit: false },
+  { url: '/Music/They Live!.mp3', explicit: false },
+  { url: '/Music/DanceParty.mp3', explicit: false },
+  { url: '/Music/One Night In Tokyo.mp3', explicit: false },
+  { url: '/Music/LevelClear.mp3', explicit: true }, 
+  { url: '/Music/A Kind Of Deutsch.mp3', explicit: false },
+  { url: '/Music/Military Fashion Show.mp3', explicit: true },
+  { url: '/Music/Hotline - Original Mix.mp3', explicit: false },
+  { url: '/Music/They%27llFindYou.mp3', explicit: false }, 
+  { url: '/Music/LANDOFFIRE.mp3', explicit: true }, 
+  { url: '/Music/GOODLOYALTHOTS.mp3', explicit: true }, 
+  { url: '/Music/FreaknikIsBack.mp3', explicit: true }, 
+  { url: '/Music/MyOrdinaryLife.mp3', explicit: false }, 
+  { url: '/Music/Strange Timez (feat. Robert Smith).mp3', explicit: false },
+  { url: '/Music/Not Like Us.mp3', explicit: true },
+  { url: '/Music/Notion.mp3', explicit: false },
+  { url: '/Music/Write This Down.mp3', explicit: false },
+  { url: '/Music/Temporary Love (feat. CG5).mp3', explicit: false },
+  { url: '/Music/Falling Down.mp3', explicit: false },
+  { url: '/Music/But Can You Do This.mp3', explicit: false },
+  { url: '/Music/TellMe.mp3', explicit: false }, 
+  { url: '/Music/Why Cant This Be Easy.mp3', explicit: false },
+  { url: '/Music/BIGDICKRANDY.mp3', explicit: true }, 
+  { url: '/Music/BIGDICKRANDY2.mp3', explicit: true }, 
+  { url: '/Music/BIGDICKRANDY3.mp3', explicit: true }, 
+  { url: '/Music/BIGDICKRANDYHOMECOMING.mp3', explicit: true }, 
+  { url: '/Music/2FAST2FURIOUS.mp3', explicit: true }, 
+  { url: '/Music/Pain_is_just_freddy_fazbear.mp3', explicit: false },
+  { url: '/Music/dq blizzard.mp3', explicit: true },
+  { url: '/Music/MC Chris Is Dead.mp3', explicit: true },
+  { url: '/Music/robitussin.mp3', explicit: true }, 
+  { url: '/Music/ToothpickspliffsRemix.mp3', explicit: true }, 
+  { url: '/Music/Mcchrisownz.mp3', explicit: true }, 
+  { url: '/Music/BewareTheMushroomRoadSMRPG.mp3', explicit: true },
+  { url: '/Music/Super Mario RPG Waltz of the Forest (4K).mp3', explicit: false }
 ];
 
 const trackMeta = [
@@ -1817,102 +1817,102 @@ let songColorEnabled = false;
 
 const FCImages = [
   {
-    image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/FC3.png',
+    image: '/Files/Creations/FC3.png',
     title: 'FC3.png',
     description: 'Temporary description for FC3.png.'
   },
 
   {
-    image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/FC6.png',
+    image: '/Files/Creations/FC6.png',
     title: 'FC6.png',
     description: 'Temporary description for FC6.png.'
   },
 
   {
-    image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/FC9.png',
+    image: '/Files/Creations/FC9.png',
     title: 'FC9.png',
     description: 'Temporary description for FC9.png.'
   },
   {
-    image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/FC11.png',
+    image: '/Files/Creations/FC11.png',
     title: 'FC11.png',
     description: 'Temporary description for FC11.png.'
   },
   {
-    image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/FC1NEW.png',
+    image: '/Files/Creations/FC1NEW.png',
     title: 'Updated background',
     description: 'Newest picture of Flatline City, its also the version the background video is right now.'
   }
 ];
 const SRImages = [
   {
-    image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SR1.png',
+    image: '/Files/Creations/SR1.png',
     title: 'SR1.png',
     description: 'Temporary description for SR1.png.'
   },
 
   {
-    image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SR2.png',
+    image: '/Files/Creations/SR2.png',
     title: 'SR2.png',
     description: 'Temporary description for SR2.png.'
   },
 
   {
-    image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SR3.png',
+    image: '/Files/Creations/SR3.png',
     title: 'SR3.png',
     description: 'Temporary description for SR3.png.'
   },
   {
-    image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SR4.png',
+    image: '/Files/Creations/SR4.png',
     title: 'SR4.png',
     description: 'Temporary description for SR4.png.'
   },
   {
-    image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SR5.png',
+    image: '/Files/Creations/SR5.png',
     title: 'SR5.png',
     description: 'Temporary description for SR5.png.'
   },
   {
-    image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SR6.png',
+    image: '/Files/Creations/SR6.png',
     title: 'SR6.png',
     description: 'Temporary description for S63.png.'
   },
 ];
 const SSImages = [
   {
-    image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SS1.png',
+    image: '/Files/Creations/SS1.png',
     title: 'SS1.png',
     description: 'Temporary description for SS1.png.'
   },
 
   {
-    image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SS2.png',
+    image: '/Files/Creations/SS2.png',
     title: 'SS2.png',
     description: 'Temporary description for SS2.png.'
   },
 
   {
-    image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SS3.png',
+    image: '/Files/Creations/SS3.png',
     title: 'SS3.png',
     description: 'Temporary description for SS3.png.'
   },
   {
-    image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SS4.png',
+    image: '/Files/Creations/SS4.png',
     title: 'SS4.png',
     description: 'Temporary description for SS4.png.'
   },
   {
-    image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SS5.png',
+    image: '/Files/Creations/SS5.png',
     title: 'SS5.png',
     description: 'Temporary description for SS5.png.'
   },
   {
-    image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SS6.png',
+    image: '/Files/Creations/SS6.png',
     title: 'SS6.png',
     description: 'Temporary description for SS6.png.'
   },
   {
-    image: 'https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/SS7.png',
+    image: '/Files/Creations/SS7.png',
     title: 'SS7.png',
     description: 'Temporary description for SS7.png.'
   }
@@ -2839,11 +2839,11 @@ const pages = {
         <p class="lead"><strong>Please</strong> check out <strong>"Info"</strong> on the left panel that will open if you move your mouse to the left side of the screen.</p>
         <div class="image-row">
           <figure class="image-card">
-            <img src="https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/sili2.jpg" alt="Cat image">
+            <img src="/sili2.jpg" alt="Cat image">
             <span>Sili Cat 1</span>
           </figure>
           <figure class="image-card">
-            <img src="https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/sili3.jpg" alt="Cat image">
+            <img src="/sili3.jpg" alt="Cat image">
             <span>Sili Cat 2</span>
           </figure>
         </div>
@@ -2852,13 +2852,13 @@ const pages = {
       <aside class="panel patch-panel">
         <h3>Patch Notes</h3>
         <ul class="patch-list">
-          <li class="specialText" onclick="burst(1000);"><strong>We have officially hit v1.0.0!</strong></li>
+          <li class="specialText" onclick="burst(1000);"><strong>We have officially hit v2.0.0!</strong></li>
+		  <li><strong>Moved the website to finally be server only, no Github anymore!</strong></li>
 		  <li>You can now disable the clock in the settings.</li>
 		  <li>Added the unblocked games section.</li>
 		  <li>Added a shuffle button.</li>
           <li>You can now change the value of how much the volume is changed when using Ctrl + Up and Ctrl + Down in the settings.</li>
           <li>Added new explicit content filtering, explicit songs are by default enabled, go to the settings to disable them.</li>
-          <li>Changed the About section to be <strong>Info</strong>, with even more information added.</li>
           <li class="clickable" onclick="window.open('https://trello.com/b/TWbquA4v/website-stuff', '_blank')">Click this to view the trello board for website development updates.</li>
         </ul>
       </aside>
@@ -3115,7 +3115,7 @@ const games = ["https://turbowarp.org/1109852074/embed?addons=stuck,pause,fullsc
 const titles = ["Block Blast (Not Made By Me)", "Paper Minecraft (Not Made By Me)", "Sisyphean Escalator", "Gambling but Mid", "Laser Dodge", "Goober Dodger", "Neon's Hostile Road", "Mid Cookie Clicker", "Asteroid Assault", "Reel 'Em In", "Cats Hate Rats"];
 const controls = [`Click and drag blocks to match 3 or more of the same color.\n\nClear the board to advance to the next level.\n\nUse strategy to plan your moves!`, `Modding Guide: ▶️ https://youtu.be/PexNsUvqD5w\n[1 to 9] - Select Item    [Click] - Place or Mine\n[WASD] - Move / Jump  [E] - Open/Close Inventory\n[E+hover] - Open / Close Chest, Crafting Table, Door\n[Space] - Drop single tile from a stack while dragging.\n[F] - Eat food       [N] - Label a sign or chest\n[Q] - Drop item      [P] - Pause / Unpause\n[T] - Talk / Command    [O] - Save your game\n[M] - Music / Sounds   [Shift] - Sprint`, `Type the letters shown fast enough or fall.\n\nNot case sensitive.`, `::At BlackJack::\nUse arrow keys to bet:\n\nLeft and Right set the bet to 0 and max\n\nUp and down will change the bet by 10, or if holding "." will change it by 500\n1\nEnter to place bet, and after will be the hit button.\n\nSpace to stand.\n\n::At Slots::\nS to Spin\n\nSame betting controls.`, `Use the mouse to dodge the lasers that get faster with time!\n\nPress the left mouse button to become invincible for three seconds with a 10 second cool down so use it wisely!`, `Use the mouse to dodge the goobers, and don't stay in the border too long.\n\nThat's really about it.`, `ASD to move.\nW for a 3-second long power-up of invincibility.\nSpace to Start/Restart on the game-over screen.\n\n1 and 2 control the arcade scan filter.\n3 and 4 control the arcade cabinet overlay.\n5 and 6 control the arcade music (on/off)\n\n(60 fps Is highly recommended)`, `It's Cookie Clicker, but worse.\n\nUse your mouse.`, `Left mouse button to fire a weak auxiliary laser that overheats quickly.\n\nSpace for Main powerful laser.\n\nW for a backup shield that lasts 10 seconds, but has limited uses.\n\nUse your mouse to aim the laser.`, `Use Left Mouse Button to fire the harpoon and try to get the fish, and buy upgrades.\n \nBeware of the explosive mine, it takes $50 dollars to repair the harpoon and the explosion might scare a few good fish away.\n\n\nThis is still a work in progress and I plan on adding more things like power ups, multipliers, and maybe a high score system.\n\nF to show debug menu \nG to hide debug menu`, `goober.\n\nUse mouse 1 to hit the rats.\nuse F to turn off the yarn.\nUse G to turn them back on.\n`];
 const notes = [`Block Blast is a puzzle game where you match blocks.\n\nIt's not made by me, but it's a fun game to play!`, `*** Credits ***\nAll the graphics are taken from the Minecraft wiki page and have not been created by me. I have rescaled them and broken them up to make the game work, but that is it at present.\n\nORIGNAL PROJECT MADE BY GRIFFPATCH ON SCRATCH, NOT ME:\n\nCheck him out he does great stuf, https://scratch.mit.edu/users/griffpatch/`, `The game is based on this video by the way:\n\nhttps://youtu.be/2Gby1XQ4Z2M?feature=shared`, `Don't gamble in real life, also this technically is not correct, and if you do it quick enough you can easily break most of this.\n\nThe special codes are:\n\nL E O\n\nN F S M W\n`, `Not much to add, I could have done a better job with the randomization of everything, but I am not gonna be working on this any further.`, `<b>!!!VOLUME WARNING!!!</b>\n\nI made this game to be difficult and stressful on purpose.\n\nIf you don't like loud noises or flashing lights, I would recommend not playing this game.`, `This is a game I made in a day, so don't expect too much.\n\nAlso, the hitbox for the asteroids is a bit wonky.`, `This game is unfinished and buggy.\n\nI am not going to work on it anymore.`, `I made this game as a joke.\n\nIt's not very good.`, `This game is still in development.\n\nI plan on adding more features soon.`, `This game is a work in progress.\n\nI plan on adding more content soon.`];
-const webGames = ["https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@adfbe44ac5b4ac145c9b00df1e50374c929a5ad0/game.js",  "https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@4b190625813f90b2260f3539d74170add388fd9f/game2.js", "https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@1477541d70a90eea4ae6e2f705cb8e2750267a56/game3.js"];
+const webGames = ["/game.js",  "/game2.js", "/game3.js"];
 const webTitles = ["Test WebGame 1 Dino", "Test WebGame 2 Number Guess", "Test WebGame 3 Asteroid Dodge"];
 const webControls = ["Test control info for web game. Use space, click, or up arrow to jump.", "Test control info for web game. Use mouse and numbers.", "Test control info for web game. Use WASD."];
 const webNotes = ["Hopefully it works.",  "Hopefully it works 2, electric boogaloo.", "Hopefully it works 3, sili bee."];
@@ -3136,7 +3136,7 @@ function showUnblockedGames() {
   		<p>Press the button of the game you want to play, it will copy the code to your clipboard. Then paste the code into the text box and press run to start the game. If you cant see all of the game please go into full screen, and zoom out of the website using Ctrl + "-" until you can.
 		<br />If the game isnt loading/starting, go back to the games menu and come back. As of right now, this system is really terrible, and I will continue working on having it not be.
 		<br />Im really trying here guys 😭.</p>
-		<button onclick="copyGitHubData('https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/math.html')">
+		<button onclick="copyGitHubData('/Files/math.html')">
           GN-Math.dev (Entire Website, BROKEN)
         </button>
         <button onclick="copyGitHubData('https://raw.githubusercontent.com/freebuisness/html/main/198.html')">
@@ -3186,7 +3186,7 @@ function showEmulators() {
 function navigateTo(emulator) {
   const content = document.getElementById('gamesContent');
   if (emulator === 'nes') {
-    content.innerHTML = `<button class="back-button" onclick="showEmulators()">← Back to Emulators</button><div style="width: 100%; max-width: 900px; margin: 2rem auto;"><h2 style="padding: 0 0 1rem 0;">NES Emulator</h2><div style="width:100%;height:500px;max-width:100%; background: #000; border-radius: 10px; overflow: hidden; border: 1px solid #333;"><div id="game"></div></div><script>window.EJS_player='#game';window.EJS_core='nes';window.EJS_gameName='cpu_dummy_reads';window.EJS_color='#0044ff';window.EJS_startOnLoaded=true;window.EJS_pathtodata='https://cdn.jsdelivr.net/gh/EmulatorJS/EmulatorJS@latest/data/';window.EJS_url='https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Roms/cpu_dummy_reads.nes';<\/script><script src="https://cdn.jsdelivr.net/gh/EmulatorJS/EmulatorJS@latest/data/loader.js"><\/script></div>`;
+    content.innerHTML = `<button class="back-button" onclick="showEmulators()">← Back to Emulators</button><div style="width: 100%; max-width: 900px; margin: 2rem auto;"><h2 style="padding: 0 0 1rem 0;">NES Emulator</h2><div style="width:100%;height:500px;max-width:100%; background: #000; border-radius: 10px; overflow: hidden; border: 1px solid #333;"><div id="game"></div></div><script>window.EJS_player='#game';window.EJS_core='nes';window.EJS_gameName='cpu_dummy_reads';window.EJS_color='#0044ff';window.EJS_startOnLoaded=true;window.EJS_pathtodata='https://cdn.jsdelivr.net/gh/EmulatorJS/EmulatorJS@latest/data/';window.EJS_url='/Files/Roms/cpu_dummy_reads.nes';<\/script><script src="https://cdn.jsdelivr.net/gh/EmulatorJS/EmulatorJS@latest/data/loader.js"><\/script></div>`;
   } else {
     content.innerHTML = `<div class="wip-container"><h2>${emulator.toUpperCase()} Emulator</h2><p>Work in Progress</p><p style="color: #888; margin-top: 1rem;">This section is currently under development.</p><button class="back-button" onclick="showEmulators()">← Back to Emulators</button></div>`;
   }
@@ -3398,11 +3398,11 @@ function showCreationsTab(tab) {
       
       <div class="section-header">Python</div>
       <div class="image-row creations-grid">
-        <figure class="image-card" style="cursor: pointer;" onclick="openCodeViewer('https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/main.py', 'main.py')">
+        <figure class="image-card" style="cursor: pointer;" onclick="openCodeViewer('/Files/Creations/main.py', 'main.py')">
           <div style="height: 150px; background: #222; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-size: 2rem; color: #ffd43b; font-weight: bold;">Python</div>
           <span>main.py</span>
         </figure>
-        <figure class="image-card" style="cursor: pointer;" onclick="openCodeViewer('https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/Creations/gamble.py', 'gamble.py')">
+        <figure class="image-card" style="cursor: pointer;" onclick="openCodeViewer('/Files/Creations/gamble.py', 'gamble.py')">
           <div style="height: 150px; background: #222; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-size: 2rem; color: #ffd43b; font-weight: bold;">Python</div>
           <span>gamble.py</span>
         </figure>
@@ -3410,7 +3410,7 @@ function showCreationsTab(tab) {
       
       <div class="section-header">HTML</div>
       <div class="image-row creations-grid">
-        <figure class="image-card" style="cursor: pointer;" onclick="openCodeViewer('https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/index.html', 'GN Neon Index HTML')">
+        <figure class="image-card" style="cursor: pointer;" onclick="openCodeViewer('/index.html', 'GN Neon Index HTML')">
           <div style="height: 150px; background: #222; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-size: 2rem; color: #ffd43b; font-weight: bold;">HTML</div>
           <span>GN Neon Index HTML</span>
         </figure>
@@ -3519,7 +3519,7 @@ function setVideoBackground(videoUrl) {
 
 applySavedColors();
 load("home");
-setVideoBackground('https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/FlatlineCityLoop.mp4');
+setVideoBackground('/Files/FlatlineCityLoop.mp4');
 initMusic();
 
 // ─── IMPACT BORDER VISUALIZER ─────────────────────────────
@@ -3631,7 +3631,7 @@ function finalCheck() {
 }
 
 </script>
-<script src="https://cdn.jsdelivr.net/gh/Neon64makoto/GN-Neon@main/Files/Extra/main.js"></script>
+<script src="/Files/Extra/main.js"></script>
 <script>
 const page = {
   soggy: `
@@ -3657,11 +3657,11 @@ const page = {
     </p>
   </div>
   <figure id="dryCat" class="image-card">
-  <img src="https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/dry.jpg" alt="Dry Cat image">
+  <img src="/Files/dry.jpg" alt="Dry Cat image">
             <span>Dry</span>
   </figure>
   <figure id="wetCat" class="image-card">
-  <img src="https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/wet.jpg" alt="Sog Cat image">
+  <img src="/Files/wet.jpg" alt="Sog Cat image">
             <span>Sog</span>
   </figure>          
   </div>
@@ -3861,7 +3861,7 @@ class Confetti{
 
 function burst(amount){
 
-   const confettiSound = new Audio('https://raw.githubusercontent.com/Neon64makoto/GN-Neon/main/Files/confetti-pop-sound.mp3');
+   const confettiSound = new Audio('/Files/confetti-pop-sound.mp3');
 
     if (isCooldown) return;
 
